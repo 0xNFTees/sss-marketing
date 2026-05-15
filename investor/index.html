@@ -12,59 +12,62 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <script src="https://unpkg.com/lucide-react/dist/umd/lucide-react.js"></script>
+    <script src="https://unpkg.com/lucide-react"></script>
 </head>
-<body class="bg-slate-950">
+<body class="bg-slate-950 text-slate-200 m-0 p-0">
 
     <div id="root"></div>
 
     <script type="text/babel">
-        // Map browser globals to replace npm imports
         const { useState, useMemo, useEffect } = React;
-        const {
-          TrendingUp, Building2, Users, Receipt, Layers, Wifi, ShieldCheck, Sparkles,
-          ArrowUpRight, ChevronRight, Crown, Briefcase, Activity, Target, Lock, Zap,
-          Stethoscope, Smile, CircuitBoard, Cpu, DollarSign, CalendarClock
-        } = LucideReact;
+
+        // Bulletproof Icon Fallback Layer to protect execution thread
+        const SafeIcon = ({ name, className }) => {
+            const Lucide = window.LucideReact || window.lucideReact;
+            const IconComponent = Lucide ? Lucide[name] : null;
+            if (IconComponent) {
+                return React.createElement(IconComponent, { className });
+            }
+            return (
+                <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+            );
+        };
 
         // ─────────────────────────────────────────────────────────────────────
-        //  MODEL — Strict adherence to brief
+        // MODEL — Strict adherence to brief
         // ─────────────────────────────────────────────────────────────────────
         const CONFIG = {
           startClinics: 3,
           targetClinics: 100,
           horizonMonths: 24,
-          networkSize: 500, // 123Dentist reference; 20% target = 100
-          // Revenue
+          networkSize: 500, 
           mgmtFee: 449,
           mgmtCost: 149,
           setupFee: 499,
-          setupCost: 320, // 300 white-label + 20 NFC
+          setupCost: 320, 
           lpFee: 999,
           lpCost: 750,
-          // Friction
           stripe: 0.03,
-          corpTax: 0.13, // Canadian
-          // Splits
+          corpTax: 0.13, 
           founderShare: 0.85,
           partnerShare: 0.15,
-          // OpEx
           swBase: 400,
           swMax: 1800,
           laborMax: 3000,
           laborThreshold: 50,
-          // Capital
           injection: 30000,
         };
 
-        // Per-transaction net (post-Stripe, pre-tax)
-        const SETUP_NET = CONFIG.setupFee - CONFIG.setupCost - CONFIG.setupFee * CONFIG.stripe; // 164.03
-        const LP_NET = CONFIG.lpFee - CONFIG.lpCost - CONFIG.lpFee * CONFIG.stripe; // 219.03
-        const RECURRING_GROSS = CONFIG.mgmtFee - CONFIG.mgmtCost; // 300
-        const RECURRING_NET = RECURRING_GROSS - CONFIG.mgmtFee * CONFIG.stripe; // 286.53
-        const RECURRING_MARGIN = RECURRING_GROSS / CONFIG.mgmtFee; // 0.668
+        const SETUP_NET = CONFIG.setupFee - CONFIG.setupCost - CONFIG.setupFee * CONFIG.stripe; 
+        const LP_NET = CONFIG.lpFee - CONFIG.lpCost - CONFIG.lpFee * CONFIG.stripe; 
+        const RECURRING_GROSS = CONFIG.mgmtFee - CONFIG.mgmtCost; 
+        const RECURRING_NET = RECURRING_GROSS - CONFIG.mgmtFee * CONFIG.stripe; 
+        const RECURRING_MARGIN = RECURRING_GROSS / CONFIG.mgmtFee; 
 
-        // Linear clinic growth 3 → 100 across 24 months
         function clinicsAt(month) {
           const t = (month - 1) / (CONFIG.horizonMonths - 1);
           return CONFIG.startClinics + (CONFIG.targetClinics - CONFIG.startClinics) * t;
@@ -77,21 +80,12 @@
 
           const recurringProfit = clinics * RECURRING_NET;
           const setupProfit = newClinics * SETUP_NET;
-          // LP refresh: 1 per clinic per year on average
           const lpProfit = (clinics * LP_NET) / 12;
 
           const grossProfit = recurringProfit + setupProfit + lpProfit;
 
-          const software =
-            CONFIG.swBase +
-            (CONFIG.swMax - CONFIG.swBase) *
-              Math.max(0, clinics - CONFIG.startClinics) /
-              (CONFIG.targetClinics - CONFIG.startClinics);
-          const labor =
-            clinics <= CONFIG.laborThreshold
-              ? 0
-              : CONFIG.laborMax *
-                Math.min(1, (clinics - CONFIG.laborThreshold) / CONFIG.laborThreshold);
+          const software = CONFIG.swBase + (CONFIG.swMax - CONFIG.swBase) * Math.max(0, clinics - CONFIG.startClinics) / (CONFIG.targetClinics - CONFIG.startClinics);
+          const labor = clinics <= CONFIG.laborThreshold ? 0 : CONFIG.laborMax * Math.min(1, (clinics - CONFIG.laborThreshold) / CONFIG.laborThreshold);
           const opex = software + labor;
 
           const ebt = grossProfit - opex;
@@ -117,10 +111,7 @@
           };
         }
 
-        // Precompute full 24-month series + cumulative partner dividend
-        const SERIES = Array.from({ length: CONFIG.horizonMonths }, (_, i) =>
-          monthMetrics(i + 1)
-        );
+        const SERIES = Array.from({ length: CONFIG.horizonMonths }, (_, i) => monthMetrics(i + 1));
         let runningPartner = 0;
         let runningVenture = 0;
         const SERIES_WITH_CUM = SERIES.map((row) => {
@@ -129,110 +120,61 @@
           return { ...row, cumPartner: runningPartner, cumVenture: runningVenture };
         });
 
-        const PARTNER_PAYBACK_MONTH =
-          SERIES_WITH_CUM.find((r) => r.cumPartner >= CONFIG.injection)?.month ?? null;
-        const VENTURE_BREAKEVEN_MONTH =
-          SERIES_WITH_CUM.find((r) => r.cumVenture >= CONFIG.injection)?.month ?? null;
+        const PARTNER_PAYBACK_MONTH = SERIES_WITH_CUM.find((r) => r.cumPartner >= CONFIG.injection)?.month ?? null;
+        const VENTURE_BREAKEVEN_MONTH = SERIES_WITH_CUM.find((r) => r.cumVenture >= CONFIG.injection)?.month ?? null;
         const FINAL = SERIES_WITH_CUM[CONFIG.horizonMonths - 1];
 
         // ─────────────────────────────────────────────────────────────────────
-        //  FORMATTERS
+        // FORMATTERS
         // ─────────────────────────────────────────────────────────────────────
-        const fmtUSD = (v, opts = {}) =>
-          v.toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-            maximumFractionDigits: 0,
-            ...opts,
-          });
-        const fmtUSDc = (v) =>
-          v.toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-            maximumFractionDigits: 2,
-          });
-        const fmtPct = (v, d = 1) =>
-          `${(v * 100).toLocaleString("en-US", { maximumFractionDigits: d })}%`;
-        const fmtN = (v, d = 0) =>
-          v.toLocaleString("en-US", { maximumFractionDigits: d });
+        const fmtUSD = (v, opts = {}) => v.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0, ...opts });
+        const fmtUSDc = (v) => v.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
+        const fmtPct = (v, d = 1) => `${(v * 100).toLocaleString("en-US", { maximumFractionDigits: d })}%`;
+        const fmtN = (v, d = 0) => v.toLocaleString("en-US", { maximumFractionDigits: d });
 
         // ─────────────────────────────────────────────────────────────────────
-        //  PRIMITIVES
+        // PRIMITIVES
         // ─────────────────────────────────────────────────────────────────────
         const Card = ({ children, className = "", glow = false }) => (
-          <div
-            className={`relative rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm ${
-              glow ? "shadow-[0_0_40px_-12px_rgba(14,165,233,0.35)]" : ""
-            } ${className}`}
-          >
+          <div className={`relative rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm ${glow ? "shadow-[0_0_40px_-12px_rgba(14,165,233,0.35)]" : ""} ${className}`}>
             {children}
           </div>
         );
 
         const SectionLabel = ({ children, num }) => (
           <div className="mb-6 flex items-center gap-3">
-            <span className="font-mono text-[11px] tracking-[0.2em] text-sky-500/80">
-              {num}
-            </span>
+            <span className="font-mono text-[11px] tracking-[0.2em] text-sky-500/80">{num}</span>
             <span className="h-px flex-none w-8 bg-slate-700" />
-            <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-slate-400">
-              {children}
-            </span>
+            <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-slate-400">{children}</span>
           </div>
         );
 
         const StatRow = ({ label, value, accent = "" }) => (
           <div className="flex items-baseline justify-between border-b border-slate-800/60 py-2.5 last:border-b-0">
-            <span className="text-[11px] uppercase tracking-wider text-slate-500">
-              {label}
-            </span>
-            <span className={`font-mono text-sm tabular-nums ${accent || "text-slate-200"}`}>
-              {value}
-            </span>
+            <span className="text-[11px] uppercase tracking-wider text-slate-500">{label}</span>
+            <span className={`font-mono text-sm tabular-nums ${accent || "text-slate-200"}`}>{value}</span>
           </div>
         );
 
         // ─────────────────────────────────────────────────────────────────────
-        //  DASHBOARD
+        // DASHBOARD
         // ─────────────────────────────────────────────────────────────────────
-        function SSSEquityDashboard() {
+        export default function SSSEquityDashboard() {
           const [month, setMonth] = useState(12);
           const m = SERIES_WITH_CUM[month - 1];
 
-          // Inject Google Fonts once
           useEffect(() => {
             const id = "sss-fonts";
             if (document.getElementById(id)) return;
             const link = document.createElement("link");
             link.id = id;
             link.rel = "stylesheet";
-            link.href =
-              "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap";
+            link.href = "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap";
             document.head.appendChild(link);
           }, []);
 
-          // Reusable curve path generator
-          const buildPath = (key, w = 600, h = 120) => {
-            const max = Math.max(...SERIES_WITH_CUM.map((r) => r[key]));
-            const min = Math.min(...SERIES_WITH_CUM.map((r) => r[key]));
-            const range = max - min || 1;
-            const pts = SERIES_WITH_CUM.map((r, i) => {
-              const x = (i / (CONFIG.horizonMonths - 1)) * w;
-              const y = h - ((r[key] - min) / range) * h;
-              return [x, y];
-            });
-            const d = pts
-              .map(([x, y], i) => (i === 0 ? `M ${x},${y}` : `L ${x},${y}`))
-              .join(" ");
-            const area = `${d} L ${w},${h} L 0,${h} Z`;
-            return { d, area, pts };
-          };
-
           return (
-            <div
-              className="min-h-screen w-full bg-slate-950 text-slate-200"
-              style={{ fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif" }}
-            >
+            <div className="min-h-screen w-full bg-slate-950 text-slate-200" style={{ fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif" }}>
               <style>{`
                 .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
                 .grid-bg {
@@ -276,7 +218,6 @@
                 }
               `}</style>
 
-              {/* HEADER */}
               <header className="relative border-b border-slate-800/80 grid-bg">
                 <div className="absolute inset-0 bg-gradient-to-b from-sky-950/30 via-transparent to-transparent pointer-events-none" />
                 <div className="relative mx-auto max-w-7xl px-6 py-5 flex items-center justify-between">
@@ -287,12 +228,8 @@
                       </div>
                     </div>
                     <div className="leading-tight">
-                      <div className="font-bold tracking-tight text-slate-50 text-[15px]">
-                        SSS MARKETING
-                      </div>
-                      <div className="mono text-[10px] tracking-[0.2em] text-slate-500 uppercase">
-                        Capital Partners
-                      </div>
+                      <div className="font-bold tracking-tight text-slate-50 text-[15px]">SSS MARKETING</div>
+                      <div className="mono text-[10px] tracking-[0.2em] text-slate-500 uppercase">Capital Partners</div>
                     </div>
                   </div>
 
@@ -301,52 +238,39 @@
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                       Live Model
                     </div>
-                    <div className="text-[11px] uppercase tracking-wider text-slate-500">
-                      Confidential · Series Seed Memorandum
-                    </div>
-                    <div className="mono text-[11px] text-slate-400">
-                      Rev. 05.2026
-                    </div>
+                    <div className="text-[11px] uppercase tracking-wider text-slate-500">Confidential · Series Seed Memorandum</div>
+                    <div className="mono text-[11px] text-slate-400">Rev. 05.2026</div>
                   </div>
                 </div>
 
                 <div className="relative mx-auto max-w-7xl px-6 pb-12 pt-8">
                   <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-sky-400/90 mb-4">
-                    <Briefcase className="w-3.5 h-3.5" />
+                    <SafeIcon name="Briefcase" className="w-3.5 h-3.5" />
                     Partner Equity Dashboard
                   </div>
                   <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-50 leading-[1.05] max-w-4xl">
                     A <span className="text-sky-400">$30,000</span> position in the{" "}
-                    <span className="italic text-slate-300">utility layer</span> of
-                    Canadian dental care.
+                    <span className="italic text-slate-300">utility layer</span> of Canadian dental care.
                   </h1>
                   <p className="mt-5 max-w-2xl text-slate-400 leading-relaxed">
                     Partner subscribes for a{" "}
-                    <span className="text-slate-200 font-semibold">
-                      15% perpetual net-profit equity
-                    </span>{" "}
-                    in SSS Marketing's clinic-services platform. The 24-month model
-                    charts a{" "}
-                    <span className="text-emerald-400 font-semibold">conservative</span>{" "}
-                    path to{" "}
-                    <span className="text-slate-200">20% of the 123Dentist network</span>{" "}
-                    — with the broader independent-clinic market sitting beyond it as
-                    uncapped upside.
+                    <span className="text-slate-200 font-semibold">15% perpetual net-profit equity</span>{" "}
+                    in SSS Marketing's clinic-services platform. The 24-month model charts a{" "}
+                    <span className="text-emerald-400 font-semibold">conservative</span> path to{" "}
+                    <span className="text-slate-200">20% of the 123Dentist network</span> — with the broader independent-clinic market sitting beyond it as uncapped upside.
                   </p>
 
                   <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-px bg-slate-800/60 rounded-xl overflow-hidden border border-slate-800">
                     {[
-                      { k: "Capital Injection", v: "$30,000", sub: "CAD · Single tranche", icon: DollarSign },
-                      { k: "Net Equity", v: "15.00%", sub: "Of post-tax net profit", icon: Crown },
-                      { k: "Horizon to Target", v: "24 mo", sub: "3 → 100 clinics", icon: CalendarClock },
-                      { k: "Partner Payback", v: `M ${PARTNER_PAYBACK_MONTH ?? "—"}`, sub: "Cumulative div ≥ injection", icon: Target, accent: true },
-                    ].map(({ k, v, sub, icon: Icon, accent }) => (
+                      { k: "Capital Injection", v: "$30,000", sub: "CAD · Single tranche", icon: "DollarSign" },
+                      { k: "Net Equity", v: "15.00%", sub: "Of post-tax net profit", icon: "Crown" },
+                      { k: "Horizon to Target", v: "24 mo", sub: "3 → 100 clinics", icon: "CalendarClock" },
+                      { k: "Partner Payback", v: `M ${PARTNER_PAYBACK_MONTH ?? "—"}`, sub: "Cumulative div ≥ injection", icon: "Target", accent: true },
+                    ].map(({ k, v, sub, icon, accent }) => (
                       <div key={k} className="bg-slate-950 p-5">
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-                            {k}
-                          </span>
-                          <Icon className={`w-3.5 h-3.5 ${accent ? "text-emerald-400" : "text-slate-600"}`} />
+                          <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500">{k}</span>
+                          <SafeIcon name={icon} className={`w-3.5 h-3.5 ${accent ? "text-emerald-400" : "text-slate-600"}`} />
                         </div>
                         <div className={`mono text-3xl font-semibold tabular-nums ${accent ? "text-emerald-400 profit-glow" : "text-slate-50"}`}>
                           {v}
@@ -358,7 +282,6 @@
                 </div>
               </header>
 
-              {/* STRATEGIC BRIEFING — THESIS */}
               <section className="relative border-b border-slate-900 overflow-hidden">
                 <div className="absolute inset-0 pointer-events-none">
                   <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-sky-500/[0.04] blur-3xl" />
@@ -368,22 +291,14 @@
                   <div className="flex items-center gap-3 mb-12">
                     <span className="font-mono text-[11px] tracking-[0.2em] text-sky-500/80">00</span>
                     <span className="h-px flex-none w-8 bg-slate-700" />
-                    <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-slate-400">
-                      Strategic Briefing · Private
-                    </span>
+                    <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-slate-400">Strategic Briefing · Private</span>
                   </div>
 
                   <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
                     <div className="lg:col-span-3">
-                      <div className="text-[11px] uppercase tracking-[0.2em] text-sky-400 mb-3">
-                        Founder → Cornerstone Partner
-                      </div>
-                      <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-slate-50 leading-[1.15]">
-                        The trade, <br /> in three sentences.
-                      </h2>
-                      <p className="text-slate-500 text-[13px] mt-4 leading-relaxed">
-                        A peer-to-peer thesis. Everything that follows is the proof.
-                      </p>
+                      <div className="text-[11px] uppercase tracking-[0.2em] text-sky-400 mb-3">Founder → Cornerstone Partner</div>
+                      <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-slate-50 leading-[1.15]">The trade, <br /> in three sentences.</h2>
+                      <p className="text-slate-500 text-[13px] mt-4 leading-relaxed">A peer-to-peer thesis. Everything that follows is the proof.</p>
                       <div className="mt-6 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-slate-600 border border-slate-800 rounded-full px-3 py-1.5">
                         <span className="w-1 h-1 rounded-full bg-emerald-400" />
                         2-year trust · DMD cornerstone
@@ -425,7 +340,6 @@
                 </div>
               </section>
 
-              {/* GROWTH STRATEGY SLIDER */}
               <section className="mx-auto max-w-7xl px-6 py-20">
                 <SectionLabel num="01">Growth Strategy / Timeline</SectionLabel>
 
@@ -437,26 +351,24 @@
                     </p>
                   </div>
                   <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-slate-400">
-                    <Zap className="w-3.5 h-3.5 text-sky-400" />
+                    <SafeIcon name="Zap" className="w-3.5 h-3.5 text-sky-400" />
                     Real-time scenario engine
                   </div>
                 </div>
 
                 <Card className="p-8 lg:p-10" glow>
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                    <LiveMetric icon={Building2} label="Clinic Count" value={fmtN(Math.round(m.clinics))} suffix="active" detail={`${fmtPct(m.clinics / CONFIG.networkSize, 1)} of 123Dentist`} tone="sky" />
-                    <LiveMetric icon={TrendingUp} label="Total Net Profit" value={fmtUSD(m.net)} suffix="/ mo" detail={`EBT ${fmtUSD(m.ebt)} − tax ${fmtUSD(m.tax)}`} tone="emerald" />
-                    <LiveMetric icon={Crown} label="Founder Div · 85%" value={fmtUSD(m.founder)} suffix="/ mo" detail="Post-tax take-home" tone="slate" />
-                    <LiveMetric icon={Users} label="Partner Div · 15%" value={fmtUSD(m.partner)} suffix="/ mo" detail={`Annualized ${fmtUSD(m.partner * 12)}`} tone="emerald" accent />
+                    <LiveMetric icon="Building2" label="Clinic Count" value={fmtN(Math.round(m.clinics))} suffix="active" detail={`${fmtPct(m.clinics / CONFIG.networkSize, 1)} of 123Dentist`} tone="sky" />
+                    <LiveMetric icon="TrendingUp" label="Total Net Profit" value={fmtUSD(m.net)} suffix="/ mo" detail={`EBT ${fmtUSD(m.ebt)} − tax ${fmtUSD(m.tax)}`} tone="emerald" />
+                    <LiveMetric icon="Crown" label="Founder Div · 85%" value={fmtUSD(m.founder)} suffix="/ mo" detail="Post-tax take-home" tone="slate" />
+                    <LiveMetric icon="Users" label="Partner Div · 15%" value={fmtUSD(m.partner)} suffix="/ mo" detail={`Annualized ${fmtUSD(m.partner * 12)}`} tone="emerald" accent />
                   </div>
 
                   <div className="space-y-3">
                     <div className="flex justify-between items-baseline">
                       <div>
                         <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Position</div>
-                        <div className="mono text-2xl text-slate-50">
-                          Month {String(month).padStart(2, "0")}<span className="text-slate-600 text-base"> / 24</span>
-                        </div>
+                        <div className="mono text-2xl text-slate-50">Month {String(month).padStart(2, "0")}<span className="text-slate-600 text-base"> / 24</span></div>
                       </div>
                       <div className="text-right">
                         <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Trajectory</div>
@@ -480,32 +392,28 @@
                 </Card>
               </section>
 
-              {/* UNIT ECONOMICS */}
               <section className="mx-auto max-w-7xl px-6 py-20 border-t border-slate-900">
                 <SectionLabel num="02">Unit Economics</SectionLabel>
                 <div className="flex items-end justify-between mb-10 flex-wrap gap-6">
                   <div>
                     <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">Three margins. One flywheel.</h2>
-                    <p className="text-slate-500 mt-2 max-w-xl">
-                      Every clinic compounds across three distinct revenue surfaces. Stripe is netted; corporate tax sits at portfolio level.
-                    </p>
+                    <p className="text-slate-500 mt-2 max-w-xl">Every clinic compounds across three distinct revenue surfaces. Stripe is netted; corporate tax sits at portfolio level.</p>
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-5">
-                  {/* Setup */}
                   <Card className="p-7 group hover:border-sky-500/40 transition-colors">
                     <div className="flex items-start justify-between mb-6">
                       <div className="w-11 h-11 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
-                        <Receipt className="w-5 h-5 text-sky-400" />
+                        <SafeIcon name="Receipt" className="w-5 h-5 text-sky-400" />
                       </div>
                       <span className="mono text-[10px] uppercase tracking-wider text-slate-500">One-time · per clinic</span>
                     </div>
                     <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">Setup Activation</div>
                     <div className="mt-1 flex items-baseline gap-2">
                       <div className="mono text-4xl font-bold text-slate-50">$499</div>
-                      <ArrowUpRight className="w-4 h-4 text-slate-600" />
-                      <div className="mono text-2xl font-semibold text-emerald-400 profit-glow">{fmtUSDc(SETUP_NET)}</div>
+                      <SafeIcon name="ArrowUpRight" className="w-4 h-4 text-slate-600 inline ml-1 align-baseline" />
+                      <div className="mono text-2xl font-semibold text-emerald-400 profit-glow inline ml-2">{fmtUSDc(SETUP_NET)}</div>
                     </div>
                     <div className="text-[11px] text-slate-500 mt-1">Net per onboarding, post-Stripe</div>
                     <div className="mt-5 space-y-0">
@@ -517,19 +425,18 @@
                     </div>
                   </Card>
 
-                  {/* Landing Page */}
                   <Card className="p-7 group hover:border-sky-500/40 transition-colors">
                     <div className="flex items-start justify-between mb-6">
                       <div className="w-11 h-11 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
-                        <Layers className="w-5 h-5 text-sky-400" />
+                        <SafeIcon name="Layers" className="w-5 h-5 text-sky-400" />
                       </div>
                       <span className="mono text-[10px] uppercase tracking-wider text-slate-500">Annual refresh</span>
                     </div>
                     <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">Landing Page Refresh</div>
                     <div className="mt-1 flex items-baseline gap-2">
                       <div className="mono text-4xl font-bold text-slate-50">$999</div>
-                      <ArrowUpRight className="w-4 h-4 text-slate-600" />
-                      <div className="mono text-2xl font-semibold text-emerald-400 profit-glow">{fmtUSDc(LP_NET)}</div>
+                      <SafeIcon name="ArrowUpRight" className="w-4 h-4 text-slate-600 inline ml-1 align-baseline" />
+                      <div className="mono text-2xl font-semibold text-emerald-400 profit-glow inline ml-2">{fmtUSDc(LP_NET)}</div>
                     </div>
                     <div className="text-[11px] text-slate-500 mt-1">Net per refresh, post-Stripe</div>
                     <div className="mt-5 space-y-0">
@@ -541,12 +448,11 @@
                     </div>
                   </Card>
 
-                  {/* Recurring */}
                   <Card className="p-7 relative overflow-hidden">
                     <div className="absolute top-0 right-0 px-3 py-1 bg-emerald-500/10 border-l border-b border-emerald-500/30 text-[10px] uppercase tracking-wider text-emerald-300">Core Asset</div>
                     <div className="flex items-start justify-between mb-6">
                       <div className="w-11 h-11 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
-                        <Activity className="w-5 h-5 text-emerald-400" />
+                        <SafeIcon name="Activity" className="w-5 h-5 text-emerald-400" />
                       </div>
                       <span className="mono text-[10px] uppercase tracking-wider text-slate-500">MRR · per clinic</span>
                     </div>
@@ -557,9 +463,7 @@
                     </div>
                     <div className="mt-3 flex items-center gap-3">
                       <div className="mono text-3xl font-bold text-emerald-400 profit-glow">{fmtPct(RECURRING_MARGIN, 0)}</div>
-                      <div className="text-[11px] text-slate-400 leading-tight">
-                        Gross margin <br /> <span className="text-slate-600">{fmtUSDc(RECURRING_GROSS)} per clinic</span>
-                      </div>
+                      <div className="text-[11px] text-slate-400 leading-tight">Gross margin <br /> <span className="text-slate-600">{fmtUSDc(RECURRING_GROSS)} per clinic</span></div>
                     </div>
                     <div className="mt-5 space-y-0">
                       <StatRow label="Monthly Fee" value="$449.00" />
@@ -583,15 +487,12 @@
                 </Card>
               </section>
 
-              {/* CAPITAL EFFICIENCY / PAYBACK */}
               <section className="mx-auto max-w-7xl px-6 py-20 border-t border-slate-900">
                 <SectionLabel num="03">Capital Efficiency</SectionLabel>
                 <div className="flex items-end justify-between mb-10 flex-wrap gap-6">
                   <div>
                     <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">Payback Tracker</h2>
-                    <p className="text-slate-500 mt-2 max-w-xl">
-                      Cumulative partner dividends measured against the $30,000 injection. Crossover defines breakeven. <span className="text-slate-400">Modeled against the 20% network floor — independent-clinic uptake is not priced in.</span>
-                    </p>
+                    <p className="text-slate-500 mt-2 max-w-xl">Cumulative partner dividends measured against the $30,000 injection. Crossover defines breakeven. <span className="text-slate-400">Modeled against the 20% network floor — independent-clinic uptake is not priced in.</span></p>
                   </div>
                 </div>
 
@@ -641,34 +542,27 @@
                 </Card>
               </section>
 
-              {/* PHYSICAL MOAT (NFC) */}
               <section className="mx-auto max-w-7xl px-6 py-20 border-t border-slate-900">
                 <SectionLabel num="04">Defensibility</SectionLabel>
                 <div className="grid lg:grid-cols-5 gap-8">
                   <div className="lg:col-span-2">
                     <div className="flex items-center gap-2 text-sky-400 text-[11px] uppercase tracking-[0.2em] mb-3">
-                      <ShieldCheck className="w-3.5 h-3.5" />
+                      <SafeIcon name="ShieldCheck" className="w-3.5 h-3.5" />
                       The Physical Moat
                     </div>
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">
-                      Hardware lives on the counter. <br /> <span className="text-slate-500">Software lives in habit.</span>
-                    </h2>
-                    <p className="text-slate-400 mt-5 leading-relaxed">
-                      Each clinic receives a branded NFC Review Pad — a $20 piece of hardware that turns the reception desk into a recurring review engine. Once installed, switching costs become physical: staff training, signage, patient flow.
-                    </p>
-                    <p className="text-slate-400 mt-3 leading-relaxed">
-                      SaaS competitors can clone the dashboard. They cannot un-install the tap target sitting on the counter.
-                    </p>
+                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">Hardware lives on the counter. <br /> <span className="text-slate-500">Software lives in habit.</span></h2>
+                    <p className="text-slate-400 mt-5 leading-relaxed">Each clinic receives a branded NFC Review Pad — a $20 piece of hardware that turns the reception desk into a recurring review engine. Once installed, switching costs become physical: staff training, signage, patient flow.</p>
+                    <p className="text-slate-400 mt-3 leading-relaxed">SaaS competitors can clone the dashboard. They cannot un-install the tap target sitting on the counter.</p>
 
                     <div className="mt-8 space-y-3">
                       {[
-                        { i: Lock, t: "Switching friction", d: "Removing the pad = visible change at the front desk" },
-                        { i: CircuitBoard, t: "Embedded in workflow", d: "Receptionist hands pad to patient at checkout" },
-                        { i: Wifi, t: "Always-on review funnel", d: "Each tap = direct deep-link to Google Review" },
-                      ].map(({ i: Icon, t, d }) => (
+                        { i: "Lock", t: "Switching friction", d: "Removing the pad = visible change at the front desk" },
+                        { i: "CircuitBoard", t: "Embedded in workflow", d: "Receptionist hands pad to patient at checkout" },
+                        { i: "Wifi", t: "Always-on review funnel", d: "Each tap = direct deep-link to Google Review" },
+                      ].map(({ i, t, d }) => (
                         <div key={t} className="flex gap-4">
                           <div className="w-9 h-9 rounded-lg bg-sky-500/10 border border-sky-500/30 flex-none flex items-center justify-center">
-                            <Icon className="w-4 h-4 text-sky-400" />
+                            <SafeIcon name={i} className="w-4 h-4 text-sky-400" />
                           </div>
                           <div>
                             <div className="text-sm font-semibold text-slate-200">{t}</div>
@@ -679,7 +573,6 @@
                     </div>
                   </div>
 
-                  {/* NFC Visual */}
                   <div className="lg:col-span-3">
                     <Card className="p-8 lg:p-10 relative overflow-hidden h-full" glow>
                       <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-sky-500/10 blur-3xl pointer-events-none" />
@@ -741,37 +634,31 @@
                 </div>
               </section>
 
-              {/* FORWARD OPTIONALITY */}
               <section className="mx-auto max-w-7xl px-6 py-20 border-t border-slate-900">
                 <SectionLabel num="05">Forward Optionality</SectionLabel>
                 <div className="flex items-end justify-between mb-10 flex-wrap gap-6">
                   <div>
                     <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">Secondary revenue layers.</h2>
-                    <p className="text-slate-500 mt-2 max-w-xl">
-                      Once the utility layer is installed, every clinic becomes a distribution channel for high-ticket procedure funnels. <span className="text-slate-400">None of this is in the base case — and neither is the independent-clinic market beyond the 123Dentist network.</span> Pure upside.
-                    </p>
+                    <p className="text-slate-500 mt-2 max-w-xl">Once the utility layer is installed, every clinic becomes a distribution channel for high-ticket procedure funnels. <span className="text-slate-400">None of this is in the base case — and neither is the independent-clinic market beyond the 123Dentist network.</span> Pure upside.</p>
                   </div>
                   <div className="text-[11px] uppercase tracking-wider text-emerald-400/80 flex items-center gap-2">
-                    <Sparkles className="w-3.5 h-3.5" />
+                    <SafeIcon name="Sparkles" className="w-3.5 h-3.5" />
                     Not in base case
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-5">
-                  <UpsellCard icon={Smile} tier="Tier I" name="Invisalign Funnels" ticket="$2,500 – $4,000" note="Specialized lead-gen for clear aligner candidates. Per-clinic LTV multiplier." metrics={[["Avg Procedure", "$5,800"], ["Funnel ARR (est.)", "$1,800"], ["Margin Profile", "70%+"]]} />
-                  <UpsellCard icon={Stethoscope} tier="Tier II" name="Implant Pipeline" ticket="$3,500 – $6,000" note="High-intent geo-targeted campaigns. Capacity-constrained — fits surgical schedules." metrics={[["Avg Procedure", "$4,500"], ["Funnel ARR (est.)", "$3,200"], ["Margin Profile", "65%+"]]} featured />
-                  <UpsellCard icon={Cpu} tier="Tier III" name="AI Triage Layer" ticket="$199 / mo add-on" note="Automated patient intake + insurance pre-check. Sits on top of the existing $449 utility." metrics={[["Attach Rate (proj.)", "40%"], ["Incremental ARR", "$95K"], ["Margin Profile", "82%"]]} />
+                  <UpsellCard icon="Smile" tier="Tier I" name="Invisalign Funnels" ticket="$2,500 – $4,000" note="Specialized lead-gen for clear aligner candidates. Per-clinic LTV multiplier." metrics={[["Avg Procedure", "$5,800"], ["Funnel ARR (est.)", "$1,800"], ["Margin Profile", "70%+"]]} />
+                  <UpsellCard icon="Stethoscope" tier="Tier II" name="Implant Pipeline" ticket="$3,500 – $6,000" note="High-intent geo-targeted campaigns. Capacity-constrained — fits surgical schedules." metrics={[["Avg Procedure", "$4,500"], ["Funnel ARR (est.)", "$3,200"], ["Margin Profile", "65%+"]]} featured />
+                  <UpsellCard icon="Cpu" tier="Tier III" name="AI Triage Layer" ticket="$199 / mo add-on" note="Automated patient intake + insurance pre-check. Sits on top of the existing $449 utility." metrics={[["Attach Rate (proj.)", "40%"], ["Incremental ARR", "$95K"], ["Margin Profile", "82%"]]} />
                 </div>
               </section>
 
-              {/* FOOTER */}
               <footer className="border-t border-slate-900 mt-10">
                 <div className="mx-auto max-w-7xl px-6 py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                   <div>
                     <div className="font-bold tracking-tight text-slate-200">SSS MARKETING · Capital Partners</div>
-                    <div className="text-[11px] text-slate-500 mt-1 max-w-xl">
-                      This document is a confidential memorandum prepared for a prospective equity partner. Projections are illustrative and based on the unit economics stated herein. Past results not indicative of future returns. Canadian-domiciled entity; CAD reporting; 13% federal corporate tax applied at portfolio level.
-                    </div>
+                    <div className="text-[11px] text-slate-500 mt-1 max-w-xl">This document is a confidential memorandum prepared for a prospective equity partner. Projections are illustrative and based on the unit economics stated herein. Past results not indicative of future returns. Canadian-domiciled entity; CAD reporting; 13% federal corporate tax applied at portfolio level.</div>
                   </div>
                   <div className="flex items-center gap-6 mono text-[11px] text-slate-500">
                     <div>SSS-2026-Q2</div>
@@ -786,10 +673,7 @@
           );
         }
 
-        // ─────────────────────────────────────────────────────────────────────
-        //  SUB-COMPONENTS
-        // ─────────────────────────────────────────────────────────────────────
-        function LiveMetric({ icon: Icon, label, value, suffix, detail, tone, accent }) {
+        function LiveMetric({ icon, label, value, suffix, detail, tone, accent }) {
           const toneMap = {
             sky: "text-sky-400 num-glow",
             emerald: "text-emerald-400 profit-glow",
@@ -799,7 +683,7 @@
             <div className={`relative p-5 rounded-lg border ${accent ? "bg-emerald-500/5 border-emerald-500/30" : "bg-slate-950/60 border-slate-800"} transition-all`}>
               <div className="flex items-center justify-between mb-4">
                 <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500">{label}</span>
-                <Icon className={`w-3.5 h-3.5 ${toneMap[tone]}`} />
+                <SafeIcon name={icon} className={`w-3.5 h-3.5 ${toneMap[tone]}`} />
               </div>
               <div className="flex items-baseline gap-1.5">
                 <span className={`mono text-3xl font-bold tabular-nums leading-none ${toneMap[tone]}`}>{value}</span>
@@ -906,10 +790,10 @@
               </div>
               <svg viewBox={`0 0 ${w} ${h + 30}`} className="w-full" preserveAspectRatio="none">
                 <defs>
-                  <radialGradient id="paybackFill" x1="0" x2="0" y1="0" y2="1">
+                  <linearGradient id="paybackFill" x1="0" x2="0" y1="0" y2="1">
                     <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
                     <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
-                  </radialGradient>
+                  </linearGradient>
                 </defs>
                 {[0.25, 0.5, 0.75, 1].map((p) => (
                   <line key={p} x1="0" x2={w} y1={h * (1 - p)} y2={h * (1 - p)} stroke="#1e293b" strokeWidth="0.5" strokeDasharray="2 4" />
@@ -936,13 +820,13 @@
           );
         }
 
-        function UpsellCard({ icon: Icon, tier, name, ticket, note, metrics, featured }) {
+        function UpsellCard({ icon, tier, name, ticket, note, metrics, featured }) {
           return (
             <div className={`relative rounded-xl p-7 border ${featured ? "border-sky-500/40 bg-gradient-to-b from-sky-950/30 to-slate-900/60" : "border-slate-800 bg-slate-900/40"}`}>
               {featured && <div className="absolute -top-3 left-7 px-2.5 py-0.5 bg-sky-500 text-slate-950 text-[10px] uppercase tracking-wider font-bold rounded">Highest LTV</div>}
               <div className="flex items-center justify-between mb-5">
                 <div className="w-11 h-11 rounded-lg bg-slate-800/80 border border-slate-700 flex items-center justify-center">
-                  <Icon className="w-5 h-5 text-sky-400" />
+                  <SafeIcon name={icon} className="w-5 h-5 text-sky-400" />
                 </div>
                 <span className="mono text-[10px] uppercase tracking-wider text-slate-500">{tier}</span>
               </div>
@@ -950,12 +834,13 @@
               <div className="mono text-sm text-emerald-400 mt-1">{ticket}</div>
               <p className="text-[13px] text-slate-400 mt-3 leading-snug">{note}</p>
               <div className="mt-5 space-y-0">{metrics.map(([k, v]) => <StatRow key={k} label={k} value={v} />)}</div>
-              <div className="mt-5 flex items-center gap-1.5 text-[11px] text-sky-400 group cursor-default">Roadmap Q3 2027 <ChevronRight className="w-3.5 h-3.5" /></div>
+              <div className="mt-5 flex items-center gap-1.5 text-[11px] text-sky-400 group cursor-default">
+                Roadmap Q3 2027 <SafeIcon name="ChevronRight" className="w-3.5 h-3.5 inline ml-1 align-baseline" />
+              </div>
             </div>
           );
         }
 
-        // Render Dashboard initialization 
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<SSSEquityDashboard />);
     </script>
