@@ -1,5 +1,24 @@
-import React, { useState, useMemo, useEffect } from "react";
-import {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investor Relations</title>
+    
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    </head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // ==========================================
+        // 1. PASTE YOUR JSX CODE DIRECTLY BELOW
+        // ==========================================
+{
   TrendingUp,
   Building2,
   Users,
@@ -1514,3 +1533,21 @@ function UpsellCard({ icon: Icon, tier, name, ticket, note, metrics, featured })
     </div>
   );
 }
+        function InvestorPage() {
+            return (
+                <div style={{ padding: '40px', fontFamily: 'sans-serif', textAlign: 'center' }}>
+                    <h1>Investor Page</h1>
+                    <p>Your JSX code is now rendering live!</p>
+                </div>
+            );
+        }
+
+
+        // ==========================================
+        // 2. RENDER THE COMPONENT TO THE PAGE
+        // ==========================================
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<InvestorPage />);
+    </script>
+</body>
+</html>
