@@ -2,388 +2,430 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SSS Marketing — Investor Pitch</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SSS Investor Pitch</title>
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- React -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-
-  <!-- Babel -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <!-- Lucide -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
-    body {
-      margin: 0;
-      background: #020617;
-      font-family: 'Manrope', sans-serif;
+    body{
+      margin:0;
+      background:#020617;
+      color:#e2e8f0;
+      font-family:Manrope,sans-serif;
+      overflow-x:hidden;
     }
 
-    .mono {
-      font-family: 'JetBrains Mono', monospace;
+    .mono{
+      font-family:'JetBrains Mono',monospace;
     }
 
-    .grid-bg {
-      background-image:
-        linear-gradient(rgba(148,163,184,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(148,163,184,0.04) 1px, transparent 1px);
-      background-size: 32px 32px;
+    .card{
+      background:rgba(15,23,42,.72);
+      border:1px solid rgba(51,65,85,.7);
+      border-radius:24px;
+      backdrop-filter:blur(12px);
     }
 
-    .num-glow {
-      text-shadow: 0 0 24px rgba(14,165,233,0.25);
+    .hero-glow{
+      position:absolute;
+      width:700px;
+      height:700px;
+      border-radius:9999px;
+      background:rgba(14,165,233,.08);
+      filter:blur(120px);
+      top:-200px;
+      right:-200px;
+      pointer-events:none;
     }
 
-    .profit-glow {
-      text-shadow: 0 0 24px rgba(16,185,129,0.3);
+    .profit{
+      color:#10b981;
     }
 
-    input[type=range].sss-slider {
-      -webkit-appearance: none;
-      appearance: none;
-      background: transparent;
-      width: 100%;
+    .sky{
+      color:#38bdf8;
     }
 
-    input[type=range].sss-slider::-webkit-slider-runnable-track {
-      height: 4px;
-      background: linear-gradient(
-        90deg,
-        #0ea5e9 0%,
-        #0ea5e9 var(--val,50%),
-        #1e293b var(--val,50%),
-        #1e293b 100%
-      );
-      border-radius: 999px;
-    }
-
-    input[type=range].sss-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 22px;
-      height: 22px;
-      border-radius: 999px;
-      background: #f8fafc;
-      border: 3px solid #0ea5e9;
-      margin-top: -9px;
-      cursor: pointer;
+    input[type="range"]{
+      width:100%;
     }
   </style>
 </head>
 
 <body>
-  <div id="root"></div>
 
-  <script type="text/babel">
-    const {
-      TrendingUp,
-      Building2,
-      Users,
-      Crown,
-      Briefcase,
-      Zap
-    } = lucide.icons;
+<div class="hero-glow"></div>
 
-    const { useState } = React;
+<div class="max-w-7xl mx-auto px-6 py-10">
 
-    const CONFIG = {
-      startClinics: 3,
-      targetClinics: 100,
-      horizonMonths: 24,
-      networkSize: 500,
-      mgmtFee: 449,
-      mgmtCost: 149,
-      stripe: 0.03,
-      corpTax: 0.13,
-      founderShare: 0.85,
-      partnerShare: 0.15,
-      injection: 30000,
-    };
+  <!-- HEADER -->
 
-    const RECURRING_GROSS = CONFIG.mgmtFee - CONFIG.mgmtCost;
-    const RECURRING_NET = RECURRING_GROSS - CONFIG.mgmtFee * CONFIG.stripe;
+  <div class="flex justify-between items-center mb-20">
 
-    function clinicsAt(month) {
-      const t = (month - 1) / (CONFIG.horizonMonths - 1);
-      return CONFIG.startClinics +
-        (CONFIG.targetClinics - CONFIG.startClinics) * t;
-    }
+    <div class="flex items-center gap-4">
 
-    function monthMetrics(month) {
-      const clinics = clinicsAt(month);
-      const recurringProfit = clinics * RECURRING_NET;
-      const tax = recurringProfit * CONFIG.corpTax;
-      const net = recurringProfit - tax;
+      <div class="w-14 h-14 rounded-2xl bg-sky-500 flex items-center justify-center text-black font-black text-2xl">
+        S³
+      </div>
 
-      return {
-        month,
-        clinics,
-        net,
-        founder: net * CONFIG.founderShare,
-        partner: net * CONFIG.partnerShare,
-      };
-    }
-
-    const SERIES = Array.from(
-      { length: CONFIG.horizonMonths },
-      (_, i) => monthMetrics(i + 1)
-    );
-
-    function fmtUSD(v) {
-      return v.toLocaleString('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        maximumFractionDigits: 0,
-      });
-    }
-
-    function fmtN(v) {
-      return v.toLocaleString('en-US', {
-        maximumFractionDigits: 0,
-      });
-    }
-
-    function Icon({ icon: IconComp, className }) {
-      return React.createElement(IconComp, {
-        className,
-        strokeWidth: 2,
-      });
-    } className={className}></i>;
-    }
-
-    function Card({ children, className = '' }) {
-      return (
-        <div className={`rounded-2xl border border-slate-800 bg-slate-900/60 ${className}`}>
-          {children}
+      <div>
+        <div class="text-white text-xl font-bold">
+          SSS MARKETING
         </div>
-      );
-    }
 
-    function Metric({ icon, label, value, detail, accent }) {
-      return (
-        <Card className={`p-5 ${accent ? 'border-emerald-500/30 bg-emerald-500/5' : ''}`}>
-          <div className="flex items-center justify-between mb-4">
-            <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-              {label}
-            </div>
-            <Icon icon={icon} className="w-4 h-4 text-sky-400" />
-          </div>
-
-          <div className={`mono text-3xl font-bold ${accent ? 'text-emerald-400 profit-glow' : 'text-slate-100'}`}>
-            {value}
-          </div>
-
-          <div className="text-[11px] text-slate-500 mt-2">
-            {detail}
-          </div>
-        </Card>
-      );
-    }
-
-    function App() {
-      const [month, setMonth] = useState(12);
-
-      const m = SERIES[month - 1];
-
-      React.useEffect(() => {}, [month]);
-
-      return (
-        <div className="min-h-screen bg-slate-950 text-slate-200">
-          <header className="border-b border-slate-800 grid-bg">
-            <div className="max-w-7xl mx-auto px-6 py-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center text-white font-bold">
-                    S³
-                  </div>
-
-                  <div>
-                    <div className="font-bold text-slate-100">
-                      SSS MARKETING
-                    </div>
-
-                    <div className="mono text-[10px] uppercase tracking-[0.2em] text-slate-500">
-                      Capital Partners
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mono text-[11px] text-slate-500">
-                  Rev. 05.2026
-                </div>
-              </div>
-
-              <div className="mt-16 max-w-4xl">
-                <div className="flex items-center gap-2 text-sky-400 text-[11px] uppercase tracking-[0.25em] mb-5">
-                  <Icon icon={Briefcase} className="w-4 h-4" />
-                  Partner Equity Dashboard
-                </div>
-
-                <h1 className="text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05] text-slate-50">
-                  A <span className="text-sky-400">$30,000</span> position in the utility layer of Canadian dental care.
-                </h1>
-
-                <p className="mt-6 text-slate-400 text-lg leading-relaxed max-w-2xl">
-                  Partner subscribes for a 15% perpetual net-profit equity in SSS Marketing's clinic-services platform.
-                </p>
-              </div>
-            </div>
-          </header>
-
-          <main className="max-w-7xl mx-auto px-6 py-20">
-            <div className="flex items-end justify-between mb-10 flex-wrap gap-6">
-              <div>
-                <div className="text-[11px] uppercase tracking-[0.2em] text-sky-400 mb-3">
-                  Growth Strategy
-                </div>
-
-                <h2 className="text-4xl font-bold tracking-tight text-slate-50">
-                  Drag the lever. Watch the yield curve.
-                </h2>
-
-                <p className="text-slate-500 mt-3 max-w-xl">
-                  Real-time model simulation for clinic expansion.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-slate-400">
-                <Icon icon={Zap} className="w-4 h-4 text-sky-400" />
-                Live Scenario Engine
-              </div>
-            </div>
-
-            <Card className="p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-                <Metric
-                  icon={Building2}
-                  label="Clinic Count"
-                  value={fmtN(Math.round(m.clinics))}
-                  detail="Active clinics"
-                />
-
-                <Metric
-                  icon={TrendingUp}
-                  label="Net Profit"
-                  value={fmtUSD(m.net)}
-                  detail="Monthly"
-                  accent
-                />
-
-                <Metric
-                  icon={Crown}
-                  label="Founder 85%"
-                  value={fmtUSD(m.founder)}
-                  detail="Monthly dividend"
-                />
-
-                <Metric
-                  icon={Users}
-                  label="Partner 15%"
-                  value={fmtUSD(m.partner)}
-                  detail="Monthly dividend"
-                  accent
-                />
-              </div>
-
-              <div>
-                <div className="flex justify-between items-center mb-4">
-                  <div>
-                    <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-                      Timeline Position
-                    </div>
-
-                    <div className="mono text-3xl text-slate-50 mt-1">
-                      Month {month}
-                    </div>
-                  </div>
-
-                  <div className="text-right">
-                    <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-                      Penetration
-                    </div>
-
-                    <div className="mono text-xl text-sky-400">
-                      {Math.round((m.clinics / CONFIG.networkSize) * 100)}%
-                    </div>
-                  </div>
-                </div>
-
-                <input
-                  type="range"
-                  min="1"
-                  max="24"
-                  value={month}
-                  onChange={(e) => setMonth(Number(e.target.value))}
-                  className="sss-slider"
-                  style={{
-                    '--val': `${((month - 1) / 23) * 100}%`
-                  }}
-                />
-              </div>
-            </Card>
-
-            <div className="grid lg:grid-cols-4 gap-5 mt-10">
-              <Card className="p-6 lg:col-span-2">
-                <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-3">
-                  Deal Terms
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex justify-between border-b border-slate-800 pb-3">
-                    <span className="text-slate-400">Capital Injection</span>
-                    <span className="mono text-slate-100">$30,000</span>
-                  </div>
-
-                  <div className="flex justify-between border-b border-slate-800 pb-3">
-                    <span className="text-slate-400">Partner Equity</span>
-                    <span className="mono text-emerald-400">15%</span>
-                  </div>
-
-                  <div className="flex justify-between border-b border-slate-800 pb-3">
-                    <span className="text-slate-400">Target Clinics</span>
-                    <span className="mono text-slate-100">100</span>
-                  </div>
-
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">Network Size</span>
-                    <span className="mono text-slate-100">500</span>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="p-6 lg:col-span-2 border-emerald-500/30 bg-emerald-500/5">
-                <div className="text-[10px] uppercase tracking-[0.2em] text-emerald-400 mb-3">
-                  Monthly Partner Yield
-                </div>
-
-                <div className="mono text-6xl font-bold text-emerald-400 profit-glow">
-                  {fmtUSD(m.partner)}
-                </div>
-
-                <div className="mt-3 text-slate-400">
-                  Projected monthly partner dividend at Month {month}
-                </div>
-              </Card>
-            </div>
-          </main>
+        <div class="mono text-slate-500 text-xs tracking-[0.3em] uppercase">
+          Capital Partners
         </div>
-      );
-    }
+      </div>
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
-  </script>
+    </div>
+
+    <div class="mono text-xs text-slate-500 hidden md:block">
+      CONFIDENTIAL · REV 05.2026
+    </div>
+
+  </div>
+
+  <!-- HERO -->
+
+  <section class="mb-24">
+
+    <div class="text-sky-400 uppercase tracking-[0.3em] text-xs mb-5">
+      Partner Equity Dashboard
+    </div>
+
+    <h1 class="text-5xl md:text-7xl font-black leading-[1.02] max-w-5xl mb-8">
+      A <span class="sky">$30,000</span> position in the utility layer of Canadian dental care.
+    </h1>
+
+    <p class="max-w-3xl text-slate-400 text-lg leading-relaxed">
+      Partner subscribes for a 15% perpetual net-profit equity position in SSS Marketing's clinic-services platform.
+      This live investor dashboard models expansion from 3 clinics to 100 clinics over 24 months.
+    </p>
+
+  </section>
+
+  <!-- LIVE METRICS -->
+
+  <section class="grid md:grid-cols-4 gap-5 mb-24">
+
+    <div class="card p-7">
+      <div class="text-slate-500 uppercase text-xs tracking-[0.25em] mb-4">
+        Clinic Count
+      </div>
+
+      <div id="clinicCount" class="mono text-5xl text-white font-bold">
+        3
+      </div>
+
+      <div class="text-slate-500 mt-3 text-sm">
+        Active clinics
+      </div>
+    </div>
+
+    <div class="card p-7">
+      <div class="text-slate-500 uppercase text-xs tracking-[0.25em] mb-4">
+        Monthly Net Profit
+      </div>
+
+      <div id="monthlyProfit" class="mono text-5xl font-bold profit">
+        $0
+      </div>
+
+      <div class="text-slate-500 mt-3 text-sm">
+        Post-tax
+      </div>
+    </div>
+
+    <div class="card p-7">
+      <div class="text-slate-500 uppercase text-xs tracking-[0.25em] mb-4">
+        Partner Dividend
+      </div>
+
+      <div id="partnerProfit" class="mono text-5xl font-bold sky">
+        $0
+      </div>
+
+      <div class="text-slate-500 mt-3 text-sm">
+        15% equity
+      </div>
+    </div>
+
+    <div class="card p-7">
+      <div class="text-slate-500 uppercase text-xs tracking-[0.25em] mb-4">
+        Timeline
+      </div>
+
+      <div id="monthLabel" class="mono text-5xl text-white font-bold">
+        M1
+      </div>
+
+      <div class="text-slate-500 mt-3 text-sm">
+        Scenario month
+      </div>
+    </div>
+
+  </section>
+
+  <!-- SLIDER -->
+
+  <section class="card p-10 mb-24">
+
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <div class="text-white text-3xl font-bold mb-2">
+          Growth Timeline
+        </div>
+
+        <div class="text-slate-500">
+          Drag to simulate growth across 24 months.
+        </div>
+      </div>
+
+      <div class="mono text-slate-400">
+        Live Scenario Engine
+      </div>
+    </div>
+
+    <input
+      type="range"
+      min="1"
+      max="24"
+      value="1"
+      id="monthSlider"
+    />
+
+  </section>
+
+  <!-- UNIT ECONOMICS -->
+
+  <section class="mb-24">
+
+    <div class="text-white text-4xl font-bold mb-12">
+      Unit Economics
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5">
+
+      <div class="card p-8">
+        <div class="text-slate-500 uppercase tracking-[0.2em] text-xs mb-5">
+          Setup Activation
+        </div>
+
+        <div class="mono text-5xl text-white font-bold mb-3">
+          $499
+        </div>
+
+        <div class="profit mono text-2xl font-bold mb-5">
+          +$164 net
+        </div>
+
+        <p class="text-slate-400 leading-relaxed">
+          One-time onboarding fee including NFC review hardware deployment.
+        </p>
+      </div>
+
+      <div class="card p-8">
+        <div class="text-slate-500 uppercase tracking-[0.2em] text-xs mb-5">
+          Landing Page Refresh
+        </div>
+
+        <div class="mono text-5xl text-white font-bold mb-3">
+          $999
+        </div>
+
+        <div class="profit mono text-2xl font-bold mb-5">
+          +$219 net
+        </div>
+
+        <p class="text-slate-400 leading-relaxed">
+          Annual clinic refresh layer with high-margin production economics.
+        </p>
+      </div>
+
+      <div class="card p-8">
+        <div class="text-slate-500 uppercase tracking-[0.2em] text-xs mb-5">
+          Management Utility
+        </div>
+
+        <div class="mono text-5xl text-white font-bold mb-3">
+          $449/mo
+        </div>
+
+        <div class="profit mono text-2xl font-bold mb-5">
+          67% margin
+        </div>
+
+        <p class="text-slate-400 leading-relaxed">
+          Recurring infrastructure layer powering review management and clinic growth.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- NFC SECTION -->
+
+  <section class="card p-10 mb-24">
+
+    <div class="grid lg:grid-cols-2 gap-14 items-center">
+
+      <div>
+
+        <div class="text-sky-400 uppercase tracking-[0.3em] text-xs mb-5">
+          Defensibility
+        </div>
+
+        <div class="text-5xl font-black leading-tight mb-6">
+          Hardware lives on the counter.
+        </div>
+
+        <p class="text-slate-400 leading-relaxed text-lg">
+          Each clinic receives a branded NFC review pad that embeds SSS directly into clinic workflow.
+          Switching costs become physical.
+        </p>
+
+      </div>
+
+      <div class="flex justify-center">
+
+        <div class="w-[340px] h-[220px] rounded-[36px] bg-gradient-to-br from-slate-800 to-black border border-slate-700 flex items-center justify-center relative">
+
+          <div class="absolute w-40 h-40 rounded-full bg-sky-500/20 blur-3xl"></div>
+
+          <div class="text-center relative z-10">
+
+            <div class="text-sky-400 text-6xl mb-3">
+              ◎
+            </div>
+
+            <div class="mono text-slate-400 tracking-[0.4em] text-xs">
+              TAP · REVIEW · GO
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- UPSELLS -->
+
+  <section class="mb-24">
+
+    <div class="text-white text-4xl font-bold mb-12">
+      Secondary Revenue Layers
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5">
+
+      <div class="card p-8">
+        <div class="text-sky-400 uppercase tracking-[0.25em] text-xs mb-5">
+          Tier I
+        </div>
+
+        <div class="text-3xl font-bold text-white mb-3">
+          Invisalign Funnels
+        </div>
+
+        <div class="profit mono text-xl mb-5">
+          $2.5K–4K
+        </div>
+
+        <p class="text-slate-400 leading-relaxed">
+          Specialized lead-generation infrastructure for clear-aligner patients.
+        </p>
+      </div>
+
+      <div class="card p-8 border-sky-500/40">
+        <div class="text-sky-400 uppercase tracking-[0.25em] text-xs mb-5">
+          Tier II
+        </div>
+
+        <div class="text-3xl font-bold text-white mb-3">
+          Implant Pipelines
+        </div>
+
+        <div class="profit mono text-xl mb-5">
+          $3.5K–6K
+        </div>
+
+        <p class="text-slate-400 leading-relaxed">
+          High-ticket implant acquisition systems layered on top of the existing utility platform.
+        </p>
+      </div>
+
+      <div class="card p-8">
+        <div class="text-sky-400 uppercase tracking-[0.25em] text-xs mb-5">
+          Tier III
+        </div>
+
+        <div class="text-3xl font-bold text-white mb-3">
+          AI Triage Layer
+        </div>
+
+        <div class="profit mono text-xl mb-5">
+          $199/mo
+        </div>
+
+        <p class="text-slate-400 leading-relaxed">
+          Automated intake, qualification and insurance routing infrastructure.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+<script>
+
+const slider = document.getElementById('monthSlider');
+
+const clinicCount = document.getElementById('clinicCount');
+const monthlyProfit = document.getElementById('monthlyProfit');
+const partnerProfit = document.getElementById('partnerProfit');
+const monthLabel = document.getElementById('monthLabel');
+
+function updateDashboard(month){
+
+  const clinics = Math.round(3 + ((100 - 3) * ((month - 1) / 23)));
+
+  const monthly = Math.round(clinics * 286);
+
+  const partner = Math.round(monthly * 0.15);
+
+  clinicCount.innerText = clinics;
+
+  monthlyProfit.innerText =
+    '$' + monthly.toLocaleString();
+
+  partnerProfit.innerText =
+    '$' + partner.toLocaleString();
+
+  monthLabel.innerText =
+    'M' + month;
+}
+
+slider.addEventListener('input', e => {
+  updateDashboard(Number(e.target.value));
+});
+
+updateDashboard(1);
+
+</script>
+
 </body>
 </html>
-```
