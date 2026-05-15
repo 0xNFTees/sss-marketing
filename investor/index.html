@@ -91,12 +91,9 @@
       Building2,
       Users,
       Crown,
-      DollarSign,
-      CalendarClock,
-      Target,
       Briefcase,
       Zap
-    } = lucide;
+    } = lucide.icons;
 
     const { useState } = React;
 
@@ -158,7 +155,11 @@
     }
 
     function Icon({ icon: IconComp, className }) {
-      return <i data-lucide={IconComp} className={className}></i>;
+      return React.createElement(IconComp, {
+        className,
+        strokeWidth: 2,
+      });
+    } className={className}></i>;
     }
 
     function Card({ children, className = '' }) {
@@ -195,9 +196,7 @@
 
       const m = SERIES[month - 1];
 
-      React.useEffect(() => {
-        lucide.createIcons();
-      }, [month]);
+      React.useEffect(() => {}, [month]);
 
       return (
         <div className="min-h-screen bg-slate-950 text-slate-200">
@@ -388,26 +387,3 @@
 </body>
 </html>
 ```
-
-# IMPORTANT
-
-After pasting:
-
-1. Commit changes
-2. Wait 30–60 seconds
-3. Hard refresh browser
-
-   * Mac: CMD + SHIFT + R
-   * Windows: CTRL + F5
-
-# IMPORTANT #2
-
-GitHub Pages sometimes serves old cached HTML.
-
-If still white:
-
-* Open DevTools
-* Console tab
-* Screenshot the red error
-
-That will instantly reveal the exact issue.
