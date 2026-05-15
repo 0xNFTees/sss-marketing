@@ -3,1551 +3,961 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investor Relations</title>
+    <title>SSS Marketing - Partner Equity Dashboard</title>
     
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    </head>
-<body>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://unpkg.com/lucide-react/dist/umd/lucide-react.js"></script>
+</head>
+<body class="bg-slate-950">
+
     <div id="root"></div>
 
     <script type="text/babel">
-        // ==========================================
-        // 1. PASTE YOUR JSX CODE DIRECTLY BELOW
-        // ==========================================
-{
-  TrendingUp,
-  Building2,
-  Users,
-  Receipt,
-  Layers,
-  Wifi,
-  ShieldCheck,
-  Sparkles,
-  ArrowUpRight,
-  ChevronRight,
-  Crown,
-  Briefcase,
-  Activity,
-  Target,
-  Lock,
-  Zap,
-  Stethoscope,
-  Smile,
-  CircuitBoard,
-  Cpu,
-  DollarSign,
-  CalendarClock,
-} from "lucide-react";
+        // Map browser globals to replace npm imports
+        const { useState, useMemo, useEffect } = React;
+        const {
+          TrendingUp, Building2, Users, Receipt, Layers, Wifi, ShieldCheck, Sparkles,
+          ArrowUpRight, ChevronRight, Crown, Briefcase, Activity, Target, Lock, Zap,
+          Stethoscope, Smile, CircuitBoard, Cpu, DollarSign, CalendarClock
+        } = LucideReact;
 
-// ─────────────────────────────────────────────────────────────────────
-//  MODEL — Strict adherence to brief
-// ─────────────────────────────────────────────────────────────────────
-const CONFIG = {
-  startClinics: 3,
-  targetClinics: 100,
-  horizonMonths: 24,
-  networkSize: 500, // 123Dentist reference; 20% target = 100
-  // Revenue
-  mgmtFee: 449,
-  mgmtCost: 149,
-  setupFee: 499,
-  setupCost: 320, // 300 white-label + 20 NFC
-  lpFee: 999,
-  lpCost: 750,
-  // Friction
-  stripe: 0.03,
-  corpTax: 0.13, // Canadian
-  // Splits
-  founderShare: 0.85,
-  partnerShare: 0.15,
-  // OpEx
-  swBase: 400,
-  swMax: 1800,
-  laborMax: 3000,
-  laborThreshold: 50,
-  // Capital
-  injection: 30000,
-};
+        // ─────────────────────────────────────────────────────────────────────
+        //  MODEL — Strict adherence to brief
+        // ─────────────────────────────────────────────────────────────────────
+        const CONFIG = {
+          startClinics: 3,
+          targetClinics: 100,
+          horizonMonths: 24,
+          networkSize: 500, // 123Dentist reference; 20% target = 100
+          // Revenue
+          mgmtFee: 449,
+          mgmtCost: 149,
+          setupFee: 499,
+          setupCost: 320, // 300 white-label + 20 NFC
+          lpFee: 999,
+          lpCost: 750,
+          // Friction
+          stripe: 0.03,
+          corpTax: 0.13, // Canadian
+          // Splits
+          founderShare: 0.85,
+          partnerShare: 0.15,
+          // OpEx
+          swBase: 400,
+          swMax: 1800,
+          laborMax: 3000,
+          laborThreshold: 50,
+          // Capital
+          injection: 30000,
+        };
 
-// Per-transaction net (post-Stripe, pre-tax)
-const SETUP_NET = CONFIG.setupFee - CONFIG.setupCost - CONFIG.setupFee * CONFIG.stripe; // 164.03
-const LP_NET = CONFIG.lpFee - CONFIG.lpCost - CONFIG.lpFee * CONFIG.stripe; // 219.03
-const RECURRING_GROSS = CONFIG.mgmtFee - CONFIG.mgmtCost; // 300
-const RECURRING_NET = RECURRING_GROSS - CONFIG.mgmtFee * CONFIG.stripe; // 286.53
-const RECURRING_MARGIN = RECURRING_GROSS / CONFIG.mgmtFee; // 0.668
+        // Per-transaction net (post-Stripe, pre-tax)
+        const SETUP_NET = CONFIG.setupFee - CONFIG.setupCost - CONFIG.setupFee * CONFIG.stripe; // 164.03
+        const LP_NET = CONFIG.lpFee - CONFIG.lpCost - CONFIG.lpFee * CONFIG.stripe; // 219.03
+        const RECURRING_GROSS = CONFIG.mgmtFee - CONFIG.mgmtCost; // 300
+        const RECURRING_NET = RECURRING_GROSS - CONFIG.mgmtFee * CONFIG.stripe; // 286.53
+        const RECURRING_MARGIN = RECURRING_GROSS / CONFIG.mgmtFee; // 0.668
 
-// Linear clinic growth 3 → 100 across 24 months
-function clinicsAt(month) {
-  const t = (month - 1) / (CONFIG.horizonMonths - 1);
-  return CONFIG.startClinics + (CONFIG.targetClinics - CONFIG.startClinics) * t;
-}
-
-function monthMetrics(month) {
-  const clinics = clinicsAt(month);
-  const prevClinics = month === 1 ? CONFIG.startClinics : clinicsAt(month - 1);
-  const newClinics = Math.max(0, clinics - prevClinics);
-
-  const recurringProfit = clinics * RECURRING_NET;
-  const setupProfit = newClinics * SETUP_NET;
-  // LP refresh: 1 per clinic per year on average
-  const lpProfit = (clinics * LP_NET) / 12;
-
-  const grossProfit = recurringProfit + setupProfit + lpProfit;
-
-  const software =
-    CONFIG.swBase +
-    (CONFIG.swMax - CONFIG.swBase) *
-      Math.max(0, clinics - CONFIG.startClinics) /
-      (CONFIG.targetClinics - CONFIG.startClinics);
-  const labor =
-    clinics <= CONFIG.laborThreshold
-      ? 0
-      : CONFIG.laborMax *
-        Math.min(1, (clinics - CONFIG.laborThreshold) / CONFIG.laborThreshold);
-  const opex = software + labor;
-
-  const ebt = grossProfit - opex;
-  const tax = ebt > 0 ? ebt * CONFIG.corpTax : 0;
-  const net = ebt - tax;
-
-  return {
-    month,
-    clinics,
-    newClinics,
-    recurringProfit,
-    setupProfit,
-    lpProfit,
-    grossProfit,
-    software,
-    labor,
-    opex,
-    ebt,
-    tax,
-    net,
-    founder: net * CONFIG.founderShare,
-    partner: net * CONFIG.partnerShare,
-  };
-}
-
-// Precompute full 24-month series + cumulative partner dividend
-const SERIES = Array.from({ length: CONFIG.horizonMonths }, (_, i) =>
-  monthMetrics(i + 1)
-);
-let runningPartner = 0;
-let runningVenture = 0;
-const SERIES_WITH_CUM = SERIES.map((row) => {
-  runningPartner += row.partner;
-  runningVenture += row.net;
-  return { ...row, cumPartner: runningPartner, cumVenture: runningVenture };
-});
-
-const PARTNER_PAYBACK_MONTH =
-  SERIES_WITH_CUM.find((r) => r.cumPartner >= CONFIG.injection)?.month ?? null;
-const VENTURE_BREAKEVEN_MONTH =
-  SERIES_WITH_CUM.find((r) => r.cumVenture >= CONFIG.injection)?.month ?? null;
-const FINAL = SERIES_WITH_CUM[CONFIG.horizonMonths - 1];
-
-// ─────────────────────────────────────────────────────────────────────
-//  FORMATTERS
-// ─────────────────────────────────────────────────────────────────────
-const fmtUSD = (v, opts = {}) =>
-  v.toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-    ...opts,
-  });
-const fmtUSDc = (v) =>
-  v.toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 2,
-  });
-const fmtPct = (v, d = 1) =>
-  `${(v * 100).toLocaleString("en-US", { maximumFractionDigits: d })}%`;
-const fmtN = (v, d = 0) =>
-  v.toLocaleString("en-US", { maximumFractionDigits: d });
-
-// ─────────────────────────────────────────────────────────────────────
-//  PRIMITIVES
-// ─────────────────────────────────────────────────────────────────────
-const Card = ({ children, className = "", glow = false }) => (
-  <div
-    className={`relative rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm ${
-      glow ? "shadow-[0_0_40px_-12px_rgba(14,165,233,0.35)]" : ""
-    } ${className}`}
-  >
-    {children}
-  </div>
-);
-
-const SectionLabel = ({ children, num }) => (
-  <div className="mb-6 flex items-center gap-3">
-    <span className="font-mono text-[11px] tracking-[0.2em] text-sky-500/80">
-      {num}
-    </span>
-    <span className="h-px flex-none w-8 bg-slate-700" />
-    <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-slate-400">
-      {children}
-    </span>
-  </div>
-);
-
-const StatRow = ({ label, value, accent = "" }) => (
-  <div className="flex items-baseline justify-between border-b border-slate-800/60 py-2.5 last:border-b-0">
-    <span className="text-[11px] uppercase tracking-wider text-slate-500">
-      {label}
-    </span>
-    <span className={`font-mono text-sm tabular-nums ${accent || "text-slate-200"}`}>
-      {value}
-    </span>
-  </div>
-);
-
-// ─────────────────────────────────────────────────────────────────────
-//  DASHBOARD
-// ─────────────────────────────────────────────────────────────────────
-export default function SSSEquityDashboard() {
-  const [month, setMonth] = useState(12);
-  const m = SERIES_WITH_CUM[month - 1];
-
-  // Inject Google Fonts once
-  useEffect(() => {
-    const id = "sss-fonts";
-    if (document.getElementById(id)) return;
-    const link = document.createElement("link");
-    link.id = id;
-    link.rel = "stylesheet";
-    link.href =
-      "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap";
-    document.head.appendChild(link);
-  }, []);
-
-  // Reusable curve path generator
-  const buildPath = (key, w = 600, h = 120) => {
-    const max = Math.max(...SERIES_WITH_CUM.map((r) => r[key]));
-    const min = Math.min(...SERIES_WITH_CUM.map((r) => r[key]));
-    const range = max - min || 1;
-    const pts = SERIES_WITH_CUM.map((r, i) => {
-      const x = (i / (CONFIG.horizonMonths - 1)) * w;
-      const y = h - ((r[key] - min) / range) * h;
-      return [x, y];
-    });
-    const d = pts
-      .map(([x, y], i) => (i === 0 ? `M ${x},${y}` : `L ${x},${y}`))
-      .join(" ");
-    const area = `${d} L ${w},${h} L 0,${h} Z`;
-    return { d, area, pts };
-  };
-
-  return (
-    <div
-      className="min-h-screen w-full bg-slate-950 text-slate-200"
-      style={{ fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif" }}
-    >
-      <style>{`
-        .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
-        .grid-bg {
-          background-image:
-            linear-gradient(rgba(148,163,184,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(148,163,184,0.04) 1px, transparent 1px);
-          background-size: 32px 32px;
+        // Linear clinic growth 3 → 100 across 24 months
+        function clinicsAt(month) {
+          const t = (month - 1) / (CONFIG.horizonMonths - 1);
+          return CONFIG.startClinics + (CONFIG.targetClinics - CONFIG.startClinics) * t;
         }
-        .num-glow { text-shadow: 0 0 24px rgba(14,165,233,0.25); }
-        .profit-glow { text-shadow: 0 0 24px rgba(16,185,129,0.3); }
-        input[type=range].sss-slider {
-          -webkit-appearance: none; appearance: none;
-          background: transparent;
-          width: 100%;
-        }
-        input[type=range].sss-slider::-webkit-slider-runnable-track {
-          height: 4px;
-          background: linear-gradient(90deg, #0ea5e9 0%, #0ea5e9 var(--val,50%), #1e293b var(--val,50%), #1e293b 100%);
-          border-radius: 999px;
-        }
-        input[type=range].sss-slider::-moz-range-track {
-          height: 4px; background: #1e293b; border-radius: 999px;
-        }
-        input[type=range].sss-slider::-moz-range-progress {
-          height: 4px; background: #0ea5e9; border-radius: 999px;
-        }
-        input[type=range].sss-slider::-webkit-slider-thumb {
-          -webkit-appearance: none; appearance: none;
-          width: 22px; height: 22px; border-radius: 999px;
-          background: #f8fafc;
-          border: 3px solid #0ea5e9;
-          margin-top: -9px;
-          box-shadow: 0 0 0 6px rgba(14,165,233,0.15), 0 0 30px rgba(14,165,233,0.5);
-          cursor: grab;
-          transition: transform .15s ease;
-        }
-        input[type=range].sss-slider::-webkit-slider-thumb:active { transform: scale(1.1); cursor: grabbing; }
-        input[type=range].sss-slider::-moz-range-thumb {
-          width: 22px; height: 22px; border-radius: 999px;
-          background: #f8fafc; border: 3px solid #0ea5e9; cursor: grab;
-        }
-      `}</style>
 
-      {/* ═══════════════════════════════════════════════════════════════
-          HEADER
-      ═══════════════════════════════════════════════════════════════ */}
-      <header className="relative border-b border-slate-800/80 grid-bg">
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-950/30 via-transparent to-transparent pointer-events-none" />
-        <div className="relative mx-auto max-w-7xl px-6 py-5 flex items-center justify-between">
-          {/* Wordmark */}
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-sky-500 to-sky-700 flex items-center justify-center font-bold text-white text-lg tracking-tighter shadow-[0_0_30px_-6px_rgba(14,165,233,0.6)]">
-                S³
-              </div>
-            </div>
-            <div className="leading-tight">
-              <div className="font-bold tracking-tight text-slate-50 text-[15px]">
-                SSS MARKETING
-              </div>
-              <div className="mono text-[10px] tracking-[0.2em] text-slate-500 uppercase">
-                Capital Partners
-              </div>
-            </div>
+        function monthMetrics(month) {
+          const clinics = clinicsAt(month);
+          const prevClinics = month === 1 ? CONFIG.startClinics : clinicsAt(month - 1);
+          const newClinics = Math.max(0, clinics - prevClinics);
+
+          const recurringProfit = clinics * RECURRING_NET;
+          const setupProfit = newClinics * SETUP_NET;
+          // LP refresh: 1 per clinic per year on average
+          const lpProfit = (clinics * LP_NET) / 12;
+
+          const grossProfit = recurringProfit + setupProfit + lpProfit;
+
+          const software =
+            CONFIG.swBase +
+            (CONFIG.swMax - CONFIG.swBase) *
+              Math.max(0, clinics - CONFIG.startClinics) /
+              (CONFIG.targetClinics - CONFIG.startClinics);
+          const labor =
+            clinics <= CONFIG.laborThreshold
+              ? 0
+              : CONFIG.laborMax *
+                Math.min(1, (clinics - CONFIG.laborThreshold) / CONFIG.laborThreshold);
+          const opex = software + labor;
+
+          const ebt = grossProfit - opex;
+          const tax = ebt > 0 ? ebt * CONFIG.corpTax : 0;
+          const net = ebt - tax;
+
+          return {
+            month,
+            clinics,
+            newClinics,
+            recurringProfit,
+            setupProfit,
+            lpProfit,
+            grossProfit,
+            software,
+            labor,
+            opex,
+            ebt,
+            tax,
+            net,
+            founder: net * CONFIG.founderShare,
+            partner: net * CONFIG.partnerShare,
+          };
+        }
+
+        // Precompute full 24-month series + cumulative partner dividend
+        const SERIES = Array.from({ length: CONFIG.horizonMonths }, (_, i) =>
+          monthMetrics(i + 1)
+        );
+        let runningPartner = 0;
+        let runningVenture = 0;
+        const SERIES_WITH_CUM = SERIES.map((row) => {
+          runningPartner += row.partner;
+          runningVenture += row.net;
+          return { ...row, cumPartner: runningPartner, cumVenture: runningVenture };
+        });
+
+        const PARTNER_PAYBACK_MONTH =
+          SERIES_WITH_CUM.find((r) => r.cumPartner >= CONFIG.injection)?.month ?? null;
+        const VENTURE_BREAKEVEN_MONTH =
+          SERIES_WITH_CUM.find((r) => r.cumVenture >= CONFIG.injection)?.month ?? null;
+        const FINAL = SERIES_WITH_CUM[CONFIG.horizonMonths - 1];
+
+        // ─────────────────────────────────────────────────────────────────────
+        //  FORMATTERS
+        // ─────────────────────────────────────────────────────────────────────
+        const fmtUSD = (v, opts = {}) =>
+          v.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 0,
+            ...opts,
+          });
+        const fmtUSDc = (v) =>
+          v.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 2,
+          });
+        const fmtPct = (v, d = 1) =>
+          `${(v * 100).toLocaleString("en-US", { maximumFractionDigits: d })}%`;
+        const fmtN = (v, d = 0) =>
+          v.toLocaleString("en-US", { maximumFractionDigits: d });
+
+        // ─────────────────────────────────────────────────────────────────────
+        //  PRIMITIVES
+        // ─────────────────────────────────────────────────────────────────────
+        const Card = ({ children, className = "", glow = false }) => (
+          <div
+            className={`relative rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm ${
+              glow ? "shadow-[0_0_40px_-12px_rgba(14,165,233,0.35)]" : ""
+            } ${className}`}
+          >
+            {children}
           </div>
+        );
 
-          <div className="hidden md:flex items-center gap-6">
-            <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-slate-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Live Model
-            </div>
-            <div className="text-[11px] uppercase tracking-wider text-slate-500">
-              Confidential · Series Seed Memorandum
-            </div>
-            <div className="mono text-[11px] text-slate-400">
-              Rev. 05.2026
-            </div>
-          </div>
-        </div>
-
-        {/* Hero strip */}
-        <div className="relative mx-auto max-w-7xl px-6 pb-12 pt-8">
-          <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-sky-400/90 mb-4">
-            <Briefcase className="w-3.5 h-3.5" />
-            Partner Equity Dashboard
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-50 leading-[1.05] max-w-4xl">
-            A <span className="text-sky-400">$30,000</span> position in the{" "}
-            <span className="italic text-slate-300">utility layer</span> of
-            Canadian dental care.
-          </h1>
-          <p className="mt-5 max-w-2xl text-slate-400 leading-relaxed">
-            Partner subscribes for a{" "}
-            <span className="text-slate-200 font-semibold">
-              15% perpetual net-profit equity
-            </span>{" "}
-            in SSS Marketing's clinic-services platform. The 24-month model
-            charts a{" "}
-            <span className="text-emerald-400 font-semibold">conservative</span>{" "}
-            path to{" "}
-            <span className="text-slate-200">20% of the 123Dentist network</span>{" "}
-            — with the broader independent-clinic market sitting beyond it as
-            uncapped upside.
-          </p>
-
-          {/* Deal terms */}
-          <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-px bg-slate-800/60 rounded-xl overflow-hidden border border-slate-800">
-            {[
-              {
-                k: "Capital Injection",
-                v: "$30,000",
-                sub: "CAD · Single tranche",
-                icon: DollarSign,
-              },
-              {
-                k: "Net Equity",
-                v: "15.00%",
-                sub: "Of post-tax net profit",
-                icon: Crown,
-              },
-              {
-                k: "Horizon to Target",
-                v: "24 mo",
-                sub: "3 → 100 clinics",
-                icon: CalendarClock,
-              },
-              {
-                k: "Partner Payback",
-                v: `M ${PARTNER_PAYBACK_MONTH ?? "—"}`,
-                sub: "Cumulative div ≥ injection",
-                icon: Target,
-                accent: true,
-              },
-            ].map(({ k, v, sub, icon: Icon, accent }) => (
-              <div key={k} className="bg-slate-950 p-5">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-                    {k}
-                  </span>
-                  <Icon
-                    className={`w-3.5 h-3.5 ${
-                      accent ? "text-emerald-400" : "text-slate-600"
-                    }`}
-                  />
-                </div>
-                <div
-                  className={`mono text-3xl font-semibold tabular-nums ${
-                    accent ? "text-emerald-400 profit-glow" : "text-slate-50"
-                  }`}
-                >
-                  {v}
-                </div>
-                <div className="text-[11px] text-slate-500 mt-1.5">{sub}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </header>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          STRATEGIC BRIEFING — THESIS
-      ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative border-b border-slate-900 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-sky-500/[0.04] blur-3xl" />
-          <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-emerald-500/[0.03] blur-3xl" />
-        </div>
-        <div className="relative mx-auto max-w-7xl px-6 py-20">
-          <div className="flex items-center gap-3 mb-12">
+        const SectionLabel = ({ children, num }) => (
+          <div className="mb-6 flex items-center gap-3">
             <span className="font-mono text-[11px] tracking-[0.2em] text-sky-500/80">
-              00
+              {num}
             </span>
             <span className="h-px flex-none w-8 bg-slate-700" />
             <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-slate-400">
-              Strategic Briefing · Private
+              {children}
             </span>
           </div>
+        );
 
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
-            <div className="lg:col-span-3">
-              <div className="text-[11px] uppercase tracking-[0.2em] text-sky-400 mb-3">
-                Founder → Cornerstone Partner
-              </div>
-              <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-slate-50 leading-[1.15]">
-                The trade,
-                <br />
-                in three sentences.
-              </h2>
-              <p className="text-slate-500 text-[13px] mt-4 leading-relaxed">
-                A peer-to-peer thesis. Everything that follows is the proof.
-              </p>
-              <div className="mt-6 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-slate-600 border border-slate-800 rounded-full px-3 py-1.5">
-                <span className="w-1 h-1 rounded-full bg-emerald-400" />
-                2-year trust · DMD cornerstone
-              </div>
-            </div>
-
-            <div className="lg:col-span-9 space-y-10 lg:space-y-12 relative lg:pl-12 lg:border-l border-slate-800">
-              {/* Sentence 01 */}
-              <div className="relative">
-                <div className="hidden lg:flex absolute -left-[3.4rem] top-1 w-7 h-7 rounded-full bg-slate-950 border border-slate-700 items-center justify-center mono text-[10px] text-sky-400 font-semibold">
-                  01
-                </div>
-                <div className="lg:hidden mono text-[10px] text-sky-400 mb-2">
-                  · 01 ·
-                </div>
-                <p className="text-xl lg:text-[1.6rem] text-slate-100 leading-snug font-medium tracking-tight">
-                  Your{" "}
-                  <span className="text-sky-400 font-semibold">$30K</span>{" "}
-                  funds the build; your{" "}
-                  <span className="text-sky-400 font-semibold">
-                    DMD credibility
-                  </span>{" "}
-                  funds the entry price —{" "}
-                  <span className="text-slate-400 italic">that's the trade</span>.
-                </p>
-              </div>
-
-              {/* Sentence 02 */}
-              <div className="relative">
-                <div className="hidden lg:flex absolute -left-[3.4rem] top-1 w-7 h-7 rounded-full bg-slate-950 border border-slate-700 items-center justify-center mono text-[10px] text-sky-400 font-semibold">
-                  02
-                </div>
-                <div className="lg:hidden mono text-[10px] text-sky-400 mb-2">
-                  · 02 ·
-                </div>
-                <p className="text-xl lg:text-[1.6rem] text-slate-100 leading-snug font-medium tracking-tight">
-                  Sweat equity is mine, the system is{" "}
-                  <span className="text-slate-300 italic">
-                    white-labeled and passive
-                  </span>
-                  , and your clinics carry{" "}
-                  <span className="text-emerald-400 font-semibold">
-                    zero operational weight
-                  </span>
-                  .
-                </p>
-              </div>
-
-              {/* Sentence 03 */}
-              <div className="relative">
-                <div className="hidden lg:flex absolute -left-[3.4rem] top-1 w-7 h-7 rounded-full bg-slate-950 border border-emerald-500/40 items-center justify-center mono text-[10px] text-emerald-400 font-semibold">
-                  03
-                </div>
-                <div className="lg:hidden mono text-[10px] text-emerald-400 mb-2">
-                  · 03 ·
-                </div>
-                <p className="text-xl lg:text-[1.6rem] text-slate-100 leading-snug font-medium tracking-tight">
-                  Pilot validates the model, the 24-month curve deploys it
-                  across the 123Dentist network, and 20% of the largest dental
-                  group in Canada — plus the independent clinics that follow —
-                  is the{" "}
-                  <span className="text-emerald-400 font-bold profit-glow">
-                    conservative
-                  </span>{" "}
-                  ceiling,{" "}
-                  <span className="italic text-slate-500">not the target</span>.
-                </p>
-              </div>
-
-              {/* Signature */}
-              <div className="pt-4 flex items-center gap-3 text-[11px] text-slate-600">
-                <span className="h-px flex-1 bg-slate-800" />
-                <span className="mono uppercase tracking-[0.2em]">
-                  End briefing
-                </span>
-                <span className="h-px flex-1 bg-slate-800" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          GROWTH STRATEGY SLIDER
-      ═══════════════════════════════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-6 py-20">
-        <SectionLabel num="01">Growth Strategy / Timeline</SectionLabel>
-
-        <div className="flex items-end justify-between mb-10 flex-wrap gap-6">
-          <div>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">
-              Drag the lever. Watch the yield curve.
-            </h2>
-            <p className="text-slate-500 mt-2 max-w-xl">
-              Each tick recalculates the full P&amp;L stack — post-Stripe,
-              post-OpEx, post-tax. Founder takes 85%, Partner 15%.
-            </p>
-          </div>
-          <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-slate-400">
-            <Zap className="w-3.5 h-3.5 text-sky-400" />
-            Real-time scenario engine
-          </div>
-        </div>
-
-        <Card className="p-8 lg:p-10" glow>
-          {/* Live readout grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-            <LiveMetric
-              icon={Building2}
-              label="Clinic Count"
-              value={fmtN(Math.round(m.clinics))}
-              suffix="active"
-              detail={`${fmtPct(
-                m.clinics / CONFIG.networkSize,
-                1
-              )} of 123Dentist`}
-              tone="sky"
-            />
-            <LiveMetric
-              icon={TrendingUp}
-              label="Total Net Profit"
-              value={fmtUSD(m.net)}
-              suffix="/ mo"
-              detail={`EBT ${fmtUSD(m.ebt)} − tax ${fmtUSD(m.tax)}`}
-              tone="emerald"
-            />
-            <LiveMetric
-              icon={Crown}
-              label="Founder Div · 85%"
-              value={fmtUSD(m.founder)}
-              suffix="/ mo"
-              detail="Post-tax take-home"
-              tone="slate"
-            />
-            <LiveMetric
-              icon={Users}
-              label="Partner Div · 15%"
-              value={fmtUSD(m.partner)}
-              suffix="/ mo"
-              detail={`Annualized ${fmtUSD(m.partner * 12)}`}
-              tone="emerald"
-              accent
-            />
-          </div>
-
-          {/* Slider */}
-          <div className="space-y-3">
-            <div className="flex justify-between items-baseline">
-              <div>
-                <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-                  Position
-                </div>
-                <div className="mono text-2xl text-slate-50">
-                  Month {String(month).padStart(2, "0")}
-                  <span className="text-slate-600 text-base"> / 24</span>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-                  Trajectory
-                </div>
-                <div className="mono text-sm text-slate-300">
-                  +{fmtN(m.newClinics, 1)} clinics this period
-                </div>
-              </div>
-            </div>
-
-            <input
-              type="range"
-              min={1}
-              max={24}
-              value={month}
-              onChange={(e) => setMonth(parseInt(e.target.value, 10))}
-              className="sss-slider"
-              style={{ "--val": `${((month - 1) / 23) * 100}%` }}
-            />
-
-            {/* Tick labels */}
-            <div className="flex justify-between mono text-[10px] text-slate-600 pt-1 select-none">
-              {[1, 6, 12, 18, 24].map((mm) => (
-                <span
-                  key={mm}
-                  className={
-                    Math.abs(mm - month) <= 1 ? "text-sky-400" : ""
-                  }
-                >
-                  M{mm}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Sparkline strip */}
-          <div className="mt-10 grid lg:grid-cols-2 gap-8">
-            <Sparkline
-              title="Monthly Net Profit"
-              series={SERIES_WITH_CUM}
-              keyName="net"
-              activeMonth={month}
-              stroke="#10b981"
-              fill="rgba(16,185,129,0.12)"
-              format={fmtUSD}
-            />
-            <Sparkline
-              title="Clinic Penetration"
-              series={SERIES_WITH_CUM}
-              keyName="clinics"
-              activeMonth={month}
-              stroke="#0ea5e9"
-              fill="rgba(14,165,233,0.12)"
-              format={(v) => `${Math.round(v)} clinics`}
-            />
-          </div>
-        </Card>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          PROFIT CENTER GRID
-      ═══════════════════════════════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-6 py-20 border-t border-slate-900">
-        <SectionLabel num="02">Unit Economics</SectionLabel>
-        <div className="flex items-end justify-between mb-10 flex-wrap gap-6">
-          <div>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">
-              Three margins. One flywheel.
-            </h2>
-            <p className="text-slate-500 mt-2 max-w-xl">
-              Every clinic compounds across three distinct revenue surfaces.
-              Stripe is netted; corporate tax sits at portfolio level.
-            </p>
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-5">
-          {/* Setup */}
-          <Card className="p-7 group hover:border-sky-500/40 transition-colors">
-            <div className="flex items-start justify-between mb-6">
-              <div className="w-11 h-11 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
-                <Receipt className="w-5 h-5 text-sky-400" />
-              </div>
-              <span className="mono text-[10px] uppercase tracking-wider text-slate-500">
-                One-time · per clinic
-              </span>
-            </div>
-            <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">
-              Setup Activation
-            </div>
-            <div className="mt-1 flex items-baseline gap-2">
-              <div className="mono text-4xl font-bold text-slate-50">$499</div>
-              <ArrowUpRight className="w-4 h-4 text-slate-600" />
-              <div className="mono text-2xl font-semibold text-emerald-400 profit-glow">
-                {fmtUSDc(SETUP_NET)}
-              </div>
-            </div>
-            <div className="text-[11px] text-slate-500 mt-1">
-              Net per onboarding, post-Stripe
-            </div>
-            <div className="mt-5 space-y-0">
-              <StatRow label="Gross Ticket" value="$499.00" />
-              <StatRow label="White-label COGS" value="−$300.00" />
-              <StatRow label="NFC Kit (hardware)" value="−$20.00" />
-              <StatRow
-                label="Stripe (3%)"
-                value={`−${fmtUSDc(CONFIG.setupFee * CONFIG.stripe)}`}
-              />
-              <StatRow
-                label="Net Contribution"
-                value={fmtUSDc(SETUP_NET)}
-                accent="text-emerald-400"
-              />
-            </div>
-          </Card>
-
-          {/* Landing Page */}
-          <Card className="p-7 group hover:border-sky-500/40 transition-colors">
-            <div className="flex items-start justify-between mb-6">
-              <div className="w-11 h-11 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
-                <Layers className="w-5 h-5 text-sky-400" />
-              </div>
-              <span className="mono text-[10px] uppercase tracking-wider text-slate-500">
-                Annual refresh
-              </span>
-            </div>
-            <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">
-              Landing Page Refresh
-            </div>
-            <div className="mt-1 flex items-baseline gap-2">
-              <div className="mono text-4xl font-bold text-slate-50">$999</div>
-              <ArrowUpRight className="w-4 h-4 text-slate-600" />
-              <div className="mono text-2xl font-semibold text-emerald-400 profit-glow">
-                {fmtUSDc(LP_NET)}
-              </div>
-            </div>
-            <div className="text-[11px] text-slate-500 mt-1">
-              Net per refresh, post-Stripe
-            </div>
-            <div className="mt-5 space-y-0">
-              <StatRow label="Gross Ticket" value="$999.00" />
-              <StatRow label="Production COGS" value="−$750.00" />
-              <StatRow
-                label="Stripe (3%)"
-                value={`−${fmtUSDc(CONFIG.lpFee * CONFIG.stripe)}`}
-              />
-              <StatRow
-                label="Net Contribution"
-                value={fmtUSDc(LP_NET)}
-                accent="text-emerald-400"
-              />
-              <StatRow
-                label="At 100 clinics · annual"
-                value={fmtUSD(100 * LP_NET)}
-                accent="text-slate-100"
-              />
-            </div>
-          </Card>
-
-          {/* Recurring */}
-          <Card className="p-7 relative overflow-hidden">
-            <div className="absolute top-0 right-0 px-3 py-1 bg-emerald-500/10 border-l border-b border-emerald-500/30 text-[10px] uppercase tracking-wider text-emerald-300">
-              Core Asset
-            </div>
-            <div className="flex items-start justify-between mb-6">
-              <div className="w-11 h-11 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
-                <Activity className="w-5 h-5 text-emerald-400" />
-              </div>
-              <span className="mono text-[10px] uppercase tracking-wider text-slate-500">
-                MRR · per clinic
-              </span>
-            </div>
-            <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">
-              Management Utility
-            </div>
-            <div className="mt-1 flex items-baseline gap-2">
-              <div className="mono text-4xl font-bold text-slate-50">$449</div>
-              <span className="text-slate-600 text-sm">/mo</span>
-            </div>
-            <div className="mt-3 flex items-center gap-3">
-              <div className="mono text-3xl font-bold text-emerald-400 profit-glow">
-                {fmtPct(RECURRING_MARGIN, 0)}
-              </div>
-              <div className="text-[11px] text-slate-400 leading-tight">
-                Gross margin
-                <br />
-                <span className="text-slate-600">
-                  {fmtUSDc(RECURRING_GROSS)} per clinic
-                </span>
-              </div>
-            </div>
-            <div className="mt-5 space-y-0">
-              <StatRow label="Monthly Fee" value="$449.00" />
-              <StatRow label="Service COGS" value="−$149.00" />
-              <StatRow
-                label="Stripe (3%)"
-                value={`−${fmtUSDc(CONFIG.mgmtFee * CONFIG.stripe)}`}
-              />
-              <StatRow
-                label="Net MRR / clinic"
-                value={fmtUSDc(RECURRING_NET)}
-                accent="text-emerald-400"
-              />
-              <StatRow
-                label="@ 100 clinics · ARR"
-                value={fmtUSD(100 * RECURRING_NET * 12)}
-                accent="text-slate-100"
-              />
-            </div>
-          </Card>
-        </div>
-
-        {/* Margin stack visual */}
-        <Card className="mt-5 p-7">
-          <div className="flex items-center justify-between mb-5">
-            <div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-                Margin Decomposition · $449 management fee
-              </div>
-              <div className="text-slate-300 mt-1 text-sm">
-                Per-clinic dollar flows from invoice to retained earnings.
-              </div>
-            </div>
-            <span className="mono text-[10px] text-slate-500">CAD</span>
-          </div>
-          <MarginStack />
-        </Card>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          CAPITAL EFFICIENCY / PAYBACK
-      ═══════════════════════════════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-6 py-20 border-t border-slate-900">
-        <SectionLabel num="03">Capital Efficiency</SectionLabel>
-        <div className="flex items-end justify-between mb-10 flex-wrap gap-6">
-          <div>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">
-              Payback Tracker
-            </h2>
-            <p className="text-slate-500 mt-2 max-w-xl">
-              Cumulative partner dividends measured against the $30,000
-              injection. Crossover defines breakeven.{" "}
-              <span className="text-slate-400">
-                Modeled against the 20% network floor — independent-clinic
-                uptake is not priced in.
-              </span>
-            </p>
-          </div>
-        </div>
-
-        <Card className="p-8 lg:p-10">
-          <div className="grid lg:grid-cols-4 gap-8 mb-10">
-            <div className="lg:col-span-3">
-              <PaybackChart />
-            </div>
-            <div className="space-y-4">
-              <div>
-                <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-                  Partner Payback
-                </div>
-                <div className="mono text-4xl font-bold text-emerald-400 profit-glow leading-none mt-1">
-                  M{PARTNER_PAYBACK_MONTH}
-                </div>
-                <div className="text-[11px] text-slate-500 mt-1">
-                  Cumulative div ≥ $30K
-                </div>
-              </div>
-              <div className="h-px bg-slate-800" />
-              <div>
-                <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-                  Venture Breakeven
-                </div>
-                <div className="mono text-4xl font-bold text-sky-400 num-glow leading-none mt-1">
-                  M{VENTURE_BREAKEVEN_MONTH}
-                </div>
-                <div className="text-[11px] text-slate-500 mt-1">
-                  Cum. net profit ≥ injection
-                </div>
-              </div>
-              <div className="h-px bg-slate-800" />
-              <div>
-                <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-                  24-Mo Yield (Partner)
-                </div>
-                <div className="mono text-4xl font-bold text-slate-50 leading-none mt-1">
-                  {fmtN(FINAL.cumPartner / CONFIG.injection, 2)}×
-                </div>
-                <div className="text-[11px] text-slate-500 mt-1">
-                  {fmtUSD(FINAL.cumPartner)} returned on $30K
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {[
-              {
-                k: "Mo 6",
-                row: SERIES_WITH_CUM[5],
-              },
-              {
-                k: "Mo 12",
-                row: SERIES_WITH_CUM[11],
-              },
-              {
-                k: `Mo ${PARTNER_PAYBACK_MONTH}`,
-                row: SERIES_WITH_CUM[PARTNER_PAYBACK_MONTH - 1],
-                hot: true,
-              },
-              {
-                k: "Mo 24",
-                row: SERIES_WITH_CUM[23],
-              },
-            ].map(({ k, row, hot }) => (
-              <div
-                key={k}
-                className={`rounded-lg border p-4 ${
-                  hot
-                    ? "border-emerald-500/40 bg-emerald-500/5"
-                    : "border-slate-800 bg-slate-950/50"
-                }`}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="mono text-[10px] uppercase tracking-wider text-slate-500">
-                    {k}
-                  </span>
-                  {hot && (
-                    <span className="text-[9px] uppercase tracking-wider text-emerald-400">
-                      Payback
-                    </span>
-                  )}
-                </div>
-                <div className="mono text-lg text-slate-50 tabular-nums">
-                  {fmtUSD(row.cumPartner)}
-                </div>
-                <div className="text-[11px] text-slate-500 mt-1">
-                  {Math.round(row.clinics)} clinics
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          PHYSICAL MOAT (NFC)
-      ═══════════════════════════════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-6 py-20 border-t border-slate-900">
-        <SectionLabel num="04">Defensibility</SectionLabel>
-        <div className="grid lg:grid-cols-5 gap-8">
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-2 text-sky-400 text-[11px] uppercase tracking-[0.2em] mb-3">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              The Physical Moat
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">
-              Hardware lives on the counter.
-              <br />
-              <span className="text-slate-500">Software lives in habit.</span>
-            </h2>
-            <p className="text-slate-400 mt-5 leading-relaxed">
-              Each clinic receives a branded NFC Review Pad — a $20 piece of
-              hardware that turns the reception desk into a recurring review
-              engine. Once installed, switching costs become physical: staff
-              training, signage, patient flow.
-            </p>
-            <p className="text-slate-400 mt-3 leading-relaxed">
-              SaaS competitors can clone the dashboard. They cannot un-install
-              the tap target sitting on the counter.
-            </p>
-
-            <div className="mt-8 space-y-3">
-              {[
-                {
-                  i: Lock,
-                  t: "Switching friction",
-                  d: "Removing the pad = visible change at the front desk",
-                },
-                {
-                  i: CircuitBoard,
-                  t: "Embedded in workflow",
-                  d: "Receptionist hands pad to patient at checkout",
-                },
-                {
-                  i: Wifi,
-                  t: "Always-on review funnel",
-                  d: "Each tap = direct deep-link to Google Review",
-                },
-              ].map(({ i: Icon, t, d }) => (
-                <div key={t} className="flex gap-4">
-                  <div className="w-9 h-9 rounded-lg bg-sky-500/10 border border-sky-500/30 flex-none flex items-center justify-center">
-                    <Icon className="w-4 h-4 text-sky-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-slate-200">
-                      {t}
-                    </div>
-                    <div className="text-[13px] text-slate-500 leading-snug">
-                      {d}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* NFC visual */}
-          <div className="lg:col-span-3">
-            <Card className="p-8 lg:p-10 relative overflow-hidden h-full" glow>
-              <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-sky-500/10 blur-3xl pointer-events-none" />
-              <div className="absolute -bottom-32 -left-10 w-72 h-72 rounded-full bg-emerald-500/5 blur-3xl pointer-events-none" />
-              <div className="relative flex items-center justify-between mb-8">
-                <div>
-                  <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-                    SKU · NFC-REV-001
-                  </div>
-                  <div className="text-2xl font-bold text-slate-50 mt-1">
-                    SSS Review Pad™
-                  </div>
-                </div>
-                <div className="mono text-[10px] uppercase tracking-wider text-emerald-400 border border-emerald-500/30 rounded-full px-3 py-1 bg-emerald-500/5">
-                  Shipped w/ every clinic
-                </div>
-              </div>
-
-              {/* NFC pad rendering */}
-              <div className="relative mx-auto" style={{ maxWidth: 320 }}>
-                <svg viewBox="0 0 320 200" className="w-full">
-                  <defs>
-                    <linearGradient id="padBody" x1="0" x2="1" y1="0" y2="1">
-                      <stop offset="0%" stopColor="#0f172a" />
-                      <stop offset="100%" stopColor="#020617" />
-                    </linearGradient>
-                    <linearGradient id="padEdge" x1="0" x2="0" y1="0" y2="1">
-                      <stop offset="0%" stopColor="#334155" />
-                      <stop offset="100%" stopColor="#0f172a" />
-                    </linearGradient>
-                    <radialGradient id="ring" cx="0.5" cy="0.5" r="0.5">
-                      <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.6" />
-                      <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0" />
-                    </radialGradient>
-                  </defs>
-                  {/* shadow */}
-                  <ellipse cx="160" cy="185" rx="120" ry="8" fill="#000" opacity="0.5" />
-                  {/* body */}
-                  <rect
-                    x="40"
-                    y="30"
-                    width="240"
-                    height="150"
-                    rx="20"
-                    fill="url(#padBody)"
-                    stroke="url(#padEdge)"
-                    strokeWidth="1.5"
-                  />
-                  {/* glow ring */}
-                  <circle cx="160" cy="105" r="60" fill="url(#ring)" />
-                  {/* NFC waves */}
-                  <g
-                    fill="none"
-                    stroke="#0ea5e9"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    opacity="0.85"
-                  >
-                    <path d="M 145 105 a 18 18 0 0 1 30 0" />
-                    <path d="M 138 105 a 28 28 0 0 1 44 0" opacity="0.6" />
-                    <path d="M 131 105 a 38 38 0 0 1 58 0" opacity="0.35" />
-                    <circle cx="160" cy="115" r="4" fill="#0ea5e9" stroke="none" />
-                  </g>
-                  {/* brand */}
-                  <text
-                    x="160"
-                    y="160"
-                    textAnchor="middle"
-                    fill="#64748b"
-                    fontSize="9"
-                    fontFamily="JetBrains Mono"
-                    letterSpacing="3"
-                  >
-                    TAP · REVIEW · GO
-                  </text>
-                  {/* corner mark */}
-                  <text
-                    x="56"
-                    y="50"
-                    fill="#0ea5e9"
-                    fontSize="11"
-                    fontFamily="Manrope"
-                    fontWeight="700"
-                  >
-                    S³
-                  </text>
-                </svg>
-              </div>
-
-              <div className="grid grid-cols-3 gap-px bg-slate-800 mt-8 rounded-lg overflow-hidden border border-slate-800">
-                <div className="bg-slate-950 p-4 text-center">
-                  <div className="mono text-2xl font-bold text-slate-50">$20</div>
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">
-                    Hardware COGS
-                  </div>
-                </div>
-                <div className="bg-slate-950 p-4 text-center">
-                  <div className="mono text-2xl font-bold text-sky-400">∞</div>
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">
-                    Taps / pad
-                  </div>
-                </div>
-                <div className="bg-slate-950 p-4 text-center">
-                  <div className="mono text-2xl font-bold text-emerald-400">
-                    100%
-                  </div>
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">
-                    Attach rate
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          UPSELL ROADMAP
-      ═══════════════════════════════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-6 py-20 border-t border-slate-900">
-        <SectionLabel num="05">Forward Optionality</SectionLabel>
-        <div className="flex items-end justify-between mb-10 flex-wrap gap-6">
-          <div>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">
-              Secondary revenue layers.
-            </h2>
-            <p className="text-slate-500 mt-2 max-w-xl">
-              Once the utility layer is installed, every clinic becomes a
-              distribution channel for high-ticket procedure funnels.{" "}
-              <span className="text-slate-400">
-                None of this is in the base case — and neither is the
-                independent-clinic market beyond the 123Dentist network.
-              </span>{" "}
-              Pure upside.
-            </p>
-          </div>
-          <div className="text-[11px] uppercase tracking-wider text-emerald-400/80 flex items-center gap-2">
-            <Sparkles className="w-3.5 h-3.5" />
-            Not in base case
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-5">
-          <UpsellCard
-            icon={Smile}
-            tier="Tier I"
-            name="Invisalign Funnels"
-            ticket="$2,500 – $4,000"
-            note="Specialized lead-gen for clear aligner candidates. Per-clinic LTV multiplier."
-            metrics={[
-              ["Avg Procedure", "$5,800"],
-              ["Funnel ARR (est.)", "$1,800"],
-              ["Margin Profile", "70%+"],
-            ]}
-          />
-          <UpsellCard
-            icon={Stethoscope}
-            tier="Tier II"
-            name="Implant Pipeline"
-            ticket="$3,500 – $6,000"
-            note="High-intent geo-targeted campaigns. Capacity-constrained — fits surgical schedules."
-            metrics={[
-              ["Avg Procedure", "$4,500"],
-              ["Funnel ARR (est.)", "$3,200"],
-              ["Margin Profile", "65%+"],
-            ]}
-            featured
-          />
-          <UpsellCard
-            icon={Cpu}
-            tier="Tier III"
-            name="AI Triage Layer"
-            ticket="$199 / mo add-on"
-            note="Automated patient intake + insurance pre-check. Sits on top of the existing $449 utility."
-            metrics={[
-              ["Attach Rate (proj.)", "40%"],
-              ["Incremental ARR", "$95K"],
-              ["Margin Profile", "82%"],
-            ]}
-          />
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          FOOTER
-      ═══════════════════════════════════════════════════════════════ */}
-      <footer className="border-t border-slate-900 mt-10">
-        <div className="mx-auto max-w-7xl px-6 py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div>
-            <div className="font-bold tracking-tight text-slate-200">
-              SSS MARKETING · Capital Partners
-            </div>
-            <div className="text-[11px] text-slate-500 mt-1 max-w-xl">
-              This document is a confidential memorandum prepared for a
-              prospective equity partner. Projections are illustrative and
-              based on the unit economics stated herein. Past results not
-              indicative of future returns. Canadian-domiciled entity; CAD
-              reporting; 13% federal corporate tax applied at portfolio level.
-            </div>
-          </div>
-          <div className="flex items-center gap-6 mono text-[11px] text-slate-500">
-            <div>SSS-2026-Q2</div>
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              Model live
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────
-//  SUB-COMPONENTS
-// ─────────────────────────────────────────────────────────────────────
-function LiveMetric({ icon: Icon, label, value, suffix, detail, tone, accent }) {
-  const toneMap = {
-    sky: "text-sky-400 num-glow",
-    emerald: "text-emerald-400 profit-glow",
-    slate: "text-slate-200",
-  };
-  return (
-    <div
-      className={`relative p-5 rounded-lg border ${
-        accent
-          ? "bg-emerald-500/5 border-emerald-500/30"
-          : "bg-slate-950/60 border-slate-800"
-      } transition-all`}
-    >
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-          {label}
-        </span>
-        <Icon className={`w-3.5 h-3.5 ${toneMap[tone]}`} />
-      </div>
-      <div className="flex items-baseline gap-1.5">
-        <span
-          className={`mono text-3xl font-bold tabular-nums leading-none ${toneMap[tone]}`}
-        >
-          {value}
-        </span>
-        <span className="text-xs text-slate-500">{suffix}</span>
-      </div>
-      <div className="text-[11px] text-slate-500 mt-2 leading-tight">
-        {detail}
-      </div>
-    </div>
-  );
-}
-
-function Sparkline({ title, series, keyName, activeMonth, stroke, fill, format }) {
-  const w = 600;
-  const h = 110;
-  const vals = series.map((r) => r[keyName]);
-  const max = Math.max(...vals);
-  const min = Math.min(...vals);
-  const range = max - min || 1;
-  const pts = series.map((r, i) => {
-    const x = (i / (CONFIG.horizonMonths - 1)) * w;
-    const y = h - ((r[keyName] - min) / range) * h;
-    return [x, y];
-  });
-  const d = pts
-    .map(([x, y], i) => (i === 0 ? `M ${x},${y}` : `L ${x},${y}`))
-    .join(" ");
-  const area = `M 0,${h} ${pts
-    .map(([x, y]) => `L ${x},${y}`)
-    .join(" ")} L ${w},${h} Z`;
-  const [ax, ay] = pts[activeMonth - 1];
-
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-          {title}
-        </span>
-        <span className="mono text-xs text-slate-300">
-          {format(series[activeMonth - 1][keyName])}
-        </span>
-      </div>
-      <svg viewBox={`0 0 ${w} ${h + 10}`} className="w-full" preserveAspectRatio="none">
-        {/* gridlines */}
-        {[0.25, 0.5, 0.75].map((p) => (
-          <line
-            key={p}
-            x1="0"
-            x2={w}
-            y1={h * p}
-            y2={h * p}
-            stroke="#1e293b"
-            strokeDasharray="2 4"
-            strokeWidth="0.5"
-          />
-        ))}
-        <path d={area} fill={fill} />
-        <path d={d} fill="none" stroke={stroke} strokeWidth="2" />
-        {/* active marker */}
-        <line
-          x1={ax}
-          x2={ax}
-          y1="0"
-          y2={h}
-          stroke={stroke}
-          strokeDasharray="2 3"
-          strokeWidth="1"
-          opacity="0.4"
-        />
-        <circle cx={ax} cy={ay} r="6" fill={stroke} opacity="0.25" />
-        <circle cx={ax} cy={ay} r="3.5" fill={stroke} />
-      </svg>
-    </div>
-  );
-}
-
-function MarginStack() {
-  const segments = [
-    { label: "Service COGS", value: 149, color: "#475569" },
-    { label: "Stripe Fee", value: 13.47, color: "#64748b" },
-    { label: "Gross Margin (pre-tax)", value: 286.53, color: "#10b981" },
-  ];
-  const total = CONFIG.mgmtFee;
-  return (
-    <div>
-      <div className="flex h-12 w-full rounded-lg overflow-hidden border border-slate-800">
-        {segments.map((s) => (
-          <div
-            key={s.label}
-            style={{
-              width: `${(s.value / total) * 100}%`,
-              background: s.color,
-            }}
-            className="relative group flex items-center justify-center text-[10px] text-slate-900 font-bold"
-          >
-            <span className="opacity-90 px-1 truncate">
-              {fmtPct(s.value / total, 1)}
+        const StatRow = ({ label, value, accent = "" }) => (
+          <div className="flex items-baseline justify-between border-b border-slate-800/60 py-2.5 last:border-b-0">
+            <span className="text-[11px] uppercase tracking-wider text-slate-500">
+              {label}
+            </span>
+            <span className={`font-mono text-sm tabular-nums ${accent || "text-slate-200"}`}>
+              {value}
             </span>
           </div>
-        ))}
-      </div>
-      <div className="grid grid-cols-3 gap-4 mt-4">
-        {segments.map((s) => (
-          <div key={s.label}>
-            <div className="flex items-center gap-2">
-              <span
-                className="w-2 h-2 rounded-full"
-                style={{ background: s.color }}
-              />
-              <span className="text-[11px] uppercase tracking-wider text-slate-500">
-                {s.label}
-              </span>
-            </div>
-            <div className="mono text-lg text-slate-100 mt-1">
-              {fmtUSDc(s.value)}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+        );
 
-function PaybackChart() {
-  const w = 800;
-  const h = 280;
-  const maxVal = Math.max(
-    FINAL.cumPartner,
-    CONFIG.injection * 1.5
-  );
-  const pts = SERIES_WITH_CUM.map((r, i) => {
-    const x = (i / (CONFIG.horizonMonths - 1)) * w;
-    const y = h - (r.cumPartner / maxVal) * h;
-    return [x, y];
-  });
-  const d = pts
-    .map(([x, y], i) => (i === 0 ? `M ${x},${y}` : `L ${x},${y}`))
-    .join(" ");
-  const area = `M 0,${h} ${pts.map(([x, y]) => `L ${x},${y}`).join(" ")} L ${w},${h} Z`;
+        // ─────────────────────────────────────────────────────────────────────
+        //  DASHBOARD
+        // ─────────────────────────────────────────────────────────────────────
+        function SSSEquityDashboard() {
+          const [month, setMonth] = useState(12);
+          const m = SERIES_WITH_CUM[month - 1];
 
-  const breakevenIdx = PARTNER_PAYBACK_MONTH - 1;
-  const breakevenX = (breakevenIdx / (CONFIG.horizonMonths - 1)) * w;
-  const breakevenY = h - (SERIES_WITH_CUM[breakevenIdx].cumPartner / maxVal) * h;
+          // Inject Google Fonts once
+          useEffect(() => {
+            const id = "sss-fonts";
+            if (document.getElementById(id)) return;
+            const link = document.createElement("link");
+            link.id = id;
+            link.rel = "stylesheet";
+            link.href =
+              "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap";
+            document.head.appendChild(link);
+          }, []);
 
-  const injectionY = h - (CONFIG.injection / maxVal) * h;
+          // Reusable curve path generator
+          const buildPath = (key, w = 600, h = 120) => {
+            const max = Math.max(...SERIES_WITH_CUM.map((r) => r[key]));
+            const min = Math.min(...SERIES_WITH_CUM.map((r) => r[key]));
+            const range = max - min || 1;
+            const pts = SERIES_WITH_CUM.map((r, i) => {
+              const x = (i / (CONFIG.horizonMonths - 1)) * w;
+              const y = h - ((r[key] - min) / range) * h;
+              return [x, y];
+            });
+            const d = pts
+              .map(([x, y], i) => (i === 0 ? `M ${x},${y}` : `L ${x},${y}`))
+              .join(" ");
+            const area = `${d} L ${w},${h} L 0,${h} Z`;
+            return { d, area, pts };
+          };
 
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-4 text-[11px] text-slate-400">
-          <span className="flex items-center gap-2">
-            <span className="w-3 h-0.5 bg-emerald-400" />
-            Cumulative Partner Dividend
-          </span>
-          <span className="flex items-center gap-2">
-            <span
-              className="w-3 h-0 border-t border-dashed"
-              style={{ borderColor: "#f59e0b" }}
-            />
-            $30,000 Injection
-          </span>
-        </div>
-        <span className="mono text-[10px] text-slate-600">CAD · cumulative</span>
-      </div>
-      <svg viewBox={`0 0 ${w} ${h + 30}`} className="w-full" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="paybackFill" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        {/* horizontal gridlines */}
-        {[0.25, 0.5, 0.75, 1].map((p) => (
-          <line
-            key={p}
-            x1="0"
-            x2={w}
-            y1={h * (1 - p)}
-            y2={h * (1 - p)}
-            stroke="#1e293b"
-            strokeWidth="0.5"
-            strokeDasharray="2 4"
-          />
-        ))}
-        {/* Injection line */}
-        <line
-          x1="0"
-          x2={w}
-          y1={injectionY}
-          y2={injectionY}
-          stroke="#f59e0b"
-          strokeWidth="1.5"
-          strokeDasharray="6 4"
-          opacity="0.8"
-        />
-        <text
-          x="8"
-          y={injectionY - 6}
-          fill="#f59e0b"
-          fontSize="11"
-          fontFamily="JetBrains Mono"
-        >
-          $30,000 injection
-        </text>
-        {/* Area + line */}
-        <path d={area} fill="url(#paybackFill)" />
-        <path d={d} fill="none" stroke="#10b981" strokeWidth="2.5" />
-        {/* Breakeven crossover marker */}
-        <circle cx={breakevenX} cy={breakevenY} r="8" fill="#10b981" opacity="0.25" />
-        <circle cx={breakevenX} cy={breakevenY} r="4" fill="#10b981" />
-        <line
-          x1={breakevenX}
-          x2={breakevenX}
-          y1={breakevenY}
-          y2={h}
-          stroke="#10b981"
-          strokeWidth="1"
-          strokeDasharray="2 3"
-          opacity="0.5"
-        />
-        <text
-          x={breakevenX + 10}
-          y={breakevenY - 10}
-          fill="#10b981"
-          fontSize="12"
-          fontWeight="600"
-          fontFamily="Manrope"
-        >
-          Payback · M{PARTNER_PAYBACK_MONTH}
-        </text>
-        {/* x-axis */}
-        {[1, 6, 12, 18, 24].map((mm) => {
-          const xx = ((mm - 1) / (CONFIG.horizonMonths - 1)) * w;
           return (
-            <g key={mm}>
-              <line x1={xx} x2={xx} y1={h} y2={h + 4} stroke="#475569" />
-              <text
-                x={xx}
-                y={h + 18}
-                fill="#64748b"
-                fontSize="10"
-                textAnchor="middle"
-                fontFamily="JetBrains Mono"
-              >
-                M{mm}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
-    </div>
-  );
-}
+            <div
+              className="min-h-screen w-full bg-slate-950 text-slate-200"
+              style={{ fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif" }}
+            >
+              <style>{`
+                .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+                .grid-bg {
+                  background-image:
+                    linear-gradient(rgba(148,163,184,0.04) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(148,163,184,0.04) 1px, transparent 1px);
+                  background-size: 32px 32px;
+                }
+                .num-glow { text-shadow: 0 0 24px rgba(14,165,233,0.25); }
+                .profit-glow { text-shadow: 0 0 24px rgba(16,185,129,0.3); }
+                input[type=range].sss-slider {
+                  -webkit-appearance: none; appearance: none;
+                  background: transparent;
+                  width: 100%;
+                }
+                input[type=range].sss-slider::-webkit-slider-runnable-track {
+                  height: 4px;
+                  background: linear-gradient(90deg, #0ea5e9 0%, #0ea5e9 var(--val,50%), #1e293b var(--val,50%), #1e293b 100%);
+                  border-radius: 999px;
+                }
+                input[type=range].sss-slider::-moz-range-track {
+                  height: 4px; background: #1e293b; border-radius: 999px;
+                }
+                input[type=range].sss-slider::-moz-range-progress {
+                  height: 4px; background: #0ea5e9; border-radius: 999px;
+                }
+                input[type=range].sss-slider::-webkit-slider-thumb {
+                  -webkit-appearance: none; appearance: none;
+                  width: 22px; height: 22px; border-radius: 999px;
+                  background: #f8fafc;
+                  border: 3px solid #0ea5e9;
+                  margin-top: -9px;
+                  box-shadow: 0 0 0 6px rgba(14,165,233,0.15), 0 0 30px rgba(14,165,233,0.5);
+                  cursor: grab;
+                  transition: transform .15s ease;
+                }
+                input[type=range].sss-slider::-webkit-slider-thumb:active { transform: scale(1.1); cursor: grabbing; }
+                input[type=range].sss-slider::-moz-range-thumb {
+                  width: 22px; height: 22px; border-radius: 999px;
+                  background: #f8fafc; border: 3px solid #0ea5e9; cursor: grab;
+                }
+              `}</style>
 
-function UpsellCard({ icon: Icon, tier, name, ticket, note, metrics, featured }) {
-  return (
-    <div
-      className={`relative rounded-xl p-7 border ${
-        featured
-          ? "border-sky-500/40 bg-gradient-to-b from-sky-950/30 to-slate-900/60"
-          : "border-slate-800 bg-slate-900/40"
-      }`}
-    >
-      {featured && (
-        <div className="absolute -top-3 left-7 px-2.5 py-0.5 bg-sky-500 text-slate-950 text-[10px] uppercase tracking-wider font-bold rounded">
-          Highest LTV
-        </div>
-      )}
-      <div className="flex items-center justify-between mb-5">
-        <div className="w-11 h-11 rounded-lg bg-slate-800/80 border border-slate-700 flex items-center justify-center">
-          <Icon className="w-5 h-5 text-sky-400" />
-        </div>
-        <span className="mono text-[10px] uppercase tracking-wider text-slate-500">
-          {tier}
-        </span>
-      </div>
-      <div className="text-xl font-bold text-slate-50">{name}</div>
-      <div className="mono text-sm text-emerald-400 mt-1">{ticket}</div>
-      <p className="text-[13px] text-slate-400 mt-3 leading-snug">{note}</p>
-      <div className="mt-5 space-y-0">
-        {metrics.map(([k, v]) => (
-          <StatRow key={k} label={k} value={v} />
-        ))}
-      </div>
-      <div className="mt-5 flex items-center gap-1.5 text-[11px] text-sky-400 group cursor-default">
-        Roadmap Q3 2027 <ChevronRight className="w-3.5 h-3.5" />
-      </div>
-    </div>
-  );
-}
-        function InvestorPage() {
-            return (
-                <div style={{ padding: '40px', fontFamily: 'sans-serif', textAlign: 'center' }}>
-                    <h1>Investor Page</h1>
-                    <p>Your JSX code is now rendering live!</p>
+              {/* HEADER */}
+              <header className="relative border-b border-slate-800/80 grid-bg">
+                <div className="absolute inset-0 bg-gradient-to-b from-sky-950/30 via-transparent to-transparent pointer-events-none" />
+                <div className="relative mx-auto max-w-7xl px-6 py-5 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="relative">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-sky-500 to-sky-700 flex items-center justify-center font-bold text-white text-lg tracking-tighter shadow-[0_0_30px_-6px_rgba(14,165,233,0.6)]">
+                        S³
+                      </div>
+                    </div>
+                    <div className="leading-tight">
+                      <div className="font-bold tracking-tight text-slate-50 text-[15px]">
+                        SSS MARKETING
+                      </div>
+                      <div className="mono text-[10px] tracking-[0.2em] text-slate-500 uppercase">
+                        Capital Partners
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="hidden md:flex items-center gap-6">
+                    <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-slate-400">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      Live Model
+                    </div>
+                    <div className="text-[11px] uppercase tracking-wider text-slate-500">
+                      Confidential · Series Seed Memorandum
+                    </div>
+                    <div className="mono text-[11px] text-slate-400">
+                      Rev. 05.2026
+                    </div>
+                  </div>
                 </div>
-            );
+
+                <div className="relative mx-auto max-w-7xl px-6 pb-12 pt-8">
+                  <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-sky-400/90 mb-4">
+                    <Briefcase className="w-3.5 h-3.5" />
+                    Partner Equity Dashboard
+                  </div>
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-50 leading-[1.05] max-w-4xl">
+                    A <span className="text-sky-400">$30,000</span> position in the{" "}
+                    <span className="italic text-slate-300">utility layer</span> of
+                    Canadian dental care.
+                  </h1>
+                  <p className="mt-5 max-w-2xl text-slate-400 leading-relaxed">
+                    Partner subscribes for a{" "}
+                    <span className="text-slate-200 font-semibold">
+                      15% perpetual net-profit equity
+                    </span>{" "}
+                    in SSS Marketing's clinic-services platform. The 24-month model
+                    charts a{" "}
+                    <span className="text-emerald-400 font-semibold">conservative</span>{" "}
+                    path to{" "}
+                    <span className="text-slate-200">20% of the 123Dentist network</span>{" "}
+                    — with the broader independent-clinic market sitting beyond it as
+                    uncapped upside.
+                  </p>
+
+                  <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-px bg-slate-800/60 rounded-xl overflow-hidden border border-slate-800">
+                    {[
+                      { k: "Capital Injection", v: "$30,000", sub: "CAD · Single tranche", icon: DollarSign },
+                      { k: "Net Equity", v: "15.00%", sub: "Of post-tax net profit", icon: Crown },
+                      { k: "Horizon to Target", v: "24 mo", sub: "3 → 100 clinics", icon: CalendarClock },
+                      { k: "Partner Payback", v: `M ${PARTNER_PAYBACK_MONTH ?? "—"}`, sub: "Cumulative div ≥ injection", icon: Target, accent: true },
+                    ].map(({ k, v, sub, icon: Icon, accent }) => (
+                      <div key={k} className="bg-slate-950 p-5">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
+                            {k}
+                          </span>
+                          <Icon className={`w-3.5 h-3.5 ${accent ? "text-emerald-400" : "text-slate-600"}`} />
+                        </div>
+                        <div className={`mono text-3xl font-semibold tabular-nums ${accent ? "text-emerald-400 profit-glow" : "text-slate-50"}`}>
+                          {v}
+                        </div>
+                        <div className="text-[11px] text-slate-500 mt-1.5">{sub}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </header>
+
+              {/* STRATEGIC BRIEFING — THESIS */}
+              <section className="relative border-b border-slate-900 overflow-hidden">
+                <div className="absolute inset-0 pointer-events-none">
+                  <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-sky-500/[0.04] blur-3xl" />
+                  <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-emerald-500/[0.03] blur-3xl" />
+                </div>
+                <div className="relative mx-auto max-w-7xl px-6 py-20">
+                  <div className="flex items-center gap-3 mb-12">
+                    <span className="font-mono text-[11px] tracking-[0.2em] text-sky-500/80">00</span>
+                    <span className="h-px flex-none w-8 bg-slate-700" />
+                    <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-slate-400">
+                      Strategic Briefing · Private
+                    </span>
+                  </div>
+
+                  <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
+                    <div className="lg:col-span-3">
+                      <div className="text-[11px] uppercase tracking-[0.2em] text-sky-400 mb-3">
+                        Founder → Cornerstone Partner
+                      </div>
+                      <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-slate-50 leading-[1.15]">
+                        The trade, <br /> in three sentences.
+                      </h2>
+                      <p className="text-slate-500 text-[13px] mt-4 leading-relaxed">
+                        A peer-to-peer thesis. Everything that follows is the proof.
+                      </p>
+                      <div className="mt-6 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-slate-600 border border-slate-800 rounded-full px-3 py-1.5">
+                        <span className="w-1 h-1 rounded-full bg-emerald-400" />
+                        2-year trust · DMD cornerstone
+                      </div>
+                    </div>
+
+                    <div className="lg:col-span-9 space-y-10 lg:space-y-12 relative lg:pl-12 lg:border-l border-slate-800">
+                      <div className="relative">
+                        <div className="hidden lg:flex absolute -left-[3.4rem] top-1 w-7 h-7 rounded-full bg-slate-950 border border-slate-700 items-center justify-center mono text-[10px] text-sky-400 font-semibold">01</div>
+                        <div className="lg:hidden mono text-[10px] text-sky-400 mb-2">· 01 ·</div>
+                        <p className="text-xl lg:text-[1.6rem] text-slate-100 leading-snug font-medium tracking-tight">
+                          Your <span className="text-sky-400 font-semibold">$30K</span> funds the build; your <span className="text-sky-400 font-semibold">DMD credibility</span> funds the entry price — <span className="text-slate-400 italic">that's the trade</span>.
+                        </p>
+                      </div>
+
+                      <div className="relative">
+                        <div className="hidden lg:flex absolute -left-[3.4rem] top-1 w-7 h-7 rounded-full bg-slate-950 border border-slate-700 items-center justify-center mono text-[10px] text-sky-400 font-semibold">02</div>
+                        <div className="lg:hidden mono text-[10px] text-sky-400 mb-2">· 02 ·</div>
+                        <p className="text-xl lg:text-[1.6rem] text-slate-100 leading-snug font-medium tracking-tight">
+                          Sweat equity is mine, the system is <span className="text-slate-300 italic">white-labeled and passive</span>, and your clinics carry <span className="text-emerald-400 font-semibold">zero operational weight</span>.
+                        </p>
+                      </div>
+
+                      <div className="relative">
+                        <div className="hidden lg:flex absolute -left-[3.4rem] top-1 w-7 h-7 rounded-full bg-slate-950 border border-emerald-500/40 items-center justify-center mono text-[10px] text-emerald-400 font-semibold">03</div>
+                        <div className="lg:hidden mono text-[10px] text-emerald-400 mb-2">· 03 ·</div>
+                        <p className="text-xl lg:text-[1.6rem] text-slate-100 leading-snug font-medium tracking-tight">
+                          Pilot validates the model, the 24-month curve deploys it across the 123Dentist network, and 20% of the largest dental group in Canada — plus the independent clinics that follow — is the <span className="text-emerald-400 font-bold profit-glow">conservative</span> ceiling, <span className="italic text-slate-500">not the target</span>.
+                        </p>
+                      </div>
+
+                      <div className="pt-4 flex items-center gap-3 text-[11px] text-slate-600">
+                        <span className="h-px flex-1 bg-slate-800" />
+                        <span className="mono uppercase tracking-[0.2em]">End briefing</span>
+                        <span className="h-px flex-1 bg-slate-800" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* GROWTH STRATEGY SLIDER */}
+              <section className="mx-auto max-w-7xl px-6 py-20">
+                <SectionLabel num="01">Growth Strategy / Timeline</SectionLabel>
+
+                <div className="flex items-end justify-between mb-10 flex-wrap gap-6">
+                  <div>
+                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">Drag the lever. Watch the yield curve.</h2>
+                    <p className="text-slate-500 mt-2 max-w-xl">
+                      Each tick recalculates the full P&amp;L stack — post-Stripe, post-OpEx, post-tax. Founder takes 85%, Partner 15%.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-slate-400">
+                    <Zap className="w-3.5 h-3.5 text-sky-400" />
+                    Real-time scenario engine
+                  </div>
+                </div>
+
+                <Card className="p-8 lg:p-10" glow>
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                    <LiveMetric icon={Building2} label="Clinic Count" value={fmtN(Math.round(m.clinics))} suffix="active" detail={`${fmtPct(m.clinics / CONFIG.networkSize, 1)} of 123Dentist`} tone="sky" />
+                    <LiveMetric icon={TrendingUp} label="Total Net Profit" value={fmtUSD(m.net)} suffix="/ mo" detail={`EBT ${fmtUSD(m.ebt)} − tax ${fmtUSD(m.tax)}`} tone="emerald" />
+                    <LiveMetric icon={Crown} label="Founder Div · 85%" value={fmtUSD(m.founder)} suffix="/ mo" detail="Post-tax take-home" tone="slate" />
+                    <LiveMetric icon={Users} label="Partner Div · 15%" value={fmtUSD(m.partner)} suffix="/ mo" detail={`Annualized ${fmtUSD(m.partner * 12)}`} tone="emerald" accent />
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-baseline">
+                      <div>
+                        <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Position</div>
+                        <div className="mono text-2xl text-slate-50">
+                          Month {String(month).padStart(2, "0")}<span className="text-slate-600 text-base"> / 24</span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Trajectory</div>
+                        <div className="mono text-sm text-slate-300">+{fmtN(m.newClinics, 1)} clinics this period</div>
+                      </div>
+                    </div>
+
+                    <input type="range" min={1} max={24} value={month} onChange={(e) => setMonth(parseInt(e.target.value, 10))} className="sss-slider" style={{ "--val": `${((month - 1) / 23) * 100}%` }} />
+
+                    <div className="flex justify-between mono text-[10px] text-slate-600 pt-1 select-none">
+                      {[1, 6, 12, 18, 24].map((mm) => (
+                        <span key={mm} className={Math.abs(mm - month) <= 1 ? "text-sky-400" : ""}>M{mm}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-10 grid lg:grid-cols-2 gap-8">
+                    <Sparkline title="Monthly Net Profit" series={SERIES_WITH_CUM} keyName="net" activeMonth={month} stroke="#10b981" fill="rgba(16,185,129,0.12)" format={fmtUSD} />
+                    <Sparkline title="Clinic Penetration" series={SERIES_WITH_CUM} keyName="clinics" activeMonth={month} stroke="#0ea5e9" fill="rgba(14,165,233,0.12)" format={(v) => `${Math.round(v)} clinics`} />
+                  </div>
+                </Card>
+              </section>
+
+              {/* UNIT ECONOMICS */}
+              <section className="mx-auto max-w-7xl px-6 py-20 border-t border-slate-900">
+                <SectionLabel num="02">Unit Economics</SectionLabel>
+                <div className="flex items-end justify-between mb-10 flex-wrap gap-6">
+                  <div>
+                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">Three margins. One flywheel.</h2>
+                    <p className="text-slate-500 mt-2 max-w-xl">
+                      Every clinic compounds across three distinct revenue surfaces. Stripe is netted; corporate tax sits at portfolio level.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-5">
+                  {/* Setup */}
+                  <Card className="p-7 group hover:border-sky-500/40 transition-colors">
+                    <div className="flex items-start justify-between mb-6">
+                      <div className="w-11 h-11 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
+                        <Receipt className="w-5 h-5 text-sky-400" />
+                      </div>
+                      <span className="mono text-[10px] uppercase tracking-wider text-slate-500">One-time · per clinic</span>
+                    </div>
+                    <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">Setup Activation</div>
+                    <div className="mt-1 flex items-baseline gap-2">
+                      <div className="mono text-4xl font-bold text-slate-50">$499</div>
+                      <ArrowUpRight className="w-4 h-4 text-slate-600" />
+                      <div className="mono text-2xl font-semibold text-emerald-400 profit-glow">{fmtUSDc(SETUP_NET)}</div>
+                    </div>
+                    <div className="text-[11px] text-slate-500 mt-1">Net per onboarding, post-Stripe</div>
+                    <div className="mt-5 space-y-0">
+                      <StatRow label="Gross Ticket" value="$499.00" />
+                      <StatRow label="White-label COGS" value="−$300.00" />
+                      <StatRow label="NFC Kit (hardware)" value="−$20.00" />
+                      <StatRow label="Stripe (3%)" value={`−${fmtUSDc(CONFIG.setupFee * CONFIG.stripe)}`} />
+                      <StatRow label="Net Contribution" value={fmtUSDc(SETUP_NET)} accent="text-emerald-400" />
+                    </div>
+                  </Card>
+
+                  {/* Landing Page */}
+                  <Card className="p-7 group hover:border-sky-500/40 transition-colors">
+                    <div className="flex items-start justify-between mb-6">
+                      <div className="w-11 h-11 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
+                        <Layers className="w-5 h-5 text-sky-400" />
+                      </div>
+                      <span className="mono text-[10px] uppercase tracking-wider text-slate-500">Annual refresh</span>
+                    </div>
+                    <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">Landing Page Refresh</div>
+                    <div className="mt-1 flex items-baseline gap-2">
+                      <div className="mono text-4xl font-bold text-slate-50">$999</div>
+                      <ArrowUpRight className="w-4 h-4 text-slate-600" />
+                      <div className="mono text-2xl font-semibold text-emerald-400 profit-glow">{fmtUSDc(LP_NET)}</div>
+                    </div>
+                    <div className="text-[11px] text-slate-500 mt-1">Net per refresh, post-Stripe</div>
+                    <div className="mt-5 space-y-0">
+                      <StatRow label="Gross Ticket" value="$999.00" />
+                      <StatRow label="Production COGS" value="−$750.00" />
+                      <StatRow label="Stripe (3%)" value={`−${fmtUSDc(CONFIG.lpFee * CONFIG.stripe)}`} />
+                      <StatRow label="Net Contribution" value={fmtUSDc(LP_NET)} accent="text-emerald-400" />
+                      <StatRow label="At 100 clinics · annual" value={fmtUSD(100 * LP_NET)} accent="text-slate-100" />
+                    </div>
+                  </Card>
+
+                  {/* Recurring */}
+                  <Card className="p-7 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 px-3 py-1 bg-emerald-500/10 border-l border-b border-emerald-500/30 text-[10px] uppercase tracking-wider text-emerald-300">Core Asset</div>
+                    <div className="flex items-start justify-between mb-6">
+                      <div className="w-11 h-11 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
+                        <Activity className="w-5 h-5 text-emerald-400" />
+                      </div>
+                      <span className="mono text-[10px] uppercase tracking-wider text-slate-500">MRR · per clinic</span>
+                    </div>
+                    <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">Management Utility</div>
+                    <div className="mt-1 flex items-baseline gap-2">
+                      <div className="mono text-4xl font-bold text-slate-50">$449</div>
+                      <span className="text-slate-600 text-sm">/mo</span>
+                    </div>
+                    <div className="mt-3 flex items-center gap-3">
+                      <div className="mono text-3xl font-bold text-emerald-400 profit-glow">{fmtPct(RECURRING_MARGIN, 0)}</div>
+                      <div className="text-[11px] text-slate-400 leading-tight">
+                        Gross margin <br /> <span className="text-slate-600">{fmtUSDc(RECURRING_GROSS)} per clinic</span>
+                      </div>
+                    </div>
+                    <div className="mt-5 space-y-0">
+                      <StatRow label="Monthly Fee" value="$449.00" />
+                      <StatRow label="Service COGS" value="−$149.00" />
+                      <StatRow label="Stripe (3%)" value={`−${fmtUSDc(CONFIG.mgmtFee * CONFIG.stripe)}`} />
+                      <StatRow label="Net MRR / clinic" value={fmtUSDc(RECURRING_NET)} accent="text-emerald-400" />
+                      <StatRow label="@ 100 clinics · ARR" value={fmtUSD(100 * RECURRING_NET * 12)} accent="text-slate-100" />
+                    </div>
+                  </Card>
+                </div>
+
+                <Card className="mt-5 p-7">
+                  <div className="flex items-center justify-between mb-5">
+                    <div>
+                      <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Margin Decomposition · $449 management fee</div>
+                      <div className="text-slate-300 mt-1 text-sm">Per-clinic dollar flows from invoice to retained earnings.</div>
+                    </div>
+                    <span className="mono text-[10px] text-slate-500">CAD</span>
+                  </div>
+                  <MarginStack />
+                </Card>
+              </section>
+
+              {/* CAPITAL EFFICIENCY / PAYBACK */}
+              <section className="mx-auto max-w-7xl px-6 py-20 border-t border-slate-900">
+                <SectionLabel num="03">Capital Efficiency</SectionLabel>
+                <div className="flex items-end justify-between mb-10 flex-wrap gap-6">
+                  <div>
+                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">Payback Tracker</h2>
+                    <p className="text-slate-500 mt-2 max-w-xl">
+                      Cumulative partner dividends measured against the $30,000 injection. Crossover defines breakeven. <span className="text-slate-400">Modeled against the 20% network floor — independent-clinic uptake is not priced in.</span>
+                    </p>
+                  </div>
+                </div>
+
+                <Card className="p-8 lg:p-10">
+                  <div className="grid lg:grid-cols-4 gap-8 mb-10">
+                    <div className="lg:col-span-3">
+                      <PaybackChart />
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Partner Payback</div>
+                        <div className="mono text-4xl font-bold text-emerald-400 profit-glow leading-none mt-1">M{PARTNER_PAYBACK_MONTH}</div>
+                        <div className="text-[11px] text-slate-500 mt-1">Cumulative div ≥ $30K</div>
+                      </div>
+                      <div className="h-px bg-slate-800" />
+                      <div>
+                        <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Venture Breakeven</div>
+                        <div className="mono text-4xl font-bold text-sky-400 num-glow leading-none mt-1">M{VENTURE_BREAKEVEN_MONTH}</div>
+                        <div className="text-[11px] text-slate-500 mt-1">Cum. net profit ≥ injection</div>
+                      </div>
+                      <div className="h-px bg-slate-800" />
+                      <div>
+                        <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">24-Mo Yield (Partner)</div>
+                        <div className="mono text-4xl font-bold text-slate-50 leading-none mt-1">{fmtN(FINAL.cumPartner / CONFIG.injection, 2)}×</div>
+                        <div className="text-[11px] text-slate-500 mt-1">{fmtUSD(FINAL.cumPartner)} returned on $30K</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                    {[
+                      { k: "Mo 6", row: SERIES_WITH_CUM[5] },
+                      { k: "Mo 12", row: SERIES_WITH_CUM[11] },
+                      { k: `Mo ${PARTNER_PAYBACK_MONTH}`, row: SERIES_WITH_CUM[PARTNER_PAYBACK_MONTH - 1], hot: true },
+                      { k: "Mo 24", row: SERIES_WITH_CUM[23] },
+                    ].map(({ k, row, hot }) => (
+                      <div key={k} className={`rounded-lg border p-4 ${hot ? "border-emerald-500/40 bg-emerald-500/5" : "border-slate-800 bg-slate-950/50"}`}>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="mono text-[10px] uppercase tracking-wider text-slate-500">{k}</span>
+                          {hot && <span className="text-[9px] uppercase tracking-wider text-emerald-400">Payback</span>}
+                        </div>
+                        <div className="mono text-lg text-slate-50 tabular-nums">{fmtUSD(row.cumPartner)}</div>
+                        <div className="text-[11px] text-slate-500 mt-1">{Math.round(row.clinics)} clinics</div>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </section>
+
+              {/* PHYSICAL MOAT (NFC) */}
+              <section className="mx-auto max-w-7xl px-6 py-20 border-t border-slate-900">
+                <SectionLabel num="04">Defensibility</SectionLabel>
+                <div className="grid lg:grid-cols-5 gap-8">
+                  <div className="lg:col-span-2">
+                    <div className="flex items-center gap-2 text-sky-400 text-[11px] uppercase tracking-[0.2em] mb-3">
+                      <ShieldCheck className="w-3.5 h-3.5" />
+                      The Physical Moat
+                    </div>
+                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">
+                      Hardware lives on the counter. <br /> <span className="text-slate-500">Software lives in habit.</span>
+                    </h2>
+                    <p className="text-slate-400 mt-5 leading-relaxed">
+                      Each clinic receives a branded NFC Review Pad — a $20 piece of hardware that turns the reception desk into a recurring review engine. Once installed, switching costs become physical: staff training, signage, patient flow.
+                    </p>
+                    <p className="text-slate-400 mt-3 leading-relaxed">
+                      SaaS competitors can clone the dashboard. They cannot un-install the tap target sitting on the counter.
+                    </p>
+
+                    <div className="mt-8 space-y-3">
+                      {[
+                        { i: Lock, t: "Switching friction", d: "Removing the pad = visible change at the front desk" },
+                        { i: CircuitBoard, t: "Embedded in workflow", d: "Receptionist hands pad to patient at checkout" },
+                        { i: Wifi, t: "Always-on review funnel", d: "Each tap = direct deep-link to Google Review" },
+                      ].map(({ i: Icon, t, d }) => (
+                        <div key={t} className="flex gap-4">
+                          <div className="w-9 h-9 rounded-lg bg-sky-500/10 border border-sky-500/30 flex-none flex items-center justify-center">
+                            <Icon className="w-4 h-4 text-sky-400" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-semibold text-slate-200">{t}</div>
+                            <div className="text-[13px] text-slate-500 leading-snug">{d}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* NFC Visual */}
+                  <div className="lg:col-span-3">
+                    <Card className="p-8 lg:p-10 relative overflow-hidden h-full" glow>
+                      <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-sky-500/10 blur-3xl pointer-events-none" />
+                      <div className="absolute -bottom-32 -left-10 w-72 h-72 rounded-full bg-emerald-500/5 blur-3xl pointer-events-none" />
+                      <div className="relative flex items-center justify-between mb-8">
+                        <div>
+                          <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">SKU · NFC-REV-001</div>
+                          <div className="text-2xl font-bold text-slate-50 mt-1">SSS Review Pad™</div>
+                        </div>
+                        <div className="mono text-[10px] uppercase tracking-wider text-emerald-400 border border-emerald-500/30 rounded-full px-3 py-1 bg-emerald-500/5">Shipped w/ every clinic</div>
+                      </div>
+
+                      <div className="relative mx-auto" style={{ maxWidth: 320 }}>
+                        <svg viewBox="0 0 320 200" className="w-full">
+                          <defs>
+                            <linearGradient id="padBody" x1="0" x2="1" y1="0" y2="1">
+                              <stop offset="0%" stopColor="#0f172a" />
+                              <stop offset="100%" stopColor="#020617" />
+                            </linearGradient>
+                            <linearGradient id="padEdge" x1="0" x2="0" y1="0" y2="1">
+                              <stop offset="0%" stopColor="#334155" />
+                              <stop offset="100%" stopColor="#0f172a" />
+                            </linearGradient>
+                            <radialGradient id="ring" cx="0.5" cy="0.5" r="0.5">
+                              <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.6" />
+                              <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0" />
+                            </radialGradient>
+                          </defs>
+                          <ellipse cx="160" cy="185" rx="120" ry="8" fill="#000" opacity="0.5" />
+                          <rect x="40" y="30" width="240" height="150" rx="20" fill="url(#padBody)" stroke="url(#padEdge)" strokeWidth="1.5" />
+                          <circle cx="160" cy="105" r="60" fill="url(#ring)" />
+                          <g fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" opacity="0.85">
+                            <path d="M 145 105 a 18 18 0 0 1 30 0" />
+                            <path d="M 138 105 a 28 28 0 0 1 44 0" opacity="0.6" />
+                            <path d="M 131 105 a 38 38 0 0 1 58 0" opacity="0.35" />
+                            <circle cx="160" cy="115" r="4" fill="#0ea5e9" stroke="none" />
+                          </g>
+                          <text x="160" y="160" textAnchor="middle" fill="#64748b" fontSize="9" fontFamily="JetBrains Mono" letterSpacing="3">TAP · REVIEW · GO</text>
+                          <text x="56" y="50" fill="#0ea5e9" fontSize="11" fontFamily="Manrope" fontWeight="700">S³</text>
+                        </svg>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-px bg-slate-800 mt-8 rounded-lg overflow-hidden border border-slate-800">
+                        <div className="bg-slate-950 p-4 text-center">
+                          <div className="mono text-2xl font-bold text-slate-50">$20</div>
+                          <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">Hardware COGS</div>
+                        </div>
+                        <div className="bg-slate-950 p-4 text-center">
+                          <div className="mono text-2xl font-bold text-sky-400">∞</div>
+                          <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">Taps / pad</div>
+                        </div>
+                        <div className="bg-slate-950 p-4 text-center">
+                          <div className="mono text-2xl font-bold text-emerald-400">100%</div>
+                          <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">Attach rate</div>
+                        </div>
+                      </div>
+                    </Card>
+                  </div>
+                </div>
+              </section>
+
+              {/* FORWARD OPTIONALITY */}
+              <section className="mx-auto max-w-7xl px-6 py-20 border-t border-slate-900">
+                <SectionLabel num="05">Forward Optionality</SectionLabel>
+                <div className="flex items-end justify-between mb-10 flex-wrap gap-6">
+                  <div>
+                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">Secondary revenue layers.</h2>
+                    <p className="text-slate-500 mt-2 max-w-xl">
+                      Once the utility layer is installed, every clinic becomes a distribution channel for high-ticket procedure funnels. <span className="text-slate-400">None of this is in the base case — and neither is the independent-clinic market beyond the 123Dentist network.</span> Pure upside.
+                    </p>
+                  </div>
+                  <div className="text-[11px] uppercase tracking-wider text-emerald-400/80 flex items-center gap-2">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    Not in base case
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-5">
+                  <UpsellCard icon={Smile} tier="Tier I" name="Invisalign Funnels" ticket="$2,500 – $4,000" note="Specialized lead-gen for clear aligner candidates. Per-clinic LTV multiplier." metrics={[["Avg Procedure", "$5,800"], ["Funnel ARR (est.)", "$1,800"], ["Margin Profile", "70%+"]]} />
+                  <UpsellCard icon={Stethoscope} tier="Tier II" name="Implant Pipeline" ticket="$3,500 – $6,000" note="High-intent geo-targeted campaigns. Capacity-constrained — fits surgical schedules." metrics={[["Avg Procedure", "$4,500"], ["Funnel ARR (est.)", "$3,200"], ["Margin Profile", "65%+"]]} featured />
+                  <UpsellCard icon={Cpu} tier="Tier III" name="AI Triage Layer" ticket="$199 / mo add-on" note="Automated patient intake + insurance pre-check. Sits on top of the existing $449 utility." metrics={[["Attach Rate (proj.)", "40%"], ["Incremental ARR", "$95K"], ["Margin Profile", "82%"]]} />
+                </div>
+              </section>
+
+              {/* FOOTER */}
+              <footer className="border-t border-slate-900 mt-10">
+                <div className="mx-auto max-w-7xl px-6 py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                  <div>
+                    <div className="font-bold tracking-tight text-slate-200">SSS MARKETING · Capital Partners</div>
+                    <div className="text-[11px] text-slate-500 mt-1 max-w-xl">
+                      This document is a confidential memorandum prepared for a prospective equity partner. Projections are illustrative and based on the unit economics stated herein. Past results not indicative of future returns. Canadian-domiciled entity; CAD reporting; 13% federal corporate tax applied at portfolio level.
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-6 mono text-[11px] text-slate-500">
+                    <div>SSS-2026-Q2</div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      Model live
+                    </div>
+                  </div>
+                </div>
+              </footer>
+            </div>
+          );
         }
 
+        // ─────────────────────────────────────────────────────────────────────
+        //  SUB-COMPONENTS
+        // ─────────────────────────────────────────────────────────────────────
+        function LiveMetric({ icon: Icon, label, value, suffix, detail, tone, accent }) {
+          const toneMap = {
+            sky: "text-sky-400 num-glow",
+            emerald: "text-emerald-400 profit-glow",
+            slate: "text-slate-200",
+          };
+          return (
+            <div className={`relative p-5 rounded-lg border ${accent ? "bg-emerald-500/5 border-emerald-500/30" : "bg-slate-950/60 border-slate-800"} transition-all`}>
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500">{label}</span>
+                <Icon className={`w-3.5 h-3.5 ${toneMap[tone]}`} />
+              </div>
+              <div className="flex items-baseline gap-1.5">
+                <span className={`mono text-3xl font-bold tabular-nums leading-none ${toneMap[tone]}`}>{value}</span>
+                <span className="text-xs text-slate-500">{suffix}</span>
+              </div>
+              <div className="text-[11px] text-slate-500 mt-2 leading-tight">{detail}</div>
+            </div>
+          );
+        }
 
-        // ==========================================
-        // 2. RENDER THE COMPONENT TO THE PAGE
-        // ==========================================
+        function Sparkline({ title, series, keyName, activeMonth, stroke, fill, format }) {
+          const w = 600; const h = 110;
+          const vals = series.map((r) => r[keyName]);
+          const max = Math.max(...vals); const min = Math.min(...vals);
+          const range = max - min || 1;
+          const pts = series.map((r, i) => {
+            const x = (i / (CONFIG.horizonMonths - 1)) * w;
+            const y = h - ((r[keyName] - min) / range) * h;
+            return [x, y];
+          });
+          const d = pts.map(([x, y], i) => (i === 0 ? `M ${x},${y}` : `L ${x},${y}`)).join(" ");
+          const area = `M 0,${h} ${pts.map(([x, y]) => `L ${x},${y}`).join(" ")} L ${w},${h} Z`;
+          const [ax, ay] = pts[activeMonth - 1];
+
+          return (
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500">{title}</span>
+                <span className="mono text-xs text-slate-300">{format(series[activeMonth - 1][keyName])}</span>
+              </div>
+              <svg viewBox={`0 0 ${w} ${h + 10}`} className="w-full" preserveAspectRatio="none">
+                {[0.25, 0.5, 0.75].map((p) => (
+                  <line key={p} x1="0" x2={w} y1={h * p} y2={h * p} stroke="#1e293b" strokeDasharray="2 4" strokeWidth="0.5" />
+                ))}
+                <path d={area} fill={fill} />
+                <path d={d} fill="none" stroke={stroke} strokeWidth="2" />
+                <line x1={ax} x2={ax} y1="0" y2={h} stroke={stroke} strokeDasharray="2 3" strokeWidth="1" opacity="0.4" />
+                <circle cx={ax} cy={ay} r="6" fill={stroke} opacity="0.25" />
+                <circle cx={ax} cy={ay} r="3.5" fill={stroke} />
+              </svg>
+            </div>
+          );
+        }
+
+        function MarginStack() {
+          const segments = [
+            { label: "Service COGS", value: 149, color: "#475569" },
+            { label: "Stripe Fee", value: 13.47, color: "#64748b" },
+            { label: "Gross Margin (pre-tax)", value: 286.53, color: "#10b981" },
+          ];
+          const total = CONFIG.mgmtFee;
+          return (
+            <div>
+              <div className="flex h-12 w-full rounded-lg overflow-hidden border border-slate-800">
+                {segments.map((s) => (
+                  <div key={s.label} style={{ width: `${(s.value / total) * 100}%`, background: s.color }} className="relative group flex items-center justify-center text-[10px] text-slate-900 font-bold">
+                    <span className="opacity-90 px-1 truncate">{fmtPct(s.value / total, 1)}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="grid grid-cols-3 gap-4 mt-4">
+                {segments.map((s) => (
+                  <div key={s.label}>
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full" style={{ background: s.color }} />
+                      <span className="text-[11px] uppercase tracking-wider text-slate-500">{s.label}</span>
+                    </div>
+                    <div className="mono text-lg text-slate-100 mt-1">{fmtUSDc(s.value)}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        function PaybackChart() {
+          const w = 800; const h = 280;
+          const maxVal = Math.max(FINAL.cumPartner, CONFIG.injection * 1.5);
+          const pts = SERIES_WITH_CUM.map((r, i) => {
+            const x = (i / (CONFIG.horizonMonths - 1)) * w;
+            const y = h - (r.cumPartner / maxVal) * h;
+            return [x, y];
+          });
+          const d = pts.map(([x, y], i) => (i === 0 ? `M ${x},${y}` : `L ${x},${y}`)).join(" ");
+          const area = `M 0,${h} ${pts.map(([x, y]) => `L ${x},${y}`).join(" ")} L ${w},${h} Z`;
+
+          const breakevenIdx = PARTNER_PAYBACK_MONTH - 1;
+          const breakevenX = (breakevenIdx / (CONFIG.horizonMonths - 1)) * w;
+          const breakevenY = h - (SERIES_WITH_CUM[breakevenIdx].cumPartner / maxVal) * h;
+          const injectionY = h - (CONFIG.injection / maxVal) * h;
+
+          return (
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-4 text-[11px] text-slate-400">
+                  <span className="flex items-center gap-2">
+                    <span className="w-3 h-0.5 bg-emerald-400" /> Cumulative Partner Dividend
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <span className="w-3 h-0 border-t border-dashed" style={{ borderColor: "#f59e0b" }} /> $30,000 Injection
+                  </span>
+                </div>
+                <span className="mono text-[10px] text-slate-600">CAD · cumulative</span>
+              </div>
+              <svg viewBox={`0 0 ${w} ${h + 30}`} className="w-full" preserveAspectRatio="none">
+                <defs>
+                  <radialGradient id="paybackFill" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
+                    <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+                {[0.25, 0.5, 0.75, 1].map((p) => (
+                  <line key={p} x1="0" x2={w} y1={h * (1 - p)} y2={h * (1 - p)} stroke="#1e293b" strokeWidth="0.5" strokeDasharray="2 4" />
+                ))}
+                <line x1="0" x2={w} y1={injectionY} y2={injectionY} stroke="#f59e0b" strokeWidth="1.5" strokeDasharray="6 4" opacity="0.8" />
+                <text x="8" y={injectionY - 6} fill="#f59e0b" fontSize="11" fontFamily="JetBrains Mono">$30,000 injection</text>
+                <path d={area} fill="url(#paybackFill)" />
+                <path d={d} fill="none" stroke="#10b981" strokeWidth="2.5" />
+                <circle cx={breakevenX} cy={breakevenY} r="8" fill="#10b981" opacity="0.25" />
+                <circle cx={breakevenX} cy={breakevenY} r="4" fill="#10b981" />
+                <line x1={breakevenX} x2={breakevenX} y1={breakevenY} y2={h} stroke="#10b981" strokeWidth="1" strokeDasharray="2 3" opacity="0.5" />
+                <text x={breakevenX + 10} y={breakevenY - 10} fill="#10b981" fontSize="12" fontWeight="600" fontFamily="Manrope">Payback · M{PARTNER_PAYBACK_MONTH}</text>
+                {[1, 6, 12, 18, 24].map((mm) => {
+                  const xx = ((mm - 1) / (CONFIG.horizonMonths - 1)) * w;
+                  return (
+                    <g key={mm}>
+                      <line x1={xx} x2={xx} y1={h} y2={h + 4} stroke="#475569" />
+                      <text x={xx} y={h + 18} fill="#64748b" fontSize="10" textAnchor="middle" fontFamily="JetBrains Mono">M{mm}</text>
+                    </g>
+                  );
+                })}
+              </svg>
+            </div>
+          );
+        }
+
+        function UpsellCard({ icon: Icon, tier, name, ticket, note, metrics, featured }) {
+          return (
+            <div className={`relative rounded-xl p-7 border ${featured ? "border-sky-500/40 bg-gradient-to-b from-sky-950/30 to-slate-900/60" : "border-slate-800 bg-slate-900/40"}`}>
+              {featured && <div className="absolute -top-3 left-7 px-2.5 py-0.5 bg-sky-500 text-slate-950 text-[10px] uppercase tracking-wider font-bold rounded">Highest LTV</div>}
+              <div className="flex items-center justify-between mb-5">
+                <div className="w-11 h-11 rounded-lg bg-slate-800/80 border border-slate-700 flex items-center justify-center">
+                  <Icon className="w-5 h-5 text-sky-400" />
+                </div>
+                <span className="mono text-[10px] uppercase tracking-wider text-slate-500">{tier}</span>
+              </div>
+              <div className="text-xl font-bold text-slate-50">{name}</div>
+              <div className="mono text-sm text-emerald-400 mt-1">{ticket}</div>
+              <p className="text-[13px] text-slate-400 mt-3 leading-snug">{note}</p>
+              <div className="mt-5 space-y-0">{metrics.map(([k, v]) => <StatRow key={k} label={k} value={v} />)}</div>
+              <div className="mt-5 flex items-center gap-1.5 text-[11px] text-sky-400 group cursor-default">Roadmap Q3 2027 <ChevronRight className="w-3.5 h-3.5" /></div>
+            </div>
+          );
+        }
+
+        // Render Dashboard initialization 
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<InvestorPage />);
+        root.render(<SSSEquityDashboard />);
     </script>
 </body>
 </html>
