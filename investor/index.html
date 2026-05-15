@@ -12,7 +12,7 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <script src="https://unpkg.com/lucide-react"></script>
+    <script src="https://unpkg.com/lucide"></script>
 </head>
 <body class="bg-slate-950 text-slate-200 m-0 p-0">
 
@@ -21,18 +21,22 @@
     <script type="text/babel">
         const { useState, useMemo, useEffect } = React;
 
-        // Bulletproof Icon Fallback Layer to protect execution thread
+        // Dynamic Icon Loader to prevent browser namespace crashes
         const SafeIcon = ({ name, className }) => {
-            const Lucide = window.LucideReact || window.lucideReact;
-            const IconComponent = Lucide ? Lucide[name] : null;
-            if (IconComponent) {
-                return React.createElement(IconComponent, { className });
+            const iconComponent = window.lucide ? window.lucide[name] : null;
+            if (iconComponent) {
+                // Creates the SVG path structures directly from Lucide core
+                const [tag, attrs, children] = iconComponent;
+                return React.createElement(
+                    tag, 
+                    { ...attrs, className: `${attrs.class || ''} ${className || ''}`.trim() },
+                    (children || []).map((child, i) => React.createElement(child[0], { ...child[1], key: i }))
+                );
             }
+            // Minimal SVG fallback line if CDN delays loading
             return (
-                <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="16" x2="12" y2="12"/>
-                    <line x1="12" y1="8" x2="12.01" y2="8"/>
                 </svg>
             );
         };
@@ -85,7 +89,7 @@
           const grossProfit = recurringProfit + setupProfit + lpProfit;
 
           const software = CONFIG.swBase + (CONFIG.swMax - CONFIG.swBase) * Math.max(0, clinics - CONFIG.startClinics) / (CONFIG.targetClinics - CONFIG.startClinics);
-          const labor = clinics <= CONFIG.laborThreshold ? 0 : CONFIG.laborMax * Math.min(1, (clinics - CONFIG.laborThreshold) / CONFIG.laborThreshold);
+          const labor = clinics <= CONFIG.laborThreshold ? 0 : CONFIG.laborMax * Math.min(1, (CONFIG.laborThreshold === 0 ? 1 : (clinics - CONFIG.laborThreshold) / CONFIG.laborThreshold));
           const opex = software + labor;
 
           const ebt = grossProfit - opex;
@@ -157,9 +161,9 @@
         );
 
         // ─────────────────────────────────────────────────────────────────────
-        // DASHBOARD
+        // MAIN APP DASHBOARD COMPONENT (Export removed for raw browser parsing)
         // ─────────────────────────────────────────────────────────────────────
-        export default function SSSEquityDashboard() {
+        function SSSEquityDashboard() {
           const [month, setMonth] = useState(12);
           const m = SERIES_WITH_CUM[month - 1];
 
@@ -174,7 +178,7 @@
           }, []);
 
           return (
-            <div className="min-h-screen w-full bg-slate-950 text-slate-200" style={{ fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif" }}>
+            <div class="min-h-screen w-full bg-slate-950 text-slate-200" style={{ fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif" }}>
               <style>{`
                 .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
                 .grid-bg {
@@ -245,7 +249,7 @@
 
                 <div className="relative mx-auto max-w-7xl px-6 pb-12 pt-8">
                   <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-sky-400/90 mb-4">
-                    <SafeIcon name="Briefcase" className="w-3.5 h-3.5" />
+                    <SafeIcon name="briefcase" className="w-3.5 h-3.5" />
                     Partner Equity Dashboard
                   </div>
                   <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-50 leading-[1.05] max-w-4xl">
@@ -262,10 +266,10 @@
 
                   <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-px bg-slate-800/60 rounded-xl overflow-hidden border border-slate-800">
                     {[
-                      { k: "Capital Injection", v: "$30,000", sub: "CAD · Single tranche", icon: "DollarSign" },
-                      { k: "Net Equity", v: "15.00%", sub: "Of post-tax net profit", icon: "Crown" },
-                      { k: "Horizon to Target", v: "24 mo", sub: "3 → 100 clinics", icon: "CalendarClock" },
-                      { k: "Partner Payback", v: `M ${PARTNER_PAYBACK_MONTH ?? "—"}`, sub: "Cumulative div ≥ injection", icon: "Target", accent: true },
+                      { k: "Capital Injection", v: "$30,000", sub: "CAD · Single tranche", icon: "dollar-sign" },
+                      { k: "Net Equity", v: "15.00%", sub: "Of post-tax net profit", icon: "crown" },
+                      { k: "Horizon to Target", v: "24 mo", sub: "3 → 100 clinics", icon: "calendar" },
+                      { k: "Partner Payback", v: `M ${PARTNER_PAYBACK_MONTH ?? "—"}`, sub: "Cumulative div ≥ injection", icon: "target", accent: true },
                     ].map(({ k, v, sub, icon, accent }) => (
                       <div key={k} className="bg-slate-950 p-5">
                         <div className="flex items-center justify-between mb-3">
@@ -351,17 +355,17 @@
                     </p>
                   </div>
                   <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-slate-400">
-                    <SafeIcon name="Zap" className="w-3.5 h-3.5 text-sky-400" />
+                    <SafeIcon name="zap" className="w-3.5 h-3.5 text-sky-400" />
                     Real-time scenario engine
                   </div>
                 </div>
 
                 <Card className="p-8 lg:p-10" glow>
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                    <LiveMetric icon="Building2" label="Clinic Count" value={fmtN(Math.round(m.clinics))} suffix="active" detail={`${fmtPct(m.clinics / CONFIG.networkSize, 1)} of 123Dentist`} tone="sky" />
-                    <LiveMetric icon="TrendingUp" label="Total Net Profit" value={fmtUSD(m.net)} suffix="/ mo" detail={`EBT ${fmtUSD(m.ebt)} − tax ${fmtUSD(m.tax)}`} tone="emerald" />
-                    <LiveMetric icon="Crown" label="Founder Div · 85%" value={fmtUSD(m.founder)} suffix="/ mo" detail="Post-tax take-home" tone="slate" />
-                    <LiveMetric icon="Users" label="Partner Div · 15%" value={fmtUSD(m.partner)} suffix="/ mo" detail={`Annualized ${fmtUSD(m.partner * 12)}`} tone="emerald" accent />
+                    <LiveMetric icon="building-2" label="Clinic Count" value={fmtN(Math.round(m.clinics))} suffix="active" detail={`${fmtPct(m.clinics / CONFIG.networkSize, 1)} of 123Dentist`} tone="sky" />
+                    <LiveMetric icon="trending-up" label="Total Net Profit" value={fmtUSD(m.net)} suffix="/ mo" detail={`EBT ${fmtUSD(m.ebt)} − tax ${fmtUSD(m.tax)}`} tone="emerald" />
+                    <LiveMetric icon="crown" label="Founder Div · 85%" value={fmtUSD(m.founder)} suffix="/ mo" detail="Post-tax take-home" tone="slate" />
+                    <LiveMetric icon="users" label="Partner Div · 15%" value={fmtUSD(m.partner)} suffix="/ mo" detail={`Annualized ${fmtUSD(m.partner * 12)}`} tone="emerald" accent />
                   </div>
 
                   <div className="space-y-3">
@@ -405,14 +409,14 @@
                   <Card className="p-7 group hover:border-sky-500/40 transition-colors">
                     <div className="flex items-start justify-between mb-6">
                       <div className="w-11 h-11 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
-                        <SafeIcon name="Receipt" className="w-5 h-5 text-sky-400" />
+                        <SafeIcon name="receipt" className="w-5 h-5 text-sky-400" />
                       </div>
                       <span className="mono text-[10px] uppercase tracking-wider text-slate-500">One-time · per clinic</span>
                     </div>
                     <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">Setup Activation</div>
                     <div className="mt-1 flex items-baseline gap-2">
                       <div className="mono text-4xl font-bold text-slate-50">$499</div>
-                      <SafeIcon name="ArrowUpRight" className="w-4 h-4 text-slate-600 inline ml-1 align-baseline" />
+                      <SafeIcon name="arrow-up-right" className="w-4 h-4 text-slate-600 inline ml-1 align-baseline" />
                       <div className="mono text-2xl font-semibold text-emerald-400 profit-glow inline ml-2">{fmtUSDc(SETUP_NET)}</div>
                     </div>
                     <div className="text-[11px] text-slate-500 mt-1">Net per onboarding, post-Stripe</div>
@@ -428,14 +432,14 @@
                   <Card className="p-7 group hover:border-sky-500/40 transition-colors">
                     <div className="flex items-start justify-between mb-6">
                       <div className="w-11 h-11 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
-                        <SafeIcon name="Layers" className="w-5 h-5 text-sky-400" />
+                        <SafeIcon name="layers" className="w-5 h-5 text-sky-400" />
                       </div>
                       <span className="mono text-[10px] uppercase tracking-wider text-slate-500">Annual refresh</span>
                     </div>
                     <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">Landing Page Refresh</div>
                     <div className="mt-1 flex items-baseline gap-2">
                       <div className="mono text-4xl font-bold text-slate-50">$999</div>
-                      <SafeIcon name="ArrowUpRight" className="w-4 h-4 text-slate-600 inline ml-1 align-baseline" />
+                      <SafeIcon name="arrow-up-right" className="w-4 h-4 text-slate-600 inline ml-1 align-baseline" />
                       <div className="mono text-2xl font-semibold text-emerald-400 profit-glow inline ml-2">{fmtUSDc(LP_NET)}</div>
                     </div>
                     <div className="text-[11px] text-slate-500 mt-1">Net per refresh, post-Stripe</div>
@@ -452,7 +456,7 @@
                     <div className="absolute top-0 right-0 px-3 py-1 bg-emerald-500/10 border-l border-b border-emerald-500/30 text-[10px] uppercase tracking-wider text-emerald-300">Core Asset</div>
                     <div className="flex items-start justify-between mb-6">
                       <div className="w-11 h-11 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
-                        <SafeIcon name="Activity" className="w-5 h-5 text-emerald-400" />
+                        <SafeIcon name="activity" className="w-5 h-5 text-emerald-400" />
                       </div>
                       <span className="mono text-[10px] uppercase tracking-wider text-slate-500">MRR · per clinic</span>
                     </div>
@@ -547,7 +551,7 @@
                 <div className="grid lg:grid-cols-5 gap-8">
                   <div className="lg:col-span-2">
                     <div className="flex items-center gap-2 text-sky-400 text-[11px] uppercase tracking-[0.2em] mb-3">
-                      <SafeIcon name="ShieldCheck" className="w-3.5 h-3.5" />
+                      <SafeIcon name="shield" className="w-3.5 h-3.5" />
                       The Physical Moat
                     </div>
                     <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">Hardware lives on the counter. <br /> <span className="text-slate-500">Software lives in habit.</span></h2>
@@ -556,9 +560,9 @@
 
                     <div className="mt-8 space-y-3">
                       {[
-                        { i: "Lock", t: "Switching friction", d: "Removing the pad = visible change at the front desk" },
-                        { i: "CircuitBoard", t: "Embedded in workflow", d: "Receptionist hands pad to patient at checkout" },
-                        { i: "Wifi", t: "Always-on review funnel", d: "Each tap = direct deep-link to Google Review" },
+                        { i: "lock", t: "Switching friction", d: "Removing the pad = visible change at the front desk" },
+                        { i: "cpu", t: "Embedded in workflow", d: "Receptionist hands pad to patient at checkout" },
+                        { i: "wifi", t: "Always-on review funnel", d: "Each tap = direct deep-link to Google Review" },
                       ].map(({ i, t, d }) => (
                         <div key={t} className="flex gap-4">
                           <div className="w-9 h-9 rounded-lg bg-sky-500/10 border border-sky-500/30 flex-none flex items-center justify-center">
@@ -642,15 +646,15 @@
                     <p className="text-slate-500 mt-2 max-w-xl">Once the utility layer is installed, every clinic becomes a distribution channel for high-ticket procedure funnels. <span className="text-slate-400">None of this is in the base case — and neither is the independent-clinic market beyond the 123Dentist network.</span> Pure upside.</p>
                   </div>
                   <div className="text-[11px] uppercase tracking-wider text-emerald-400/80 flex items-center gap-2">
-                    <SafeIcon name="Sparkles" className="w-3.5 h-3.5" />
+                    <SafeIcon name="sparkles" className="w-3.5 h-3.5" />
                     Not in base case
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-5">
-                  <UpsellCard icon="Smile" tier="Tier I" name="Invisalign Funnels" ticket="$2,500 – $4,000" note="Specialized lead-gen for clear aligner candidates. Per-clinic LTV multiplier." metrics={[["Avg Procedure", "$5,800"], ["Funnel ARR (est.)", "$1,800"], ["Margin Profile", "70%+"]]} />
-                  <UpsellCard icon="Stethoscope" tier="Tier II" name="Implant Pipeline" ticket="$3,500 – $6,000" note="High-intent geo-targeted campaigns. Capacity-constrained — fits surgical schedules." metrics={[["Avg Procedure", "$4,500"], ["Funnel ARR (est.)", "$3,200"], ["Margin Profile", "65%+"]]} featured />
-                  <UpsellCard icon="Cpu" tier="Tier III" name="AI Triage Layer" ticket="$199 / mo add-on" note="Automated patient intake + insurance pre-check. Sits on top of the existing $449 utility." metrics={[["Attach Rate (proj.)", "40%"], ["Incremental ARR", "$95K"], ["Margin Profile", "82%"]]} />
+                  <UpsellCard icon="smile" tier="Tier I" name="Invisalign Funnels" ticket="$2,500 – $4,000" note="Specialized lead-gen for clear aligner candidates. Per-clinic LTV multiplier." metrics={[["Avg Procedure", "$5,800"], ["Funnel ARR (est.)", "$1,800"], ["Margin Profile", "70%+"]]} />
+                  <UpsellCard icon="activity" tier="Tier II" name="Implant Pipeline" ticket="$3,500 – $6,000" note="High-intent geo-targeted campaigns. Capacity-constrained — fits surgical schedules." metrics={[["Avg Procedure", "$4,500"], ["Funnel ARR (est.)", "$3,200"], ["Margin Profile", "65%+"]]} featured />
+                  <UpsellCard icon="cpu" tier="Tier III" name="AI Triage Layer" ticket="$199 / mo add-on" note="Automated patient intake + insurance pre-check. Sits on top of the existing $449 utility." metrics={[["Attach Rate (proj.)", "40%"], ["Incremental ARR", "$95K"], ["Margin Profile", "82%"]]} />
                 </div>
               </section>
 
@@ -704,145 +708,4 @@
             const y = h - ((r[keyName] - min) / range) * h;
             return [x, y];
           });
-          const d = pts.map(([x, y], i) => (i === 0 ? `M ${x},${y}` : `L ${x},${y}`)).join(" ");
-          const area = `M 0,${h} ${pts.map(([x, y]) => `L ${x},${y}`).join(" ")} L ${w},${h} Z`;
-          const [ax, ay] = pts[activeMonth - 1];
-
-          return (
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500">{title}</span>
-                <span className="mono text-xs text-slate-300">{format(series[activeMonth - 1][keyName])}</span>
-              </div>
-              <svg viewBox={`0 0 ${w} ${h + 10}`} className="w-full" preserveAspectRatio="none">
-                {[0.25, 0.5, 0.75].map((p) => (
-                  <line key={p} x1="0" x2={w} y1={h * p} y2={h * p} stroke="#1e293b" strokeDasharray="2 4" strokeWidth="0.5" />
-                ))}
-                <path d={area} fill={fill} />
-                <path d={d} fill="none" stroke={stroke} strokeWidth="2" />
-                <line x1={ax} x2={ax} y1="0" y2={h} stroke={stroke} strokeDasharray="2 3" strokeWidth="1" opacity="0.4" />
-                <circle cx={ax} cy={ay} r="6" fill={stroke} opacity="0.25" />
-                <circle cx={ax} cy={ay} r="3.5" fill={stroke} />
-              </svg>
-            </div>
-          );
-        }
-
-        function MarginStack() {
-          const segments = [
-            { label: "Service COGS", value: 149, color: "#475569" },
-            { label: "Stripe Fee", value: 13.47, color: "#64748b" },
-            { label: "Gross Margin (pre-tax)", value: 286.53, color: "#10b981" },
-          ];
-          const total = CONFIG.mgmtFee;
-          return (
-            <div>
-              <div className="flex h-12 w-full rounded-lg overflow-hidden border border-slate-800">
-                {segments.map((s) => (
-                  <div key={s.label} style={{ width: `${(s.value / total) * 100}%`, background: s.color }} className="relative group flex items-center justify-center text-[10px] text-slate-900 font-bold">
-                    <span className="opacity-90 px-1 truncate">{fmtPct(s.value / total, 1)}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="grid grid-cols-3 gap-4 mt-4">
-                {segments.map((s) => (
-                  <div key={s.label}>
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full" style={{ background: s.color }} />
-                      <span className="text-[11px] uppercase tracking-wider text-slate-500">{s.label}</span>
-                    </div>
-                    <div className="mono text-lg text-slate-100 mt-1">{fmtUSDc(s.value)}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          );
-        }
-
-        function PaybackChart() {
-          const w = 800; const h = 280;
-          const maxVal = Math.max(FINAL.cumPartner, CONFIG.injection * 1.5);
-          const pts = SERIES_WITH_CUM.map((r, i) => {
-            const x = (i / (CONFIG.horizonMonths - 1)) * w;
-            const y = h - (r.cumPartner / maxVal) * h;
-            return [x, y];
-          });
-          const d = pts.map(([x, y], i) => (i === 0 ? `M ${x},${y}` : `L ${x},${y}`)).join(" ");
-          const area = `M 0,${h} ${pts.map(([x, y]) => `L ${x},${y}`).join(" ")} L ${w},${h} Z`;
-
-          const breakevenIdx = PARTNER_PAYBACK_MONTH - 1;
-          const breakevenX = (breakevenIdx / (CONFIG.horizonMonths - 1)) * w;
-          const breakevenY = h - (SERIES_WITH_CUM[breakevenIdx].cumPartner / maxVal) * h;
-          const injectionY = h - (CONFIG.injection / maxVal) * h;
-
-          return (
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-4 text-[11px] text-slate-400">
-                  <span className="flex items-center gap-2">
-                    <span className="w-3 h-0.5 bg-emerald-400" /> Cumulative Partner Dividend
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <span className="w-3 h-0 border-t border-dashed" style={{ borderColor: "#f59e0b" }} /> $30,000 Injection
-                  </span>
-                </div>
-                <span className="mono text-[10px] text-slate-600">CAD · cumulative</span>
-              </div>
-              <svg viewBox={`0 0 ${w} ${h + 30}`} className="w-full" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="paybackFill" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
-                    <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                {[0.25, 0.5, 0.75, 1].map((p) => (
-                  <line key={p} x1="0" x2={w} y1={h * (1 - p)} y2={h * (1 - p)} stroke="#1e293b" strokeWidth="0.5" strokeDasharray="2 4" />
-                ))}
-                <line x1="0" x2={w} y1={injectionY} y2={injectionY} stroke="#f59e0b" strokeWidth="1.5" strokeDasharray="6 4" opacity="0.8" />
-                <text x="8" y={injectionY - 6} fill="#f59e0b" fontSize="11" fontFamily="JetBrains Mono">$30,000 injection</text>
-                <path d={area} fill="url(#paybackFill)" />
-                <path d={d} fill="none" stroke="#10b981" strokeWidth="2.5" />
-                <circle cx={breakevenX} cy={breakevenY} r="8" fill="#10b981" opacity="0.25" />
-                <circle cx={breakevenX} cy={breakevenY} r="4" fill="#10b981" />
-                <line x1={breakevenX} x2={breakevenX} y1={breakevenY} y2={h} stroke="#10b981" strokeWidth="1" strokeDasharray="2 3" opacity="0.5" />
-                <text x={breakevenX + 10} y={breakevenY - 10} fill="#10b981" fontSize="12" fontWeight="600" fontFamily="Manrope">Payback · M{PARTNER_PAYBACK_MONTH}</text>
-                {[1, 6, 12, 18, 24].map((mm) => {
-                  const xx = ((mm - 1) / (CONFIG.horizonMonths - 1)) * w;
-                  return (
-                    <g key={mm}>
-                      <line x1={xx} x2={xx} y1={h} y2={h + 4} stroke="#475569" />
-                      <text x={xx} y={h + 18} fill="#64748b" fontSize="10" textAnchor="middle" fontFamily="JetBrains Mono">M{mm}</text>
-                    </g>
-                  );
-                })}
-              </svg>
-            </div>
-          );
-        }
-
-        function UpsellCard({ icon, tier, name, ticket, note, metrics, featured }) {
-          return (
-            <div className={`relative rounded-xl p-7 border ${featured ? "border-sky-500/40 bg-gradient-to-b from-sky-950/30 to-slate-900/60" : "border-slate-800 bg-slate-900/40"}`}>
-              {featured && <div className="absolute -top-3 left-7 px-2.5 py-0.5 bg-sky-500 text-slate-950 text-[10px] uppercase tracking-wider font-bold rounded">Highest LTV</div>}
-              <div className="flex items-center justify-between mb-5">
-                <div className="w-11 h-11 rounded-lg bg-slate-800/80 border border-slate-700 flex items-center justify-center">
-                  <SafeIcon name={icon} className="w-5 h-5 text-sky-400" />
-                </div>
-                <span className="mono text-[10px] uppercase tracking-wider text-slate-500">{tier}</span>
-              </div>
-              <div className="text-xl font-bold text-slate-50">{name}</div>
-              <div className="mono text-sm text-emerald-400 mt-1">{ticket}</div>
-              <p className="text-[13px] text-slate-400 mt-3 leading-snug">{note}</p>
-              <div className="mt-5 space-y-0">{metrics.map(([k, v]) => <StatRow key={k} label={k} value={v} />)}</div>
-              <div className="mt-5 flex items-center gap-1.5 text-[11px] text-sky-400 group cursor-default">
-                Roadmap Q3 2027 <SafeIcon name="ChevronRight" className="w-3.5 h-3.5 inline ml-1 align-baseline" />
-              </div>
-            </div>
-          );
-        }
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<SSSEquityDashboard />);
-    </script>
-</body>
-</html>
+          const d = pts.map(([x, y], i) => (i === 0 ? `M ${x},${y}` : `L ${x},${
