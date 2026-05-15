@@ -11,8 +11,6 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <script src="https://unpkg.com/lucide"></script>
 </head>
 <body class="bg-slate-950 text-slate-200 m-0 p-0">
 
@@ -21,22 +19,36 @@
     <script type="text/babel">
         const { useState, useMemo, useEffect } = React;
 
-        // Dynamic Icon Loader to prevent browser namespace crashes
+        // Self-Contained High-Fidelity Vector Engine (Zero external dependencies)
         const SafeIcon = ({ name, className }) => {
-            const iconComponent = window.lucide ? window.lucide[name] : null;
-            if (iconComponent) {
-                // Creates the SVG path structures directly from Lucide core
-                const [tag, attrs, children] = iconComponent;
-                return React.createElement(
-                    tag, 
-                    { ...attrs, className: `${attrs.class || ''} ${className || ''}`.trim() },
-                    (children || []).map((child, i) => React.createElement(child[0], { ...child[1], key: i }))
-                );
-            }
-            // Minimal SVG fallback line if CDN delays loading
+            const paths = {
+                Briefcase: <path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16M2 20h20M6 6h12" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round"/>,
+                DollarSign: <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round"/>,
+                Crown: <path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7z" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>,
+                CalendarClock: <path d="M21 12a9 9 0 1 1-9-9M12 7v5l2 2M16 2v4M8 2v4M3 10h18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round"/>,
+                Target: <g><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/><circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="2" fill="none"/><circle cx="12" cy="12" r="2" fill="currentColor"/></g>,
+                Zap: <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke="currentColor" strokeWidth="2" fill="none" strokeLinejoin="round"/>,
+                Building2: <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18M6 12h12M6 16h12M10 6h4M10 10h4" stroke="currentColor" strokeWidth="2" fill="none"/>,
+                TrendingUp: <g><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" stroke="currentColor" strokeWidth="2" fill="none"/><polyline points="17 6 23 6 23 12" stroke="currentColor" strokeWidth="2" fill="none"/></g>,
+                Users: <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M20 8a3.5 3.5 0 0 1 0 7M22 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" strokeWidth="2" fill="none"/>,
+                Receipt: <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1zM16 8H8M16 12H8" stroke="currentColor" strokeWidth="2" fill="none"/>,
+                Layers: <g><polygon points="12 2 2 7 12 12 22 7 12 2" stroke="currentColor" strokeWidth="2" fill="none"/><polyline points="2 17 12 22 22 17" stroke="currentColor" strokeWidth="2" fill="none"/><polyline points="2 12 12 17 22 12" stroke="currentColor" strokeWidth="2" fill="none"/></g>,
+                Activity: <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke="currentColor" strokeWidth="2" fill="none" strokeLinejoin="round"/>,
+                ShieldCheck: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 11l2 2 4-4" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>,
+                Lock: <g><rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" strokeWidth="2" fill="none"/></g>,
+                CircuitBoard: <g><rect x="2" y="2" width="20" height="20" rx="2" stroke="currentColor" strokeWidth="2" fill="none"/><circle cx="9" cy="9" r="2" fill="currentColor"/><path d="M9 11v3h3" stroke="currentColor" strokeWidth="2" fill="none"/></g>,
+                Wifi: <path d="M5 12.55a11 11 0 0 1 14 0M7.88 15.43a7 7 0 0 1 8.24 0M10.66 18.21a2.75 2.75 0 0 1 2.68 0" stroke="currentColor" strokeWidth="2" fill="none"/>,
+                Sparkles: <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z" stroke="currentColor" strokeWidth="2" fill="none"/>,
+                Smile: <g><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round"/></g>,
+                Stethoscope: <path d="M4.8 2.5A3.5 3.5 0 0 0 2 6v2.5A7.5 7.5 0 0 0 9.5 16h5a7.5 7.5 0 0 0 7.5-7.5V6a3.5 3.5 0 0 0-5.3-3M12 16v5M10 21h4" stroke="currentColor" strokeWidth="2" fill="none"/>,
+                Cpu: <g><rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3" stroke="currentColor" strokeWidth="2" fill="none"/></g>,
+                ChevronRight: <polyline points="9 18 15 12 9 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>,
+                ArrowUpRight: <g><line x1="7" y1="17" x2="17" y2="7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><polyline points="7 7 17 7 17 17" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/></g>
+            };
+
             return (
-                <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10"/>
+                <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    {paths[name] || <circle cx="12" cy="12" r="10"/>}
                 </svg>
             );
         };
@@ -89,7 +101,7 @@
           const grossProfit = recurringProfit + setupProfit + lpProfit;
 
           const software = CONFIG.swBase + (CONFIG.swMax - CONFIG.swBase) * Math.max(0, clinics - CONFIG.startClinics) / (CONFIG.targetClinics - CONFIG.startClinics);
-          const labor = clinics <= CONFIG.laborThreshold ? 0 : CONFIG.laborMax * Math.min(1, (CONFIG.laborThreshold === 0 ? 1 : (clinics - CONFIG.laborThreshold) / CONFIG.laborThreshold));
+          const labor = clinics <= CONFIG.laborThreshold ? 0 : CONFIG.laborMax * Math.min(1, (clinics - CONFIG.laborThreshold) / CONFIG.laborThreshold);
           const opex = software + labor;
 
           const ebt = grossProfit - opex;
@@ -161,7 +173,7 @@
         );
 
         // ─────────────────────────────────────────────────────────────────────
-        // MAIN APP DASHBOARD COMPONENT (Export removed for raw browser parsing)
+        // MAIN APP DASHBOARD COMPONENT
         // ─────────────────────────────────────────────────────────────────────
         function SSSEquityDashboard() {
           const [month, setMonth] = useState(12);
@@ -178,7 +190,7 @@
           }, []);
 
           return (
-            <div class="min-h-screen w-full bg-slate-950 text-slate-200" style={{ fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif" }}>
+            <div className="min-h-screen w-full bg-slate-950 text-slate-200" style={{ fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif" }}>
               <style>{`
                 .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
                 .grid-bg {
@@ -196,14 +208,8 @@
                 }
                 input[type=range].sss-slider::-webkit-slider-runnable-track {
                   height: 4px;
-                  background: linear-gradient(90deg, #0ea5e9 0%, #0ea5e9 var(--val,50%), #1e293b var(--val,50%), #1e293b 100%);
+                  background: #1e293b;
                   border-radius: 999px;
-                }
-                input[type=range].sss-slider::-moz-range-track {
-                  height: 4px; background: #1e293b; border-radius: 999px;
-                }
-                input[type=range].sss-slider::-moz-range-progress {
-                  height: 4px; background: #0ea5e9; border-radius: 999px;
                 }
                 input[type=range].sss-slider::-webkit-slider-thumb {
                   -webkit-appearance: none; appearance: none;
@@ -213,16 +219,10 @@
                   margin-top: -9px;
                   box-shadow: 0 0 0 6px rgba(14,165,233,0.15), 0 0 30px rgba(14,165,233,0.5);
                   cursor: grab;
-                  transition: transform .15s ease;
-                }
-                input[type=range].sss-slider::-webkit-slider-thumb:active { transform: scale(1.1); cursor: grabbing; }
-                input[type=range].sss-slider::-moz-range-thumb {
-                  width: 22px; height: 22px; border-radius: 999px;
-                  background: #f8fafc; border: 3px solid #0ea5e9; cursor: grab;
                 }
               `}</style>
 
-              <header className="relative border-b border-slate-800/80 grid-bg">
+              <header className="relative className border-b border-slate-800/80 grid-bg">
                 <div className="absolute inset-0 bg-gradient-to-b from-sky-950/30 via-transparent to-transparent pointer-events-none" />
                 <div className="relative mx-auto max-w-7xl px-6 py-5 flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -249,7 +249,7 @@
 
                 <div className="relative mx-auto max-w-7xl px-6 pb-12 pt-8">
                   <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-sky-400/90 mb-4">
-                    <SafeIcon name="briefcase" className="w-3.5 h-3.5" />
+                    <SafeIcon name="Briefcase" className="w-3.5 h-3.5" />
                     Partner Equity Dashboard
                   </div>
                   <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-50 leading-[1.05] max-w-4xl">
@@ -266,10 +266,10 @@
 
                   <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-px bg-slate-800/60 rounded-xl overflow-hidden border border-slate-800">
                     {[
-                      { k: "Capital Injection", v: "$30,000", sub: "CAD · Single tranche", icon: "dollar-sign" },
-                      { k: "Net Equity", v: "15.00%", sub: "Of post-tax net profit", icon: "crown" },
-                      { k: "Horizon to Target", v: "24 mo", sub: "3 → 100 clinics", icon: "calendar" },
-                      { k: "Partner Payback", v: `M ${PARTNER_PAYBACK_MONTH ?? "—"}`, sub: "Cumulative div ≥ injection", icon: "target", accent: true },
+                      { k: "Capital Injection", v: "$30,000", sub: "CAD · Single tranche", icon: "DollarSign" },
+                      { k: "Net Equity", v: "15.00%", sub: "Of post-tax net profit", icon: "Crown" },
+                      { k: "Horizon to Target", v: "24 mo", sub: "3 → 100 clinics", icon: "CalendarClock" },
+                      { k: "Partner Payback", v: `M ${PARTNER_PAYBACK_MONTH ?? "—"}`, sub: "Cumulative div ≥ injection", icon: "Target", accent: true },
                     ].map(({ k, v, sub, icon, accent }) => (
                       <div key={k} className="bg-slate-950 p-5">
                         <div className="flex items-center justify-between mb-3">
@@ -355,17 +355,17 @@
                     </p>
                   </div>
                   <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-slate-400">
-                    <SafeIcon name="zap" className="w-3.5 h-3.5 text-sky-400" />
+                    <SafeIcon name="Zap" className="w-3.5 h-3.5 text-sky-400" />
                     Real-time scenario engine
                   </div>
                 </div>
 
                 <Card className="p-8 lg:p-10" glow>
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                    <LiveMetric icon="building-2" label="Clinic Count" value={fmtN(Math.round(m.clinics))} suffix="active" detail={`${fmtPct(m.clinics / CONFIG.networkSize, 1)} of 123Dentist`} tone="sky" />
-                    <LiveMetric icon="trending-up" label="Total Net Profit" value={fmtUSD(m.net)} suffix="/ mo" detail={`EBT ${fmtUSD(m.ebt)} − tax ${fmtUSD(m.tax)}`} tone="emerald" />
-                    <LiveMetric icon="crown" label="Founder Div · 85%" value={fmtUSD(m.founder)} suffix="/ mo" detail="Post-tax take-home" tone="slate" />
-                    <LiveMetric icon="users" label="Partner Div · 15%" value={fmtUSD(m.partner)} suffix="/ mo" detail={`Annualized ${fmtUSD(m.partner * 12)}`} tone="emerald" accent />
+                    <LiveMetric icon="Building2" label="Clinic Count" value={fmtN(Math.round(m.clinics))} suffix="active" detail={`${fmtPct(m.clinics / CONFIG.networkSize, 1)} of 123Dentist`} tone="sky" />
+                    <LiveMetric icon="TrendingUp" label="Total Net Profit" value={fmtUSD(m.net)} suffix="/ mo" detail={`EBT ${fmtUSD(m.ebt)} − tax ${fmtUSD(m.tax)}`} tone="emerald" />
+                    <LiveMetric icon="Crown" label="Founder Div · 85%" value={fmtUSD(m.founder)} suffix="/ mo" detail="Post-tax take-home" tone="slate" />
+                    <LiveMetric icon="Users" label="Partner Div · 15%" value={fmtUSD(m.partner)} suffix="/ mo" detail={`Annualized ${fmtUSD(m.partner * 12)}`} tone="emerald" accent />
                   </div>
 
                   <div className="space-y-3">
@@ -380,7 +380,7 @@
                       </div>
                     </div>
 
-                    <input type="range" min={1} max={24} value={month} onChange={(e) => setMonth(parseInt(e.target.value, 10))} className="sss-slider" style={{ "--val": `${((month - 1) / 23) * 100}%` }} />
+                    <input type="range" min={1} max={24} value={month} onChange={(e) => setMonth(parseInt(e.target.value, 10))} className="sss-slider" />
 
                     <div className="flex justify-between mono text-[10px] text-slate-600 pt-1 select-none">
                       {[1, 6, 12, 18, 24].map((mm) => (
@@ -409,14 +409,14 @@
                   <Card className="p-7 group hover:border-sky-500/40 transition-colors">
                     <div className="flex items-start justify-between mb-6">
                       <div className="w-11 h-11 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
-                        <SafeIcon name="receipt" className="w-5 h-5 text-sky-400" />
+                        <SafeIcon name="Receipt" className="w-5 h-5 text-sky-400" />
                       </div>
                       <span className="mono text-[10px] uppercase tracking-wider text-slate-500">One-time · per clinic</span>
                     </div>
                     <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">Setup Activation</div>
                     <div className="mt-1 flex items-baseline gap-2">
                       <div className="mono text-4xl font-bold text-slate-50">$499</div>
-                      <SafeIcon name="arrow-up-right" className="w-4 h-4 text-slate-600 inline ml-1 align-baseline" />
+                      <SafeIcon name="ArrowUpRight" className="w-4 h-4 text-slate-600 inline ml-1 align-baseline" />
                       <div className="mono text-2xl font-semibold text-emerald-400 profit-glow inline ml-2">{fmtUSDc(SETUP_NET)}</div>
                     </div>
                     <div className="text-[11px] text-slate-500 mt-1">Net per onboarding, post-Stripe</div>
@@ -432,14 +432,14 @@
                   <Card className="p-7 group hover:border-sky-500/40 transition-colors">
                     <div className="flex items-start justify-between mb-6">
                       <div className="w-11 h-11 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
-                        <SafeIcon name="layers" className="w-5 h-5 text-sky-400" />
+                        <SafeIcon name="Layers" className="w-5 h-5 text-sky-400" />
                       </div>
                       <span className="mono text-[10px] uppercase tracking-wider text-slate-500">Annual refresh</span>
                     </div>
                     <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">Landing Page Refresh</div>
                     <div className="mt-1 flex items-baseline gap-2">
                       <div className="mono text-4xl font-bold text-slate-50">$999</div>
-                      <SafeIcon name="arrow-up-right" className="w-4 h-4 text-slate-600 inline ml-1 align-baseline" />
+                      <SafeIcon name="ArrowUpRight" className="w-4 h-4 text-slate-600 inline ml-1 align-baseline" />
                       <div className="mono text-2xl font-semibold text-emerald-400 profit-glow inline ml-2">{fmtUSDc(LP_NET)}</div>
                     </div>
                     <div className="text-[11px] text-slate-500 mt-1">Net per refresh, post-Stripe</div>
@@ -452,260 +452,4 @@
                     </div>
                   </Card>
 
-                  <Card className="p-7 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 px-3 py-1 bg-emerald-500/10 border-l border-b border-emerald-500/30 text-[10px] uppercase tracking-wider text-emerald-300">Core Asset</div>
-                    <div className="flex items-start justify-between mb-6">
-                      <div className="w-11 h-11 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
-                        <SafeIcon name="activity" className="w-5 h-5 text-emerald-400" />
-                      </div>
-                      <span className="mono text-[10px] uppercase tracking-wider text-slate-500">MRR · per clinic</span>
-                    </div>
-                    <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">Management Utility</div>
-                    <div className="mt-1 flex items-baseline gap-2">
-                      <div className="mono text-4xl font-bold text-slate-50">$449</div>
-                      <span className="text-slate-600 text-sm">/mo</span>
-                    </div>
-                    <div className="mt-3 flex items-center gap-3">
-                      <div className="mono text-3xl font-bold text-emerald-400 profit-glow">{fmtPct(RECURRING_MARGIN, 0)}</div>
-                      <div className="text-[11px] text-slate-400 leading-tight">Gross margin <br /> <span className="text-slate-600">{fmtUSDc(RECURRING_GROSS)} per clinic</span></div>
-                    </div>
-                    <div className="mt-5 space-y-0">
-                      <StatRow label="Monthly Fee" value="$449.00" />
-                      <StatRow label="Service COGS" value="−$149.00" />
-                      <StatRow label="Stripe (3%)" value={`−${fmtUSDc(CONFIG.mgmtFee * CONFIG.stripe)}`} />
-                      <StatRow label="Net MRR / clinic" value={fmtUSDc(RECURRING_NET)} accent="text-emerald-400" />
-                      <StatRow label="@ 100 clinics · ARR" value={fmtUSD(100 * RECURRING_NET * 12)} accent="text-slate-100" />
-                    </div>
-                  </Card>
-                </div>
-
-                <Card className="mt-5 p-7">
-                  <div className="flex items-center justify-between mb-5">
-                    <div>
-                      <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Margin Decomposition · $449 management fee</div>
-                      <div className="text-slate-300 mt-1 text-sm">Per-clinic dollar flows from invoice to retained earnings.</div>
-                    </div>
-                    <span className="mono text-[10px] text-slate-500">CAD</span>
-                  </div>
-                  <MarginStack />
-                </Card>
-              </section>
-
-              <section className="mx-auto max-w-7xl px-6 py-20 border-t border-slate-900">
-                <SectionLabel num="03">Capital Efficiency</SectionLabel>
-                <div className="flex items-end justify-between mb-10 flex-wrap gap-6">
-                  <div>
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">Payback Tracker</h2>
-                    <p className="text-slate-500 mt-2 max-w-xl">Cumulative partner dividends measured against the $30,000 injection. Crossover defines breakeven. <span className="text-slate-400">Modeled against the 20% network floor — independent-clinic uptake is not priced in.</span></p>
-                  </div>
-                </div>
-
-                <Card className="p-8 lg:p-10">
-                  <div className="grid lg:grid-cols-4 gap-8 mb-10">
-                    <div className="lg:col-span-3">
-                      <PaybackChart />
-                    </div>
-                    <div className="space-y-4">
-                      <div>
-                        <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Partner Payback</div>
-                        <div className="mono text-4xl font-bold text-emerald-400 profit-glow leading-none mt-1">M{PARTNER_PAYBACK_MONTH}</div>
-                        <div className="text-[11px] text-slate-500 mt-1">Cumulative div ≥ $30K</div>
-                      </div>
-                      <div className="h-px bg-slate-800" />
-                      <div>
-                        <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Venture Breakeven</div>
-                        <div className="mono text-4xl font-bold text-sky-400 num-glow leading-none mt-1">M{VENTURE_BREAKEVEN_MONTH}</div>
-                        <div className="text-[11px] text-slate-500 mt-1">Cum. net profit ≥ injection</div>
-                      </div>
-                      <div className="h-px bg-slate-800" />
-                      <div>
-                        <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">24-Mo Yield (Partner)</div>
-                        <div className="mono text-4xl font-bold text-slate-50 leading-none mt-1">{fmtN(FINAL.cumPartner / CONFIG.injection, 2)}×</div>
-                        <div className="text-[11px] text-slate-500 mt-1">{fmtUSD(FINAL.cumPartner)} returned on $30K</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                    {[
-                      { k: "Mo 6", row: SERIES_WITH_CUM[5] },
-                      { k: "Mo 12", row: SERIES_WITH_CUM[11] },
-                      { k: `Mo ${PARTNER_PAYBACK_MONTH}`, row: SERIES_WITH_CUM[PARTNER_PAYBACK_MONTH - 1], hot: true },
-                      { k: "Mo 24", row: SERIES_WITH_CUM[23] },
-                    ].map(({ k, row, hot }) => (
-                      <div key={k} className={`rounded-lg border p-4 ${hot ? "border-emerald-500/40 bg-emerald-500/5" : "border-slate-800 bg-slate-950/50"}`}>
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="mono text-[10px] uppercase tracking-wider text-slate-500">{k}</span>
-                          {hot && <span className="text-[9px] uppercase tracking-wider text-emerald-400">Payback</span>}
-                        </div>
-                        <div className="mono text-lg text-slate-50 tabular-nums">{fmtUSD(row.cumPartner)}</div>
-                        <div className="text-[11px] text-slate-500 mt-1">{Math.round(row.clinics)} clinics</div>
-                      </div>
-                    ))}
-                  </div>
-                </Card>
-              </section>
-
-              <section className="mx-auto max-w-7xl px-6 py-20 border-t border-slate-900">
-                <SectionLabel num="04">Defensibility</SectionLabel>
-                <div className="grid lg:grid-cols-5 gap-8">
-                  <div className="lg:col-span-2">
-                    <div className="flex items-center gap-2 text-sky-400 text-[11px] uppercase tracking-[0.2em] mb-3">
-                      <SafeIcon name="shield" className="w-3.5 h-3.5" />
-                      The Physical Moat
-                    </div>
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">Hardware lives on the counter. <br /> <span className="text-slate-500">Software lives in habit.</span></h2>
-                    <p className="text-slate-400 mt-5 leading-relaxed">Each clinic receives a branded NFC Review Pad — a $20 piece of hardware that turns the reception desk into a recurring review engine. Once installed, switching costs become physical: staff training, signage, patient flow.</p>
-                    <p className="text-slate-400 mt-3 leading-relaxed">SaaS competitors can clone the dashboard. They cannot un-install the tap target sitting on the counter.</p>
-
-                    <div className="mt-8 space-y-3">
-                      {[
-                        { i: "lock", t: "Switching friction", d: "Removing the pad = visible change at the front desk" },
-                        { i: "cpu", t: "Embedded in workflow", d: "Receptionist hands pad to patient at checkout" },
-                        { i: "wifi", t: "Always-on review funnel", d: "Each tap = direct deep-link to Google Review" },
-                      ].map(({ i, t, d }) => (
-                        <div key={t} className="flex gap-4">
-                          <div className="w-9 h-9 rounded-lg bg-sky-500/10 border border-sky-500/30 flex-none flex items-center justify-center">
-                            <SafeIcon name={i} className="w-4 h-4 text-sky-400" />
-                          </div>
-                          <div>
-                            <div className="text-sm font-semibold text-slate-200">{t}</div>
-                            <div className="text-[13px] text-slate-500 leading-snug">{d}</div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="lg:col-span-3">
-                    <Card className="p-8 lg:p-10 relative overflow-hidden h-full" glow>
-                      <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-sky-500/10 blur-3xl pointer-events-none" />
-                      <div className="absolute -bottom-32 -left-10 w-72 h-72 rounded-full bg-emerald-500/5 blur-3xl pointer-events-none" />
-                      <div className="relative flex items-center justify-between mb-8">
-                        <div>
-                          <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">SKU · NFC-REV-001</div>
-                          <div className="text-2xl font-bold text-slate-50 mt-1">SSS Review Pad™</div>
-                        </div>
-                        <div className="mono text-[10px] uppercase tracking-wider text-emerald-400 border border-emerald-500/30 rounded-full px-3 py-1 bg-emerald-500/5">Shipped w/ every clinic</div>
-                      </div>
-
-                      <div className="relative mx-auto" style={{ maxWidth: 320 }}>
-                        <svg viewBox="0 0 320 200" className="w-full">
-                          <defs>
-                            <linearGradient id="padBody" x1="0" x2="1" y1="0" y2="1">
-                              <stop offset="0%" stopColor="#0f172a" />
-                              <stop offset="100%" stopColor="#020617" />
-                            </linearGradient>
-                            <linearGradient id="padEdge" x1="0" x2="0" y1="0" y2="1">
-                              <stop offset="0%" stopColor="#334155" />
-                              <stop offset="100%" stopColor="#0f172a" />
-                            </linearGradient>
-                            <radialGradient id="ring" cx="0.5" cy="0.5" r="0.5">
-                              <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.6" />
-                              <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0" />
-                            </radialGradient>
-                          </defs>
-                          <ellipse cx="160" cy="185" rx="120" ry="8" fill="#000" opacity="0.5" />
-                          <rect x="40" y="30" width="240" height="150" rx="20" fill="url(#padBody)" stroke="url(#padEdge)" strokeWidth="1.5" />
-                          <circle cx="160" cy="105" r="60" fill="url(#ring)" />
-                          <g fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" opacity="0.85">
-                            <path d="M 145 105 a 18 18 0 0 1 30 0" />
-                            <path d="M 138 105 a 28 28 0 0 1 44 0" opacity="0.6" />
-                            <path d="M 131 105 a 38 38 0 0 1 58 0" opacity="0.35" />
-                            <circle cx="160" cy="115" r="4" fill="#0ea5e9" stroke="none" />
-                          </g>
-                          <text x="160" y="160" textAnchor="middle" fill="#64748b" fontSize="9" fontFamily="JetBrains Mono" letterSpacing="3">TAP · REVIEW · GO</text>
-                          <text x="56" y="50" fill="#0ea5e9" fontSize="11" fontFamily="Manrope" fontWeight="700">S³</text>
-                        </svg>
-                      </div>
-
-                      <div className="grid grid-cols-3 gap-px bg-slate-800 mt-8 rounded-lg overflow-hidden border border-slate-800">
-                        <div className="bg-slate-950 p-4 text-center">
-                          <div className="mono text-2xl font-bold text-slate-50">$20</div>
-                          <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">Hardware COGS</div>
-                        </div>
-                        <div className="bg-slate-950 p-4 text-center">
-                          <div className="mono text-2xl font-bold text-sky-400">∞</div>
-                          <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">Taps / pad</div>
-                        </div>
-                        <div className="bg-slate-950 p-4 text-center">
-                          <div className="mono text-2xl font-bold text-emerald-400">100%</div>
-                          <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">Attach rate</div>
-                        </div>
-                      </div>
-                    </Card>
-                  </div>
-                </div>
-              </section>
-
-              <section className="mx-auto max-w-7xl px-6 py-20 border-t border-slate-900">
-                <SectionLabel num="05">Forward Optionality</SectionLabel>
-                <div className="flex items-end justify-between mb-10 flex-wrap gap-6">
-                  <div>
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-50">Secondary revenue layers.</h2>
-                    <p className="text-slate-500 mt-2 max-w-xl">Once the utility layer is installed, every clinic becomes a distribution channel for high-ticket procedure funnels. <span className="text-slate-400">None of this is in the base case — and neither is the independent-clinic market beyond the 123Dentist network.</span> Pure upside.</p>
-                  </div>
-                  <div className="text-[11px] uppercase tracking-wider text-emerald-400/80 flex items-center gap-2">
-                    <SafeIcon name="sparkles" className="w-3.5 h-3.5" />
-                    Not in base case
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-3 gap-5">
-                  <UpsellCard icon="smile" tier="Tier I" name="Invisalign Funnels" ticket="$2,500 – $4,000" note="Specialized lead-gen for clear aligner candidates. Per-clinic LTV multiplier." metrics={[["Avg Procedure", "$5,800"], ["Funnel ARR (est.)", "$1,800"], ["Margin Profile", "70%+"]]} />
-                  <UpsellCard icon="activity" tier="Tier II" name="Implant Pipeline" ticket="$3,500 – $6,000" note="High-intent geo-targeted campaigns. Capacity-constrained — fits surgical schedules." metrics={[["Avg Procedure", "$4,500"], ["Funnel ARR (est.)", "$3,200"], ["Margin Profile", "65%+"]]} featured />
-                  <UpsellCard icon="cpu" tier="Tier III" name="AI Triage Layer" ticket="$199 / mo add-on" note="Automated patient intake + insurance pre-check. Sits on top of the existing $449 utility." metrics={[["Attach Rate (proj.)", "40%"], ["Incremental ARR", "$95K"], ["Margin Profile", "82%"]]} />
-                </div>
-              </section>
-
-              <footer className="border-t border-slate-900 mt-10">
-                <div className="mx-auto max-w-7xl px-6 py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                  <div>
-                    <div className="font-bold tracking-tight text-slate-200">SSS MARKETING · Capital Partners</div>
-                    <div className="text-[11px] text-slate-500 mt-1 max-w-xl">This document is a confidential memorandum prepared for a prospective equity partner. Projections are illustrative and based on the unit economics stated herein. Past results not indicative of future returns. Canadian-domiciled entity; CAD reporting; 13% federal corporate tax applied at portfolio level.</div>
-                  </div>
-                  <div className="flex items-center gap-6 mono text-[11px] text-slate-500">
-                    <div>SSS-2026-Q2</div>
-                    <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                      Model live
-                    </div>
-                  </div>
-                </div>
-              </footer>
-            </div>
-          );
-        }
-
-        function LiveMetric({ icon, label, value, suffix, detail, tone, accent }) {
-          const toneMap = {
-            sky: "text-sky-400 num-glow",
-            emerald: "text-emerald-400 profit-glow",
-            slate: "text-slate-200",
-          };
-          return (
-            <div className={`relative p-5 rounded-lg border ${accent ? "bg-emerald-500/5 border-emerald-500/30" : "bg-slate-950/60 border-slate-800"} transition-all`}>
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500">{label}</span>
-                <SafeIcon name={icon} className={`w-3.5 h-3.5 ${toneMap[tone]}`} />
-              </div>
-              <div className="flex items-baseline gap-1.5">
-                <span className={`mono text-3xl font-bold tabular-nums leading-none ${toneMap[tone]}`}>{value}</span>
-                <span className="text-xs text-slate-500">{suffix}</span>
-              </div>
-              <div className="text-[11px] text-slate-500 mt-2 leading-tight">{detail}</div>
-            </div>
-          );
-        }
-
-        function Sparkline({ title, series, keyName, activeMonth, stroke, fill, format }) {
-          const w = 600; const h = 110;
-          const vals = series.map((r) => r[keyName]);
-          const max = Math.max(...vals); const min = Math.min(...vals);
-          const range = max - min || 1;
-          const pts = series.map((r, i) => {
-            const x = (i / (CONFIG.horizonMonths - 1)) * w;
-            const y = h - ((r[keyName] - min) / range) * h;
-            return [x, y];
-          });
-          const d = pts.map(([x, y], i) => (i === 0 ? `M ${x},${y}` : `L ${x},${
+                  <Card className="p-7
