@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#fefae0">
 <title>SSS — Acquisition de patients dentaires</title>
 <meta name="description" content="Agence marketing dentaire. Six leviers Google. Un seul forfait. 449 $ / mois.">
+<meta name="robots" content="index, follow">
 <meta name="format-detection" content="telephone=no">
 
 <link rel="canonical" href="https://sss.marketing/">
@@ -546,9 +547,16 @@ nav.scrolled .nav-logo{height:26px}
 .contact-fact-value{
   font-family:var(--display);font-weight:500;font-size:19px;line-height:1.2;
   letter-spacing:-0.005em;color:var(--ink);
-  transition:color .25s var(--ease);
+  transition:color .25s var(--ease),text-decoration-color .25s var(--ease);
 }
-a.contact-fact-value:hover{color:var(--tan)}
+a.contact-fact-value{
+  text-decoration:underline;
+  text-decoration-color:rgba(212,163,115,0.45);
+  text-decoration-thickness:1px;
+  text-underline-offset:5px;
+}
+a.contact-fact-value:hover{color:var(--tan);text-decoration-color:var(--tan)}
+.pricing-sup-cad{font-size:0.55em;color:var(--tan);vertical-align:0.45em}
 
 .contact-embed{
   border:1px solid var(--rule);
@@ -817,6 +825,8 @@ a.contact-fact-value:hover{color:var(--tan)}
   transition:border-color .25s var(--ease),color .25s var(--ease),background-color .25s var(--ease);
 }
 .booker-success-link:hover{border-color:var(--tan);color:var(--tan);background:rgba(212,163,115,0.06)}
+.booker-retry{margin-left:auto}
+.booker-mark-mail{margin-top:14px}
 .booker-success-reset{
   font-family:var(--body);font-size:10px;letter-spacing:0.22em;
   text-transform:uppercase;color:var(--ink);opacity:0.55;
@@ -875,8 +885,15 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 .footer-brand-tag{font-family:var(--body);font-size:13px;line-height:1.65;color:var(--ink);opacity:0.7;max-width:340px}
 .footer-col-label{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan);margin-bottom:18px}
 .footer-col ul{display:flex;flex-direction:column;gap:10px}
-.footer-col a,.footer-col span{font-family:var(--body);font-size:13px;color:var(--ink);opacity:0.82;transition:color .25s var(--ease),opacity .25s var(--ease)}
+.footer-col a,.footer-col span{font-family:var(--body);font-size:13px;color:var(--ink);opacity:0.82;transition:color .25s var(--ease),opacity .25s var(--ease),text-decoration-color .25s var(--ease)}
 .footer-col a:hover{color:var(--tan);opacity:1}
+.footer-col a[href^="mailto:"]{
+  text-decoration:underline;
+  text-decoration-color:rgba(212,163,115,0.4);
+  text-decoration-thickness:1px;
+  text-underline-offset:3px;
+}
+.footer-col a[href^="mailto:"]:hover{text-decoration-color:var(--tan)}
 .footer-legal{
   margin-top:32px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;
   font-family:var(--body);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
@@ -921,7 +938,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   .hero{padding-top:calc(var(--nav-h) + 56px);padding-bottom:96px}
   .hero-grid{grid-template-columns:1fr;gap:40px;align-items:start}
   .hero-left{order:2}
-  .hero-right{order:1;text-align:left;align-items:flex-start;padding-bottom:0;padding-top:8px;border-bottom:1px solid var(--rule);padding-bottom:32px}
+  .hero-right{order:1;text-align:left;align-items:flex-start;padding-top:8px;padding-bottom:32px;border-bottom:1px solid var(--rule)}
   .hero-right-num{font-size:clamp(96px,18vw,140px)}
   .hero-right-caption{text-align:left}
   .hero h1{font-size:clamp(40px,10.5vw,72px)}
@@ -1008,6 +1025,18 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   footer{padding:24pt 0 0 0;border-top:1pt solid #000}
 }
 </style>
+<noscript>
+<style>
+.booker-pane--loading{display:none}
+.booker-body::after{
+  content:"Activez JavaScript pour réserver, ou écrivez-nous : info@sss.marketing";
+  display:block;padding:48px 28px;text-align:center;
+  font-family:var(--body);font-size:13px;line-height:1.7;
+  color:var(--ink);opacity:0.7;
+}
+.fade-in{opacity:1;transform:none}
+</style>
+</noscript>
 </head>
 <body>
 
@@ -1073,11 +1102,11 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     </div>
     <div class="problem-grid">
       <div class="problem-stmt fade-in d1">
-        <div class="problem-stmt-num">i</div>
+        <div class="problem-stmt-num" aria-hidden="true">i</div>
         <p class="problem-stmt-body" data-i="prob1">Les agences traditionnelles vendent de la visibilité. Nous générons des patients.</p>
       </div>
       <div class="problem-stmt fade-in d2">
-        <div class="problem-stmt-num">ii</div>
+        <div class="problem-stmt-num" aria-hidden="true">ii</div>
         <p class="problem-stmt-body">
           <span data-i="prob2">La plupart des agences ne comprennent pas pourquoi quelqu'un cherche « dentiste d'urgence » à 22h. Nous, oui.</span>
           <span class="quietly" data-i="prob2Sub">Parce que nous avons été sur la ligne de front de vraies cliniques dentaires.</span>
@@ -1159,8 +1188,8 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       <div class="eco-text">
         <h2 class="eco-title fade-in d1" data-i="ecoTitle">Chaque visite devient une opportunité d'avis.</h2>
         <ul class="eco-list">
-          <li class="fade-in d2"><span class="eco-list-num">i</span><span data-i="eco1">Dispositifs NFC à la réception. Un toucher. Un avis Google.</span></li>
-          <li class="fade-in d3"><span class="eco-list-num">ii</span><span data-i="eco3">La fréquence des avis est l'un des signaux les plus forts de l'algorithme local de Google.</span></li>
+          <li class="fade-in d2"><span class="eco-list-num" aria-hidden="true">i</span><span data-i="eco1">Dispositifs NFC à la réception. Un toucher. Un avis Google.</span></li>
+          <li class="fade-in d3"><span class="eco-list-num" aria-hidden="true">ii</span><span data-i="eco3">La fréquence des avis est l'un des signaux les plus forts de l'algorithme local de Google.</span></li>
         </ul>
       </div>
       <div class="eco-object fade-in d2">
@@ -1216,7 +1245,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       </div>
       <div class="pricing-fact fade-in d2">
         <div class="pricing-fact-label" data-i="pf2Label">Onboarding</div>
-        <div class="pricing-fact-value">499<sup style="font-size:0.55em;color:var(--tan);vertical-align:0.45em">$</sup></div>
+        <div class="pricing-fact-value">499<sup class="pricing-sup-cad">$</sup></div>
         <div class="pricing-fact-note" data-i="pf2Note">Six leviers configurés. Tableau de bord activé.</div>
       </div>
       <div class="pricing-fact fade-in d3">
@@ -1294,22 +1323,22 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 
     <ul class="why-list">
       <li class="why-item fade-in d1">
-        <span class="why-item-num">i</span>
+        <span class="why-item-num" aria-hidden="true">i</span>
         <span class="why-item-text" data-i="why1">Aucune caméra. Aucune danse. Vous restez dentiste.</span>
         <span class="why-item-tag" data-i="why1Tag">Filtre</span>
       </li>
       <li class="why-item fade-in d2">
-        <span class="why-item-num">ii</span>
+        <span class="why-item-num" aria-hidden="true">ii</span>
         <span class="why-item-text" data-i="why2">Expertise dentaire spécialisée. Rien d'autre.</span>
         <span class="why-item-tag" data-i="why2Tag">Vertical</span>
       </li>
       <li class="why-item fade-in d3">
-        <span class="why-item-num">iii</span>
+        <span class="why-item-num" aria-hidden="true">iii</span>
         <span class="why-item-text" data-i="why3">Optimisation continue des campagnes. Pas une fois par trimestre.</span>
         <span class="why-item-tag" data-i="why3Tag">Discipline</span>
       </li>
       <li class="why-item fade-in d4">
-        <span class="why-item-num">iv</span>
+        <span class="why-item-num" aria-hidden="true">iv</span>
         <span class="why-item-text" data-i="why4">Tableau de bord temps réel. Accès 24/7.</span>
         <span class="why-item-tag" data-i="why4Tag">Transparence</span>
       </li>
@@ -1351,7 +1380,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       <article class="team-card fade-in d3">
         <div class="team-meta">
           <div class="team-role" data-i="aliRole">Partenaire · Conseiller opérationnel</div>
-          <h3 class="team-name" data-i="aliName">Ali Kazemian</h3>
+          <h3 class="team-name" data-i="aliName">Ali K.</h3>
           <p class="team-bio" data-i="aliBio">Plus de 10 ans à l'intérieur des cliniques dentaires. Opérations quotidiennes, navigation des assurances, comptabilité clinique, expérience patient. A piloté l'exploitation de cliniques à fort volume facturant des millions en revenus. Sait ce qui se passe entre le clic et le fauteuil.</p>
         </div>
       </article>
@@ -1397,10 +1426,6 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
             <div class="contact-fact-label" data-i="contactLocLabel">Bureau</div>
             <div class="contact-fact-value" data-i="contactLocValue">Montréal, QC</div>
           </div>
-          <div class="contact-fact">
-            <div class="contact-fact-label" data-i="contactRespLabel">Réponse</div>
-            <div class="contact-fact-value" data-i="contactRespValue">Hamza, personnellement.</div>
-          </div>
         </div>
       </aside>
 
@@ -1413,8 +1438,8 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
            aria-label="Calendrier de réservation">
         <div class="booker" id="booker">
           <div class="booker-head">
-            <div class="booker-progress" role="progressbar" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1" id="bookerProgress">
-              <span class="booker-progress-step active" data-step="date">
+            <div class="booker-progress" aria-label="Étapes de réservation" id="bookerProgress">
+              <span class="booker-progress-step active" data-step="date" aria-current="step">
                 <span class="booker-progress-num">01</span>
                 <span class="booker-progress-label" data-i="bkProgressDate">Date</span>
               </span>
@@ -1510,10 +1535,10 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 (function(){
   const i18n = {
     fr:{
-      cta:"Réserver un audit de 15 min",skipLink:"Aller au contenu",eyebrow:"Acquisition de patients dentaires",heroTitle:"Un seul indicateur compte.",heroTitleAccent:"Un fauteuil occupé.",heroSub:"Marketing dentaire. Par des opérateurs.",heroCta:"Réserver un audit de 15 min",priceLabel:"Forfait mensuel",priceCaption:"Tout inclus · Six leviers",scrollLabel:"Défiler",problemLabel:"Le problème",prob1:"Les agences traditionnelles vendent de la visibilité. Nous générons des patients.",prob2:"La plupart des agences ne comprennent pas pourquoi quelqu'un cherche « dentiste d'urgence » à 22h. Nous, oui.",prob2Sub:"Parce que nous avons été sur la ligne de front de vraies cliniques dentaires.",servicesLabel:"Services",servicesTitle:"Six leviers Google. Un seul forfait.",servicesIntro:"Opéré en interne. Mesuré mensuellement.",svc1Name:"Google Ads — Search",svc1Desc:"Captés à la requête. Quand ils cherchent.",svc2Name:"Google My Business",svc2Desc:"Premier sur la carte. Profil défendu.",svc3Name:"Data Analytics",svc3Desc:"Chaque dollar tracé au fauteuil.",svc4Name:"Google Ads — Display",svc4Desc:"Présence ciblée. Mesurable.",svc5Name:"Google Ads — Vidéo",svc5Desc:"YouTube géolocalisé. Format court.",svc6Name:"Google Ads — Shopping",svc6Desc:"Annonces produits. Conversion directe.",svcDetailCue:"+ Voir les livrables",servicesFootNote:"Publicité Google facturée par Google. Aucun frais caché.",ecoLabel:"Infrastructure réputation",ecoTitle:"Chaque visite devient une opportunité d'avis.",eco1:"Dispositifs NFC à la réception. Un toucher. Un avis Google.",eco3:"La fréquence des avis est l'un des signaux les plus forts de l'algorithme local de Google.",ecoCaption:"Dispositif NFC SSS · Sage / Ink",pricingLabel:"Tarification",pricingMo:"par mois · CAD",pf1Label:"Inclus",pf1Value:"Six leviers Google",pf1Note:"Search, GMB, Data, Display, Vidéo, Shopping.",pf2Label:"Onboarding",pf2Note:"Six leviers configurés. Tableau de bord activé.",pf3Label:"Publicité Google",pf3Value:"Facturée directement",pf3Note:"Vous gardez le contrôle.",pf4Label:"Spécialisation",pf4Value:"Dentaire uniquement",pf4Note:"Aucun autre vertical.",pricingCta:"Réserver un audit de 15 min",processLabel:"Processus",processTitle:"Trois étapes. De l'audit à la mise en ligne.",step1Num:"Étape 01",step1Unit:"min",step1Title:"Audit",step1Desc:"Présence Google. Compétiteurs. Opportunités locales.",step2Num:"Étape 02",step2Anchor:"Plan",step2Title:"Stratégie",step2Desc:"Plan d'action. Budget par levier. Cibles mensuelles.",step3Num:"Étape 03",step3Unit:"jours",step3Title:"Mise en ligne",step3Desc:"Campagnes actives. Mesure dès le premier mois.",whyLabel:"Pourquoi SSS",whyTitle:"Une discipline. Un seul vertical.",whySub:"Quatre raisons. Aucune en trop.",why1:"Aucune caméra. Aucune danse. Vous restez dentiste.",why1Tag:"Filtre",why2:"Expertise dentaire spécialisée. Rien d'autre.",why2Tag:"Vertical",why3:"Optimisation continue des campagnes. Pas une fois par trimestre.",why3Tag:"Discipline",why4:"Tableau de bord temps réel. Accès 24/7.",why4Tag:"Transparence",teamLabel:"Équipe",teamTitle:"Chaque dollar a un opérateur.",teamSub:"Aucun budget laissé à un algorithme. Des spécialistes Google certifiés gèrent chaque campagne, en collaboration directe avec un dentiste en exercice. Chaque mot, chaque promesse — validés avant publication.",hamzaRole:"Fondateur",hamzaName:"Hamza A.",hamzaBio:"Dix ans en marketing. Quatre ans en clinique — appels, urgences, plans de traitement. La majorité des agences n'ont jamais vu ça de l'intérieur.",shayanRole:"Partenaire · Conseiller clinique",shayanName:"Dr. Shayan Araghi",shayanBio:"14 ans de pratique clinique. Plusieurs cliniques bâties de zéro. DMD, Université de Montréal. Investisseur et partenaire stratégique.",aliRole:"Partenaire · Conseiller opérationnel",aliName:"Ali Kazemian",aliBio:"Plus de 10 ans à l'intérieur des cliniques dentaires. Opérations quotidiennes, navigation des assurances, comptabilité clinique, expérience patient. A piloté l'exploitation de cliniques à fort volume facturant des millions en revenus. Sait ce qui se passe entre le clic et le fauteuil.",finalEyebrow:"Audit gratuit · 15 minutes",finalTitle:"Un fauteuil vide coûte plus cher qu'un forfait marketing.",finalSub:"Présence Google, compétiteurs, opportunités locales. Avec ou sans nous.",contactLabel:"Contact",contactTitle:"Choisissez votre créneau.",contactIntro:"Audit gratuit. 15 minutes.",contactEmailLabel:"Email",contactLocLabel:"Bureau",contactLocValue:"Montréal, QC",contactRespLabel:"Réponse",contactRespValue:"Hamza, personnellement.",contactEmbedLabel:"Calendrier",contactEmbedStatus:"Réservez par email pour l'instant",bkProgressDate:"Date",bkProgressTime:"Heure",bkProgressDetails:"Détails",bkTz:"Fuseau",bkLoadingTitle:"Initialisation…",bkFootNote:"Réservation directe · Google Calendar",bkFootMail:"Ou écrivez-nous",footerTag:"Marketing dentaire. Search-first.",footerNav:"Navigation",footerNavSvc:"Services",footerNavPrice:"Tarification",footerNavProc:"Processus",footerNavTeam:"Équipe",footerContact:"Contact",footerBook:"Réserver un audit",footerLoc:"Montréal, QC",footerLegal:"© 2026 SSS Marketing. Tous droits réservés.",detailCloseLabel:"Fermer"
+      cta:"Réserver un audit de 15 min",skipLink:"Aller au contenu",eyebrow:"Acquisition de patients dentaires",heroTitle:"Un seul indicateur compte.",heroTitleAccent:"Un fauteuil occupé.",heroSub:"Marketing dentaire. Par des opérateurs.",heroCta:"Réserver un audit de 15 min",priceLabel:"Forfait mensuel",priceCaption:"Tout inclus · Six leviers",scrollLabel:"Défiler",problemLabel:"Le problème",prob1:"Les agences traditionnelles vendent de la visibilité. Nous générons des patients.",prob2:"La plupart des agences ne comprennent pas pourquoi quelqu'un cherche « dentiste d'urgence » à 22h. Nous, oui.",prob2Sub:"Parce que nous avons été sur la ligne de front de vraies cliniques dentaires.",servicesLabel:"Services",servicesTitle:"Six leviers Google. Un seul forfait.",servicesIntro:"Opéré en interne. Mesuré mensuellement.",svc1Name:"Google Ads — Search",svc1Desc:"Captés à la requête. Quand ils cherchent.",svc2Name:"Google My Business",svc2Desc:"Premier sur la carte. Profil défendu.",svc3Name:"Data Analytics",svc3Desc:"Chaque dollar tracé au fauteuil.",svc4Name:"Google Ads — Display",svc4Desc:"Présence ciblée. Mesurable.",svc5Name:"Google Ads — Vidéo",svc5Desc:"YouTube géolocalisé. Format court.",svc6Name:"Google Ads — Shopping",svc6Desc:"Annonces produits. Conversion directe.",svcDetailCue:"+ Voir les livrables",servicesFootNote:"Publicité Google facturée par Google. Aucun frais caché.",ecoLabel:"Infrastructure réputation",ecoTitle:"Chaque visite devient une opportunité d'avis.",eco1:"Dispositifs NFC à la réception. Un toucher. Un avis Google.",eco3:"La fréquence des avis est l'un des signaux les plus forts de l'algorithme local de Google.",ecoCaption:"Dispositif NFC SSS · Sage / Ink",pricingLabel:"Tarification",pricingMo:"par mois · CAD",pf1Label:"Inclus",pf1Value:"Six leviers Google",pf1Note:"Search, GMB, Data, Display, Vidéo, Shopping.",pf2Label:"Onboarding",pf2Note:"Six leviers configurés. Tableau de bord activé.",pf3Label:"Publicité Google",pf3Value:"Facturée directement",pf3Note:"Vous gardez le contrôle.",pf4Label:"Spécialisation",pf4Value:"Dentaire uniquement",pf4Note:"Aucun autre vertical.",pricingCta:"Réserver un audit de 15 min",processLabel:"Processus",processTitle:"Trois étapes. De l'audit à la mise en ligne.",step1Num:"Étape 01",step1Unit:"min",step1Title:"Audit",step1Desc:"Présence Google. Compétiteurs. Opportunités locales.",step2Num:"Étape 02",step2Anchor:"Plan",step2Title:"Stratégie",step2Desc:"Plan d'action. Budget par levier. Cibles mensuelles.",step3Num:"Étape 03",step3Unit:"jours",step3Title:"Mise en ligne",step3Desc:"Campagnes actives. Mesure dès le premier mois.",whyLabel:"Pourquoi SSS",whyTitle:"Une discipline. Un seul vertical.",whySub:"Quatre raisons. Aucune en trop.",why1:"Aucune caméra. Aucune danse. Vous restez dentiste.",why1Tag:"Filtre",why2:"Expertise dentaire spécialisée. Rien d'autre.",why2Tag:"Vertical",why3:"Optimisation continue des campagnes. Pas une fois par trimestre.",why3Tag:"Discipline",why4:"Tableau de bord temps réel. Accès 24/7.",why4Tag:"Transparence",teamLabel:"Équipe",teamTitle:"Chaque dollar a un opérateur.",teamSub:"Aucun budget laissé à un algorithme. Des spécialistes Google certifiés gèrent chaque campagne, en collaboration directe avec un dentiste en exercice. Chaque mot, chaque promesse — validés avant publication.",hamzaRole:"Fondateur",hamzaName:"Hamza A.",hamzaBio:"Dix ans en marketing. Quatre ans en clinique — appels, urgences, plans de traitement. La majorité des agences n'ont jamais vu ça de l'intérieur.",shayanRole:"Partenaire · Conseiller clinique",shayanName:"Dr. Shayan Araghi",shayanBio:"14 ans de pratique clinique. Plusieurs cliniques bâties de zéro. DMD, Université de Montréal. Investisseur et partenaire stratégique.",aliRole:"Partenaire · Conseiller opérationnel",aliName:"Ali K.",aliBio:"Plus de 10 ans à l'intérieur des cliniques dentaires. Opérations quotidiennes, navigation des assurances, comptabilité clinique, expérience patient. A piloté l'exploitation de cliniques à fort volume facturant des millions en revenus. Sait ce qui se passe entre le clic et le fauteuil.",finalEyebrow:"Audit gratuit · 15 minutes",finalTitle:"Un fauteuil vide coûte plus cher qu'un forfait marketing.",finalSub:"Présence Google, compétiteurs, opportunités locales. Avec ou sans nous.",contactLabel:"Contact",contactTitle:"Choisissez votre créneau.",contactIntro:"Audit gratuit. 15 minutes.",contactEmailLabel:"Email",contactLocLabel:"Bureau",contactLocValue:"Montréal, QC",contactEmbedLabel:"Calendrier",contactEmbedStatus:"Réservez par email pour l'instant",bkProgressDate:"Date",bkProgressTime:"Heure",bkProgressDetails:"Détails",bkTz:"Fuseau",bkLoadingTitle:"Initialisation…",bkFootNote:"Réservation directe · Google Calendar",bkFootMail:"Ou écrivez-nous",footerTag:"Marketing dentaire. Search-first.",footerNav:"Navigation",footerNavSvc:"Services",footerNavPrice:"Tarification",footerNavProc:"Processus",footerNavTeam:"Équipe",footerContact:"Contact",footerBook:"Réserver un audit",footerLoc:"Montréal, QC",footerLegal:"© 2026 SSS Marketing. Tous droits réservés.",detailCloseLabel:"Fermer"
     },
     en:{
-      cta:"Book a 15-min audit",skipLink:"Skip to content",eyebrow:"Dental patient acquisition",heroTitle:"One metric matters.",heroTitleAccent:"An occupied chair.",heroSub:"Dental marketing. By operators.",heroCta:"Book a 15-min audit",priceLabel:"Monthly plan",priceCaption:"All included · Six channels",scrollLabel:"Scroll",problemLabel:"The problem",prob1:"Traditional agencies sell visibility. We generate patients.",prob2:"Most agencies don't understand why someone searches \u201Cemergency dentist\u201D at 10 PM. We do.",prob2Sub:"Because we've been on the front lines of real dental practices.",servicesLabel:"Services",servicesTitle:"Six Google channels. One plan.",servicesIntro:"Run in-house. Measured monthly.",svc1Name:"Google Ads — Search",svc1Desc:"Captured at the query. When they search.",svc2Name:"Google Business Profile",svc2Desc:"First on the map. Profile defended.",svc3Name:"Data Analytics",svc3Desc:"Every dollar traced to the chair.",svc4Name:"Google Ads — Display",svc4Desc:"Targeted presence. Measurable.",svc5Name:"Google Ads — Video",svc5Desc:"Geo-targeted YouTube. Short format.",svc6Name:"Google Ads — Shopping",svc6Desc:"Product ads. Direct conversion.",svcDetailCue:"+ See deliverables",servicesFootNote:"Ad spend billed by Google directly. No hidden fees.",ecoLabel:"Reputation infrastructure",ecoTitle:"Every visit becomes a review opportunity.",eco1:"NFC pads at reception. One tap. One Google review.",eco3:"Review frequency is one of the strongest signals in Google's local algorithm.",ecoCaption:"SSS NFC pad · Sage / Ink",pricingLabel:"Pricing",pricingMo:"per month · CAD",pf1Label:"Included",pf1Value:"Six Google channels",pf1Note:"Search, GBP, Data, Display, Video, Shopping.",pf2Label:"Onboarding",pf2Note:"Six channels configured. Dashboard live.",pf3Label:"Google ad spend",pf3Value:"Billed directly",pf3Note:"You keep control.",pf4Label:"Specialization",pf4Value:"Dental only",pf4Note:"No other vertical.",pricingCta:"Book a 15-min audit",processLabel:"Process",processTitle:"Three steps. From audit to live.",step1Num:"Step 01",step1Unit:"min",step1Title:"Audit",step1Desc:"Google presence. Competitors. Local opportunities.",step2Num:"Step 02",step2Anchor:"Plan",step2Title:"Strategy",step2Desc:"Action plan. Budget per channel. Monthly targets.",step3Num:"Step 03",step3Unit:"days",step3Title:"Live",step3Desc:"Campaigns active. Measured from month one.",whyLabel:"Why SSS",whyTitle:"A discipline. One vertical.",whySub:"Four reasons. None spare.",why1:"No camera. No dancing. You stay a dentist.",why1Tag:"Filter",why2:"Specialized dental expertise. Nothing else.",why2Tag:"Vertical",why3:"Continuous campaign optimization. Not once a quarter.",why3Tag:"Discipline",why4:"Real-time dashboard. 24/7 access.",why4Tag:"Transparency",teamLabel:"Team",teamTitle:"Every dollar has an operator.",teamSub:"No budget left to an algorithm. Certified Google specialists run every campaign, in direct collaboration with a dentist in active practice. Every word, every promise — validated before it goes live.",hamzaRole:"Founder",hamzaName:"Hamza A.",hamzaBio:"Ten years in marketing. Four years inside a clinic — phones, emergencies, treatment plans. Most agencies have never seen this from inside.",shayanRole:"Partner · Clinical advisor",shayanName:"Dr. Shayan Araghi",shayanBio:"14 years of clinical practice. Several clinics built from scratch. DMD, Université de Montréal. Investor and strategic partner.",aliRole:"Partner · Operations advisor",aliName:"Ali Kazemian",aliBio:"10+ years inside dental clinics. Daily operations, insurance navigation, clinic accounting, patient experience. Has run high-volume clinics billing millions in revenue. Knows exactly what happens between the click and the chair.",finalEyebrow:"Free audit · 15 minutes",finalTitle:"An empty chair costs more than a marketing plan.",finalSub:"Google presence, competitors, local opportunities. With us or without.",contactLabel:"Contact",contactTitle:"Pick your slot.",contactIntro:"Free audit. 15 minutes.",contactEmailLabel:"Email",contactLocLabel:"Office",contactLocValue:"Montréal, QC",contactRespLabel:"Response",contactRespValue:"Hamza, personally.",contactEmbedLabel:"Calendar",contactEmbedStatus:"Book via email for now",bkProgressDate:"Date",bkProgressTime:"Time",bkProgressDetails:"Details",bkTz:"Timezone",bkLoadingTitle:"Loading…",bkFootNote:"Direct booking · Google Calendar",bkFootMail:"Or email us",footerTag:"Dental marketing. Search-first.",footerNav:"Navigation",footerNavSvc:"Services",footerNavPrice:"Pricing",footerNavProc:"Process",footerNavTeam:"Team",footerContact:"Contact",footerBook:"Book an audit",footerLoc:"Montréal, QC",footerLegal:"© 2026 SSS Marketing. All rights reserved.",detailCloseLabel:"Close"
+      cta:"Book a 15-min audit",skipLink:"Skip to content",eyebrow:"Dental patient acquisition",heroTitle:"One metric matters.",heroTitleAccent:"An occupied chair.",heroSub:"Dental marketing. By operators.",heroCta:"Book a 15-min audit",priceLabel:"Monthly plan",priceCaption:"All included · Six channels",scrollLabel:"Scroll",problemLabel:"The problem",prob1:"Traditional agencies sell visibility. We generate patients.",prob2:"Most agencies don't understand why someone searches \u201Cemergency dentist\u201D at 10 PM. We do.",prob2Sub:"Because we've been on the front lines of real dental practices.",servicesLabel:"Services",servicesTitle:"Six Google channels. One plan.",servicesIntro:"Run in-house. Measured monthly.",svc1Name:"Google Ads — Search",svc1Desc:"Captured at the query. When they search.",svc2Name:"Google Business Profile",svc2Desc:"First on the map. Profile defended.",svc3Name:"Data Analytics",svc3Desc:"Every dollar traced to the chair.",svc4Name:"Google Ads — Display",svc4Desc:"Targeted presence. Measurable.",svc5Name:"Google Ads — Video",svc5Desc:"Geo-targeted YouTube. Short format.",svc6Name:"Google Ads — Shopping",svc6Desc:"Product ads. Direct conversion.",svcDetailCue:"+ See deliverables",servicesFootNote:"Ad spend billed by Google directly. No hidden fees.",ecoLabel:"Reputation infrastructure",ecoTitle:"Every visit becomes a review opportunity.",eco1:"NFC pads at reception. One tap. One Google review.",eco3:"Review frequency is one of the strongest signals in Google's local algorithm.",ecoCaption:"SSS NFC pad · Sage / Ink",pricingLabel:"Pricing",pricingMo:"per month · CAD",pf1Label:"Included",pf1Value:"Six Google channels",pf1Note:"Search, GBP, Data, Display, Video, Shopping.",pf2Label:"Onboarding",pf2Note:"Six channels configured. Dashboard live.",pf3Label:"Google ad spend",pf3Value:"Billed directly",pf3Note:"You keep control.",pf4Label:"Specialization",pf4Value:"Dental only",pf4Note:"No other vertical.",pricingCta:"Book a 15-min audit",processLabel:"Process",processTitle:"Three steps. From audit to live.",step1Num:"Step 01",step1Unit:"min",step1Title:"Audit",step1Desc:"Google presence. Competitors. Local opportunities.",step2Num:"Step 02",step2Anchor:"Plan",step2Title:"Strategy",step2Desc:"Action plan. Budget per channel. Monthly targets.",step3Num:"Step 03",step3Unit:"days",step3Title:"Live",step3Desc:"Campaigns active. Measured from month one.",whyLabel:"Why SSS",whyTitle:"A discipline. One vertical.",whySub:"Four reasons. None spare.",why1:"No camera. No dancing. You stay a dentist.",why1Tag:"Filter",why2:"Specialized dental expertise. Nothing else.",why2Tag:"Vertical",why3:"Continuous campaign optimization. Not once a quarter.",why3Tag:"Discipline",why4:"Real-time dashboard. 24/7 access.",why4Tag:"Transparency",teamLabel:"Team",teamTitle:"Every dollar has an operator.",teamSub:"No budget left to an algorithm. Certified Google specialists run every campaign, in direct collaboration with a dentist in active practice. Every word, every promise — validated before it goes live.",hamzaRole:"Founder",hamzaName:"Hamza A.",hamzaBio:"Ten years in marketing. Four years inside a clinic — phones, emergencies, treatment plans. Most agencies have never seen this from inside.",shayanRole:"Partner · Clinical advisor",shayanName:"Dr. Shayan Araghi",shayanBio:"14 years of clinical practice. Several clinics built from scratch. DMD, Université de Montréal. Investor and strategic partner.",aliRole:"Partner · Operations advisor",aliName:"Ali K.",aliBio:"10+ years inside dental clinics. Daily operations, insurance navigation, clinic accounting, patient experience. Has run high-volume clinics billing millions in revenue. Knows exactly what happens between the click and the chair.",finalEyebrow:"Free audit · 15 minutes",finalTitle:"An empty chair costs more than a marketing plan.",finalSub:"Google presence, competitors, local opportunities. With us or without.",contactLabel:"Contact",contactTitle:"Pick your slot.",contactIntro:"Free audit. 15 minutes.",contactEmailLabel:"Email",contactLocLabel:"Office",contactLocValue:"Montréal, QC",contactEmbedLabel:"Calendar",contactEmbedStatus:"Book via email for now",bkProgressDate:"Date",bkProgressTime:"Time",bkProgressDetails:"Details",bkTz:"Timezone",bkLoadingTitle:"Loading…",bkFootNote:"Direct booking · Google Calendar",bkFootMail:"Or email us",footerTag:"Dental marketing. Search-first.",footerNav:"Navigation",footerNavSvc:"Services",footerNavPrice:"Pricing",footerNavProc:"Process",footerNavTeam:"Team",footerContact:"Contact",footerBook:"Book an audit",footerLoc:"Montréal, QC",footerLegal:"© 2026 SSS Marketing. All rights reserved.",detailCloseLabel:"Close"
     }
   };
   const svcDetail = {
@@ -1680,7 +1705,6 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       loadedMonths:{},
       loadingAvailability:false,
       availabilityError:null,
-      submitting:false,
       formError:null,
       result:null,
     };
@@ -1765,11 +1789,12 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       document.querySelectorAll(".booker-progress-step").forEach(function(el){
         const step = el.getAttribute("data-step");
         const stepIdx = { date:0, time:1, details:2 }[step];
-        el.classList.toggle("active", stepIdx === idx);
+        const isActive = stepIdx === idx;
+        el.classList.toggle("active", isActive);
         el.classList.toggle("done", stepIdx < idx);
+        if(isActive) el.setAttribute("aria-current","step");
+        else el.removeAttribute("aria-current");
       });
-      const prog = document.getElementById("bookerProgress");
-      if(prog) prog.setAttribute("aria-valuenow", String(idx+1));
     }
 
     function renderUnconfigured(){
@@ -1780,7 +1805,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
         +   '<div class="booker-mark"><img src="logo-mark.png" srcset="logo-mark.png 1x, logo-mark@2x.png 2x" alt="SSS" width="148" height="61" loading="lazy" decoding="async"></div>'
         +   '<div class="booker-mark-label">'+attr(D.markLabel)+'</div>'
         +   '<div class="booker-mark-status">'+attr(D.markStatus)+'</div>'
-        +   '<a class="booker-success-link" href="'+attr(mail)+'" style="margin-top:14px"><span>'+attr(D.bookAnother)+'</span></a>'
+        +   '<a class="booker-success-link booker-mark-mail" href="'+attr(mail)+'"><span>'+attr(D.bookAnother)+'</span></a>'
         + '</div>';
     }
 
@@ -1835,7 +1860,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
         +   '<div class="booker-cal-days" aria-hidden="true">'+ D.daysShort.map(function(x){return "<span>"+x+"</span>";}).join("") +'</div>'
         +   '<div class="booker-cal-grid" role="grid">'+ cells +'</div>'
         +   (showRetry
-              ? '<div class="booker-error" role="alert">'+attr(D.slotsError)+' <button type="button" data-retry="month" class="booker-success-link" style="margin-left:auto">'+attr(D.retry)+'</button></div>'
+              ? '<div class="booker-error" role="alert">'+attr(D.slotsError)+' <button type="button" data-retry="month" class="booker-success-link booker-retry">'+attr(D.retry)+'</button></div>'
               : '')
         +   '<div class="booker-cal-foot">'
         +     '<div class="booker-cal-legend">'
