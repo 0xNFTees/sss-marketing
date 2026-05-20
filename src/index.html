@@ -1,13 +1,34 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Style-Type" content="text/css">
   <title>SSS Marketing — Agence marketing dentaire spécialisée</title>
   <meta name="description" content="Agence marketing dentaire. Six leviers Google. Un seul forfait. 449 $ / mois. Marketing dentaire par des opérateurs.">
-  <meta name="generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.3">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://sss.marketing/">
+  <meta name="theme-color" content="#15130f">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sss.marketing/">
+  <meta property="og:title" content="SSS Marketing — Agence marketing dentaire spécialisée">
+  <meta property="og:description" content="Six leviers Google. Un seul forfait. 449 $ / mois. Marketing dentaire par des opérateurs.">
+  <meta property="og:locale" content="fr_CA">
+  <meta property="og:site_name" content="SSS Marketing">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="SSS Marketing — Agence marketing dentaire spécialisée">
+  <meta name="twitter:description" content="Six leviers Google. Un seul forfait. 449 $ / mois. Marketing dentaire par des opérateurs.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <!-- Performance: pre-connect for Google Calendar iframe -->
+  <link rel="preconnect" href="https://calendar.google.com">
+  <link rel="dns-prefetch" href="https://calendar.google.com">
+
   <style type="text/css">
     body {background-color: #fefad9}
     p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #fefad9; -webkit-text-stroke: #fefad9; background-color: #15130f}
@@ -45,7 +66,7 @@
     p.p40 {margin: 0.0px 0.0px 40.0px 0.0px; font: 16.0px Helvetica; color: #15130f; -webkit-text-stroke: #15130f}
     p.p41 {margin: 0.0px 0.0px 0.0px 0.0px; font: 19.0px Georgia; color: #15130f; -webkit-text-stroke: #15130f}
     p.p42 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Helvetica; color: #fefad9; -webkit-text-stroke: #fefad9}
-    p.p43 {margin: 0.0px 0.0px 0.0px 0.0px; font: 16.0px Helvetica; color: #15130f; -webkit-text-stroke: #15130f; background-color: #15130f; background-color: rgba(21, 19, 15, 0.15); min-height: 19.0px}
+    p.p43 {margin: 0.0px 0.0px 0.0px 0.0px; font: 16.0px Helvetica; color: #15130f; -webkit-text-stroke: #15130f; background-color: rgba(21, 19, 15, 0.15); min-height: 19.0px}
     p.p44 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 16.0px Helvetica; color: #15130f; -webkit-text-stroke: #15130f; min-height: 19.0px}
     p.p45 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px Helvetica; color: #15130f; -webkit-text-stroke: #15130f; min-height: 13.0px}
     p.p46 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 16.0px Helvetica; color: #15130f; -webkit-text-stroke: #15130f}
@@ -104,12 +125,13 @@
       border-bottom: 1px solid #c99260;
     }
     .sss-bk__eyebrow {
-      display: inline-block;
+      display: block;
       font: 11px/1 Helvetica, sans-serif;
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: #c99260;
       margin: 0 0 14px;
+      font-weight: normal;
     }
     .sss-bk__sub {
       font: 14px/1.55 Helvetica, sans-serif;
@@ -261,10 +283,29 @@
     }
 
     /* ============================================================
-       GLOBAL LINK ENHANCEMENTS — Accessibility & Interaction
-       Surgical improvements for existing Cocoa-export links
+       PRODUCTION FIXES — Accessibility, Keyboard Navigation, SEO
        ============================================================ */
+
+    /* Skip link — visually hidden until focused */
+    .skip-link {
+      display: block;
+      position: absolute;
+      top: -100%;
+      left: 0;
+      padding: 8px 16px;
+      background: #15130f;
+      color: #fefad9;
+      font: 11px/1 Helvetica, sans-serif;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      z-index: 9999;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* Global link baseline — prevents browser UA blue override */
     a {
+      color: inherit;
       cursor: pointer;
       transition: color 200ms ease, border-color 200ms ease;
     }
@@ -272,16 +313,34 @@
       outline: 1px dashed #c99260;
       outline-offset: 3px;
     }
-    /* Email links in contact section */
-    p.p41 a {
+
+    /* CTA button anchors — block display preserves full-width hit target */
+    p.p8 a, p.p1 a {
+      display: block;
+      color: inherit;
       text-decoration: none;
-      border-bottom: 1px solid transparent;
     }
-    p.p41 a:hover {
-      border-bottom-color: #c99260;
+    p.p37 a {
+      display: inline-block;
+      color: inherit;
+      text-decoration: none;
     }
+    p.p8 a:focus-visible, p.p37 a:focus-visible {
+      outline: 1px dashed rgba(254, 250, 217, 0.7);
+      outline-offset: 4px;
+    }
+
+    /* Email link — gold underline for visual distinction (minimalist aesthetic) */
+    p.p41 a {
+      color: #15130f;
+      text-decoration: none;
+      border-bottom: 1px solid #c99260;
+    }
+    p.p41 a:hover { color: #c99260; border-bottom-color: #15130f; }
+
     /* Footer navigation links */
     ul.ul1 li a {
+      color: inherit;
       text-decoration: none;
       border-bottom: 1px solid transparent;
     }
@@ -289,27 +348,47 @@
       color: #c99260;
       border-bottom-color: #c99260;
     }
+
+    /* Narrow-screen fix for Cocoa negative-indent centering hack */
+    @media (max-width: 320px) {
+      p.p36 { margin-left: 0; margin-right: 0; text-indent: 0; }
+    }
   </style>
 </head>
 <body>
-<!-- NOTE: file:///Attachment.png paths will not work in production. Replace with proper asset URLs and add alt text. -->
-<p class="p1"><span class="s1">ALLER AU CONTENU</span></p>
-<p class="p2"><span class="s1"><img src="file:///Attachment.png" alt="Logo SSS Marketing"></span></p>
+
+<!-- Skip navigation -->
+<a class="skip-link" href="#main-content">Aller au contenu</a>
+
+<header role="banner">
+<p class="p1"><a href="#sssBooking"><span class="s1">RÉSERVER UN AUDIT DE 15 MIN</span></a></p>
+<p class="p2"><span class="s1"><img src="logo-nav.png" srcset="logo-nav@2x.png 2x, logo-nav@3x.png 3x" alt="SSS Marketing" width="auto" height="auto"></span></p>
 <p class="p3"><span class="s2">FR</span></p>
 <p class="p4"><span class="s2">/</span></p>
 <p class="p3"><span class="s2">EN</span></p>
-<p class="p1"><span class="s1">RÉSERVER UN AUDIT DE 15 MIN</span></p>
+<p class="p1"><a href="#sssBooking"><span class="s1">RÉSERVER UN AUDIT DE 15 MIN</span></a></p>
+</header>
+
+<main id="main-content">
+
+<!-- Hero -->
+<section aria-label="Acquisition de patients dentaires">
 <p class="p5"><span class="s3">ACQUISITION DE PATIENTS DENTAIRES</span></p>
 <h1 style="margin: 0.0px 0.0px 36.0px 0.0px; font: 72.0px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s3">Un seul indicateur compte.</span><span class="s1"><br>
 </span><span class="s4">Un fauteuil occupé.</span></h1>
 <p class="p7"><span class="s3">Marketing dentaire. Par des opérateurs.</span></p>
-<p class="p8"><span class="s5">RÉSERVER UN AUDIT DE 15 MIN</span></p>
+<p class="p8"><a href="#sssBooking"><span class="s5">RÉSERVER UN AUDIT DE 15 MIN</span></a></p>
 <p class="p9"><span class="s1"></span><br></p>
 <p class="p4"><span class="s3">15 MIN · GRATUIT · SANS ENGAGEMENT</span></p>
 <p class="p4"><span class="s3">FORFAIT MENSUEL</span></p>
 <p class="p10"><span class="s3">449</span><span class="s6"><sup>$</sup><sup></sup></span></p>
 <p class="p4"><span class="s3">TOUT INCLUS · SIX LEVIERS</span></p>
+</section>
+
 <p class="p11"><span class="s1"></span><br></p>
+
+<!-- Section 01 — Le Problème -->
+<section aria-label="Le problème">
 <p class="p5"><span class="s7">01</span></p>
 <p class="p12"><span class="s1"></span><br></p>
 <p class="p4"><span class="s7">LE PROBLÈME</span></p>
@@ -318,11 +397,16 @@
 <p class="p5"><span class="s7">02</span></p>
 <p class="p13"><span class="s7">La plupart des agences ne comprennent pas pourquoi quelqu'un cherche « dentiste d'urgence » à 22h. Nous, oui.</span></p>
 <p class="p2"><span class="s7">Parce que nous avons été sur la ligne de front de vraies cliniques dentaires.</span></p>
+</section>
+
 <p class="p11"><span class="s1"></span><br></p>
+
+<!-- Section 02 — Services -->
+<section id="services" aria-labelledby="services-h2">
 <p class="p5"><span class="s3">02</span></p>
 <p class="p12"><span class="s1"></span><br></p>
 <p class="p4"><span class="s3">SERVICES</span></p>
-<h2 style="margin: 0.0px 0.0px 0.0px 0.0px; font: 36.8px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s3">Six leviers Google. Un seul forfait.</span></h2>
+<h2 id="services-h2" style="margin: 0.0px 0.0px 0.0px 0.0px; font: 36.8px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s3">Six leviers Google. Un seul forfait.</span></h2>
 <p class="p15"><span class="s3">Opéré en interne. Mesuré mensuellement.</span></p>
 <p class="p16"><span class="s3">01 / SEARCH</span></p>
 <p class="p17"><span class="s1"></span><br></p>
@@ -358,13 +442,18 @@
 <p class="p4"><span class="s3">PUBLICITÉ GOOGLE FACTURÉE PAR GOOGLE. AUCUN FRAIS CACHÉ.</span></p>
 <p class="p22"><span class="s3">449</span><span class="s8"><sup>$</sup><sup></sup></span></p>
 <p class="p4"><span class="s3">/ MOIS · TOUT INCLUS</span></p>
-<p class="p8"><span class="s5">RÉSERVER UN AUDIT</span></p>
+<p class="p8"><a href="#sssBooking"><span class="s5">RÉSERVER UN AUDIT</span></a></p>
 <p class="p9"><span class="s1"></span><br></p>
+</section>
+
 <p class="p11"><span class="s1"></span><br></p>
+
+<!-- Section 03 — Infrastructure Réputation -->
+<section id="reputation" aria-labelledby="reputation-h2">
 <p class="p5"><span class="s9">03</span></p>
 <p class="p12"><span class="s1"></span><br></p>
 <p class="p4"><span class="s9">INFRASTRUCTURE RÉPUTATION</span></p>
-<h2 style="margin: 0.0px 0.0px 40.0px 0.0px; font: 34.0px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s9">Chaque visite devient une opportunité d'avis.</span></h2>
+<h2 id="reputation-h2" style="margin: 0.0px 0.0px 40.0px 0.0px; font: 34.0px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s9">Chaque visite devient une opportunité d'avis.</span></h2>
 <ul class="ul1">
   <li class="li15"><span class="s10"></span><span class="s11">01</span><span class="s12"><br>
 </span><span class="s9">Dispositifs NFC à la réception. Un toucher. Un avis Google.</span><span class="s1"><br>
@@ -374,14 +463,23 @@
 <p class="p24"><span class="s9">Plaquette sage avec wordmark SSS gravé en ink et glyphe NFC en tan.</span></p>
 <p class="p25"><span class="s9">TAP TO REVIEW</span></p>
 <p class="p3"><span class="s9">DISPOSITIF NFC SSS · SAGE / INK</span></p>
+</section>
+
 <p class="p11"><span class="s1"></span><br></p>
+
+<!-- Section 04 — Tarification -->
+<section id="tarification" aria-label="Tarification">
 <p class="p5"><span class="s3">04</span></p>
 <p class="p12"><span class="s1"></span><br></p>
 <p class="p4"><span class="s3">TARIFICATION</span></p>
 <p class="p26"><span class="s3">449</span></p>
 <p class="p27"><span class="s3"><sup>$</sup><sup></sup></span></p>
 <p class="p28"><span class="s3">PAR MOIS · CAD</span></p>
+</section>
+
 <p class="p11"><span class="s1"></span><br></p>
+
+<section aria-label="Détail du forfait" id="forfait">
 <p class="p16"><span class="s3">INCLUS</span></p>
 <p class="p29"><span class="s3">Six leviers Google</span></p>
 <p class="p30"><span class="s3">Search, GMB, Data, Display, Vidéo, Shopping.</span></p>
@@ -394,13 +492,18 @@
 <p class="p16"><span class="s3">SPÉCIALISATION</span></p>
 <p class="p29"><span class="s3">Dentaire uniquement</span></p>
 <p class="p30"><span class="s3">Aucun autre vertical.</span></p>
-<p class="p8"><span class="s5">RÉSERVER UN AUDIT DE 15 MIN</span></p>
+<p class="p8"><a href="#sssBooking"><span class="s5">RÉSERVER UN AUDIT DE 15 MIN</span></a></p>
 <p class="p9"><span class="s1"></span><br></p>
+</section>
+
 <p class="p11"><span class="s1"></span><br></p>
+
+<!-- Section 05 — Processus -->
+<section id="processus" aria-labelledby="processus-h2">
 <p class="p5"><span class="s7">05</span></p>
 <p class="p12"><span class="s1"></span><br></p>
 <p class="p4"><span class="s7">PROCESSUS</span></p>
-<h2 style="margin: 0.0px 0.0px 0.0px 0.0px; font: 36.8px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s7">Trois étapes. De l'audit à la mise en ligne.</span></h2>
+<h2 id="processus-h2" style="margin: 0.0px 0.0px 0.0px 0.0px; font: 36.8px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s7">Trois étapes. De l'audit à la mise en ligne.</span></h2>
 <p class="p16"><span class="s7">ÉTAPE 01</span></p>
 <p class="p31"><span class="s14">15</span><span class="s15">MIN</span></p>
 <h3 style="margin: 0.0px 0.0px 0.0px 0.0px; font: 22.0px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s7">Audit</span></h3>
@@ -413,11 +516,16 @@
 <p class="p31"><span class="s14">14</span><span class="s15">JOURS</span></p>
 <h3 style="margin: 0.0px 0.0px 0.0px 0.0px; font: 22.0px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s7">Mise en ligne</span></h3>
 <p class="p32"><span class="s7">Campagnes actives. Mesure dès le premier mois.</span></p>
+</section>
+
 <p class="p11"><span class="s1"></span><br></p>
+
+<!-- Section 06 — Pourquoi SSS -->
+<section id="pourquoi" aria-labelledby="pourquoi-h2">
 <p class="p5"><span class="s3">06</span></p>
 <p class="p12"><span class="s1"></span><br></p>
 <p class="p4"><span class="s3">POURQUOI SSS</span></p>
-<h2 style="margin: 0.0px 0.0px 0.0px 0.0px; font: 36.8px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s3">Une discipline. Un seul vertical.</span></h2>
+<h2 id="pourquoi-h2" style="margin: 0.0px 0.0px 0.0px 0.0px; font: 36.8px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s3">Une discipline. Un seul vertical.</span></h2>
 <p class="p15"><span class="s3">Quatre raisons. Aucune en trop.</span></p>
 <ul class="ul1">
   <li class="li29"><span class="s16"></span><span class="s17">01</span><span class="s18"><br>
@@ -433,11 +541,16 @@
 </span><span class="s3">Tableau de bord temps réel. Accès 24/7.</span><span class="s1"><br>
 </span><span class="s19">TRANSPARENCE</span></li>
 </ul>
+</section>
+
 <p class="p11"><span class="s1"></span><br></p>
+
+<!-- Section 07 — Équipe -->
+<section id="equipe" aria-labelledby="equipe-h2">
 <p class="p5"><span class="s9">07</span></p>
 <p class="p12"><span class="s1"></span><br></p>
 <p class="p4"><span class="s9">ÉQUIPE</span></p>
-<h2 style="margin: 0.0px 0.0px 0.0px 0.0px; font: 36.8px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s9">Chaque dollar a un opérateur.</span></h2>
+<h2 id="equipe-h2" style="margin: 0.0px 0.0px 0.0px 0.0px; font: 36.8px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s9">Chaque dollar a un opérateur.</span></h2>
 <p class="p2"><span class="s9">Aucun budget laissé à un algorithme. Des spécialistes Google certifiés gèrent chaque campagne, en collaboration directe avec un dentiste en exercice. Chaque mot, chaque promesse — validés avant publication.</span></p>
 <p class="p5"><span class="s9">FONDATEUR</span></p>
 <h3 style="margin: 0.0px 0.0px 0.0px 0.0px; font: 28.0px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s9">Hamza A.</span></h3>
@@ -448,23 +561,33 @@
 <p class="p5"><span class="s9">PARTENAIRE · CONSEILLER OPÉRATIONNEL</span></p>
 <h3 style="margin: 0.0px 0.0px 0.0px 0.0px; font: 28.0px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s9">Ali K.</span></h3>
 <p class="p32"><span class="s9">Plus de 10 ans à l'intérieur des cliniques dentaires. Opérations quotidiennes, navigation des assurances, comptabilité clinique, expérience patient. A piloté l'exploitation de cliniques à fort volume facturant des millions en revenus. Sait ce qui se passe entre le clic et le fauteuil.</span></p>
+</section>
+
+<!-- CTA Banner -->
+<section aria-labelledby="cta-h2">
 <p class="p34"><span class="s1"></span><br></p>
 <p class="p3"><span class="s21">AUDIT GRATUIT · 15 MINUTES</span></p>
-<h2 style="margin: 0.0px 0.0px 28.0px 0.0px; text-align: center; font: 48.0px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s21">Un fauteuil vide coûte plus cher qu'un forfait marketing.</span></h2>
+<h2 id="cta-h2" style="margin: 0.0px 0.0px 28.0px 0.0px; text-align: center; font: 48.0px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s21">Un fauteuil vide coûte plus cher qu'un forfait marketing.</span></h2>
 <p class="p36"><span class="s21">Présence Google, compétiteurs, opportunités locales. Avec ou sans nous.</span></p>
-<p class="p37"><span class="s22">RÉSERVER MON AUDIT GRATUIT</span></p>
+<p class="p37"><a href="#sssBooking"><span class="s22">RÉSERVER MON AUDIT GRATUIT</span></a></p>
 <p class="p38"><span class="s1"></span><br></p>
 <p class="p3"><span class="s21">15 MIN · SANS ENGAGEMENT</span></p>
+</section>
+
 <p class="p11"><span class="s1"></span><br></p>
+
+<!-- Section 08 — Contact -->
+<section id="contact" aria-labelledby="contact-h2">
 <p class="p5"><span class="s3">08</span></p>
 <p class="p12"><span class="s1"></span><br></p>
 <p class="p4"><span class="s3">CONTACT</span></p>
-<h2 style="margin: 0.0px 0.0px 28.0px 0.0px; font: 36.8px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s3">Choisissez votre créneau.</span></h2>
+<h2 id="contact-h2" style="margin: 0.0px 0.0px 28.0px 0.0px; font: 36.8px Georgia; color: #15130f; -webkit-text-stroke: #15130f"><span class="s3">Choisissez votre créneau.</span></h2>
 <p class="p40"><span class="s3">Audit gratuit. 15 minutes.</span></p>
 <p class="p16"><span class="s3">EMAIL</span></p>
-<p class="p41"><span class="s3"><a href="mailto:info@sss.marketing">info@sss.marketing<span class="s23"></span></a></span></p>
+<p class="p41"><span class="s3"><a href="mailto:info@sss.marketing">info@sss.marketing</a></span></p>
 <p class="p16"><span class="s3">BUREAU</span></p>
 <p class="p41"><span class="s3">Montréal, QC</span></p>
+
 <!-- ============================================================
      SSS BOOKING — Live Google Calendar Integration
      Calendar ID: c_c3163b5e97939baf226e43395f5f8433bbe3f6fdcf2def9a236dbc825a19d676@group.calendar.google.com
@@ -472,8 +595,8 @@
      ============================================================ -->
 <div class="sss-bk" id="sssBooking" aria-labelledby="sss-bk-title">
   <div class="sss-bk__head">
-    <span class="sss-bk__eyebrow">Calendrier · Réservation directe</span>
-    <p class="sss-bk__sub" id="sss-bk-title">Quinze minutes. Visio. Sans engagement. Choisissez votre créneau ci-dessous.</p>
+    <h3 class="sss-bk__eyebrow" id="sss-bk-title">Calendrier · Réservation directe</h3>
+    <p class="sss-bk__sub">Quinze minutes. Visio. Sans engagement. Choisissez votre créneau ci-dessous.</p>
   </div>
 
   <div class="sss-bk__card">
@@ -510,6 +633,7 @@
         title="Calendrier SSS · Disponibilités"
         src="https://calendar.google.com/calendar/embed?src=c_c3163b5e97939baf226e43395f5f8433bbe3f6fdcf2def9a236dbc825a19d676%40group.calendar.google.com&ctz=America%2FMontreal&mode=AGENDA&showTitle=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&bgcolor=%23fefad9"
         loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
         onload="document.getElementById('sssBkEmbed').classList.add('is-loaded')"></iframe>
     </div>
 
@@ -519,45 +643,92 @@
     </div>
   </div>
 </div>
+</section>
+
+<p class="p11"><span class="s1"></span><br></p>
+
+</main>
+
+<footer role="contentinfo">
+<p class="p2"><span class="s1"><img src="logo-mark.png" srcset="logo-mark@2x.png 2x, logo-mark@3x.png 3x" alt="SSS Marketing" width="auto" height="auto"></span></p>
+<p class="p19"><span class="s3">Marketing dentaire. Search-first.</span></p>
+<p class="p16"><span class="s3">NAVIGATION</span></p>
+<nav aria-label="Navigation principale">
+<ul class="ul1">
+  <li class="li19"><a href="#services"><span class="s25"></span><span class="s3">Services</span></a></li>
+  <li class="li19"><a href="#tarification"><span class="s25"></span><span class="s3">Tarification</span></a></li>
+  <li class="li19"><a href="#processus"><span class="s25"></span><span class="s3">Processus</span></a></li>
+  <li class="li19"><a href="#equipe"><span class="s25"></span><span class="s3">Équipe</span></a></li>
+</ul>
+</nav>
+<p class="p16"><span class="s3">CONTACT</span></p>
+<ul class="ul1">
+  <li class="li19"><a href="mailto:info@sss.marketing"><span class="s25"></span><span class="s1">info@sss.marketing</span></a></li>
+  <li class="li19"><a href="#sssBooking"><span class="s25"></span><span class="s3">Réserver un audit</span></a></li>
+  <li class="li19"><span class="s25"></span><span class="s3">Montréal, QC</span></li>
+</ul>
+<p class="p4"><span class="s3">© 2026 SSS MARKETING. TOUS DROITS RÉSERVÉS.</span></p>
+<p class="p46"><span class="s1">Défiler</span></p>
+<p class="p44"><span class="s1"></span><br></p>
+</footer>
+
+<!-- Schema.org — MarketingAgency structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MarketingAgency",
+  "name": "SSS Marketing",
+  "description": "Agence marketing dentaire spécialisée. Six leviers Google. Un seul forfait. 449 $ CAD / mois.",
+  "url": "https://sss.marketing",
+  "email": "info@sss.marketing",
+  "logo": "https://sss.marketing/logo-mark.png",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Montréal",
+    "addressRegion": "QC",
+    "addressCountry": "CA"
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "Canada"
+  },
+  "knowsAbout": ["Marketing dentaire", "Google Ads", "Google My Business", "SEO local", "Data Analytics"],
+  "priceRange": "449 $ CAD / mois",
+  "currenciesAccepted": "CAD",
+  "inLanguage": "fr"
+}
+</script>
+
+<!-- Calendar section reveal on scroll + iframe load failsafe -->
 <script>
   (function () {
-    var el = document.getElementById('sssBooking');
+    const el = document.getElementById('sssBooking');
     if (!el) return;
+
     if (!('IntersectionObserver' in window)) {
       el.classList.add('is-visible');
     } else {
-      var io = new IntersectionObserver(function (entries) {
+      const io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
           if (e.isIntersecting) { el.classList.add('is-visible'); io.disconnect(); }
         });
       }, { threshold: 0.12 });
       io.observe(el);
     }
-    // Failsafe: reveal the iframe if onload never fires (network slow / blocked)
-    setTimeout(function () {
-      var emb = document.getElementById('sssBkEmbed');
+
+    // Failsafe: reveal iframe if onload never fires (slow network / CSP block)
+    const failsafe = setTimeout(function () {
+      const emb = document.getElementById('sssBkEmbed');
       if (emb && !emb.classList.contains('is-loaded')) emb.classList.add('is-loaded');
     }, 6000);
+
+    // Clean up failsafe if iframe loads normally
+    const iframe = el.querySelector('.sss-bk__iframe');
+    if (iframe) {
+      iframe.addEventListener('load', function () { clearTimeout(failsafe); }, { once: true });
+    }
   })();
 </script>
-<p class="p11"><span class="s1"></span><br></p>
-<p class="p2"><span class="s1"><img src="file:///Attachment.png" alt="Logo SSS Marketing"></span></p>
-<p class="p19"><span class="s3">Marketing dentaire. Search-first.</span></p>
-<p class="p16"><span class="s3">NAVIGATION</span></p>
-<ul class="ul1">
-  <li class="li19"><span class="s25"></span><span class="s3">Services</span></li>
-  <li class="li19"><span class="s25"></span><span class="s3">Tarification</span></li>
-  <li class="li19"><span class="s25"></span><span class="s3">Processus</span></li>
-  <li class="li19"><span class="s25"></span><span class="s3">Équipe</span></li>
-</ul>
-<p class="p16"><span class="s3">CONTACT</span></p>
-<ul class="ul1">
-  <li class="li19"><span class="s25"><a href="mailto:info@sss.marketing"><span class="s1">info@sss.marketing</span></a></span></li>
-  <li class="li19"><span class="s25"></span><span class="s3">Réserver un audit</span></li>
-  <li class="li19"><span class="s25"></span><span class="s3">Montréal, QC</span></li>
-</ul>
-<p class="p4"><span class="s3">© 2026 SSS MARKETING. TOUS DROITS RÉSERVÉS.</span></p>
-<p class="p46"><span class="s1">Défiler</span></p>
-<p class="p44"><span class="s1"></span><br></p>
+
 </body>
 </html>
