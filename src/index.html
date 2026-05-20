@@ -16,14 +16,18 @@
   <meta property="og:description" content="Six leviers Google. Un seul forfait. 449 $ / mois. Marketing dentaire par des opérateurs.">
   <meta property="og:locale" content="fr_CA">
   <meta property="og:site_name" content="SSS Marketing">
+  <meta property="og:image" content="https://sss.marketing/logo-mark@3x.png">
+  <meta property="og:image:alt" content="SSS Marketing">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="SSS Marketing — Agence marketing dentaire spécialisée">
   <meta name="twitter:description" content="Six leviers Google. Un seul forfait. 449 $ / mois. Marketing dentaire par des opérateurs.">
+  <meta name="twitter:image" content="https://sss.marketing/logo-mark@3x.png">
 
   <!-- Favicon -->
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="logo-mark.png">
 
   <!-- Performance: pre-connect for Google Calendar iframe -->
   <link rel="preconnect" href="https://calendar.google.com">
@@ -353,6 +357,11 @@
     @media (max-width: 320px) {
       p.p36 { margin-left: 0; margin-right: 0; text-indent: 0; }
     }
+
+    /* Smooth anchor scroll — respects reduced-motion preference */
+    @media (prefers-reduced-motion: no-preference) {
+      html { scroll-behavior: smooth; }
+    }
   </style>
 </head>
 <body>
@@ -362,11 +371,11 @@
 
 <header role="banner">
 <p class="p1"><a href="#sssBooking"><span class="s1">RÉSERVER UN AUDIT DE 15 MIN</span></a></p>
-<p class="p2"><span class="s1"><img src="logo-nav.png" srcset="logo-nav@2x.png 2x, logo-nav@3x.png 3x" alt="SSS Marketing" width="auto" height="auto"></span></p>
+<p class="p2"><span class="s1"><img src="logo-nav.png" srcset="logo-nav@2x.png 2x, logo-nav@3x.png 3x" alt="SSS Marketing" decoding="async"></span></p>
 <p class="p3"><span class="s2">FR</span></p>
-<p class="p4"><span class="s2">/</span></p>
+<p class="p4" aria-hidden="true"><span class="s2">/</span></p>
 <p class="p3"><span class="s2">EN</span></p>
-<p class="p1"><a href="#sssBooking"><span class="s1">RÉSERVER UN AUDIT DE 15 MIN</span></a></p>
+<p class="p1" aria-hidden="true"><a href="#sssBooking" tabindex="-1"><span class="s1">RÉSERVER UN AUDIT DE 15 MIN</span></a></p>
 </header>
 
 <main id="main-content">
@@ -381,7 +390,7 @@
 <p class="p9"><span class="s1"></span><br></p>
 <p class="p4"><span class="s3">15 MIN · GRATUIT · SANS ENGAGEMENT</span></p>
 <p class="p4"><span class="s3">FORFAIT MENSUEL</span></p>
-<p class="p10"><span class="s3">449</span><span class="s6"><sup>$</sup><sup></sup></span></p>
+<p class="p10"><span class="s3">449</span><span class="s6"><sup>$</sup></span></p>
 <p class="p4"><span class="s3">TOUT INCLUS · SIX LEVIERS</span></p>
 </section>
 
@@ -440,7 +449,7 @@
 <p class="p20"><span class="s3">+ VOIR LES LIVRABLES</span></p>
 <p class="p21"><span class="s1"></span><br></p>
 <p class="p4"><span class="s3">PUBLICITÉ GOOGLE FACTURÉE PAR GOOGLE. AUCUN FRAIS CACHÉ.</span></p>
-<p class="p22"><span class="s3">449</span><span class="s8"><sup>$</sup><sup></sup></span></p>
+<p class="p22"><span class="s3">449</span><span class="s8"><sup>$</sup></span></p>
 <p class="p4"><span class="s3">/ MOIS · TOUT INCLUS</span></p>
 <p class="p8"><a href="#sssBooking"><span class="s5">RÉSERVER UN AUDIT</span></a></p>
 <p class="p9"><span class="s1"></span><br></p>
@@ -473,7 +482,7 @@
 <p class="p12"><span class="s1"></span><br></p>
 <p class="p4"><span class="s3">TARIFICATION</span></p>
 <p class="p26"><span class="s3">449</span></p>
-<p class="p27"><span class="s3"><sup>$</sup><sup></sup></span></p>
+<p class="p27"><span class="s3"><sup>$</sup></span></p>
 <p class="p28"><span class="s3">PAR MOIS · CAD</span></p>
 </section>
 
@@ -484,7 +493,7 @@
 <p class="p29"><span class="s3">Six leviers Google</span></p>
 <p class="p30"><span class="s3">Search, GMB, Data, Display, Vidéo, Shopping.</span></p>
 <p class="p16"><span class="s3">ONBOARDING</span></p>
-<p class="p29"><span class="s3">499</span><span class="s13"><sup>$</sup><sup></sup></span></p>
+<p class="p29"><span class="s3">499</span><span class="s13"><sup>$</sup></span></p>
 <p class="p30"><span class="s3">Six leviers configurés. Tableau de bord activé.</span></p>
 <p class="p16"><span class="s3">PUBLICITÉ GOOGLE</span></p>
 <p class="p29"><span class="s3">Facturée directement</span></p>
@@ -633,8 +642,7 @@
         title="Calendrier SSS · Disponibilités"
         src="https://calendar.google.com/calendar/embed?src=c_c3163b5e97939baf226e43395f5f8433bbe3f6fdcf2def9a236dbc825a19d676%40group.calendar.google.com&ctz=America%2FMontreal&mode=AGENDA&showTitle=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&bgcolor=%23fefad9"
         loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        onload="document.getElementById('sssBkEmbed').classList.add('is-loaded')"></iframe>
+        referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
 
     <div class="sss-bk__foot">
@@ -650,22 +658,22 @@
 </main>
 
 <footer role="contentinfo">
-<p class="p2"><span class="s1"><img src="logo-mark.png" srcset="logo-mark@2x.png 2x, logo-mark@3x.png 3x" alt="SSS Marketing" width="auto" height="auto"></span></p>
+<p class="p2"><span class="s1"><img src="logo-mark.png" srcset="logo-mark@2x.png 2x, logo-mark@3x.png 3x" alt="SSS Marketing" decoding="async" loading="lazy"></span></p>
 <p class="p19"><span class="s3">Marketing dentaire. Search-first.</span></p>
 <p class="p16"><span class="s3">NAVIGATION</span></p>
 <nav aria-label="Navigation principale">
 <ul class="ul1">
-  <li class="li19"><a href="#services"><span class="s25"></span><span class="s3">Services</span></a></li>
-  <li class="li19"><a href="#tarification"><span class="s25"></span><span class="s3">Tarification</span></a></li>
-  <li class="li19"><a href="#processus"><span class="s25"></span><span class="s3">Processus</span></a></li>
-  <li class="li19"><a href="#equipe"><span class="s25"></span><span class="s3">Équipe</span></a></li>
+  <li class="li19"><a href="#services"><span class="s3">Services</span></a></li>
+  <li class="li19"><a href="#tarification"><span class="s3">Tarification</span></a></li>
+  <li class="li19"><a href="#processus"><span class="s3">Processus</span></a></li>
+  <li class="li19"><a href="#equipe"><span class="s3">Équipe</span></a></li>
 </ul>
 </nav>
 <p class="p16"><span class="s3">CONTACT</span></p>
 <ul class="ul1">
-  <li class="li19"><a href="mailto:info@sss.marketing"><span class="s25"></span><span class="s1">info@sss.marketing</span></a></li>
-  <li class="li19"><a href="#sssBooking"><span class="s25"></span><span class="s3">Réserver un audit</span></a></li>
-  <li class="li19"><span class="s25"></span><span class="s3">Montréal, QC</span></li>
+  <li class="li19"><a href="mailto:info@sss.marketing"><span class="s1">info@sss.marketing</span></a></li>
+  <li class="li19"><a href="#sssBooking"><span class="s3">Réserver un audit</span></a></li>
+  <li class="li19"><span class="s3">Montréal, QC</span></li>
 </ul>
 <p class="p4"><span class="s3">© 2026 SSS MARKETING. TOUS DROITS RÉSERVÉS.</span></p>
 <p class="p46"><span class="s1">Défiler</span></p>
@@ -682,6 +690,7 @@
   "url": "https://sss.marketing",
   "email": "info@sss.marketing",
   "logo": "https://sss.marketing/logo-mark.png",
+  "image": "https://sss.marketing/logo-mark@3x.png",
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "Montréal",
@@ -695,37 +704,72 @@
   "knowsAbout": ["Marketing dentaire", "Google Ads", "Google My Business", "SEO local", "Data Analytics"],
   "priceRange": "449 $ CAD / mois",
   "currenciesAccepted": "CAD",
-  "inLanguage": "fr"
+  "inLanguage": "fr",
+  "makesOffer": {
+    "@type": "Offer",
+    "name": "Forfait SSS — Six leviers Google",
+    "priceCurrency": "CAD",
+    "price": "449",
+    "priceSpecification": {
+      "@type": "UnitPriceSpecification",
+      "priceCurrency": "CAD",
+      "price": "449",
+      "unitText": "MONTH"
+    },
+    "category": "Marketing dentaire",
+    "availability": "https://schema.org/InStock"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "email": "info@sss.marketing",
+    "contactType": "sales",
+    "areaServed": "CA",
+    "availableLanguage": ["fr", "en"]
+  }
 }
 </script>
 
 <!-- Calendar section reveal on scroll + iframe load failsafe -->
 <script>
   (function () {
-    const el = document.getElementById('sssBooking');
+    var el = document.getElementById('sssBooking');
     if (!el) return;
+
+    var emb = document.getElementById('sssBkEmbed');
+    var iframe = el.querySelector('.sss-bk__iframe');
+    var failsafe = null;
+
+    function markLoaded() {
+      if (emb && !emb.classList.contains('is-loaded')) {
+        emb.classList.add('is-loaded');
+      }
+      if (failsafe) { clearTimeout(failsafe); failsafe = null; }
+    }
+
+    function startFailsafe() {
+      if (failsafe || !emb || emb.classList.contains('is-loaded')) return;
+      failsafe = setTimeout(markLoaded, 6000);
+    }
+
+    if (iframe) {
+      iframe.addEventListener('load', markLoaded, { once: true });
+    }
 
     if (!('IntersectionObserver' in window)) {
       el.classList.add('is-visible');
+      startFailsafe();
     } else {
-      const io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) { el.classList.add('is-visible'); io.disconnect(); }
-        });
+      var io = new IntersectionObserver(function (entries) {
+        for (var i = 0; i < entries.length; i++) {
+          if (entries[i].isIntersecting) {
+            el.classList.add('is-visible');
+            startFailsafe();
+            io.disconnect();
+            break;
+          }
+        }
       }, { threshold: 0.12 });
       io.observe(el);
-    }
-
-    // Failsafe: reveal iframe if onload never fires (slow network / CSP block)
-    const failsafe = setTimeout(function () {
-      const emb = document.getElementById('sssBkEmbed');
-      if (emb && !emb.classList.contains('is-loaded')) emb.classList.add('is-loaded');
-    }, 6000);
-
-    // Clean up failsafe if iframe loads normally
-    const iframe = el.querySelector('.sss-bk__iframe');
-    if (iframe) {
-      iframe.addEventListener('load', function () { clearTimeout(failsafe); }, { once: true });
     }
   })();
 </script>
