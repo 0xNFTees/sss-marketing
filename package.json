@@ -2,15 +2,6 @@
   "name": "sss-marketing-site",
   "version": "1.0.0",
   "private": true,
-  "scripts": {
-    "build": "esbuild src/entry.jsx --bundle --outfile=dist/entry.js --platform=browser --format=esm --minify --sourcemap"
-  },
-  "dependencies": {
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "lucide-react": "^0.370.0"
-  },
-  "devDependencies": {
-    "esbuild": "0.19.20"
-  }
+  "description": "Static site served by GitHub Pages from main branch root. No build step. Edit index.html and investor/index.html directly.",
+  "homepage": "https://sss.marketing"
 }
