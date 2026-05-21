@@ -421,6 +421,49 @@ nav.scrolled .nav-logo{height:26px}
 .services-foot-price sup{font-size:0.5em;color:var(--tan);vertical-align:0.5em}
 .services-foot-price small{font-family:var(--body);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink);opacity:0.55;margin-left:14px;font-weight:400}
 
+/* ----- Services · Specimen system (per Pillar 3 motif #1: hairline rule promoted to subject) ----- */
+.svc-specimen{width:100%;padding-top:4px;user-select:none;pointer-events:none}
+.svc-specimen svg{width:100%;height:auto;display:block;overflow:visible}
+.svc-rule{height:1px;background:var(--tan);opacity:0.7}
+.svc-spacer{border-bottom:1px solid var(--rule)}
+
+.sp-search .caret{animation:sssCaretBlink 1.6s ease-in-out infinite}
+@keyframes sssCaretBlink{0%,40%,100%{opacity:1}60%,90%{opacity:0.15}}
+.sp-search .loupe{transition:transform .55s var(--ease)}
+.svc:hover .sp-search .loupe,.svc:focus-visible .sp-search .loupe,.svc.active .sp-search .loupe{transform:translate(-30px,14px)}
+.svc:hover .sp-search .caret,.svc:focus-visible .sp-search .caret,.svc.active .sp-search .caret{animation:none;opacity:0;transition:opacity .25s}
+
+.sp-local .ring{transform-origin:140px 50px;transform-box:fill-box}
+.svc:hover .sp-local .r1,.svc:focus-visible .sp-local .r1,.svc.active .sp-local .r1{animation:sssRipple .9s var(--ease) forwards}
+.svc:hover .sp-local .r2,.svc:focus-visible .sp-local .r2,.svc.active .sp-local .r2{animation:sssRipple .9s var(--ease) .12s forwards}
+.svc:hover .sp-local .r3,.svc:focus-visible .sp-local .r3,.svc.active .sp-local .r3{animation:sssRipple .9s var(--ease) .24s forwards}
+@keyframes sssRipple{0%{transform:scale(0.85);opacity:0.7}100%{transform:scale(1.2);opacity:0}}
+
+.sp-data .node{transition:fill .3s var(--ease)}
+.svc:hover .sp-data .n1,.svc:focus-visible .sp-data .n1,.svc.active .sp-data .n1{animation:sssLightFill .6s ease-out .1s forwards}
+.svc:hover .sp-data .n2,.svc:focus-visible .sp-data .n2,.svc.active .sp-data .n2{animation:sssLightFill .6s ease-out .22s forwards}
+.svc:hover .sp-data .n3,.svc:focus-visible .sp-data .n3,.svc.active .sp-data .n3{animation:sssLightFill .6s ease-out .34s forwards}
+.svc:hover .sp-data .chair-rect,.svc:focus-visible .sp-data .chair-rect,.svc.active .sp-data .chair-rect{animation:sssLightStroke .6s ease-out .46s forwards}
+@keyframes sssLightFill{0%{fill:rgba(212,163,115,0)}100%{fill:rgba(212,163,115,1)}}
+@keyframes sssLightStroke{0%{stroke:rgba(28,24,18,0.65)}100%{stroke:rgba(212,163,115,1)}}
+
+.sp-display .fill-a{transition:opacity .35s var(--ease)}
+.sp-display .fill-b{opacity:0;transition:opacity .35s var(--ease) .2s}
+.svc:hover .sp-display .fill-a,.svc:focus-visible .sp-display .fill-a,.svc.active .sp-display .fill-a{opacity:0;transition:opacity .35s var(--ease)}
+.svc:hover .sp-display .fill-b,.svc:focus-visible .sp-display .fill-b,.svc.active .sp-display .fill-b{opacity:1}
+
+.sp-video .progress{transition:width .65s var(--ease)}
+.sp-video .playhead{transform-origin:75px 74px;transform-box:fill-box;transition:transform .65s var(--ease)}
+.sp-video .play-tri{transition:fill .45s var(--ease)}
+.svc:hover .sp-video .progress,.svc:focus-visible .sp-video .progress,.svc.active .sp-video .progress{width:75px}
+.svc:hover .sp-video .playhead,.svc:focus-visible .sp-video .playhead,.svc.active .sp-video .playhead{transform:translateX(40px)}
+.svc:hover .sp-video .play-tri,.svc:focus-visible .sp-video .play-tri,.svc.active .sp-video .play-tri{fill:var(--tan)}
+
+@media (prefers-reduced-motion:reduce){
+  .sp-search .caret{animation:none}
+  .svc:hover .svc-specimen *,.svc:focus-visible .svc-specimen *,.svc.active .svc-specimen *{animation:none!important;transition:none!important;transform:none!important}
+}
+
 /* ========== ECOSYSTEM ========== */
 .eco-grid{display:grid;grid-template-columns:5fr 7fr;gap:96px;align-items:center}
 .eco-text{max-width:520px}
@@ -936,6 +979,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   .services-grid{grid-template-columns:1fr}
   .svc{border-right:none !important;padding-right:0 !important;padding:28px 0 32px}
   .svc.active{padding-left:0}
+  .svc-spacer{display:none}
   .services-foot{flex-direction:column;align-items:flex-start;gap:20px}
   .eco-list li{grid-template-columns:1fr;gap:6px}
   .eco-list-num{padding-top:0}
@@ -1047,7 +1091,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 @media print{
   *{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}
   body{background:#fff !important;font-size:11pt;line-height:1.5}
-  nav,.scroll-cue,.svc-toggle,.svc-detail-cue,.cta-nav,.cta-primary,
+  nav,.scroll-cue,.svc-toggle,.svc-detail-cue,.svc-specimen,.svc-rule,.svc-spacer,.cta-nav,.cta-primary,
   .final,.contact-embed,.skip-link,.lang-switch,.svc-detail-close{display:none !important}
   .hero{min-height:auto;padding:0 0 24pt 0}
   .hero-grid{display:block}
@@ -1160,34 +1204,45 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     <div class="services-grid" id="servicesGrid">
       <button class="svc svc--core fade-in d1" type="button" data-svc="s1" aria-expanded="false">
         <div class="svc-num"><span>01 / Search</span><span class="svc-toggle" aria-hidden="true"></span></div>
+        <div class="svc-specimen" aria-hidden="true"><svg class="sp-search" viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg"><line x1="40" y1="58" x2="200" y2="58" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1" stroke-linecap="round"/><line class="caret" x1="200" y1="48" x2="200" y2="68" stroke="#d4a373" stroke-width="1.5" stroke-linecap="round"/><g class="loupe"><circle cx="225" cy="42" r="14" fill="none" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1"/><line x1="235" y1="52" x2="248" y2="65" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1" stroke-linecap="round"/><circle cx="225" cy="42" r="2.2" fill="#d4a373"/></g></svg></div>
+        <div class="svc-rule"></div>
         <h3 class="svc-name" data-i="svc1Name">Google Ads — Search</h3>
         <p class="svc-desc" data-i="svc1Desc">Captés à la requête. Quand ils cherchent.</p>
         <span class="svc-detail-cue" data-i="svcDetailCue">+ Voir les livrables</span>
       </button>
       <button class="svc svc--core fade-in d2" type="button" data-svc="s2" aria-expanded="false">
         <div class="svc-num"><span>02 / Local</span><span class="svc-toggle" aria-hidden="true"></span></div>
+        <div class="svc-specimen" aria-hidden="true"><svg class="sp-local" viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg"><g stroke="#1c1812" stroke-opacity="0.07" stroke-width="0.5"><line x1="40" y1="20" x2="240" y2="20"/><line x1="40" y1="40" x2="240" y2="40"/><line x1="40" y1="60" x2="240" y2="60"/><line x1="40" y1="80" x2="240" y2="80"/><line x1="60" y1="10" x2="60" y2="90"/><line x1="100" y1="10" x2="100" y2="90"/><line x1="140" y1="10" x2="140" y2="90"/><line x1="180" y1="10" x2="180" y2="90"/><line x1="220" y1="10" x2="220" y2="90"/></g><circle class="ring r1" cx="140" cy="50" r="20" fill="none" stroke="#1c1812" stroke-opacity="0.45" stroke-width="1"/><circle class="ring r2" cx="140" cy="50" r="32" fill="none" stroke="#1c1812" stroke-opacity="0.35" stroke-width="1"/><circle class="ring r3" cx="140" cy="50" r="44" fill="none" stroke="#1c1812" stroke-opacity="0.22" stroke-width="1"/><line x1="140" y1="50" x2="140" y2="64" stroke="#1c1812" stroke-opacity="0.7" stroke-width="1.25" stroke-linecap="round"/><circle cx="140" cy="46" r="4.5" fill="#d4a373"/></svg></div>
+        <div class="svc-rule"></div>
         <h3 class="svc-name" data-i="svc2Name">Google Business Profile</h3>
         <p class="svc-desc" data-i="svc2Desc">Premier sur la carte. Profil défendu.</p>
         <span class="svc-detail-cue" data-i="svcDetailCue">+ Voir les livrables</span>
       </button>
       <button class="svc svc--core fade-in d3" type="button" data-svc="s3" aria-expanded="false">
         <div class="svc-num"><span>03 / Data</span><span class="svc-toggle" aria-hidden="true"></span></div>
+        <div class="svc-specimen" aria-hidden="true"><svg class="sp-data" viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg"><text x="40" y="60" font-family="RhymesText, 'Palatino Linotype', Georgia, serif" font-size="26" fill="#d4a373">$</text><line x1="64" y1="52" x2="200" y2="52" stroke="#1c1812" stroke-opacity="0.4" stroke-width="1" stroke-dasharray="2 4" stroke-linecap="round"/><circle class="node n1" cx="98" cy="52" r="3.2" fill="rgba(212,163,115,0)" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1"/><circle class="node n2" cx="132" cy="52" r="3.2" fill="rgba(212,163,115,0)" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1"/><circle class="node n3" cx="166" cy="52" r="3.2" fill="rgba(212,163,115,0)" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1"/><rect class="chair-rect" x="206" y="44" width="24" height="16" rx="2" fill="none" stroke="#1c1812" stroke-opacity="0.65" stroke-width="1"/><rect class="chair-head" x="212" y="36" width="12" height="8" rx="1.5" fill="none" stroke="#1c1812" stroke-opacity="0.65" stroke-width="1"/></svg></div>
+        <div class="svc-rule"></div>
         <h3 class="svc-name" data-i="svc3Name">Data Analytics</h3>
         <p class="svc-desc" data-i="svc3Desc">Chaque dollar tracé au fauteuil.</p>
         <span class="svc-detail-cue" data-i="svcDetailCue">+ Voir les livrables</span>
       </button>
       <button class="svc fade-in d1" type="button" data-svc="s4" aria-expanded="false">
         <div class="svc-num"><span>04 / Display</span><span class="svc-toggle" aria-hidden="true"></span></div>
+        <div class="svc-specimen" aria-hidden="true"><svg class="sp-display" viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg"><g stroke="#1c1812" stroke-opacity="0.5" stroke-width="0.8" fill="none"><rect x="50" y="22" width="28" height="16"/><rect x="84" y="22" width="28" height="16"/><rect x="118" y="22" width="28" height="16"/><rect x="152" y="22" width="28" height="16"/><rect x="186" y="22" width="28" height="16"/><rect x="50" y="44" width="28" height="16"/><rect x="84" y="44" width="28" height="16"/><rect x="118" y="44" width="28" height="16"/><rect x="152" y="44" width="28" height="16"/><rect x="186" y="44" width="28" height="16"/><rect x="50" y="66" width="28" height="16"/><rect x="84" y="66" width="28" height="16"/><rect x="118" y="66" width="28" height="16"/><rect x="152" y="66" width="28" height="16"/><rect x="186" y="66" width="28" height="16"/></g><rect class="fill-a" x="152" y="44" width="28" height="16" fill="#d4a373"/><rect class="fill-b" x="84" y="22" width="28" height="16" fill="#d4a373"/></svg></div>
+        <div class="svc-rule"></div>
         <h3 class="svc-name" data-i="svc4Name">Google Ads — Display</h3>
         <p class="svc-desc" data-i="svc4Desc">Présence ciblée. Mesurable.</p>
         <span class="svc-detail-cue" data-i="svcDetailCue">+ Voir les livrables</span>
       </button>
       <button class="svc fade-in d2" type="button" data-svc="s5" aria-expanded="false">
         <div class="svc-num"><span>05 / Vidéo</span><span class="svc-toggle" aria-hidden="true"></span></div>
+        <div class="svc-specimen" aria-hidden="true"><svg class="sp-video" viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg"><text x="40" y="15" font-family="ABCWalter, Helvetica, Arial, sans-serif" font-size="7.5" letter-spacing="1.8" fill="#1c1812" fill-opacity="0.55">0:05 / 0:30</text><rect x="40" y="22" width="160" height="56" fill="none" stroke="#1c1812" stroke-opacity="0.5" stroke-width="1"/><line x1="50" y1="74" x2="190" y2="74" stroke="#1c1812" stroke-opacity="0.18" stroke-width="2.5" stroke-linecap="round"/><rect class="progress" x="50" y="72.75" width="25" height="2.5" rx="1.25" fill="#d4a373"/><line class="playhead" x1="75" y1="66" x2="75" y2="82" stroke="#d4a373" stroke-width="1.5" stroke-linecap="round"/><polygon class="play-tri" points="218,42 218,62 240,52" fill="none" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/></svg></div>
+        <div class="svc-rule"></div>
         <h3 class="svc-name" data-i="svc5Name">Google Ads — Vidéo</h3>
         <p class="svc-desc" data-i="svc5Desc">YouTube géolocalisé. Format court.</p>
         <span class="svc-detail-cue" data-i="svcDetailCue">+ Voir les livrables</span>
       </button>
+      <div class="svc-spacer" aria-hidden="true"></div>
     </div>
 
     <div class="svc-detail" id="svcDetail" aria-live="polite"></div>
