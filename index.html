@@ -1769,6 +1769,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     var selectedSlot = null; // {date: Date, time: '12:30', key: 'YYYY-MM-DD|HH:MM'}
     var isMobile = false;
     var mobileDayIndex = 0;
+    var pendingRaf = null;
 
     function getWeekStart(d){
       var dt = new Date(d);
@@ -1844,7 +1845,9 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       var allTimes = getWeekAllTimes();
       gridEl.innerHTML='';
       gridEl.classList.add('is-transitioning');
-      requestAnimationFrame(function(){
+      if(pendingRaf!==null){cancelAnimationFrame(pendingRaf);}
+      pendingRaf=requestAnimationFrame(function(){
+        pendingRaf=null;
         gridEl.classList.remove('is-transitioning');
         for(var col=0;col<7;col++){
           var day = addDays(currentWeekStart, col);
