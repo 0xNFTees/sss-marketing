@@ -516,9 +516,55 @@ nav.scrolled .nav-logo{height:26px}
   100%{transform:translateY(-4px);opacity:0.25}
 }
 
-/* ========== CONTACT ========== */
+/* ========== CONTACT — CONCIERGE BOOKING EXPERIENCE ========== */
+
+/* ── Zone A · Consultation positioning header ── */
+.booking-header{
+  background:var(--surface-b);
+  padding:72px 0 64px;
+  position:relative;
+  margin-bottom:0;
+}
+.booking-header-rule{position:absolute;top:0;left:0;right:0;height:1px;background:var(--tan);opacity:0.55}
+.booking-header-grid{
+  display:grid;grid-template-columns:7fr 5fr;gap:80px;align-items:end;
+}
+.booking-header-eyebrow{
+  font-family:var(--body);font-size:10px;letter-spacing:0.28em;text-transform:uppercase;
+  color:var(--tan);margin-bottom:28px;display:flex;align-items:center;gap:14px;
+}
+.booking-header-eyebrow::before{content:'';width:28px;height:1px;background:var(--tan);display:inline-block;flex-shrink:0}
+.booking-header-title{
+  font-family:var(--display);font-weight:500;
+  font-size:clamp(40px,5.5vw,72px);line-height:1.02;letter-spacing:-0.025em;
+  color:var(--ink);margin-bottom:24px;
+}
+.booking-header-sub{
+  font-family:var(--body);font-size:15px;line-height:1.65;
+  color:var(--ink);opacity:0.78;max-width:540px;
+}
+.booking-header-facts{display:flex;flex-direction:column;gap:0;align-self:end}
+.booking-header-fact{
+  display:grid;grid-template-columns:80px 1fr;gap:20px;
+  padding:18px 0;border-bottom:1px solid var(--rule-soft);align-items:baseline;
+}
+.booking-header-fact:first-child{border-top:1px solid var(--rule-soft)}
+.booking-header-fact-label{
+  font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;
+  color:var(--tan);padding-top:3px;
+}
+.booking-header-fact-value{
+  font-family:var(--display);font-weight:500;font-size:20px;
+  letter-spacing:-0.01em;color:var(--ink);line-height:1.2;
+}
+.booking-header-note{
+  font-family:var(--body);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--ink);opacity:0.45;margin-top:18px;text-align:right;
+}
+
+/* ── Zone B · Main booking grid ── */
 .contact-grid{
-  display:grid;grid-template-columns:4fr 8fr;gap:80px;align-items:start;
+  display:grid;grid-template-columns:4fr 8fr;gap:96px;align-items:start;
 }
 .contact-side{
   display:flex;flex-direction:column;
@@ -526,66 +572,274 @@ nav.scrolled .nav-logo{height:26px}
 }
 .contact-title{
   font-family:var(--display);font-weight:500;
-  font-size:clamp(36px,4.6vw,60px);line-height:1.04;letter-spacing:-0.02em;
-  color:var(--ink);margin-bottom:28px;
+  font-size:clamp(32px,4vw,52px);line-height:1.04;letter-spacing:-0.02em;
+  color:var(--ink);margin-bottom:20px;
 }
 .contact-intro{
-  font-family:var(--body);font-size:16px;line-height:1.65;
-  color:var(--ink);opacity:0.78;max-width:380px;margin-bottom:56px;
+  font-family:var(--body);font-size:15px;line-height:1.65;
+  color:var(--ink);opacity:0.78;max-width:360px;margin-bottom:40px;
 }
+
+/* Consultation value card */
+.booking-value-card{
+  background:var(--surface-a);
+  border:1px solid var(--rule);
+  padding:32px 28px;
+  margin-bottom:36px;
+}
+.booking-value-card-label{
+  font-family:var(--body);font-size:10px;letter-spacing:0.26em;text-transform:uppercase;
+  color:var(--tan);margin-bottom:20px;display:block;
+}
+.booking-value-list{display:flex;flex-direction:column;gap:0}
+.booking-value-item{
+  font-family:var(--display);font-weight:500;font-size:17px;line-height:1.22;
+  letter-spacing:-0.008em;color:var(--ink);
+  padding:14px 0;border-bottom:1px solid var(--rule-soft);
+}
+.booking-value-item:last-child{border-bottom:none;padding-bottom:0}
+.booking-value-item:first-child{padding-top:0}
+.booking-value-note{
+  margin-top:20px;padding-top:16px;border-top:1px solid var(--rule);
+  font-family:var(--body);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--ink);opacity:0.5;line-height:1.7;
+}
+
+/* Contact facts */
 .contact-facts{display:flex;flex-direction:column;border-top:1px solid var(--rule)}
 .contact-fact{
-  display:grid;grid-template-columns:100px 1fr;gap:24px;
-  padding:22px 0;border-bottom:1px solid var(--rule-soft);
+  display:grid;grid-template-columns:80px 1fr;gap:20px;
+  padding:18px 0;border-bottom:1px solid var(--rule-soft);
   align-items:baseline;
 }
+.contact-fact:last-child{border-bottom:none}
 .contact-fact-label{
   font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;
-  color:var(--tan);padding-top:4px;
+  color:var(--tan);padding-top:3px;
 }
 .contact-fact-value{
-  font-family:var(--display);font-weight:500;font-size:19px;line-height:1.2;
+  font-family:var(--display);font-weight:500;font-size:17px;line-height:1.25;
   letter-spacing:-0.005em;color:var(--ink);
-  transition:color .25s var(--ease), border-color .25s var(--ease);
+  transition:color .25s var(--ease),border-color .25s var(--ease);
 }
 a.contact-fact-value{
-  border-bottom:1px solid var(--tan);
-  padding-bottom:2px;
-  text-decoration:none;
+  border-bottom:1px solid var(--tan);padding-bottom:1px;
+  text-decoration:none;display:inline-block;
 }
 a.contact-fact-value:hover{color:var(--tan);border-bottom-color:var(--ink)}
 
-.contact-embed{
-  border:1px solid var(--rule);
-  background:var(--paper);
-  min-height:680px;
-  display:flex;align-items:stretch;justify-content:stretch;
-  overflow:hidden;position:relative;
+/* ── Right column — booking flow wrapper ── */
+.contact-flow{display:flex;flex-direction:column;gap:0;min-width:0}
+
+/* ── Week navigator ── */
+.booking-nav{
+  display:flex;align-items:baseline;justify-content:space-between;
+  padding-bottom:18px;border-bottom:1px solid var(--tan);margin-bottom:0;
 }
-.contact-embed iframe{width:100%;height:100%;min-height:680px;border:0;display:block}
-.contact-embed-placeholder{
-  flex:1;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:18px;
-  padding:48px;position:relative;
+.booking-nav-week{
+  font-family:var(--display);font-weight:500;font-size:22px;
+  letter-spacing:-0.015em;color:var(--ink);line-height:1;
 }
-.contact-embed-placeholder::after{
-  content:'';position:absolute;inset:14px;
-  border:0.5px solid var(--rule-soft);pointer-events:none;
-}
-.contact-embed-mark{
-  display:block;
-  height:80px;line-height:1;
-  opacity:0.22;
-  margin-bottom:10px;
-}
-.contact-embed-mark img{display:block;height:100%;width:auto}
-.contact-embed-label{
+.booking-nav-controls{display:flex;align-items:center;gap:20px}
+.booking-nav-month{
   font-family:var(--body);font-size:10px;letter-spacing:0.26em;text-transform:uppercase;
-  color:var(--tan);
-}
-.contact-embed-status{
-  font-family:var(--body);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;
   color:var(--ink);opacity:0.45;
+}
+.booking-nav-btn{
+  width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;
+  background:none;border:none;cursor:pointer;color:var(--ink);opacity:0.55;
+  transition:opacity .25s var(--ease),color .25s var(--ease);padding:0;
+}
+.booking-nav-btn:hover{opacity:1;color:var(--tan)}
+.booking-nav-btn:focus-visible{outline:1px solid var(--tan);outline-offset:3px}
+
+/* ── 7-column availability grid ── */
+.booking-grid{
+  display:grid;grid-template-columns:repeat(7,1fr);
+  border-left:1px solid var(--rule);
+  border-top:1px solid var(--rule);
+  margin-bottom:0;
+  opacity:1;transition:opacity .35s var(--ease);
+}
+.booking-grid.is-transitioning{opacity:0}
+.booking-col{
+  border-right:1px solid var(--rule);
+  display:flex;flex-direction:column;
+}
+.booking-col-head{
+  padding:14px 10px 12px;
+  border-bottom:1px solid var(--rule-soft);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:var(--paper);
+  position:relative;
+}
+.booking-col-head.is-today::after{
+  content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:20px;height:1px;background:var(--tan);
+}
+.booking-col-dayname{
+  font-family:var(--body);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--ink);opacity:0.45;
+}
+.booking-col-daynum{
+  font-family:var(--display);font-weight:500;font-size:22px;line-height:1;
+  letter-spacing:-0.02em;color:var(--ink);
+}
+.booking-col-head.is-today .booking-col-daynum{color:var(--tan)}
+
+/* Slot buttons */
+.booking-slot{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;padding:11px 6px;
+  border:none;border-bottom:1px solid var(--rule-soft);
+  background:var(--paper);
+  font-family:var(--display);font-weight:500;font-size:14px;line-height:1;
+  letter-spacing:-0.01em;color:var(--ink);
+  cursor:pointer;text-align:center;position:relative;
+  transition:background-color .28s var(--ease),color .28s var(--ease);
+}
+.booking-slot:last-child{border-bottom:none}
+.booking-slot::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:0;
+  background:var(--tan);
+  transition:width .2s var(--ease);
+}
+.booking-slot:hover::before{width:2px}
+.booking-slot:hover{background:rgba(212,163,115,0.06)}
+.booking-slot:focus-visible{outline:1px solid var(--tan);outline-offset:-1px}
+
+/* Selected state */
+.booking-slot.is-selected{
+  background:var(--tan);color:var(--paper);cursor:default;
+}
+.booking-slot.is-selected::before{display:none}
+.booking-slot.is-selected .booking-slot-check{display:block}
+.booking-slot-check{
+  display:none;position:absolute;right:7px;top:50%;transform:translateY(-50%);
+}
+
+/* Unavailable state */
+.booking-slot.is-unavailable{
+  cursor:default;
+  color:var(--ink);opacity:0.3;
+}
+.booking-slot.is-unavailable::after{
+  content:'';position:absolute;left:12px;right:12px;top:50%;height:1px;
+  background:var(--ink);opacity:0.5;
+}
+.booking-slot.is-unavailable::before{display:none}
+.booking-slot.is-unavailable:hover{background:var(--paper)}
+
+/* Empty cell (no slot in this time window) */
+.booking-slot-empty{
+  flex:1;border-bottom:1px solid var(--rule-soft);
+  background:var(--surface-a);opacity:0.45;
+}
+.booking-slot-empty:last-child{border-bottom:none}
+
+/* ── Zone C · Confirmation panel (hidden until slot selected) ── */
+.booking-confirm-wrap{
+  max-height:0;overflow:hidden;opacity:0;
+  transition:max-height .9s var(--ease),opacity .6s var(--ease) .18s;
+}
+.booking-confirm-wrap.is-open{max-height:800px;opacity:1}
+.booking-confirm{
+  display:grid;grid-template-columns:5fr 7fr;gap:48px;
+  align-items:center;
+  padding:40px 0 0;
+  border-top:2px solid var(--tan);
+  margin-top:32px;
+}
+.booking-confirm-summary{}
+.booking-confirm-eyebrow{
+  font-family:var(--body);font-size:10px;letter-spacing:0.26em;text-transform:uppercase;
+  color:var(--tan);margin-bottom:14px;display:block;
+}
+.booking-confirm-datetime{
+  font-family:var(--display);font-weight:500;
+  font-size:clamp(24px,3vw,36px);line-height:1.08;
+  letter-spacing:-0.02em;color:var(--ink);margin-bottom:14px;
+}
+.booking-confirm-meta{
+  font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;
+  color:var(--ink);opacity:0.6;margin-bottom:20px;
+}
+.booking-confirm-desc{
+  font-family:var(--body);font-size:13px;line-height:1.58;
+  color:var(--ink);opacity:0.74;margin-bottom:20px;max-width:300px;
+}
+.booking-confirm-reset{
+  font-family:var(--body);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--ink);opacity:0.55;
+  background:none;border:none;border-bottom:1px solid var(--rule);
+  padding:2px 0;cursor:pointer;
+  transition:opacity .25s var(--ease),color .25s var(--ease),border-color .25s var(--ease);
+}
+.booking-confirm-reset:hover{opacity:1;color:var(--tan);border-bottom-color:var(--tan)}
+.booking-confirm-cta-panel{
+  background:var(--sage);
+  padding:40px 36px 36px;
+}
+.booking-confirm-cta-eyebrow{
+  font-family:var(--body);font-size:10px;letter-spacing:0.26em;text-transform:uppercase;
+  color:var(--ink);opacity:0.7;margin-bottom:16px;display:block;
+}
+.booking-confirm-cta-copy{
+  font-family:var(--body);font-size:14px;line-height:1.62;
+  color:var(--ink);opacity:0.84;margin-bottom:28px;max-width:300px;
+}
+.booking-confirm-strip{
+  margin-top:20px;
+  font-family:var(--body);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--ink);opacity:0.5;display:flex;gap:16px;flex-wrap:wrap;align-items:center;
+}
+.booking-confirm-strip-sep{color:var(--tan);opacity:0.7}
+
+/* Hidden calendar iframe (accessible fallback) */
+.booking-iframe-wrap{
+  position:absolute;width:1px;height:1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
+.booking-iframe-wrap:focus-within{
+  position:static;width:auto;height:auto;clip:auto;white-space:normal;
+}
+
+/* ── Post-booking timeline ── */
+.booking-timeline{
+  padding:36px 0 0;
+  border-top:1px solid var(--rule-soft);
+  margin-top:40px;
+}
+.booking-timeline-head{
+  display:flex;align-items:center;gap:14px;margin-bottom:28px;
+  font-family:var(--body);font-size:10px;letter-spacing:0.26em;text-transform:uppercase;
+}
+.booking-timeline-num{color:var(--tan)}
+.booking-timeline-label{color:var(--ink);opacity:0.7}
+.booking-timeline-rule{flex:1;height:1px;background:var(--tan);opacity:0.4;display:inline-block}
+.booking-timeline-steps{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  list-style:none;padding:0;margin:0;
+  border-top:1px solid var(--rule-soft);
+}
+.booking-timeline-step{
+  padding:22px 20px 26px 0;
+  border-right:1px solid var(--rule-soft);
+  display:flex;flex-direction:column;gap:6px;
+}
+.booking-timeline-step:last-child{border-right:none;padding-right:0}
+.booking-timeline-step:not(:first-child){padding-left:20px}
+.booking-timeline-step-num{
+  font-family:var(--display);font-weight:500;font-size:28px;line-height:1;
+  letter-spacing:-0.025em;color:var(--ink);
+}
+.booking-timeline-step-title{
+  font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;
+  color:var(--tan);margin-top:6px;
+}
+.booking-timeline-step-desc{
+  font-family:var(--body);font-size:12px;line-height:1.55;
+  color:var(--ink);opacity:0.68;
 }
 
 /* ========== FOOTER ========== */
@@ -638,10 +892,15 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   .process-step:not(:first-child){padding-left:0}
   .process-step:last-child{border-bottom:none}
   .team-grid{grid-template-columns:repeat(2,1fr);gap:56px}
+  .booking-header-grid{grid-template-columns:1fr;gap:40px}
+  .booking-header-note{text-align:left}
   .contact-grid{grid-template-columns:1fr;gap:56px}
   .contact-side{position:static}
-  .contact-intro{margin-bottom:40px}
-  .contact-embed{min-height:560px}
+  .contact-intro{margin-bottom:32px}
+  .booking-confirm{grid-template-columns:1fr;gap:32px}
+  .booking-timeline-steps{grid-template-columns:1fr}
+  .booking-timeline-step{border-right:none;border-bottom:1px solid var(--rule-soft);padding:20px 0 !important}
+  .booking-timeline-step:last-child{border-bottom:none}
   .footer-grid{grid-template-columns:1fr 1fr;gap:48px}
 }
 @media(max-width:960px){
@@ -687,11 +946,95 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   .why-item{grid-template-columns:60px 1fr;gap:14px;padding:28px 0}
   .why-item-tag{grid-column:1/-1;padding-left:60px}
   .team-grid{grid-template-columns:1fr;gap:48px}
-  .contact-embed{min-height:520px}
-  .contact-embed-mark{height:60px}
-  .contact-fact{grid-template-columns:80px 1fr;gap:16px}
+  /* Contact / Booking mobile */
+  .booking-header{padding:48px 0 44px}
+  .booking-header-facts{margin-top:8px}
+  .booking-header-fact-value{font-size:17px}
+  .contact-fact{grid-template-columns:72px 1fr;gap:14px}
+  .booking-value-card{padding:24px 20px}
+  /* Grid → day-picker + slot-list on mobile */
+  .booking-nav{flex-direction:column;align-items:flex-start;gap:12px;padding-bottom:16px}
+  .booking-grid{display:none}
+  .booking-mobile-picker{display:flex}
+  .booking-confirm{padding:28px 0 0;margin-top:24px}
+  .booking-confirm-cta-panel{padding:28px 24px 24px}
+  .booking-confirm-strip{flex-direction:column;gap:6px}
+  .booking-confirm-strip-sep{display:none}
+  .booking-timeline{margin-top:28px;padding-top:28px}
+  .booking-timeline-rule{display:none}
+  .booking-timeline-steps{grid-template-columns:1fr}
+  .booking-timeline-step{border-right:none;border-bottom:1px solid var(--rule-soft);padding:16px 0 !important}
+  .booking-timeline-step:last-child{border-bottom:none}
   .footer-grid{grid-template-columns:1fr;gap:40px;padding-bottom:48px}
   .footer-legal{flex-direction:column;align-items:flex-start;gap:12px}
+}
+
+/* ========== MOBILE DAY-PICKER ========== */
+.booking-mobile-picker{
+  display:none;flex-direction:column;gap:0;
+}
+.booking-mobile-dayrail-wrap{
+  overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  margin-bottom:0;
+}
+.booking-mobile-dayrail-wrap::-webkit-scrollbar{display:none}
+.booking-mobile-dayrail{
+  display:flex;gap:0;
+  border-top:1px solid var(--rule);border-left:1px solid var(--rule);
+  min-width:min-content;
+}
+.booking-mobile-day{
+  flex-shrink:0;width:72px;
+  border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;padding:14px 6px;cursor:pointer;
+  background:var(--paper);
+  transition:background-color .28s var(--ease),color .28s var(--ease);
+}
+.booking-mobile-day.is-selected{background:var(--tan)}
+.booking-mobile-day-name{
+  font-family:var(--body);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--ink);opacity:0.45;
+}
+.booking-mobile-day.is-selected .booking-mobile-day-name{color:var(--paper);opacity:0.8}
+.booking-mobile-day-num{
+  font-family:var(--display);font-weight:500;font-size:26px;line-height:1;
+  letter-spacing:-0.02em;color:var(--ink);
+}
+.booking-mobile-day.is-today .booking-mobile-day-num{color:var(--tan)}
+.booking-mobile-day.is-selected .booking-mobile-day-num{color:var(--paper)}
+.booking-mobile-day.is-selected.is-today .booking-mobile-day-num{color:var(--paper)}
+.booking-mobile-slots{
+  border:1px solid var(--rule);border-top:none;
+  display:flex;flex-direction:column;
+}
+.booking-mobile-slot{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;border-bottom:1px solid var(--rule-soft);
+  background:var(--paper);cursor:pointer;
+  font-family:var(--display);font-weight:500;font-size:18px;
+  letter-spacing:-0.01em;color:var(--ink);
+  position:relative;
+  transition:background-color .28s var(--ease),color .28s var(--ease);
+}
+.booking-mobile-slot:last-child{border-bottom:none}
+.booking-mobile-slot::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:0;
+  background:var(--tan);transition:width .2s var(--ease);
+}
+.booking-mobile-slot:hover::before{width:3px}
+.booking-mobile-slot:hover{background:rgba(212,163,115,0.06)}
+.booking-mobile-slot.is-selected{background:var(--tan);color:var(--paper)}
+.booking-mobile-slot.is-selected::before{display:none}
+.booking-mobile-slot.is-unavailable{opacity:0.32;cursor:default;text-decoration:line-through}
+.booking-mobile-slot.is-unavailable::before{display:none}
+.booking-mobile-slot.is-unavailable:hover{background:var(--paper)}
+.booking-mobile-slot-check{display:none}
+.booking-mobile-slot.is-selected .booking-mobile-slot-check{display:block}
+.booking-mobile-empty{
+  padding:32px 20px;
+  font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;
+  color:var(--ink);opacity:0.4;text-align:center;
 }
 
 /* ========== A11Y ========== */
@@ -1090,18 +1433,58 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 </section>
 
 <!-- 09 · CONTACT · Paper -->
-<section class="section section--paper" id="contact">
-  <div class="section-rule"></div>
+
+<!-- Zone A · Consultation positioning header -->
+<div class="booking-header" id="contact">
+  <div class="booking-header-rule"></div>
   <div class="container">
     <div class="section-head fade-in">
       <span class="num">09</span><span class="sep"></span>
       <span data-i="contactLabel">Contact</span>
     </div>
+    <div class="booking-header-grid">
+      <div>
+        <div class="booking-header-eyebrow fade-in d1" data-i="bookingHeaderEyebrow">Audit de croissance dentaire · 30 minutes</div>
+        <h2 class="booking-header-title fade-in d2" data-i="bookingHeaderTitle">Une session. Un diagnostic complet.</h2>
+        <p class="booking-header-sub fade-in d3" data-i="bookingHeaderSub">Présence Google, compétiteurs locaux, opportunités de croissance. Mené par des spécialistes qui ont travaillé en clinique.</p>
+      </div>
+      <div class="booking-header-facts fade-in d3">
+        <div class="booking-header-fact">
+          <div class="booking-header-fact-label" data-i="bhFactDurationLabel">Durée</div>
+          <div class="booking-header-fact-value" data-i="bhFactDurationValue">30 min</div>
+        </div>
+        <div class="booking-header-fact">
+          <div class="booking-header-fact-label" data-i="bhFactFormatLabel">Format</div>
+          <div class="booking-header-fact-value" data-i="bhFactFormatValue">Google Meet</div>
+        </div>
+        <div class="booking-header-fact">
+          <div class="booking-header-fact-label" data-i="bhFactCostLabel">Coût</div>
+          <div class="booking-header-fact-value" data-i="bhFactCostValue">Gratuit</div>
+        </div>
+        <div class="booking-header-note fade-in d4" data-i="bhFactNote">Sessions disponibles · Lun–Sam</div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Zone B+C · Main booking section -->
+<section class="section section--paper" aria-label="Réservation">
+  <div class="container">
     <div class="contact-grid">
+
+      <!-- Left column · Consultation value + facts -->
       <aside class="contact-side">
-        <h2 class="contact-title fade-in d1" data-i="contactTitle">Choisissez votre créneau.</h2>
-        <p class="contact-intro fade-in d2" data-i="contactIntro">Audit gratuit. 15 minutes.</p>
+        <h3 class="contact-title fade-in d1" data-i="contactTitle">Ce que vous obtenez.</h3>
+
+        <div class="booking-value-card fade-in d2">
+          <span class="booking-value-card-label" data-i="bookingValueLabel">Contenu de l'audit</span>
+          <div class="booking-value-list">
+            <div class="booking-value-item fade-in d2" data-i="bookingValue1">Analyse de votre empreinte Google.</div>
+            <div class="booking-value-item fade-in d3" data-i="bookingValue2">Carte des compétiteurs locaux.</div>
+            <div class="booking-value-item fade-in d4" data-i="bookingValue3">Plan d'action par levier.</div>
+          </div>
+          <p class="booking-value-note" data-i="bookingValueNote">Avec ou sans nous · Les résultats vous appartiennent</p>
+        </div>
 
         <div class="contact-facts fade-in d3">
           <div class="contact-fact">
@@ -1112,22 +1495,113 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
             <div class="contact-fact-label" data-i="contactLocLabel">Bureau</div>
             <div class="contact-fact-value" data-i="contactLocValue">Montréal, QC</div>
           </div>
+          <div class="contact-fact">
+            <div class="contact-fact-label" data-i="contactTzLabel">Fuseau</div>
+            <div class="contact-fact-value" data-i="contactTzValue">UTC −05:00</div>
+          </div>
         </div>
       </aside>
 
-      <div class="contact-embed fade-in d2" id="calendarEmbed" data-calendar-src="https://calendar.google.com/calendar/embed?src=c_c3163b5e97939baf226e43395f5f8433bbe3f6fdcf2def9a236dbc825a19d676%40group.calendar.google.com&ctz=America%2FMontreal&mode=AGENDA&showTitle=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&bgcolor=%23fefae0" aria-busy="true" aria-label="Calendrier de réservation">
-        <div class="contact-embed-placeholder">
-          <div class="contact-embed-mark">
-            <img src="logo-mark.png"
-                 srcset="logo-mark.png 1x, logo-mark@2x.png 2x"
-                 alt="SSS"
-                 width="148" height="61"
-                 loading="lazy"
-                 decoding="async">
+      <!-- Right column · Booking flow -->
+      <div class="contact-flow" id="bookingFlow">
+
+        <!-- Week navigator -->
+        <div class="booking-nav fade-in d1">
+          <span class="booking-nav-week" id="bookingNavWeek">Semaine du —</span>
+          <div class="booking-nav-controls">
+            <span class="booking-nav-month" id="bookingNavMonth"></span>
+            <button class="booking-nav-btn" id="bookingPrev" type="button" aria-label="Semaine précédente">
+              <svg width="10" height="16" viewBox="0 0 10 16" fill="none" aria-hidden="true">
+                <path d="M8 2L2 8l6 6" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
+              </svg>
+            </button>
+            <button class="booking-nav-btn" id="bookingNext" type="button" aria-label="Semaine suivante">
+              <svg width="10" height="16" viewBox="0 0 10 16" fill="none" aria-hidden="true">
+                <path d="M2 2l6 6-6 6" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
+              </svg>
+            </button>
           </div>
-          <div class="contact-embed-label" data-i="contactEmbedLabel">Calendrier</div>
-          <div class="contact-embed-status" data-i="contactEmbedStatus">Configuration en cours</div>
         </div>
+
+        <!-- Desktop 7-column grid -->
+        <div class="booking-grid fade-in d2" id="bookingGrid" role="grid" aria-label="Créneaux disponibles"></div>
+
+        <!-- Mobile day-picker (hidden on desktop) -->
+        <div class="booking-mobile-picker fade-in d2" id="bookingMobilePicker">
+          <div class="booking-mobile-dayrail-wrap">
+            <div class="booking-mobile-dayrail" id="bookingMobileDayrail" role="tablist"></div>
+          </div>
+          <div class="booking-mobile-slots" id="bookingMobileSlots" role="list"></div>
+        </div>
+
+        <!-- Zone C · Confirmation panel (hidden until slot selected) -->
+        <div class="booking-confirm-wrap" id="bookingConfirmWrap" aria-hidden="true">
+          <div class="booking-confirm">
+            <div class="booking-confirm-summary">
+              <span class="booking-confirm-eyebrow" data-i="bookingConfirmEyebrow">Votre consultation</span>
+              <div class="booking-confirm-datetime" id="bookingConfirmDatetime">—</div>
+              <div class="booking-confirm-meta" data-i="bookingConfirmMeta">Google Meet · 30 minutes</div>
+              <p class="booking-confirm-desc" data-i="bookingConfirmDesc">Audit de croissance dentaire — préparé pour votre clinique.</p>
+              <button class="booking-confirm-reset" type="button" id="bookingReset">
+                <span data-i="bookingConfirmReset">← Modifier le créneau</span>
+              </button>
+            </div>
+            <div class="booking-confirm-cta-panel">
+              <span class="booking-confirm-cta-eyebrow" data-i="bookingConfirmCtaEyebrow">Réservation</span>
+              <p class="booking-confirm-cta-copy" data-i="bookingConfirmCtaCopy">Confirmez votre créneau via Google Agenda. Confirmation instantanée par email.</p>
+              <a class="cta-primary" id="bookingConfirmCta" href="https://calendar.google.com/calendar/r?cid=c_c3163b5e97939baf226e43395f5f8433bbe3f6fdcf2def9a236dbc825a19d676%40group.calendar.google.com" target="_blank" rel="noopener">
+                <span data-i="bookingConfirmCta">Confirmer la réservation</span>
+                <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
+                  <path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
+                </svg>
+              </a>
+              <div class="booking-confirm-strip">
+                <span data-i="bookingStrip1">Confirmation immédiate</span>
+                <span class="booking-confirm-strip-sep" aria-hidden="true">·</span>
+                <span data-i="bookingStrip2">Aucune carte requise</span>
+                <span class="booking-confirm-strip-sep" aria-hidden="true">·</span>
+                <span data-i="bookingStrip3">Annulation libre</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post-booking timeline -->
+        <div class="booking-timeline fade-in d3">
+          <div class="booking-timeline-head">
+            <span class="booking-timeline-num">iii</span>
+            <span class="booking-timeline-label" data-i="bookingTimelineLabel">Après la réservation</span>
+            <span class="booking-timeline-rule"></span>
+          </div>
+          <ol class="booking-timeline-steps">
+            <li class="booking-timeline-step">
+              <span class="booking-timeline-step-num">01</span>
+              <span class="booking-timeline-step-title" data-i="bookingTimeline1Title">Confirmation</span>
+              <span class="booking-timeline-step-desc" data-i="bookingTimeline1Desc">Email Google Agenda dans les 5 minutes.</span>
+            </li>
+            <li class="booking-timeline-step">
+              <span class="booking-timeline-step-num">02</span>
+              <span class="booking-timeline-step-title" data-i="bookingTimeline2Title">Préparation</span>
+              <span class="booking-timeline-step-desc" data-i="bookingTimeline2Desc">Email de préparation 24 h avant la session.</span>
+            </li>
+            <li class="booking-timeline-step">
+              <span class="booking-timeline-step-num">03</span>
+              <span class="booking-timeline-step-title" data-i="bookingTimeline3Title">Audit live</span>
+              <span class="booking-timeline-step-desc" data-i="bookingTimeline3Desc">30 minutes. Diagnostic Google complet.</span>
+            </li>
+          </ol>
+        </div>
+
+        <!-- Accessible fallback: hidden Google Calendar iframe -->
+        <div class="booking-iframe-wrap">
+          <a href="https://calendar.google.com/calendar/r?cid=c_c3163b5e97939baf226e43395f5f8433bbe3f6fdcf2def9a236dbc825a19d676%40group.calendar.google.com" target="_blank" rel="noopener" data-i="bookingIframeFallback">Accéder directement au calendrier Google</a>
+          <div id="calendarEmbed"
+               data-calendar-src="https://calendar.google.com/calendar/embed?src=c_c3163b5e97939baf226e43395f5f8433bbe3f6fdcf2def9a236dbc825a19d676%40group.calendar.google.com&ctz=America%2FMontreal&mode=AGENDA&showTitle=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&bgcolor=%23fefae0"
+               aria-hidden="true">
+            <div class="contact-embed-frame" aria-hidden="true"></div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -1186,10 +1660,10 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 (function(){
   const i18n = {
     fr:{
-      cta:"Réserver un audit de 15 min",skipLink:"Aller au contenu",eyebrow:"Acquisition de patients dentaires",heroTitle:"Un seul indicateur compte.",heroTitleAccent:"Un fauteuil occupé.",heroSub:"Marketing dentaire. Par des opérateurs.",heroCta:"Réserver un audit de 15 min",priceLabel:"Forfait mensuel",priceCaption:"Tout inclus · Six leviers",scrollLabel:"Défiler",problemLabel:"Le problème",prob1:"Les agences traditionnelles vendent de la visibilité. Nous générons des patients.",prob2:"La plupart des agences ne comprennent pas pourquoi quelqu'un cherche « dentiste d'urgence » à 22h. Nous, oui.",prob2Sub:"Parce que nous avons été sur la ligne de front de vraies cliniques dentaires.",servicesLabel:"Services",servicesTitle:"Six leviers Google. Un seul forfait.",servicesIntro:"Opéré en interne. Mesuré mensuellement.",svc1Name:"Google Ads — Search",svc1Desc:"Captés à la requête. Quand ils cherchent.",svc2Name:"Google My Business",svc2Desc:"Premier sur la carte. Profil défendu.",svc3Name:"Data Analytics",svc3Desc:"Chaque dollar tracé au fauteuil.",svc4Name:"Google Ads — Display",svc4Desc:"Présence ciblée. Mesurable.",svc5Name:"Google Ads — Vidéo",svc5Desc:"YouTube géolocalisé. Format court.",svc6Name:"Google Ads — Shopping",svc6Desc:"Annonces produits. Conversion directe.",svcDetailCue:"+ Voir les livrables",servicesFootNote:"Publicité Google facturée par Google. Aucun frais caché.",ecoLabel:"Infrastructure réputation",ecoTitle:"Chaque visite devient une opportunité d'avis.",eco1:"Dispositifs NFC à la réception. Un toucher. Un avis Google.",eco3:"La fréquence des avis est l'un des signaux les plus forts de l'algorithme local de Google.",ecoCaption:"Dispositif NFC SSS · Sage / Ink",pricingLabel:"Tarification",pricingMo:"par mois · CAD",pf1Label:"Inclus",pf1Value:"Six leviers Google",pf1Note:"Search, GMB, Data, Display, Vidéo, Shopping.",pf2Label:"Onboarding",pf2Note:"Six leviers configurés. Tableau de bord activé.",pf3Label:"Publicité Google",pf3Value:"Facturée directement",pf3Note:"Vous gardez le contrôle.",pf4Label:"Spécialisation",pf4Value:"Dentaire uniquement",pf4Note:"Aucun autre vertical.",pricingCta:"Réserver un audit de 15 min",processLabel:"Processus",processTitle:"Trois étapes. De l'audit à la mise en ligne.",step1Num:"Étape 01",step1Unit:"min",step1Title:"Audit",step1Desc:"Présence Google. Compétiteurs. Opportunités locales.",step2Num:"Étape 02",step2Anchor:"Plan",step2Title:"Stratégie",step2Desc:"Plan d'action. Budget par levier. Cibles mensuelles.",step3Num:"Étape 03",step3Unit:"jours",step3Title:"Mise en ligne",step3Desc:"Campagnes actives. Mesure dès le premier mois.",whyLabel:"Pourquoi SSS",whyTitle:"Une discipline. Un seul vertical.",whySub:"Quatre raisons. Aucune en trop.",why1:"Aucune caméra. Aucune danse. Vous restez dentiste.",why1Tag:"Filtre",why2:"Expertise dentaire spécialisée. Rien d'autre.",why2Tag:"Vertical",why3:"Optimisation continue des campagnes. Pas une fois par trimestre.",why3Tag:"Discipline",why4:"Tableau de bord temps réel. Accès 24/7.",why4Tag:"Transparence",teamLabel:"Équipe",teamTitle:"Chaque dollar a un opérateur.",teamSub:"Aucun budget laissé à un algorithme. Des spécialistes Google certifiés gèrent chaque campagne, en collaboration directe avec un dentiste en exercice. Chaque mot, chaque promesse — validés avant publication.",hamzaRole:"Fondateur",hamzaName:"Hamza A.",hamzaBio:"Dix ans en marketing. Quatre ans en clinique — appels, urgences, plans de traitement. La majorité des agences n'ont jamais vu ça de l'intérieur.",shayanRole:"Partenaire · Conseiller clinique",shayanName:"Dr. Shayan Araghi",shayanBio:"14 ans de pratique clinique. Plusieurs cliniques bâties de zéro. DMD, Université de Montréal. Investisseur et partenaire stratégique.",aliRole:"Partenaire · Conseiller opérationnel",aliName:"Ali K.",aliBio:"Plus de 10 ans à l'intérieur des cliniques dentaires. Opérations quotidiennes, navigation des assurances, comptabilité clinique, expérience patient. A piloté l'exploitation de cliniques à fort volume facturant des millions en revenus. Sait ce qui se passe entre le clic et le fauteuil.",finalEyebrow:"Audit gratuit · 15 minutes",finalTitle:"Un fauteuil vide coûte plus cher qu'un forfait marketing.",finalSub:"Présence Google, compétiteurs, opportunités locales. Avec ou sans nous.",contactLabel:"Contact",contactTitle:"Choisissez votre créneau.",contactIntro:"Audit gratuit. 15 minutes.",contactEmailLabel:"Email",contactLocLabel:"Bureau",contactLocValue:"Montréal, QC",contactEmbedLabel:"Calendrier",contactEmbedStatus:"Réservez par email pour l'instant",footerTag:"Marketing dentaire. Search-first.",footerNav:"Navigation",footerNavSvc:"Services",footerNavPrice:"Tarification",footerNavProc:"Processus",footerNavTeam:"Équipe",footerContact:"Contact",footerBook:"Réserver un audit",footerLoc:"Montréal, QC",footerLegal:"© 2026 SSS Marketing. Tous droits réservés.",detailCloseLabel:"Fermer"
+      cta:"Réserver un audit de 15 min",skipLink:"Aller au contenu",eyebrow:"Acquisition de patients dentaires",heroTitle:"Un seul indicateur compte.",heroTitleAccent:"Un fauteuil occupé.",heroSub:"Marketing dentaire. Par des opérateurs.",heroCta:"Réserver un audit de 15 min",priceLabel:"Forfait mensuel",priceCaption:"Tout inclus · Six leviers",scrollLabel:"Défiler",problemLabel:"Le problème",prob1:"Les agences traditionnelles vendent de la visibilité. Nous générons des patients.",prob2:"La plupart des agences ne comprennent pas pourquoi quelqu'un cherche « dentiste d'urgence » à 22h. Nous, oui.",prob2Sub:"Parce que nous avons été sur la ligne de front de vraies cliniques dentaires.",servicesLabel:"Services",servicesTitle:"Six leviers Google. Un seul forfait.",servicesIntro:"Opéré en interne. Mesuré mensuellement.",svc1Name:"Google Ads — Search",svc1Desc:"Captés à la requête. Quand ils cherchent.",svc2Name:"Google My Business",svc2Desc:"Premier sur la carte. Profil défendu.",svc3Name:"Data Analytics",svc3Desc:"Chaque dollar tracé au fauteuil.",svc4Name:"Google Ads — Display",svc4Desc:"Présence ciblée. Mesurable.",svc5Name:"Google Ads — Vidéo",svc5Desc:"YouTube géolocalisé. Format court.",svc6Name:"Google Ads — Shopping",svc6Desc:"Annonces produits. Conversion directe.",svcDetailCue:"+ Voir les livrables",servicesFootNote:"Publicité Google facturée par Google. Aucun frais caché.",ecoLabel:"Infrastructure réputation",ecoTitle:"Chaque visite devient une opportunité d'avis.",eco1:"Dispositifs NFC à la réception. Un toucher. Un avis Google.",eco3:"La fréquence des avis est l'un des signaux les plus forts de l'algorithme local de Google.",ecoCaption:"Dispositif NFC SSS · Sage / Ink",pricingLabel:"Tarification",pricingMo:"par mois · CAD",pf1Label:"Inclus",pf1Value:"Six leviers Google",pf1Note:"Search, GMB, Data, Display, Vidéo, Shopping.",pf2Label:"Onboarding",pf2Note:"Six leviers configurés. Tableau de bord activé.",pf3Label:"Publicité Google",pf3Value:"Facturée directement",pf3Note:"Vous gardez le contrôle.",pf4Label:"Spécialisation",pf4Value:"Dentaire uniquement",pf4Note:"Aucun autre vertical.",pricingCta:"Réserver un audit de 15 min",processLabel:"Processus",processTitle:"Trois étapes. De l'audit à la mise en ligne.",step1Num:"Étape 01",step1Unit:"min",step1Title:"Audit",step1Desc:"Présence Google. Compétiteurs. Opportunités locales.",step2Num:"Étape 02",step2Anchor:"Plan",step2Title:"Stratégie",step2Desc:"Plan d'action. Budget par levier. Cibles mensuelles.",step3Num:"Étape 03",step3Unit:"jours",step3Title:"Mise en ligne",step3Desc:"Campagnes actives. Mesure dès le premier mois.",whyLabel:"Pourquoi SSS",whyTitle:"Une discipline. Un seul vertical.",whySub:"Quatre raisons. Aucune en trop.",why1:"Aucune caméra. Aucune danse. Vous restez dentiste.",why1Tag:"Filtre",why2:"Expertise dentaire spécialisée. Rien d'autre.",why2Tag:"Vertical",why3:"Optimisation continue des campagnes. Pas une fois par trimestre.",why3Tag:"Discipline",why4:"Tableau de bord temps réel. Accès 24/7.",why4Tag:"Transparence",teamLabel:"Équipe",teamTitle:"Chaque dollar a un opérateur.",teamSub:"Aucun budget laissé à un algorithme. Des spécialistes Google certifiés gèrent chaque campagne, en collaboration directe avec un dentiste en exercice. Chaque mot, chaque promesse — validés avant publication.",hamzaRole:"Fondateur",hamzaName:"Hamza A.",hamzaBio:"Dix ans en marketing. Quatre ans en clinique — appels, urgences, plans de traitement. La majorité des agences n'ont jamais vu ça de l'intérieur.",shayanRole:"Partenaire · Conseiller clinique",shayanName:"Dr. Shayan Araghi",shayanBio:"14 ans de pratique clinique. Plusieurs cliniques bâties de zéro. DMD, Université de Montréal. Investisseur et partenaire stratégique.",aliRole:"Partenaire · Conseiller opérationnel",aliName:"Ali K.",aliBio:"Plus de 10 ans à l'intérieur des cliniques dentaires. Opérations quotidiennes, navigation des assurances, comptabilité clinique, expérience patient. A piloté l'exploitation de cliniques à fort volume facturant des millions en revenus. Sait ce qui se passe entre le clic et le fauteuil.",finalEyebrow:"Audit gratuit · 15 minutes",finalTitle:"Un fauteuil vide coûte plus cher qu'un forfait marketing.",finalSub:"Présence Google, compétiteurs, opportunités locales. Avec ou sans nous.",contactLabel:"Contact",bookingHeaderEyebrow:"Audit de croissance dentaire · 30 minutes",bookingHeaderTitle:"Une session. Un diagnostic complet.",bookingHeaderSub:"Présence Google, compétiteurs locaux, opportunités de croissance. Mené par des spécialistes qui ont travaillé en clinique.",bhFactDurationLabel:"Durée",bhFactDurationValue:"30 min",bhFactFormatLabel:"Format",bhFactFormatValue:"Google Meet",bhFactCostLabel:"Coût",bhFactCostValue:"Gratuit",bhFactNote:"Sessions disponibles · Lun–Sam",contactTitle:"Ce que vous obtenez.",bookingValueLabel:"Contenu de l'audit",bookingValue1:"Analyse de votre empreinte Google.",bookingValue2:"Carte des compétiteurs locaux.",bookingValue3:"Plan d'action par levier.",bookingValueNote:"Avec ou sans nous · Les résultats vous appartiennent",contactEmailLabel:"Email",contactLocLabel:"Bureau",contactLocValue:"Montréal, QC",contactTzLabel:"Fuseau",contactTzValue:"UTC −05:00",bookingConfirmEyebrow:"Votre consultation",bookingConfirmMeta:"Google Meet · 30 minutes",bookingConfirmDesc:"Audit de croissance dentaire — préparé pour votre clinique.",bookingConfirmReset:"← Modifier le créneau",bookingConfirmCtaEyebrow:"Réservation",bookingConfirmCtaCopy:"Confirmez votre créneau via Google Agenda. Confirmation instantanée par email.",bookingConfirmCta:"Confirmer la réservation",bookingStrip1:"Confirmation immédiate",bookingStrip2:"Aucune carte requise",bookingStrip3:"Annulation libre",bookingTimelineLabel:"Après la réservation",bookingTimeline1Title:"Confirmation",bookingTimeline1Desc:"Email Google Agenda dans les 5 minutes.",bookingTimeline2Title:"Préparation",bookingTimeline2Desc:"Email de préparation 24 h avant la session.",bookingTimeline3Title:"Audit live",bookingTimeline3Desc:"30 minutes. Diagnostic Google complet.",bookingIframeFallback:"Accéder directement au calendrier Google",footerTag:"Marketing dentaire. Search-first.",footerNav:"Navigation",footerNavSvc:"Services",footerNavPrice:"Tarification",footerNavProc:"Processus",footerNavTeam:"Équipe",footerContact:"Contact",footerBook:"Réserver un audit",footerLoc:"Montréal, QC",footerLegal:"© 2026 SSS Marketing. Tous droits réservés.",detailCloseLabel:"Fermer"
     },
     en:{
-      cta:"Book a 15-min audit",skipLink:"Skip to content",eyebrow:"Dental patient acquisition",heroTitle:"One metric matters.",heroTitleAccent:"An occupied chair.",heroSub:"Dental marketing. By operators.",heroCta:"Book a 15-min audit",priceLabel:"Monthly plan",priceCaption:"All included · Six channels",scrollLabel:"Scroll",problemLabel:"The problem",prob1:"Traditional agencies sell visibility. We generate patients.",prob2:"Most agencies don't understand why someone searches \u201Cemergency dentist\u201D at 10 PM. We do.",prob2Sub:"Because we've been on the front lines of real dental practices.",servicesLabel:"Services",servicesTitle:"Six Google channels. One plan.",servicesIntro:"Run in-house. Measured monthly.",svc1Name:"Google Ads — Search",svc1Desc:"Captured at the query. When they search.",svc2Name:"Google Business Profile",svc2Desc:"First on the map. Profile defended.",svc3Name:"Data Analytics",svc3Desc:"Every dollar traced to the chair.",svc4Name:"Google Ads — Display",svc4Desc:"Targeted presence. Measurable.",svc5Name:"Google Ads — Video",svc5Desc:"Geo-targeted YouTube. Short format.",svc6Name:"Google Ads — Shopping",svc6Desc:"Product ads. Direct conversion.",svcDetailCue:"+ See deliverables",servicesFootNote:"Ad spend billed by Google directly. No hidden fees.",ecoLabel:"Reputation infrastructure",ecoTitle:"Every visit becomes a review opportunity.",eco1:"NFC pads at reception. One tap. One Google review.",eco3:"Review frequency is one of the strongest signals in Google's local algorithm.",ecoCaption:"SSS NFC pad · Sage / Ink",pricingLabel:"Pricing",pricingMo:"per month · CAD",pf1Label:"Included",pf1Value:"Six Google channels",pf1Note:"Search, GBP, Data, Display, Video, Shopping.",pf2Label:"Onboarding",pf2Note:"Six channels configured. Dashboard live.",pf3Label:"Google ad spend",pf3Value:"Billed directly",pf3Note:"You keep control.",pf4Label:"Specialization",pf4Value:"Dental only",pf4Note:"No other vertical.",pricingCta:"Book a 15-min audit",processLabel:"Process",processTitle:"Three steps. From audit to live.",step1Num:"Step 01",step1Unit:"min",step1Title:"Audit",step1Desc:"Google presence. Competitors. Local opportunities.",step2Num:"Step 02",step2Anchor:"Plan",step2Title:"Strategy",step2Desc:"Action plan. Budget per channel. Monthly targets.",step3Num:"Step 03",step3Unit:"days",step3Title:"Live",step3Desc:"Campaigns active. Measured from month one.",whyLabel:"Why SSS",whyTitle:"A discipline. One vertical.",whySub:"Four reasons. None spare.",why1:"No camera. No dancing. You stay a dentist.",why1Tag:"Filter",why2:"Specialized dental expertise. Nothing else.",why2Tag:"Vertical",why3:"Continuous campaign optimization. Not once a quarter.",why3Tag:"Discipline",why4:"Real-time dashboard. 24/7 access.",why4Tag:"Transparency",teamLabel:"Team",teamTitle:"Every dollar has an operator.",teamSub:"No budget left to an algorithm. Certified Google specialists run every campaign, in direct collaboration with a dentist in active practice. Every word, every promise — validated before it goes live.",hamzaRole:"Founder",hamzaName:"Hamza A.",hamzaBio:"Ten years in marketing. Four years inside a clinic — phones, emergencies, treatment plans. Most agencies have never seen this from inside.",shayanRole:"Partner · Clinical advisor",shayanName:"Dr. Shayan Araghi",shayanBio:"14 years of clinical practice. Several clinics built from scratch. DMD, Université de Montréal. Investor and strategic partner.",aliRole:"Partner · Operations advisor",aliName:"Ali K.",aliBio:"10+ years inside dental clinics. Daily operations, insurance navigation, clinic accounting, patient experience. Has run high-volume clinics billing millions in revenue. Knows exactly what happens between the click and the chair.",finalEyebrow:"Free audit · 15 minutes",finalTitle:"An empty chair costs more than a marketing plan.",finalSub:"Google presence, competitors, local opportunities. With us or without.",contactLabel:"Contact",contactTitle:"Pick your slot.",contactIntro:"Free audit. 15 minutes.",contactEmailLabel:"Email",contactLocLabel:"Office",contactLocValue:"Montréal, QC",contactEmbedLabel:"Calendar",contactEmbedStatus:"Book via email for now",footerTag:"Dental marketing. Search-first.",footerNav:"Navigation",footerNavSvc:"Services",footerNavPrice:"Pricing",footerNavProc:"Process",footerNavTeam:"Team",footerContact:"Contact",footerBook:"Book an audit",footerLoc:"Montréal, QC",footerLegal:"© 2026 SSS Marketing. All rights reserved.",detailCloseLabel:"Close"
+      cta:"Book a 15-min audit",skipLink:"Skip to content",eyebrow:"Dental patient acquisition",heroTitle:"One metric matters.",heroTitleAccent:"An occupied chair.",heroSub:"Dental marketing. By operators.",heroCta:"Book a 15-min audit",priceLabel:"Monthly plan",priceCaption:"All included · Six channels",scrollLabel:"Scroll",problemLabel:"The problem",prob1:"Traditional agencies sell visibility. We generate patients.",prob2:"Most agencies don't understand why someone searches \u201Cemergency dentist\u201D at 10 PM. We do.",prob2Sub:"Because we've been on the front lines of real dental practices.",servicesLabel:"Services",servicesTitle:"Six Google channels. One plan.",servicesIntro:"Run in-house. Measured monthly.",svc1Name:"Google Ads — Search",svc1Desc:"Captured at the query. When they search.",svc2Name:"Google Business Profile",svc2Desc:"First on the map. Profile defended.",svc3Name:"Data Analytics",svc3Desc:"Every dollar traced to the chair.",svc4Name:"Google Ads — Display",svc4Desc:"Targeted presence. Measurable.",svc5Name:"Google Ads — Video",svc5Desc:"Geo-targeted YouTube. Short format.",svc6Name:"Google Ads — Shopping",svc6Desc:"Product ads. Direct conversion.",svcDetailCue:"+ See deliverables",servicesFootNote:"Ad spend billed by Google directly. No hidden fees.",ecoLabel:"Reputation infrastructure",ecoTitle:"Every visit becomes a review opportunity.",eco1:"NFC pads at reception. One tap. One Google review.",eco3:"Review frequency is one of the strongest signals in Google's local algorithm.",ecoCaption:"SSS NFC pad · Sage / Ink",pricingLabel:"Pricing",pricingMo:"per month · CAD",pf1Label:"Included",pf1Value:"Six Google channels",pf1Note:"Search, GBP, Data, Display, Video, Shopping.",pf2Label:"Onboarding",pf2Note:"Six channels configured. Dashboard live.",pf3Label:"Google ad spend",pf3Value:"Billed directly",pf3Note:"You keep control.",pf4Label:"Specialization",pf4Value:"Dental only",pf4Note:"No other vertical.",pricingCta:"Book a 15-min audit",processLabel:"Process",processTitle:"Three steps. From audit to live.",step1Num:"Step 01",step1Unit:"min",step1Title:"Audit",step1Desc:"Google presence. Competitors. Local opportunities.",step2Num:"Step 02",step2Anchor:"Plan",step2Title:"Strategy",step2Desc:"Action plan. Budget per channel. Monthly targets.",step3Num:"Step 03",step3Unit:"days",step3Title:"Live",step3Desc:"Campaigns active. Measured from month one.",whyLabel:"Why SSS",whyTitle:"A discipline. One vertical.",whySub:"Four reasons. None spare.",why1:"No camera. No dancing. You stay a dentist.",why1Tag:"Filter",why2:"Specialized dental expertise. Nothing else.",why2Tag:"Vertical",why3:"Continuous campaign optimization. Not once a quarter.",why3Tag:"Discipline",why4:"Real-time dashboard. 24/7 access.",why4Tag:"Transparency",teamLabel:"Team",teamTitle:"Every dollar has an operator.",teamSub:"No budget left to an algorithm. Certified Google specialists run every campaign, in direct collaboration with a dentist in active practice. Every word, every promise — validated before it goes live.",hamzaRole:"Founder",hamzaName:"Hamza A.",hamzaBio:"Ten years in marketing. Four years inside a clinic — phones, emergencies, treatment plans. Most agencies have never seen this from inside.",shayanRole:"Partner · Clinical advisor",shayanName:"Dr. Shayan Araghi",shayanBio:"14 years of clinical practice. Several clinics built from scratch. DMD, Université de Montréal. Investor and strategic partner.",aliRole:"Partner · Operations advisor",aliName:"Ali K.",aliBio:"10+ years inside dental clinics. Daily operations, insurance navigation, clinic accounting, patient experience. Has run high-volume clinics billing millions in revenue. Knows exactly what happens between the click and the chair.",finalEyebrow:"Free audit · 15 minutes",finalTitle:"An empty chair costs more than a marketing plan.",finalSub:"Google presence, competitors, local opportunities. With us or without.",contactLabel:"Contact",contactTitle:"What you receive.",bookingHeaderEyebrow:"Dental Growth Audit · 30 minutes",bookingHeaderTitle:"One session. A complete diagnosis.",bookingHeaderSub:"Google presence, local competitors, growth opportunities. Led by specialists who have worked inside clinics.",bhFactDurationLabel:"Duration",bhFactDurationValue:"30 min",bhFactFormatLabel:"Format",bhFactFormatValue:"Google Meet",bhFactCostLabel:"Cost",bhFactCostValue:"Free",bhFactNote:"Sessions available · Mon–Sat",bookingValueLabel:"Audit contents",bookingValue1:"Analysis of your Google footprint.",bookingValue2:"Local competitor map.",bookingValue3:"Action plan by channel.",bookingValueNote:"With or without us · The results are yours",contactEmailLabel:"Email",contactLocLabel:"Office",contactLocValue:"Montréal, QC",contactTzLabel:"Timezone",contactTzValue:"UTC −05:00",bookingConfirmEyebrow:"Your consultation",bookingConfirmMeta:"Google Meet · 30 minutes",bookingConfirmDesc:"Dental growth audit — prepared for your practice.",bookingConfirmReset:"← Modify slot",bookingConfirmCtaEyebrow:"Booking",bookingConfirmCtaCopy:"Confirm your slot via Google Calendar. Instant email confirmation.",bookingConfirmCta:"Confirm booking",bookingStrip1:"Instant confirmation",bookingStrip2:"No card required",bookingStrip3:"Cancel anytime",bookingTimelineLabel:"After booking",bookingTimeline1Title:"Confirmation",bookingTimeline1Desc:"Google Calendar email within 5 minutes.",bookingTimeline2Title:"Preparation",bookingTimeline2Desc:"Prep email 24 h before the session.",bookingTimeline3Title:"Live audit",bookingTimeline3Desc:"30 minutes. Complete Google diagnosis.",bookingIframeFallback:"Open Google Calendar directly",footerTag:"Dental marketing. Search-first.",footerNav:"Navigation",footerNavSvc:"Services",footerNavPrice:"Pricing",footerNavProc:"Process",footerNavTeam:"Team",footerContact:"Contact",footerBook:"Book an audit",footerLoc:"Montréal, QC",footerLegal:"© 2026 SSS Marketing. All rights reserved.",detailCloseLabel:"Close"
     }
   };
   const svcDetail = {
@@ -1254,25 +1728,331 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   document.querySelectorAll(".fade-in").forEach(function(el){io.observe(el);});
   applyLang();
 
-  // ── Google Calendar auto-loader ───────────────────────────────────────────
-  // To go live: set data-calendar-src="YOUR_GOOGLE_CALENDAR_BOOKING_URL"
-  // on the #calendarEmbed div. This function does the rest automatically.
+  // ── BOOKING GRID ENGINE ──────────────────────────────────────────────────────
   (function(){
+
+    // ── Availability data ────────────────────────────────────────────────────
+    // dayOfWeek: 0=Sun,1=Mon,2=Tue,3=Wed,4=Thu,5=Fri,6=Sat
+    var SLOTS = {
+      0: ['11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30'],
+      1: ['12:00','12:30','13:00','13:30'],
+      2: ['12:00','12:30','13:00','13:30'],
+      3: ['12:00','12:30','13:00','13:30'],
+      4: ['10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30'],
+      5: ['10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30'],
+      6: ['11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30']
+    };
+
+    // Simulated booked slots (slot is the ISO-like key "YYYY-MM-DD|HH:MM")
+    var BOOKED = (function(){
+      var s = {};
+      // Pre-book some slots on Mon-Wed to reinforce scarcity feel
+      // These are illustrative — replace with backend integration later
+      var today = new Date();
+      for(var d=-1;d<=14;d++){
+        var dt = new Date(today);
+        dt.setDate(today.getDate()+d);
+        var dow = dt.getDay();
+        var dk = dt.getFullYear()+'-'+pad(dt.getMonth()+1)+'-'+pad(dt.getDate());
+        if(dow===1||dow===2||dow===3){
+          // Book first and last slot on Mon/Tue/Wed to create mid-availability pattern
+          var sl = SLOTS[dow];
+          if(sl){s[dk+'|'+sl[0]]=true;s[dk+'|'+sl[sl.length-1]]=true;}
+        }
+      }
+      return s;
+    })();
+
+    function pad(n){return n<10?'0'+n:n}
+
+    var currentWeekStart = getWeekStart(new Date());
+    var selectedSlot = null; // {date: Date, time: '12:30', key: 'YYYY-MM-DD|HH:MM'}
+    var isMobile = false;
+    var mobileDayIndex = 0;
+
+    function getWeekStart(d){
+      var dt = new Date(d);
+      var day = dt.getDay(); // 0=Sun
+      var diff = (day===0)?-6:1-day; // week starts Monday
+      dt.setDate(dt.getDate()+diff);
+      dt.setHours(0,0,0,0);
+      return dt;
+    }
+    function addDays(d,n){var dt=new Date(d);dt.setDate(dt.getDate()+n);return dt;}
+    function dateKey(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+    function slotKey(d,t){return dateKey(d)+'|'+t;}
+    function isToday(d){var t=new Date();return dateKey(d)===dateKey(t);}
+    function isPast(d,t){
+      var now=new Date();
+      var parts=t.split(':');
+      var dt=new Date(d);
+      dt.setHours(parseInt(parts[0]),parseInt(parts[1]),0,0);
+      return dt<=now;
+    }
+
+    // ── Language helpers ─────────────────────────────────────────────────────
+    function getLang(){return document.documentElement.lang||'fr'}
+    function fmtWeekLabel(d){
+      var loc=getLang()==='en'?'en-CA':'fr-CA';
+      return new Intl.DateTimeFormat(loc,{month:'long',day:'numeric'}).format(d);
+    }
+    function fmtMonthLabel(d){
+      var loc=getLang()==='en'?'en-CA':'fr-CA';
+      return new Intl.DateTimeFormat(loc,{month:'long',year:'numeric'}).format(d);
+    }
+    function fmtDayName(d){
+      var loc=getLang()==='en'?'en-CA':'fr-CA';
+      return new Intl.DateTimeFormat(loc,{weekday:'short'}).format(d).replace('.','');
+    }
+    function fmtDayNum(d){return d.getDate()+''}
+    function fmtConfirmDatetime(d,t){
+      var loc=getLang()==='en'?'en-CA':'fr-CA';
+      var dayStr=new Intl.DateTimeFormat(loc,{weekday:'long',month:'long',day:'numeric'}).format(d);
+      return dayStr+' · '+t;
+    }
+
+    // ── DOM refs ─────────────────────────────────────────────────────────────
+    var gridEl   = document.getElementById('bookingGrid');
+    var navWeek  = document.getElementById('bookingNavWeek');
+    var navMonth = document.getElementById('bookingNavMonth');
+    var prevBtn  = document.getElementById('bookingPrev');
+    var nextBtn  = document.getElementById('bookingNext');
+    var confirmWrap = document.getElementById('bookingConfirmWrap');
+    var confirmDt   = document.getElementById('bookingConfirmDatetime');
+    var confirmCta  = document.getElementById('bookingConfirmCta');
+    var resetBtn    = document.getElementById('bookingReset');
+    var mobilePicker = document.getElementById('bookingMobilePicker');
+    var mobileRail   = document.getElementById('bookingMobileDayrail');
+    var mobileSlots  = document.getElementById('bookingMobileSlots');
+
+    if(!gridEl) return;
+
+    // ── Detect mobile ────────────────────────────────────────────────────────
+    function checkMobile(){
+      isMobile = window.innerWidth <= 680;
+      if(isMobile){gridEl.style.display='none';mobilePicker.style.display='flex';}
+      else{gridEl.style.display='';mobilePicker.style.display='none';}
+    }
+    checkMobile();
+    window.addEventListener('resize',function(){checkMobile();renderWeek();},{passive:true});
+
+    // ── Render week (desktop grid) ───────────────────────────────────────────
+    function renderWeek(){
+      updateNavLabels();
+      if(isMobile){renderMobilePicker();return;}
+      // Find all slot times across week for consistent row count
+      var allTimes = getWeekAllTimes();
+      gridEl.innerHTML='';
+      gridEl.classList.add('is-transitioning');
+      requestAnimationFrame(function(){
+        gridEl.classList.remove('is-transitioning');
+        for(var col=0;col<7;col++){
+          var day = addDays(currentWeekStart, col);
+          var dow = day.getDay();
+          var dk  = dateKey(day);
+          var colEl = document.createElement('div');
+          colEl.className = 'booking-col';
+          // Head
+          var head = document.createElement('div');
+          head.className = 'booking-col-head'+(isToday(day)?' is-today':'');
+          var dn = document.createElement('span');
+          dn.className = 'booking-col-dayname';
+          dn.textContent = fmtDayName(day).toUpperCase();
+          var dnum = document.createElement('span');
+          dnum.className = 'booking-col-daynum';
+          dnum.textContent = fmtDayNum(day);
+          head.appendChild(dn);head.appendChild(dnum);
+          colEl.appendChild(head);
+          var daySlotsArr = SLOTS[dow]||[];
+          // Render all time rows in consistent order
+          allTimes.forEach(function(t){
+            var hasSlot = daySlotsArr.indexOf(t)!==-1;
+            if(!hasSlot){
+              var empty = document.createElement('div');
+              empty.className='booking-slot-empty';
+              colEl.appendChild(empty);
+              return;
+            }
+            var sk = slotKey(day,t);
+            var booked = !!BOOKED[sk];
+            var past   = isPast(day,t);
+            var isSel  = selectedSlot&&selectedSlot.key===sk;
+            var btn = document.createElement('button');
+            btn.type='button';
+            btn.className='booking-slot'+(booked||past?' is-unavailable':'')+(isSel?' is-selected':'');
+            btn.textContent=t;
+            btn.setAttribute('aria-label',t+(booked||past?' — non disponible':''));
+            if(booked||past){btn.disabled=true;btn.setAttribute('aria-disabled','true');}
+            // Check mark SVG
+            var chk = document.createElementNS('http://www.w3.org/2000/svg','svg');
+            chk.setAttribute('class','booking-slot-check');
+            chk.setAttribute('width','10');chk.setAttribute('height','8');
+            chk.setAttribute('viewBox','0 0 10 8');chk.setAttribute('fill','none');
+            chk.setAttribute('aria-hidden','true');
+            var path = document.createElementNS('http://www.w3.org/2000/svg','path');
+            path.setAttribute('d','M1 4l2.5 2.5L9 1');
+            path.setAttribute('stroke','currentColor');path.setAttribute('stroke-width','1.2');
+            path.setAttribute('stroke-linecap','square');
+            chk.appendChild(path);btn.appendChild(chk);
+            if(!booked&&!past){
+              btn.addEventListener('click',function(sk2,day2,t2){
+                return function(){selectSlot(sk2,day2,t2);}
+              }(sk,day,t));
+            }
+            colEl.appendChild(btn);
+          });
+          gridEl.appendChild(colEl);
+        }
+      });
+    }
+
+    function getWeekAllTimes(){
+      var set={};
+      for(var col=0;col<7;col++){
+        var dow=addDays(currentWeekStart,col).getDay();
+        (SLOTS[dow]||[]).forEach(function(t){set[t]=true;});
+      }
+      return Object.keys(set).sort();
+    }
+
+    // ── Render mobile picker ─────────────────────────────────────────────────
+    function renderMobilePicker(){
+      mobileRail.innerHTML='';
+      for(var col=0;col<7;col++){
+        var day=addDays(currentWeekStart,col);
+        var dow=day.getDay();
+        var btn=document.createElement('button');
+        btn.type='button';
+        btn.className='booking-mobile-day'+(col===mobileDayIndex?' is-selected':'')+(isToday(day)?' is-today':'');
+        btn.setAttribute('role','tab');
+        btn.setAttribute('aria-selected',col===mobileDayIndex?'true':'false');
+        var dn=document.createElement('span');dn.className='booking-mobile-day-name';dn.textContent=fmtDayName(day).toUpperCase();
+        var dnum=document.createElement('span');dnum.className='booking-mobile-day-num';dnum.textContent=fmtDayNum(day);
+        btn.appendChild(dn);btn.appendChild(dnum);
+        (function(c,d){btn.addEventListener('click',function(){mobileDayIndex=c;renderMobileDaySlots(d);renderMobileRailActive();});})(col,day);
+        mobileRail.appendChild(btn);
+      }
+      renderMobileDaySlots(addDays(currentWeekStart,mobileDayIndex));
+    }
+    function renderMobileRailActive(){
+      Array.from(mobileRail.children).forEach(function(b,i){
+        b.classList.toggle('is-selected',i===mobileDayIndex);
+        b.setAttribute('aria-selected',i===mobileDayIndex?'true':'false');
+      });
+    }
+    function renderMobileDaySlots(day){
+      var dow=day.getDay();
+      var daySlotsArr=SLOTS[dow]||[];
+      mobileSlots.innerHTML='';
+      if(!daySlotsArr.length){
+        var emp=document.createElement('div');emp.className='booking-mobile-empty';
+        emp.textContent=getLang()==='en'?'No slots available':'Aucun créneau disponible';
+        mobileSlots.appendChild(emp);return;
+      }
+      daySlotsArr.forEach(function(t){
+        var sk=slotKey(day,t);
+        var booked=!!BOOKED[sk];var past=isPast(day,t);
+        var isSel=selectedSlot&&selectedSlot.key===sk;
+        var btn=document.createElement('button');
+        btn.type='button';
+        btn.className='booking-mobile-slot'+(booked||past?' is-unavailable':'')+(isSel?' is-selected':'');
+        btn.setAttribute('role','listitem');
+        btn.setAttribute('aria-label',t+(booked||past?' — non disponible':''));
+        var timeSpan=document.createElement('span');timeSpan.textContent=t;
+        var chkSpan=document.createElement('span');chkSpan.className='booking-mobile-slot-check';
+        var chkSvg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+        chkSvg.setAttribute('width','10');chkSvg.setAttribute('height','8');chkSvg.setAttribute('viewBox','0 0 10 8');chkSvg.setAttribute('fill','none');chkSvg.setAttribute('aria-hidden','true');
+        var cp=document.createElementNS('http://www.w3.org/2000/svg','path');
+        cp.setAttribute('d','M1 4l2.5 2.5L9 1');cp.setAttribute('stroke','currentColor');cp.setAttribute('stroke-width','1.2');cp.setAttribute('stroke-linecap','square');
+        chkSvg.appendChild(cp);chkSpan.appendChild(chkSvg);
+        btn.appendChild(timeSpan);btn.appendChild(chkSpan);
+        if(!booked&&!past){btn.addEventListener('click',function(sk2,d2,t2){return function(){selectSlot(sk2,d2,t2);};}(sk,day,t));}
+        else{btn.disabled=true;}
+        mobileSlots.appendChild(btn);
+      });
+    }
+
+    // ── Slot selection ───────────────────────────────────────────────────────
+    function selectSlot(sk,day,t){
+      selectedSlot={key:sk,date:day,time:t};
+      var dtStr=fmtConfirmDatetime(day,t);
+      confirmDt.textContent=dtStr;
+      // Build calendar link for the selected week
+      var gcUrl='https://calendar.google.com/calendar/r/week/'+day.getFullYear()+'/'+(day.getMonth()+1)+'/'+day.getDate()+'?cid=c_c3163b5e97939baf226e43395f5f8433bbe3f6fdcf2def9a236dbc825a19d676%40group.calendar.google.com';
+      confirmCta.href=gcUrl;
+      confirmWrap.classList.add('is-open');
+      confirmWrap.setAttribute('aria-hidden','false');
+      // Scroll confirm panel into view smoothly
+      setTimeout(function(){confirmWrap.scrollIntoView({behavior:'smooth',block:'nearest'});},80);
+      // Re-render to update selected state
+      if(isMobile){renderMobileDaySlots(day);}else{renderWeek();}
+    }
+
+    // ── Reset ────────────────────────────────────────────────────────────────
+    if(resetBtn){
+      resetBtn.addEventListener('click',function(){
+        selectedSlot=null;
+        confirmWrap.classList.remove('is-open');
+        confirmWrap.setAttribute('aria-hidden','true');
+        if(isMobile){renderMobilePicker();}else{renderWeek();}
+      });
+    }
+
+    // ── Navigation ───────────────────────────────────────────────────────────
+    function updateNavLabels(){
+      var weekEnd=addDays(currentWeekStart,6);
+      var loc=getLang()==='en'?'en-CA':'fr-CA';
+      var fromStr=new Intl.DateTimeFormat(loc,{month:'long',day:'numeric'}).format(currentWeekStart);
+      if(navWeek) navWeek.textContent=(getLang()==='en'?'Week of ':'Semaine du ')+fromStr;
+      if(navMonth) navMonth.textContent=fmtMonthLabel(currentWeekStart);
+    }
+    if(prevBtn){prevBtn.addEventListener('click',function(){
+      gridEl.classList.add('is-transitioning');
+      setTimeout(function(){
+        currentWeekStart=addDays(currentWeekStart,-7);
+        mobileDayIndex=0;
+        renderWeek();
+      },180);
+    });}
+    if(nextBtn){nextBtn.addEventListener('click',function(){
+      gridEl.classList.add('is-transitioning');
+      setTimeout(function(){
+        currentWeekStart=addDays(currentWeekStart,7);
+        mobileDayIndex=0;
+        renderWeek();
+      },180);
+    });}
+
+    // ── Language change re-render ────────────────────────────────────────────
+    document.querySelectorAll('.lang-btn').forEach(function(b){
+      b.addEventListener('click',function(){setTimeout(renderWeek,50);});
+    });
+
+    // ── Initial render ───────────────────────────────────────────────────────
+    renderWeek();
+
+    // ── Accessible fallback: silent iframe background load ───────────────────
     var embed = document.getElementById('calendarEmbed');
-    if(!embed) return;
-    var src = embed.getAttribute('data-calendar-src');
-    if(!src) return;
-    var ph = embed.querySelector('.contact-embed-placeholder');
-    if(ph) ph.style.display = 'none';
-    var iframe = document.createElement('iframe');
-    iframe.src = src;
-    iframe.title = (document.documentElement.lang === 'en')
-      ? 'Booking calendar — SSS'
-      : 'Calendrier de réservation — SSS';
-    iframe.setAttribute('loading', 'lazy');
-    iframe.setAttribute('allowfullscreen', 'false');
-    iframe.onload = function(){ embed.setAttribute('aria-busy','false'); };
-    embed.appendChild(iframe);
+    if(embed){
+      var src = embed.getAttribute('data-calendar-src');
+      if(src){
+        var frame = embed.querySelector('.contact-embed-frame');
+        if(frame){
+          if(src.indexOf('hl=')===-1){
+            src+=(src.indexOf('?')===-1?'?':'&')+'hl='+(document.documentElement.lang==='en'?'en':'fr');
+          }
+          var iframe=document.createElement('iframe');
+          iframe.src=src;
+          iframe.title='SSS Calendar';
+          iframe.setAttribute('loading','lazy');
+          iframe.setAttribute('tabindex','-1');
+          iframe.style.cssText='width:100%;height:400px;border:0;opacity:0;position:absolute;pointer-events:none;';
+          iframe.setAttribute('aria-hidden','true');
+          frame.appendChild(iframe);
+        }
+      }
+    }
+
   })();
 
 })();
