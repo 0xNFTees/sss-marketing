@@ -57,17 +57,17 @@ const CONFIG = {
   MAX_ADVANCE_DAYS:     45,
 
   // Calendar event template.
-  EVENT_SUMMARY: 'SSS Audit · {name}',
+  EVENT_SUMMARY: 'SSS Audit \u00B7 {name}',
   EVENT_LOCATION: 'Google Meet',
   REMINDERS_MINUTES: [10, 60 * 24],               // 10 min + 24 h before
 
   // Confirmation email.
-  CONFIRMATION_SUBJECT_FR: 'Audit SSS · Confirmation',
-  CONFIRMATION_SUBJECT_EN: 'SSS Audit · Confirmation',
+  CONFIRMATION_SUBJECT_FR: 'Audit SSS \u00B7 Confirmation',
+  CONFIRMATION_SUBJECT_EN: 'SSS Audit \u00B7 Confirmation',
   REPLY_TO: 'info@sss.marketing',
   ORG_NAME: 'SSS Marketing',
-  ORG_SIGNATURE_FR: 'Hamza · SSS Marketing',
-  ORG_SIGNATURE_EN: 'Hamza · SSS Marketing',
+  ORG_SIGNATURE_FR: 'Hamza \u00B7 SSS Marketing',
+  ORG_SIGNATURE_EN: 'Hamza \u00B7 SSS Marketing',
 
   // Set true to also email yourself an internal copy of every booking.
   NOTIFY_INTERNAL: true,
@@ -260,7 +260,7 @@ function book_(body) {
     try {
       MailApp.sendEmail({
         to: CONFIG.INTERNAL_NOTIFY_TO,
-        subject: 'New audit booking · ' + name + ' · ' + formatWhen_(start, 'en'),
+        subject: 'New audit booking \u00B7 ' + name + ' \u00B7 ' + formatWhen_(start, 'en'),
         htmlBody: buildInternalHtml_({ name, email, phone, clinic, notes, start, end }),
       });
       internalEmailOk = true;
@@ -272,7 +272,7 @@ function book_(body) {
   return {
     ok: true,
     eventId: event.getId(),
-    summary: formatWhen_(start, lang) + ' · ' + duration + ' min',
+    summary: formatWhen_(start, lang) + ' \u00B7 ' + duration + ' min',
     googleLink: googleLink,
     emailLead: leadEmailOk,
     emailInternal: internalEmailOk,
@@ -327,7 +327,7 @@ function createEventWithMeet_(cal, summary, start, end, description, guestEmail)
 
 function buildDescription_(c) {
   const lines = [
-    c.lang === 'en' ? 'Free 15-minute SSS audit.' : 'Audit SSS gratuit · 15 minutes.',
+    c.lang === 'en' ? 'Free 15-minute SSS audit.' : 'Audit SSS gratuit \u00B7 15 minutes.',
     '',
     'Name:  ' + c.name,
     'Email: ' + c.email,
@@ -351,13 +351,13 @@ function buildConfirmationHtml_(c) {
     note:  'Need to reschedule? Just reply to this email.',
     sig:   CONFIG.ORG_SIGNATURE_EN,
   } : {
-    title: 'Audit confirmé',
+    title: 'Audit confirm\u00E9',
     hi:    'Bonjour ' + c.name + ',',
-    body:  'Votre audit gratuit de 15 minutes est confirmé. Hamza vous rejoindra à l\'heure prévue.',
+    body:  'Votre audit gratuit de 15 minutes est confirm\u00E9. Hamza vous rejoindra \u00E0 l\'heure pr\u00E9vue.',
     when:  'Quand',
     tz:    'Fuseau',
-    add:   'Ajouter à Google Calendar',
-    note:  'Besoin de reprogrammer ? Répondez simplement à cet email.',
+    add:   'Ajouter \u00E0 Google Calendar',
+    note:  'Besoin de reprogrammer ? R\u00E9pondez simplement \u00E0 cet email.',
     sig:   CONFIG.ORG_SIGNATURE_FR,
   };
   return ''
@@ -378,7 +378,7 @@ function buildConfirmationHtml_(c) {
         ? '<p><a href="'+esc_(c.googleLink)+'" style="display:inline-block;padding:12px 22px;background:#1c1812;color:#fefae0;text-decoration:none;font-size:12px;letter-spacing:.18em;text-transform:uppercase">'+esc_(t.add)+'</a></p>'
         : '')
     +   '<p style="color:#666;font-size:13px">'+esc_(t.note)+'</p>'
-    +   '<p style="margin-top:28px">—<br>'+esc_(t.sig)+'</p>'
+    +   '<p style="margin-top:28px">\u2014<br>'+esc_(t.sig)+'</p>'
     + '</div>';
 }
 
@@ -391,8 +391,8 @@ function buildInternalHtml_(c) {
     +   '<table style="border-collapse:collapse">'
     +     row_('Name',   c.name)
     +     row_('Email',  c.email)
-    +     row_('Phone',  c.phone || '—')
-    +     row_('Clinic', c.clinic || '—')
+    +     row_('Phone',  c.phone || '\u2014')
+    +     row_('Clinic', c.clinic || '\u2014')
     +   '</table>'
     +   (c.notes ? '<p style="margin-top:14px"><em>Notes:</em><br>'+esc_(c.notes).replace(/\n/g,'<br>')+'</p>' : '')
     + '</div>';
@@ -433,14 +433,14 @@ function formatWhen_(d, lang) {
   const tz = CONFIG.TIMEZONE;
   // FR: "jeu. 10 déc. · 14:00"   EN: "Thu Dec 10 · 2:00 PM"
   return lang === 'en'
-    ? Utilities.formatDate(d, tz, "EEE MMM d · HH:mm")
-    : Utilities.formatDate(d, tz, "EEE d MMM · HH:mm");
+    ? Utilities.formatDate(d, tz, "EEE MMM d \u00B7 HH:mm")
+    : Utilities.formatDate(d, tz, "EEE d MMM \u00B7 HH:mm");
 }
 function formatWhenLong_(d, lang) {
   const tz = CONFIG.TIMEZONE;
   return lang === 'en'
-    ? Utilities.formatDate(d, tz, "EEEE, MMMM d, yyyy · HH:mm")
-    : Utilities.formatDate(d, tz, "EEEE d MMMM yyyy · HH:mm");
+    ? Utilities.formatDate(d, tz, "EEEE, MMMM d, yyyy \u00B7 HH:mm")
+    : Utilities.formatDate(d, tz, "EEEE d MMMM yyyy \u00B7 HH:mm");
 }
 
 function esc_(s) {
