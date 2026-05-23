@@ -537,11 +537,12 @@ nav.scrolled .nav-logo{height:26px}
 /* ── Week navigator ── */
 .booking-nav{
   display:flex;align-items:baseline;justify-content:space-between;
-  padding-bottom:18px;border-bottom:1px solid var(--tan);margin-bottom:0;
+  padding-bottom:14px;border-bottom:1px solid var(--tan);margin-bottom:0;
 }
 .booking-nav-week{
-  font-family:var(--display);font-weight:500;font-size:22px;
+  font-family:var(--display);font-weight:500;font-size:20px;
   letter-spacing:-0.015em;color:var(--ink);line-height:1;
+  font-feature-settings:"tnum" 1,"lnum" 1;
 }
 .booking-nav-controls{display:flex;align-items:center;gap:20px}
 .booking-nav-month{
@@ -559,49 +560,50 @@ nav.scrolled .nav-logo{height:26px}
 /* ── 7-column availability grid ── */
 .booking-grid{
   display:grid;grid-template-columns:repeat(7,1fr);
-  border-left:1px solid var(--rule);
-  border-top:1px solid var(--rule);
+  border-left:1px solid var(--rule-soft);
+  border-top:1px solid var(--rule-soft);
   margin-bottom:0;
   opacity:1;transition:opacity .35s var(--ease);
 }
 .booking-grid.is-transitioning{opacity:0}
 .booking-col{
-  border-right:1px solid var(--rule);
+  border-right:1px solid var(--rule-soft);
   display:flex;flex-direction:column;
 }
 .booking-col-head{
-  padding:14px 10px 12px;
+  padding:8px 8px;
   border-bottom:1px solid var(--rule-soft);
-  display:flex;flex-direction:column;align-items:center;gap:6px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
   background:var(--paper);
   position:relative;
 }
 .booking-col-head.is-today::after{
   content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
-  width:20px;height:1px;background:var(--tan);
+  width:14px;height:1px;background:var(--tan);
 }
 .booking-col-dayname{
   font-family:var(--body);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;
   color:var(--ink);opacity:0.45;
 }
 .booking-col-daynum{
-  font-family:var(--display);font-weight:500;font-size:22px;line-height:1;
+  font-family:var(--display);font-weight:500;font-size:17px;line-height:1;
   letter-spacing:-0.02em;color:var(--ink);
+  font-feature-settings:"tnum" 1,"lnum" 1;
 }
 .booking-col-head.is-today .booking-col-daynum{color:var(--tan)}
 
-/* ── Slot buttons · 4 states: available / selected / reserved / closed ── */
+/* ── Slot buttons · 3 states: available / selected / busy ── */
 /* Fixed row height enforces visual rhythm — same skeleton every day, every week. */
 .booking-slot{
   display:flex;align-items:center;justify-content:center;
-  width:100%;min-height:38px;padding:0 6px;
+  width:100%;min-height:28px;padding:0 4px;
   border:none;border-bottom:1px solid var(--rule-soft);
   background:var(--paper);
-  font-family:var(--display);font-weight:500;font-size:14px;line-height:1;
+  font-family:var(--display);font-weight:500;font-size:12px;line-height:1;
   letter-spacing:-0.005em;color:var(--ink);
   font-feature-settings:"tnum" 1,"lnum" 1;
   cursor:pointer;text-align:center;position:relative;
-  transition:background-color .25s var(--ease),color .25s var(--ease);
+  transition:background-color .22s var(--ease),color .22s var(--ease);
 }
 .booking-slot:last-child{border-bottom:none}
 
@@ -609,10 +611,10 @@ nav.scrolled .nav-logo{height:26px}
 .booking-slot::before{
   content:'';position:absolute;left:0;top:0;bottom:0;width:0;
   background:var(--tan);
-  transition:width .22s var(--ease);
+  transition:width .2s var(--ease);
 }
-.booking-slot:hover:not(.is-unavailable):not(.is-selected):not(.booking-slot--closed)::before{width:2px}
-.booking-slot:hover:not(.is-unavailable):not(.is-selected):not(.booking-slot--closed){background:rgba(212,163,115,0.06)}
+.booking-slot:hover:not(.is-busy):not(.is-selected)::before{width:2px}
+.booking-slot:hover:not(.is-busy):not(.is-selected){background:rgba(212,163,115,0.06)}
 .booking-slot:focus-visible{outline:1px solid var(--tan);outline-offset:-1px;z-index:1}
 
 /* State 2 · Selected */
@@ -622,39 +624,24 @@ nav.scrolled .nav-logo{height:26px}
 .booking-slot.is-selected::before{display:none}
 .booking-slot.is-selected .booking-slot-check{display:block}
 .booking-slot-check{
-  display:none;position:absolute;right:7px;top:50%;transform:translateY(-50%);
+  display:none;position:absolute;right:6px;top:50%;transform:translateY(-50%);
 }
 
-/* State 3 · Reserved (booked or past) — restrained, no strike-through */
-/* Time stays legible. A single hairline marker right of center reads as "held". */
-.booking-slot.is-unavailable{
+/* State 3 · Busy (booked, past, or outside operating window) */
+/* Time stays visible at low opacity. A tan hairline crosses the row center —
+   architectural notation, not text-decoration. Reads as "held," not "deleted." */
+.booking-slot.is-busy{
   cursor:default;background:var(--paper);
-  color:var(--ink);opacity:0.32;
+  color:var(--ink);opacity:0.45;
   font-variant-numeric:tabular-nums;
 }
-.booking-slot.is-unavailable::before{display:none}
-.booking-slot.is-unavailable::after{
-  content:'';position:absolute;right:10px;top:50%;transform:translateY(-50%);
-  width:4px;height:1px;background:var(--ink);opacity:0.55;
+.booking-slot.is-busy::before{display:none}
+.booking-slot.is-busy::after{
+  content:'';position:absolute;left:8px;right:8px;top:50%;
+  height:1px;background:var(--tan);opacity:0.55;
+  transform:translateY(-0.5px);
 }
-.booking-slot.is-unavailable:hover{background:var(--paper)}
-
-/* State 4 · Closed (outside this day's operating window) */
-/* Structural placeholder. No time. Surface-a fill + tan micro-dot center. */
-.booking-slot--closed{
-  cursor:default;
-  background:var(--surface-a);
-  border-bottom:1px solid var(--rule-soft);
-  pointer-events:none;
-  padding:0;
-}
-.booking-slot--closed::before,
-.booking-slot--closed::after{display:none}
-.booking-slot--closed:hover{background:var(--surface-a)}
-.booking-slot-closed-dot{
-  display:block;width:3px;height:3px;border-radius:50%;
-  background:var(--tan);opacity:0.32;
-}
+.booking-slot.is-busy:hover{background:var(--paper)}
 
 /* ── Zone C · Confirmation panel (hidden until slot selected) ── */
 .booking-confirm-wrap{
@@ -832,16 +819,16 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 .booking-mobile-dayrail-wrap::-webkit-scrollbar{display:none}
 .booking-mobile-dayrail{
   display:flex;gap:0;
-  border-top:1px solid var(--rule);border-left:1px solid var(--rule);
+  border-top:1px solid var(--rule-soft);border-left:1px solid var(--rule-soft);
   min-width:min-content;
 }
 .booking-mobile-day{
-  flex-shrink:0;width:72px;
-  border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  flex-shrink:0;width:64px;
+  border-right:1px solid var(--rule-soft);border-bottom:1px solid var(--rule-soft);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:6px;padding:14px 6px;cursor:pointer;
+  gap:4px;padding:10px 6px;cursor:pointer;
   background:var(--paper);
-  transition:background-color .28s var(--ease),color .28s var(--ease);
+  transition:background-color .25s var(--ease),color .25s var(--ease);
 }
 .booking-mobile-day.is-selected{background:var(--tan)}
 .booking-mobile-day-name{
@@ -850,68 +837,58 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 }
 .booking-mobile-day.is-selected .booking-mobile-day-name{color:var(--paper);opacity:0.8}
 .booking-mobile-day-num{
-  font-family:var(--display);font-weight:500;font-size:26px;line-height:1;
+  font-family:var(--display);font-weight:500;font-size:22px;line-height:1;
   letter-spacing:-0.02em;color:var(--ink);
+  font-feature-settings:"tnum" 1,"lnum" 1;
 }
 .booking-mobile-day.is-today .booking-mobile-day-num{color:var(--tan)}
 .booking-mobile-day.is-selected .booking-mobile-day-num{color:var(--paper)}
 .booking-mobile-day.is-selected.is-today .booking-mobile-day-num{color:var(--paper)}
 .booking-mobile-slots{
-  border:1px solid var(--rule);border-top:none;
+  border:1px solid var(--rule-soft);border-top:none;
   display:flex;flex-direction:column;
 }
-/* Mobile slot · same 4 states as desktop; taller rows for touch */
+/* Mobile slot · same 3 states as desktop; taller rows for touch */
 .booking-mobile-slot{
   display:flex;align-items:center;justify-content:space-between;
-  min-height:56px;padding:0 20px;
+  min-height:44px;padding:0 18px;
   border:none;border-bottom:1px solid var(--rule-soft);
   background:var(--paper);cursor:pointer;
-  font-family:var(--display);font-weight:500;font-size:18px;line-height:1;
+  font-family:var(--display);font-weight:500;font-size:16px;line-height:1;
   letter-spacing:-0.005em;color:var(--ink);
   font-feature-settings:"tnum" 1,"lnum" 1;
   position:relative;text-align:left;
-  transition:background-color .25s var(--ease),color .25s var(--ease);
+  transition:background-color .22s var(--ease),color .22s var(--ease);
 }
 .booking-mobile-slot:last-child{border-bottom:none}
-.booking-mobile-slot-time{display:inline-block}
+.booking-mobile-slot-time{display:inline-block;position:relative;z-index:1}
 
 /* State 1 · Available */
 .booking-mobile-slot::before{
   content:'';position:absolute;left:0;top:0;bottom:0;width:0;
-  background:var(--tan);transition:width .22s var(--ease);
+  background:var(--tan);transition:width .2s var(--ease);
 }
-.booking-mobile-slot:hover:not(.is-unavailable):not(.is-selected):not(.booking-mobile-slot--closed)::before{width:3px}
-.booking-mobile-slot:hover:not(.is-unavailable):not(.is-selected):not(.booking-mobile-slot--closed){background:rgba(212,163,115,0.06)}
+.booking-mobile-slot:hover:not(.is-busy):not(.is-selected)::before{width:3px}
+.booking-mobile-slot:hover:not(.is-busy):not(.is-selected){background:rgba(212,163,115,0.06)}
 
 /* State 2 · Selected */
 .booking-mobile-slot.is-selected{background:var(--tan);color:var(--paper)}
 .booking-mobile-slot.is-selected::before{display:none}
-.booking-mobile-slot-check{display:none}
+.booking-mobile-slot-check{display:none;position:relative;z-index:1}
 .booking-mobile-slot.is-selected .booking-mobile-slot-check{display:block}
 
-/* State 3 · Reserved (booked or past) */
-.booking-mobile-slot.is-unavailable{opacity:0.32;cursor:default}
-.booking-mobile-slot.is-unavailable::before{display:none}
-.booking-mobile-slot.is-unavailable::after{
-  content:'';position:absolute;right:24px;top:50%;transform:translateY(-50%);
-  width:5px;height:1px;background:var(--ink);opacity:0.6;
+/* State 3 · Busy (booked, past, or outside operating window) */
+.booking-mobile-slot.is-busy{
+  cursor:default;background:var(--paper);
+  color:var(--ink);opacity:0.45;
 }
-.booking-mobile-slot.is-unavailable:hover{background:var(--paper)}
-
-/* State 4 · Closed (outside operating window) */
-.booking-mobile-slot--closed{
-  cursor:default;background:var(--surface-a);
-  color:var(--ink);
-  pointer-events:none;
+.booking-mobile-slot.is-busy::before{display:none}
+.booking-mobile-slot.is-busy::after{
+  content:'';position:absolute;left:18px;right:18px;top:50%;
+  height:1px;background:var(--tan);opacity:0.55;
+  transform:translateY(-0.5px);
 }
-.booking-mobile-slot--closed .booking-mobile-slot-time{opacity:0.32}
-.booking-mobile-slot--closed::before,
-.booking-mobile-slot--closed::after{display:none}
-.booking-mobile-slot--closed:hover{background:var(--surface-a)}
-.booking-mobile-slot-closed-dot{
-  display:block;width:3px;height:3px;border-radius:50%;
-  background:var(--tan);opacity:0.32;
-}
+.booking-mobile-slot.is-busy:hover{background:var(--paper)}
 
 .booking-mobile-empty{
   padding:32px 20px;
@@ -1444,18 +1421,17 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     };
 
     // ── Constant business-hours skeleton ─────────────────────────────────────
-    // Every day shows the same 19 rows. Operating windows (10:00–16:30) are
-    // active or reserved. Outside that window, slots render as "closed" —
-    // visible, structural, but typographically silent.
+    // 14 rows from 10:00 to 16:30. The envelope contains every operating
+    // window with modest framing. Closed slots inside the envelope (e.g.
+    // 10:00 on Mon when ops start at 12:00) render as structural placeholders.
     var BUSINESS_HOURS_TIMES = (function(){
       var arr=[], h, m;
-      for(h=8; h<=17; h++){
+      for(h=10; h<17; h++){
         for(m=0; m<60; m+=30){
-          if(h===17 && m>0) break; // stop at 17:00
           arr.push((h<10?'0'+h:h)+':'+(m===0?'00':m));
         }
       }
-      return arr; // ['08:00','08:30',...,'17:00'] — 19 rows
+      return arr; // ['10:00','10:30',...,'16:30'] — 14 rows
     })();
 
     // Simulated booked slots (slot is the ISO-like key "YYYY-MM-DD|HH:MM")
@@ -1580,34 +1556,24 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
           head.appendChild(dn);head.appendChild(dnum);
           colEl.appendChild(head);
           var daySlotsArr = SLOTS[dow]||[];
-          // Render the full business-hours skeleton — every day, same row count.
-          // Closed slots (outside this day's operating window) render as
-          // structural placeholders, not invisible holes.
+          // Every row renders the time. Three states only:
+          //   available — active button, selectable
+          //   selected  — currently chosen
+          //   busy      — out-of-window OR booked OR past, all visually unified
           BUSINESS_HOURS_TIMES.forEach(function(t){
             var hasSlot = daySlotsArr.indexOf(t)!==-1;
-            if(!hasSlot){
-              // Closed: outside this day's operating window.
-              var closed = document.createElement('div');
-              closed.className='booking-slot booking-slot--closed';
-              closed.setAttribute('aria-hidden','true');
-              var dot = document.createElement('span');
-              dot.className='booking-slot-closed-dot';
-              dot.setAttribute('aria-hidden','true');
-              closed.appendChild(dot);
-              colEl.appendChild(closed);
-              return;
-            }
             var sk = slotKey(day,t);
             var booked = !!BOOKED[sk];
             var past   = isPast(day,t);
-            var isSel  = selectedSlot&&selectedSlot.key===sk;
+            var isBusy = !hasSlot || booked || past;
+            var isSel  = !isBusy && selectedSlot && selectedSlot.key===sk;
             var btn = document.createElement('button');
             btn.type='button';
-            btn.className='booking-slot'+(booked||past?' is-unavailable':'')+(isSel?' is-selected':'');
+            btn.className='booking-slot'+(isBusy?' is-busy':'')+(isSel?' is-selected':'');
             btn.textContent=t;
-            var unavailLabel=getLang()==='en'?' — unavailable':' — non disponible';
-            btn.setAttribute('aria-label',t+(booked||past?unavailLabel:''));
-            if(booked||past){btn.disabled=true;btn.setAttribute('aria-disabled','true');}
+            var busyLabel=getLang()==='en'?' — unavailable':' — non disponible';
+            btn.setAttribute('aria-label',t+(isBusy?busyLabel:''));
+            if(isBusy){btn.disabled=true;btn.setAttribute('aria-disabled','true');}
             // Check mark SVG
             var chk = document.createElementNS('http://www.w3.org/2000/svg','svg');
             chk.setAttribute('class','booking-slot-check');
@@ -1619,7 +1585,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
             path.setAttribute('stroke','currentColor');path.setAttribute('stroke-width','1.2');
             path.setAttribute('stroke-linecap','square');
             chk.appendChild(path);btn.appendChild(chk);
-            if(!booked&&!past){
+            if(!isBusy){
               btn.addEventListener('click',function(sk2,day2,t2){
                 return function(){selectSlot(sk2,day2,t2);}
               }(sk,day,t));
@@ -1660,38 +1626,19 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       var dow=day.getDay();
       var daySlotsArr=SLOTS[dow]||[];
       mobileSlots.innerHTML='';
-      if(!daySlotsArr.length){
-        // Day fully closed — single message rather than 19 closed placeholders
-        var emp=document.createElement('div');emp.className='booking-mobile-empty';
-        emp.textContent=getLang()==='en'?'No slots this day':'Aucun créneau ce jour-là';
-        mobileSlots.appendChild(emp);return;
-      }
-      // Render the full business-hours skeleton — same as desktop.
+      // Even if day has zero slots, render the full skeleton — every row busy.
       BUSINESS_HOURS_TIMES.forEach(function(t){
         var hasSlot = daySlotsArr.indexOf(t)!==-1;
-        if(!hasSlot){
-          var closed=document.createElement('div');
-          closed.className='booking-mobile-slot booking-mobile-slot--closed';
-          closed.setAttribute('aria-hidden','true');
-          var timeSpan=document.createElement('span');
-          timeSpan.className='booking-mobile-slot-time';
-          timeSpan.textContent=t;
-          var dot=document.createElement('span');
-          dot.className='booking-mobile-slot-closed-dot';
-          dot.setAttribute('aria-hidden','true');
-          closed.appendChild(timeSpan);closed.appendChild(dot);
-          mobileSlots.appendChild(closed);
-          return;
-        }
         var sk=slotKey(day,t);
         var booked=!!BOOKED[sk];var past=isPast(day,t);
-        var isSel=selectedSlot&&selectedSlot.key===sk;
+        var isBusy=!hasSlot || booked || past;
+        var isSel=!isBusy && selectedSlot && selectedSlot.key===sk;
         var btn=document.createElement('button');
         btn.type='button';
-        btn.className='booking-mobile-slot'+(booked||past?' is-unavailable':'')+(isSel?' is-selected':'');
+        btn.className='booking-mobile-slot'+(isBusy?' is-busy':'')+(isSel?' is-selected':'');
         btn.setAttribute('role','listitem');
-        var unavailLabel=getLang()==='en'?' — unavailable':' — non disponible';
-        btn.setAttribute('aria-label',t+(booked||past?unavailLabel:''));
+        var busyLabel=getLang()==='en'?' — unavailable':' — non disponible';
+        btn.setAttribute('aria-label',t+(isBusy?busyLabel:''));
         var timeSpan=document.createElement('span');
         timeSpan.className='booking-mobile-slot-time';
         timeSpan.textContent=t;
@@ -1702,7 +1649,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
         cp.setAttribute('d','M1 4l2.5 2.5L9 1');cp.setAttribute('stroke','currentColor');cp.setAttribute('stroke-width','1.2');cp.setAttribute('stroke-linecap','square');
         chkSvg.appendChild(cp);chkSpan.appendChild(chkSvg);
         btn.appendChild(timeSpan);btn.appendChild(chkSpan);
-        if(!booked&&!past){btn.addEventListener('click',function(sk2,d2,t2){return function(){selectSlot(sk2,d2,t2);};}(sk,day,t));}
+        if(!isBusy){btn.addEventListener('click',function(sk2,d2,t2){return function(){selectSlot(sk2,d2,t2);};}(sk,day,t));}
         else{btn.disabled=true;}
         mobileSlots.appendChild(btn);
       });
