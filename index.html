@@ -648,7 +648,10 @@ nav.scrolled .nav-logo{height:26px}
   max-height:0;overflow:hidden;opacity:0;
   transition:max-height .9s var(--ease),opacity .6s var(--ease) .18s;
 }
-.booking-confirm-wrap.is-open{max-height:800px;opacity:1}
+/* Generous max-height — actual height is bounded by content. Originally 800px,
+   which clipped the form's submit button on mobile (form stacks single-column
+   under 680px and exceeds 800px total height). */
+.booking-confirm-wrap.is-open{max-height:2400px;opacity:1}
 .booking-confirm{
   display:grid;grid-template-columns:5fr 7fr;gap:48px;
   align-items:center;
@@ -1879,8 +1882,13 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       confirmCta.href=gcUrl;
       confirmWrap.classList.add('is-open');
       confirmWrap.setAttribute('aria-hidden','false');
-      // Scroll confirm panel into view smoothly
-      setTimeout(function(){confirmWrap.scrollIntoView({behavior:'smooth',block:'nearest'});},80);
+      // Scroll confirm panel into view smoothly. On mobile (<=680px) use
+      // block:'start' so the form fields aren't pushed below the fold or
+      // behind the soft keyboard — desktop keeps the gentler 'nearest'.
+      setTimeout(function(){
+        var blockMode = (window.innerWidth <= 680) ? 'start' : 'nearest';
+        confirmWrap.scrollIntoView({behavior:'smooth', block: blockMode});
+      }, 80);
       // Re-render to update selected state
       if(isMobile){renderMobileDaySlots(day);}else{renderWeek();}
     }
@@ -2001,7 +2009,8 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       if(successTitle) successTitle.textContent = payload.summary || '';
       if(successCta && payload.googleLink) successCta.setAttribute('href', payload.googleLink);
       setTimeout(function(){
-        successEl.scrollIntoView({behavior:'smooth', block:'nearest'});
+        var blockMode = (window.innerWidth <= 680) ? 'start' : 'nearest';
+        successEl.scrollIntoView({behavior:'smooth', block: blockMode});
       }, 60);
     }
 
