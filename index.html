@@ -701,6 +701,51 @@ nav.scrolled .nav-logo{height:26px}
 }
 .booking-confirm-strip-sep{color:var(--tan);opacity:0.7}
 
+/* Booking form fields (rendered when API URL is configured) */
+.booking-form{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+.booking-form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:680px){.booking-form-row{grid-template-columns:1fr}}
+.booking-field{display:flex;flex-direction:column;gap:5px}
+.booking-field label{
+  font-family:var(--body);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--ink);opacity:0.7;
+}
+.booking-field input,.booking-field textarea{
+  font-family:var(--body);font-size:14px;line-height:1.5;color:var(--ink);
+  background:var(--paper);border:1px solid rgba(28,24,18,0.18);
+  padding:10px 12px;border-radius:0;outline:none;
+  transition:border-color .2s var(--ease),background .2s var(--ease);
+}
+.booking-field input:focus,.booking-field textarea:focus{
+  border-color:var(--tan);background:#fff;
+}
+.booking-field textarea{resize:vertical;min-height:64px}
+.booking-field.is-error input,.booking-field.is-error textarea{border-color:#a8261c}
+.booking-form-status{
+  font-family:var(--body);font-size:12px;line-height:1.5;color:#a8261c;
+  min-height:18px;margin-bottom:10px;
+}
+.booking-form-status.is-info{color:var(--ink);opacity:0.7}
+.cta-primary[disabled],.cta-primary.is-loading{opacity:0.6;cursor:not-allowed;pointer-events:none}
+.booking-success{
+  display:none;background:var(--sage);padding:40px 36px 36px;
+  grid-column:1 / -1;
+}
+.booking-success.is-visible{display:block}
+.booking-confirm-summary.is-hidden,.booking-confirm-cta-panel.is-hidden{display:none}
+.booking-success-eyebrow{
+  font-family:var(--body);font-size:10px;letter-spacing:0.26em;text-transform:uppercase;
+  color:var(--ink);opacity:0.7;margin-bottom:12px;display:block;
+}
+.booking-success-title{
+  font-family:var(--display);font-weight:500;font-size:22px;color:var(--ink);
+  margin:0 0 12px;line-height:1.3;
+}
+.booking-success-meta{
+  font-family:var(--body);font-size:14px;line-height:1.6;color:var(--ink);opacity:0.84;
+  margin-bottom:22px;
+}
+
 /* Hidden calendar iframe (accessible fallback) */
 .booking-iframe-wrap{
   position:absolute;width:1px;height:1px;overflow:hidden;
@@ -1207,7 +1252,13 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 <!-- Booking calendar -->
 <section class="section section--paper" aria-label="Réservation">
   <div class="container">
-    <div class="contact-flow" id="bookingFlow">
+    <!--
+      data-booking-api: paste the Apps Script /exec URL here after deploying booking.gs
+      (Deploy → New deployment → Web app → Execute as: Me, Access: Anyone).
+      While empty, the page falls back to the static "open Google Calendar" CTA
+      so the homepage continues to work without breaking.
+    -->
+    <div class="contact-flow" id="bookingFlow" data-booking-api="">
 
         <!-- Week navigator -->
         <div class="booking-nav fade-in d1">
@@ -1250,15 +1301,53 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
                 <span data-i="bookingConfirmReset">← Modifier le créneau</span>
               </button>
             </div>
-            <div class="booking-confirm-cta-panel">
+            <div class="booking-confirm-cta-panel" id="bookingCtaPanel">
               <span class="booking-confirm-cta-eyebrow" data-i="bookingConfirmCtaEyebrow">Réservation</span>
               <p class="booking-confirm-cta-copy" data-i="bookingConfirmCtaCopy">Confirmez votre créneau via Google Agenda. Confirmation instantanée par email.</p>
+
+              <!-- Form path (shown when data-booking-api is set on #bookingFlow) -->
+              <form class="booking-form" id="bookingForm" novalidate hidden>
+                <div class="booking-form-row">
+                  <div class="booking-field">
+                    <label for="bookingFieldName" data-i="bookingFieldName">Nom</label>
+                    <input type="text" id="bookingFieldName" name="name" autocomplete="name" required maxlength="120">
+                  </div>
+                  <div class="booking-field">
+                    <label for="bookingFieldEmail" data-i="bookingFieldEmail">Courriel</label>
+                    <input type="email" id="bookingFieldEmail" name="email" autocomplete="email" required maxlength="160">
+                  </div>
+                </div>
+                <div class="booking-form-row">
+                  <div class="booking-field">
+                    <label for="bookingFieldPhone" data-i="bookingFieldPhone">Téléphone (facultatif)</label>
+                    <input type="tel" id="bookingFieldPhone" name="phone" autocomplete="tel" maxlength="40">
+                  </div>
+                  <div class="booking-field">
+                    <label for="bookingFieldClinic" data-i="bookingFieldClinic">Clinique (facultatif)</label>
+                    <input type="text" id="bookingFieldClinic" name="clinic" autocomplete="organization" maxlength="160">
+                  </div>
+                </div>
+                <div class="booking-field">
+                  <label for="bookingFieldNotes" data-i="bookingFieldNotes">Notes (facultatif)</label>
+                  <textarea id="bookingFieldNotes" name="notes" rows="2" maxlength="2000"></textarea>
+                </div>
+                <div class="booking-form-status" id="bookingFormStatus" aria-live="polite" role="status"></div>
+                <button class="cta-primary" type="submit" id="bookingSubmitBtn">
+                  <span data-i="bookingSubmit">Confirmer la réservation</span>
+                  <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
+                    <path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
+                  </svg>
+                </button>
+              </form>
+
+              <!-- Fallback CTA (shown when data-booking-api is empty) -->
               <a class="cta-primary" id="bookingConfirmCta" href="https://calendar.google.com/calendar/r?cid=c_c3163b5e97939baf226e43395f5f8433bbe3f6fdcf2def9a236dbc825a19d676%40group.calendar.google.com" target="_blank" rel="noopener">
                 <span data-i="bookingConfirmCta">Confirmer la réservation</span>
                 <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
                   <path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
                 </svg>
               </a>
+
               <div class="booking-confirm-strip">
                 <span data-i="bookingStrip1">Confirmation immédiate</span>
                 <span class="booking-confirm-strip-sep" aria-hidden="true">·</span>
@@ -1266,6 +1355,19 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
                 <span class="booking-confirm-strip-sep" aria-hidden="true">·</span>
                 <span data-i="bookingStrip3">Annulation libre</span>
               </div>
+            </div>
+
+            <!-- Success state (revealed after a real booking succeeds) -->
+            <div class="booking-success" id="bookingSuccess" aria-live="polite">
+              <span class="booking-success-eyebrow" data-i="bookingSuccessEyebrow">Réservation confirmée</span>
+              <h3 class="booking-success-title" id="bookingSuccessTitle">—</h3>
+              <p class="booking-success-meta" data-i="bookingSuccessMeta">Vous recevrez un email de confirmation avec un lien Google Meet sous peu.</p>
+              <a class="cta-primary" id="bookingSuccessCta" href="#" target="_blank" rel="noopener">
+                <span data-i="bookingSuccessCta">Ajouter à Google Agenda</span>
+                <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
+                  <path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
+                </svg>
+              </a>
             </div>
           </div>
         </div>
@@ -1343,6 +1445,46 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       cta:"Book a 30-min audit",skipLink:"Skip to content",eyebrow:"Dental patient acquisition",heroTitle:"Dental marketing. By operators.",heroTitleAccent:"A booked chair.",heroSub:"One metric matters. Search-first. Measured at the chair.",heroCta:"Book a 30-min audit",scrollLabel:"Scroll",problemLabel:"The problem",prob1:"Traditional agencies sell visibility. We generate patients.",prob2:"Most agencies don't understand why someone searches \u201Cemergency dentist\u201D at 10 PM. We do.",servicesLabel:"Services",servicesTitle:"Six levers. One plan.",servicesIntro:"Run in-house. Measured monthly.",svc1Name:"Google Ads — Search",svc1Desc:"Captured at the query. When they search.",svc2Name:"Google Business Profile",svc2Desc:"First on the map. Profile defended.",svc3Name:"Data Analytics",svc3Desc:"Every dollar traced to the chair.",svc4Name:"Google Ads — Display",svc4Desc:"Targeted presence. Measurable.",svc5Name:"Google Ads — Video",svc5Desc:"Geo-targeted YouTube. Short format.",svc6Name:"Google Reviews · NFC",svc6Desc:"One tap. One review. One signal.",svcDetailCue:"+ See deliverables",pricingLabel:"Pricing",pricingMo:"per month · CAD",pf1Label:"Included",pf1Value:"Six levers",pf1Note:"Search, GBP, Data, Display, Video, NFC.",pf2Label:"Onboarding",pf2Note:"Six levers configured. Dashboard live.",pf3Label:"Google ad spend",pf3Value:"Billed directly",pf3Note:"You keep control. No hidden fees.",pf4Label:"Specialization",pf4Value:"Dental only",pf4Note:"No other vertical.",pricingCta:"Book a 30-min audit",processLabel:"Process",step1Num:"Step 01",step1Unit:"min",step1Title:"Audit",step1Desc:"Google presence. Competitors. Local opportunities.",step2Num:"Step 02",step2Anchor:"Plan",step2Title:"Strategy",step2Desc:"Action plan. Budget per channel. Monthly targets.",step3Num:"Step 03",step3Unit:"days",step3Title:"Live",step3Desc:"Campaigns active. Measured from month one.",filter:"No camera. No dancing. You stay a dentist.",teamLabel:"Team",teamTitle:"Every dollar has an operator.",teamSub:"No budget left to an algorithm. No copy posted without review. No layer between us and your practice.",hamzaRole:"Founder",hamzaName:"Hamza A.",hamzaBio:"Ten years in marketing. Four years inside a clinic — phones, emergencies, treatment plans. Most agencies haven't seen this from the inside.",shayanRole:"Partner · Clinical advisor",shayanName:"Dr. Shayan Araghi",shayanBio:"14 years of clinical practice. Several clinics built from scratch. DMD, Université de Montréal. Investor and strategic partner.",aliRole:"Partner · Operations advisor",aliName:"Ali K.",aliBio:"10+ years inside dental clinics. Daily operations, insurance navigation, clinic accounting, patient experience. Has run multi-million-dollar clinics. Knows exactly what happens between the click and the chair.",closeLabel:"Book",closeTitle:"An empty chair costs more than a marketing plan.",closeSub:"30 minutes. Google Meet. Free.",bookingConfirmEyebrow:"Your audit",bookingConfirmMeta:"Google Meet · 30 minutes",bookingConfirmDesc:"Dental growth audit — prepared for your practice.",bookingConfirmReset:"← Modify slot",bookingConfirmCtaEyebrow:"Booking",bookingConfirmCtaCopy:"Confirm your slot via Google Calendar. Instant email confirmation.",bookingConfirmCta:"Confirm booking",bookingStrip1:"Instant confirmation",bookingStrip2:"No card required",bookingStrip3:"Cancel anytime",bookingIframeFallback:"Open Google Calendar directly",footerTag:"Dental marketing. Search-first.",footerNav:"Navigation",footerNavSvc:"Services",footerNavPrice:"Pricing",footerNavProc:"Process",footerNavTeam:"Team",footerContact:"Contact",footerBook:"Book an audit",footerLoc:"Montréal, QC",footerLegal:"© 2026 SSS Marketing. All rights reserved.",detailCloseLabel:"Close"
     }
   };
+  // Booking form & status strings, kept out of the giant dictionary lines above for diff sanity.
+  Object.assign(i18n.fr, {
+    bookingFieldName: "Nom",
+    bookingFieldEmail: "Courriel",
+    bookingFieldPhone: "Téléphone (facultatif)",
+    bookingFieldClinic: "Clinique (facultatif)",
+    bookingFieldNotes: "Notes (facultatif)",
+    bookingSubmit: "Confirmer la réservation",
+    bookingSubmitting: "Envoi en cours…",
+    bookingSuccessEyebrow: "Réservation confirmée",
+    bookingSuccessMeta: "Vous recevrez un email de confirmation avec un lien Google Meet sous peu.",
+    bookingSuccessCta: "Ajouter à Google Agenda",
+    bookingErrMissing: "Veuillez remplir votre nom et votre email.",
+    bookingErrEmail: "Adresse email invalide.",
+    bookingErrSlot: "Veuillez sélectionner un créneau.",
+    bookingErrTaken: "Ce créneau vient d'être réservé. Choisissez-en un autre.",
+    bookingErrTooSoon: "Ce créneau est trop proche. Choisissez un horaire plus tard.",
+    bookingErrNetwork: "Impossible de joindre le service de réservation. Réessayez ou écrivez à info@sss.marketing.",
+    bookingErrGeneric: "Une erreur est survenue. Réessayez ou écrivez à info@sss.marketing."
+  });
+  Object.assign(i18n.en, {
+    bookingFieldName: "Name",
+    bookingFieldEmail: "Email",
+    bookingFieldPhone: "Phone (optional)",
+    bookingFieldClinic: "Clinic (optional)",
+    bookingFieldNotes: "Notes (optional)",
+    bookingSubmit: "Confirm booking",
+    bookingSubmitting: "Sending…",
+    bookingSuccessEyebrow: "Booking confirmed",
+    bookingSuccessMeta: "You'll receive a confirmation email with a Google Meet link shortly.",
+    bookingSuccessCta: "Add to Google Calendar",
+    bookingErrMissing: "Please enter your name and email.",
+    bookingErrEmail: "Invalid email address.",
+    bookingErrSlot: "Please select a time slot.",
+    bookingErrTaken: "That slot was just booked. Please pick another.",
+    bookingErrTooSoon: "That slot is too soon. Please pick a later time.",
+    bookingErrNetwork: "Could not reach the booking service. Please retry or email info@sss.marketing.",
+    bookingErrGeneric: "Something went wrong. Please retry or email info@sss.marketing."
+  });
+
   const svcDetail = {
     fr:{s1:{name:"Google Ads — Search",lede:"Notre discipline principale. Le levier qui remplit l'agenda le plus vite.",blocks:[{label:"Création",items:["Recherche avancée de mots-clés.","Analyse des compétiteurs.","Annonces et extensions sur-mesure."]},{label:"Gestion & optimisation",items:["Optimisation algorithmique continue.","Achat programmatique.","Exclusions gérées en temps réel.","Conseils budgétaires complets."]},{label:"Service & conseil",items:["Équipe dédiée. Suivi mensuel.","Accès 24/7 à vos résultats."]}]},s2:{name:"Google Business Profile",lede:"Votre fiche Google transformée en outil d'acquisition.",blocks:[{label:"Optimisation & SEO local",items:["Création et optimisation de la fiche GBP.","Positionnement stratégique sur Maps.","Étude de mots-clés géociblés."]},{label:"Gestion de réputation",items:["Gestion proactive des avis clients.","Réponses professionnelles personnalisées.","Alertes sur les commentaires négatifs."]},{label:"Contenu & engagement",items:["Publications régulières sur votre fiche.","Trafic qualifié vers vos succursales.","Suivi mensuel. Accès 24/7."]}]},s3:{name:"Data Analytics",lede:"Chaque campagne auditable. Chaque dollar tracé.",blocks:[{label:"Configuration & setup",items:["Installation Analytics et Tag Manager.","Paramétrage des conversions et objectifs.","Mise en place des rapports."]},{label:"Analyse de précision",items:["Suivi par heure, ville, jour, mot-clé.","Comportement et engagement utilisateur.","Entonnoirs de conversion configurés."]},{label:"Optimisation & stratégie",items:["Suivi multi-canaux d'acquisition.","Recommandations UX de base.","Campagnes optimisées par conversion."]}]},s4:{name:"Google Ads — Display",lede:"Vos bannières au bon endroit. Au bon moment.",blocks:[{label:"Création",items:["Formats IAB standards.","Ciblage d'audience avancé."]},{label:"Gestion",items:["Achat programmatique.","Optimisation algorithmique en temps réel."]},{label:"Service",items:["Experts hautement certifiés.","Suivi mensuel. Accès 24/7."]}]},s5:{name:"Google Ads — Vidéo",lede:"YouTube. Le deuxième moteur de recherche du monde.",blocks:[{label:"Stratégie & formats",items:["TrueView, Bumper Ads, non désactivables.","Impact dès les premières secondes.","Message adapté à chaque objectif."]},{label:"Gestion & ciblage",items:["Ciblage démographique, intérêts, comportements.","Remarketing vidéo.","Optimisation algorithmique de la visibilité."]},{label:"Service & performance",items:["Équipe dédiée. Suivi mensuel.","Experts certifiés. Accès 24/7."]}]},s6:{name:"Avis Google · NFC",lede:"Chaque visite devient un avis. Sans demander.",blocks:[{label:"Dispositif",items:["Plaquette NFC à la réception.","Activée par toucher. Sans application.","Liée à votre fiche Google."]},{label:"Signal algorithmique",items:["La fréquence d'avis est l'un des signaux les plus forts du SEO local.","Composé direct avec le levier GBP.","Chaque tap, un signal."]},{label:"Effet réseau",items:["Cycle de réputation autonome.","Baisse le coût d'acquisition du patient suivant.","Inclus. Aucun frais matériel additionnel."]}]}},
     en:{s1:{name:"Google Ads — Search",lede:"Our core discipline. The lever that fills the schedule fastest.",blocks:[{label:"Setup",items:["Advanced keyword research.","Competitor analysis.","Custom ads and extensions."]},{label:"Management & optimization",items:["Continuous algorithmic optimization.","Programmatic bidding.","Real-time exclusion management.","Full budget guidance."]},{label:"Service & advisory",items:["Dedicated team. Monthly review.","24/7 access to your results."]}]},s2:{name:"Google Business Profile",lede:"Your Google listing turned into an acquisition tool.",blocks:[{label:"Optimization & local SEO",items:["GBP listing built and optimized.","Strategic Maps positioning.","Geo-targeted keyword study."]},{label:"Reputation management",items:["Proactive review management.","Personalized professional responses.","Alerts on negative comments."]},{label:"Content & engagement",items:["Regular listing posts.","Qualified traffic to your locations.","Monthly review. 24/7 access."]}]},s3:{name:"Data Analytics",lede:"Every campaign auditable. Every dollar traced.",blocks:[{label:"Configuration & setup",items:["Analytics and Tag Manager installed.","Conversions and goals configured.","Reports set up."]},{label:"Precision analysis",items:["Tracking by hour, city, day, keyword.","User behavior and engagement.","Conversion funnels configured."]},{label:"Optimization & strategy",items:["Multi-channel acquisition tracking.","Baseline UX recommendations.","Campaigns optimized by conversion."]}]},s4:{name:"Google Ads — Display",lede:"Your banners. Right place. Right moment.",blocks:[{label:"Creative",items:["IAB standard formats.","Advanced audience targeting."]},{label:"Management",items:["Programmatic bidding.","Real-time algorithmic optimization."]},{label:"Service",items:["Highly certified experts.","Monthly review. 24/7 access."]}]},s5:{name:"Google Ads — Video",lede:"YouTube. The world's second search engine.",blocks:[{label:"Strategy & formats",items:["TrueView, Bumper Ads, non-skippable.","Impact in the first seconds.","Message tuned to objective."]},{label:"Management & targeting",items:["Demographic, interest, behavior targeting.","Video remarketing.","Algorithmic visibility optimization."]},{label:"Service & performance",items:["Dedicated team. Monthly review.","Certified experts. 24/7 access."]}]},s6:{name:"Google Reviews · NFC",lede:"Every visit becomes a review. Without asking.",blocks:[{label:"Hardware",items:["NFC pad at the front desk.","Activated by tap. No app required.","Linked to your Google listing."]},{label:"Algorithmic signal",items:["Review frequency is one of the strongest local-SEO signals.","Compounds directly with the GBP lever.","Every tap, a signal."]},{label:"Network effect",items:["Self-sustaining reputation cycle.","Lowers the cost of the next patient.","Included. No additional hardware fee."]}]}}
@@ -1434,11 +1576,28 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       return arr; // ['10:00','10:30',...,'16:30'] — 14 rows
     })();
 
-    // Simulated booked slots (slot is the ISO-like key "YYYY-MM-DD|HH:MM")
+    function pad(n){return n<10?'0'+n:n}
+
+    // ── API integration ──────────────────────────────────────────────────────
+    // When #bookingFlow has a non-empty data-booking-api attribute, the page
+    // pulls real availability from Google Apps Script and POSTs real bookings.
+    // When the attribute is empty (e.g. pre-deployment), we fall back to the
+    // static SLOTS template + the legacy "open Google Calendar" CTA so the
+    // homepage stays functional.
+    var bookingFlowEl = document.getElementById('bookingFlow');
+    var API_URL = (bookingFlowEl && bookingFlowEl.getAttribute('data-booking-api') || '').trim();
+    var API_ENABLED = !!API_URL;
+    var API_BY_DATE = Object.create(null);  // { 'YYYY-MM-DD': ['09:00', ...] }
+    var API_FETCHED_RANGES = Object.create(null); // memoize per "start|end" key
+    var API_LOADING = false;
+    var API_LAST_ERROR = null;
+
+    // Static-only mock booked slots, used when API is NOT configured. When the
+    // API is enabled we trust its availability response entirely (the server
+    // already removes busy slots) and ignore this mock.
     var BOOKED = (function(){
+      if(API_ENABLED) return {};
       var s = {};
-      // Pre-book some slots on Mon-Wed to reinforce scarcity feel
-      // These are illustrative — replace with backend integration later
       var today = new Date();
       for(var d=-1;d<=14;d++){
         var dt = new Date(today);
@@ -1446,7 +1605,6 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
         var dow = dt.getDay();
         var dk = dt.getFullYear()+'-'+pad(dt.getMonth()+1)+'-'+pad(dt.getDate());
         if(dow===1||dow===2||dow===3){
-          // Book first and last slot on Mon/Tue/Wed to create mid-availability pattern
           var sl = SLOTS[dow];
           if(sl){s[dk+'|'+sl[0]]=true;s[dk+'|'+sl[sl.length-1]]=true;}
         }
@@ -1454,7 +1612,64 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       return s;
     })();
 
-    function pad(n){return n<10?'0'+n:n}
+    function slotsForDay(day){
+      if(API_ENABLED){
+        var key = dateKey(day);
+        return API_BY_DATE[key] || [];
+      }
+      return SLOTS[day.getDay()] || [];
+    }
+    function isSlotBooked(sk){
+      if(API_ENABLED) return false;          // server-filtered when API is on
+      return !!BOOKED[sk];
+    }
+
+    function fetchAvailability(startDate, endDate){
+      if(!API_ENABLED) return Promise.resolve();
+      var startYmd = dateKey(startDate);
+      var endYmd   = dateKey(endDate);
+      var memoKey  = startYmd + '|' + endYmd;
+      if(API_FETCHED_RANGES[memoKey]) return Promise.resolve();
+      var url = API_URL
+        + (API_URL.indexOf('?')===-1?'?':'&')
+        + 'action=availability&start=' + encodeURIComponent(startYmd)
+        + '&end='   + encodeURIComponent(endYmd)
+        + '&tz='    + encodeURIComponent('America/Montreal');
+      API_LOADING = true;
+      return fetch(url, { method:'GET', credentials:'omit', cache:'no-store' })
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          API_LOADING = false;
+          if(!data || data.error){
+            API_LAST_ERROR = (data && data.error) || 'unknown';
+            console.error('[booking] availability error:', data);
+            return;
+          }
+          API_FETCHED_RANGES[memoKey] = true;
+          var slots = data.slots || {};
+          Object.keys(slots).forEach(function(k){ API_BY_DATE[k] = slots[k]; });
+          API_LAST_ERROR = null;
+        })
+        .catch(function(err){
+          API_LOADING = false;
+          API_LAST_ERROR = String(err);
+          console.error('[booking] availability fetch failed:', err);
+        });
+    }
+
+    function submitBooking(payload){
+      if(!API_ENABLED) return Promise.reject(new Error('api_not_configured'));
+      // Apps Script Web Apps reject custom Content-Type via CORS preflight,
+      // so we send text/plain with a JSON body. Apps Script reads
+      // e.postData.contents regardless of declared MIME type.
+      return fetch(API_URL, {
+        method: 'POST',
+        credentials: 'omit',
+        cache: 'no-store',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      }).then(function(r){ return r.json(); });
+    }
 
     var currentWeekStart = getWeekStart(new Date());
     var selectedSlot = null; // {date: Date, time: '12:30', key: 'YYYY-MM-DD|HH:MM'}
@@ -1555,7 +1770,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
           dnum.textContent = fmtDayNum(day);
           head.appendChild(dn);head.appendChild(dnum);
           colEl.appendChild(head);
-          var daySlotsArr = SLOTS[dow]||[];
+          var daySlotsArr = slotsForDay(day);
           // Every row renders the time. Three states only:
           //   available — active button, selectable
           //   selected  — currently chosen
@@ -1563,7 +1778,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
           BUSINESS_HOURS_TIMES.forEach(function(t){
             var hasSlot = daySlotsArr.indexOf(t)!==-1;
             var sk = slotKey(day,t);
-            var booked = !!BOOKED[sk];
+            var booked = isSlotBooked(sk);
             var past   = isPast(day,t);
             var isBusy = !hasSlot || booked || past;
             var isSel  = !isBusy && selectedSlot && selectedSlot.key===sk;
@@ -1623,14 +1838,13 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       });
     }
     function renderMobileDaySlots(day){
-      var dow=day.getDay();
-      var daySlotsArr=SLOTS[dow]||[];
+      var daySlotsArr=slotsForDay(day);
       mobileSlots.innerHTML='';
       // Even if day has zero slots, render the full skeleton — every row busy.
       BUSINESS_HOURS_TIMES.forEach(function(t){
         var hasSlot = daySlotsArr.indexOf(t)!==-1;
         var sk=slotKey(day,t);
-        var booked=!!BOOKED[sk];var past=isPast(day,t);
+        var booked=isSlotBooked(sk);var past=isPast(day,t);
         var isBusy=!hasSlot || booked || past;
         var isSel=!isBusy && selectedSlot && selectedSlot.key===sk;
         var btn=document.createElement('button');
@@ -1689,12 +1903,20 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       if(navWeek) navWeek.textContent=(getLang()==='en'?'Week of ':'Semaine du ')+fromStr;
       if(navMonth) navMonth.textContent=fmtMonthLabel(currentWeekStart);
     }
+    function ensureWeekLoaded(){
+      if(!API_ENABLED) return Promise.resolve();
+      var weekEnd = addDays(currentWeekStart, 6);
+      return fetchAvailability(currentWeekStart, weekEnd).then(function(){
+        if(isMobile){ renderMobilePicker(); } else { renderWeek(); }
+      });
+    }
     if(prevBtn){prevBtn.addEventListener('click',function(){
       gridEl.classList.add('is-transitioning');
       setTimeout(function(){
         currentWeekStart=addDays(currentWeekStart,-7);
         mobileDayIndex=0;
         renderWeek();
+        ensureWeekLoaded();
       },180);
     });}
     if(nextBtn){nextBtn.addEventListener('click',function(){
@@ -1703,6 +1925,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
         currentWeekStart=addDays(currentWeekStart,7);
         mobileDayIndex=0;
         renderWeek();
+        ensureWeekLoaded();
       },180);
     });}
 
@@ -1711,8 +1934,164 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       b.addEventListener('click',function(){setTimeout(renderWeek,50);});
     });
 
+    // ── Booking form wiring ──────────────────────────────────────────────────
+    var formEl       = document.getElementById('bookingForm');
+    var fallbackCta  = document.getElementById('bookingConfirmCta');
+    var statusEl     = document.getElementById('bookingFormStatus');
+    var submitBtn    = document.getElementById('bookingSubmitBtn');
+    var ctaPanelEl   = document.getElementById('bookingCtaPanel');
+    var successEl    = document.getElementById('bookingSuccess');
+    var successTitle = document.getElementById('bookingSuccessTitle');
+    var successCta   = document.getElementById('bookingSuccessCta');
+
+    // Show the form when API is configured, otherwise keep the static link CTA.
+    if(formEl && fallbackCta){
+      if(API_ENABLED){
+        formEl.hidden = false;
+        fallbackCta.style.display = 'none';
+      } else {
+        formEl.hidden = true;
+        fallbackCta.style.display = '';
+      }
+    }
+
+    function clearFieldErrors(){
+      formEl && formEl.querySelectorAll('.booking-field').forEach(function(el){
+        el.classList.remove('is-error');
+      });
+    }
+    function setStatus(msg, isError){
+      if(!statusEl) return;
+      statusEl.textContent = msg || '';
+      statusEl.classList.toggle('is-info', !isError && !!msg);
+    }
+    function setSubmitting(on){
+      if(!submitBtn) return;
+      submitBtn.disabled = on;
+      submitBtn.classList.toggle('is-loading', on);
+      var labelEl = submitBtn.querySelector('span[data-i]');
+      if(labelEl){
+        labelEl.textContent = on
+          ? i18n[getLang()].bookingSubmitting
+          : i18n[getLang()].bookingSubmit;
+      }
+    }
+    function mapServerError(code){
+      var dict = i18n[getLang()];
+      switch(code){
+        case 'missing_fields': return dict.bookingErrMissing;
+        case 'invalid_email':  return dict.bookingErrEmail;
+        case 'invalid_date':
+        case 'invalid_slot':   return dict.bookingErrSlot;
+        case 'slot_taken':     return dict.bookingErrTaken;
+        case 'too_soon':       return dict.bookingErrTooSoon;
+        case 'too_far':        return dict.bookingErrSlot;
+        case 'busy':           return dict.bookingErrTaken;
+        case 'no_calendar':    return dict.bookingErrGeneric;
+        case 'server_error':   return dict.bookingErrGeneric;
+        default:               return dict.bookingErrGeneric;
+      }
+    }
+    function showSuccess(payload){
+      if(!successEl) return;
+      if(ctaPanelEl) ctaPanelEl.classList.add('is-hidden');
+      var summaryEl = document.querySelector('.booking-confirm-summary');
+      if(summaryEl) summaryEl.classList.add('is-hidden');
+      successEl.classList.add('is-visible');
+      if(successTitle) successTitle.textContent = payload.summary || '';
+      if(successCta && payload.googleLink) successCta.setAttribute('href', payload.googleLink);
+      setTimeout(function(){
+        successEl.scrollIntoView({behavior:'smooth', block:'nearest'});
+      }, 60);
+    }
+
+    if(formEl){
+      formEl.addEventListener('submit', function(ev){
+        ev.preventDefault();
+        clearFieldErrors();
+        setStatus('');
+
+        var dict = i18n[getLang()];
+        var nameEl   = document.getElementById('bookingFieldName');
+        var emailEl  = document.getElementById('bookingFieldEmail');
+        var phoneEl  = document.getElementById('bookingFieldPhone');
+        var clinicEl = document.getElementById('bookingFieldClinic');
+        var notesEl  = document.getElementById('bookingFieldNotes');
+
+        var name  = (nameEl.value||'').trim();
+        var email = (emailEl.value||'').trim();
+        var phone = (phoneEl.value||'').trim();
+        var clinic= (clinicEl.value||'').trim();
+        var notes = (notesEl.value||'').trim();
+
+        if(!selectedSlot){
+          setStatus(dict.bookingErrSlot, true);
+          return;
+        }
+        if(!name || !email){
+          if(!name) nameEl.closest('.booking-field').classList.add('is-error');
+          if(!email) emailEl.closest('.booking-field').classList.add('is-error');
+          setStatus(dict.bookingErrMissing, true);
+          return;
+        }
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+          emailEl.closest('.booking-field').classList.add('is-error');
+          setStatus(dict.bookingErrEmail, true);
+          return;
+        }
+
+        var payload = {
+          action: 'book',
+          name: name,
+          email: email,
+          phone: phone,
+          clinic: clinic,
+          notes: notes,
+          date: dateKey(selectedSlot.date),
+          slot: selectedSlot.time,
+          tz:   'America/Montreal',
+          duration: 30,
+          lang: getLang()
+        };
+
+        setSubmitting(true);
+        submitBooking(payload).then(function(res){
+          setSubmitting(false);
+          if(res && res.ok){
+            showSuccess(res);
+            return;
+          }
+          var code = (res && res.error) || 'unknown';
+          console.error('[booking] server returned error:', res);
+          setStatus(mapServerError(code), true);
+          if(code === 'slot_taken' || code === 'busy'){
+            // Re-fetch availability so the busy slot disappears from the grid.
+            delete API_FETCHED_RANGES[dateKey(currentWeekStart)+'|'+dateKey(addDays(currentWeekStart,6))];
+            ensureWeekLoaded();
+          }
+        }).catch(function(err){
+          setSubmitting(false);
+          console.error('[booking] network/parse failure:', err);
+          setStatus(dict.bookingErrNetwork, true);
+        });
+      });
+    }
+
+    // Re-localize the submit button label when language switches.
+    document.querySelectorAll('.lang-btn').forEach(function(b){
+      b.addEventListener('click', function(){
+        setTimeout(function(){
+          if(submitBtn && !submitBtn.disabled){
+            var labelEl = submitBtn.querySelector('span[data-i]');
+            if(labelEl) labelEl.textContent = i18n[getLang()].bookingSubmit;
+          }
+        }, 60);
+      });
+    });
+
     // ── Initial render ───────────────────────────────────────────────────────
     renderWeek();
+    ensureWeekLoaded();
 
     // ── Accessible fallback: silent iframe background load ───────────────────
     var embed = document.getElementById('calendarEmbed');
