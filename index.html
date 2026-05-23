@@ -485,25 +485,20 @@ nav.scrolled .nav-logo{height:26px}
 .process-step-title{font-family:var(--display);font-weight:500;font-size:22px;line-height:1.2;letter-spacing:-0.01em;color:var(--ink);margin-top:6px}
 .process-step-desc{font-family:var(--body);font-size:14px;line-height:1.62;color:var(--ink);opacity:0.78;margin-top:auto;padding-top:18px;max-width:300px}
 
-/* ========== WHY ========== */
-.why-head{margin-bottom:72px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:end}
-.why-title{font-family:var(--display);font-weight:500;font-size:clamp(36px,4.6vw,60px);line-height:1.04;letter-spacing:-0.02em;color:var(--ink);max-width:480px}
-.why-sub{font-family:var(--body);font-size:15px;line-height:1.65;color:var(--ink);opacity:0.72;max-width:360px;justify-self:end}
-.why-list{border-top:1px solid var(--rule)}
-.why-item{
-  display:grid;grid-template-columns:80px 1fr auto;gap:32px;align-items:baseline;
-  padding:32px 0 32px 0;border-bottom:1px solid var(--rule);
+/* ========== EDITORIAL BREAK · Filter line between Pricing and Process ========== */
+/* Not a section. Reuses Pillar 3 motif #1: hairline rule promoted to subject. */
+.break{
+  background:var(--paper);
+  padding:clamp(72px,9vw,108px) 0;
   position:relative;
+  text-align:center;
 }
-.why-item::before{
-  content:'';position:absolute;left:-12px;top:30%;bottom:30%;width:2px;
-  background:var(--tan);opacity:0;
-  transition:opacity .35s var(--ease),top .35s var(--ease),bottom .35s var(--ease);
+.break-rule{position:absolute;top:0;left:0;right:0;height:1px;background:var(--tan);opacity:0.55}
+.break-line{
+  font-family:var(--display);font-weight:500;font-style:italic;
+  font-size:clamp(28px,3.6vw,46px);line-height:1.15;letter-spacing:-0.018em;
+  color:var(--ink);max-width:780px;margin:0 auto;
 }
-.why-item:hover::before{opacity:1;top:18%;bottom:18%}
-.why-item-num{font-family:var(--body);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--tan)}
-.why-item-text{font-family:var(--display);font-weight:500;font-size:clamp(22px,2.6vw,30px);line-height:1.2;letter-spacing:-0.012em;color:var(--ink)}
-.why-item-tag{font-family:var(--body);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink);opacity:0.45}
 
 /* ========== TEAM ========== */
 .team-head{margin-bottom:72px}
@@ -595,28 +590,32 @@ nav.scrolled .nav-logo{height:26px}
 }
 .booking-col-head.is-today .booking-col-daynum{color:var(--tan)}
 
-/* Slot buttons */
+/* ── Slot buttons · 4 states: available / selected / reserved / closed ── */
+/* Fixed row height enforces visual rhythm — same skeleton every day, every week. */
 .booking-slot{
   display:flex;align-items:center;justify-content:center;
-  width:100%;padding:11px 6px;
+  width:100%;min-height:38px;padding:0 6px;
   border:none;border-bottom:1px solid var(--rule-soft);
   background:var(--paper);
   font-family:var(--display);font-weight:500;font-size:14px;line-height:1;
-  letter-spacing:-0.01em;color:var(--ink);
+  letter-spacing:-0.005em;color:var(--ink);
+  font-feature-settings:"tnum" 1,"lnum" 1;
   cursor:pointer;text-align:center;position:relative;
-  transition:background-color .28s var(--ease),color .28s var(--ease);
+  transition:background-color .25s var(--ease),color .25s var(--ease);
 }
 .booking-slot:last-child{border-bottom:none}
+
+/* State 1 · Available */
 .booking-slot::before{
   content:'';position:absolute;left:0;top:0;bottom:0;width:0;
   background:var(--tan);
-  transition:width .2s var(--ease);
+  transition:width .22s var(--ease);
 }
-.booking-slot:hover::before{width:2px}
-.booking-slot:hover{background:rgba(212,163,115,0.06)}
-.booking-slot:focus-visible{outline:1px solid var(--tan);outline-offset:-1px}
+.booking-slot:hover:not(.is-unavailable):not(.is-selected):not(.booking-slot--closed)::before{width:2px}
+.booking-slot:hover:not(.is-unavailable):not(.is-selected):not(.booking-slot--closed){background:rgba(212,163,115,0.06)}
+.booking-slot:focus-visible{outline:1px solid var(--tan);outline-offset:-1px;z-index:1}
 
-/* Selected state */
+/* State 2 · Selected */
 .booking-slot.is-selected{
   background:var(--tan);color:var(--paper);cursor:default;
 }
@@ -626,24 +625,36 @@ nav.scrolled .nav-logo{height:26px}
   display:none;position:absolute;right:7px;top:50%;transform:translateY(-50%);
 }
 
-/* Unavailable state */
+/* State 3 · Reserved (booked or past) — restrained, no strike-through */
+/* Time stays legible. A single hairline marker right of center reads as "held". */
 .booking-slot.is-unavailable{
-  cursor:default;
-  color:var(--ink);opacity:0.3;
-}
-.booking-slot.is-unavailable::after{
-  content:'';position:absolute;left:12px;right:12px;top:50%;height:1px;
-  background:var(--ink);opacity:0.5;
+  cursor:default;background:var(--paper);
+  color:var(--ink);opacity:0.32;
+  font-variant-numeric:tabular-nums;
 }
 .booking-slot.is-unavailable::before{display:none}
+.booking-slot.is-unavailable::after{
+  content:'';position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:4px;height:1px;background:var(--ink);opacity:0.55;
+}
 .booking-slot.is-unavailable:hover{background:var(--paper)}
 
-/* Empty cell (no slot in this time window) */
-.booking-slot-empty{
-  flex:1;border-bottom:1px solid var(--rule-soft);
-  background:var(--surface-a);opacity:0.45;
+/* State 4 · Closed (outside this day's operating window) */
+/* Structural placeholder. No time. Surface-a fill + tan micro-dot center. */
+.booking-slot--closed{
+  cursor:default;
+  background:var(--surface-a);
+  border-bottom:1px solid var(--rule-soft);
+  pointer-events:none;
+  padding:0;
 }
-.booking-slot-empty:last-child{border-bottom:none}
+.booking-slot--closed::before,
+.booking-slot--closed::after{display:none}
+.booking-slot--closed:hover{background:var(--surface-a)}
+.booking-slot-closed-dot{
+  display:block;width:3px;height:3px;border-radius:50%;
+  background:var(--tan);opacity:0.32;
+}
 
 /* ── Zone C · Confirmation panel (hidden until slot selected) ── */
 .booking-confirm-wrap{
@@ -769,8 +780,8 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   .hero{padding-top:calc(var(--nav-h) + 56px);padding-bottom:96px}
   .hero h1{font-size:clamp(40px,10.5vw,72px)}
   .hero-sub{font-size:16px}
-  .services-head,.why-head{grid-template-columns:1fr;gap:24px}
-  .services-intro,.why-sub{justify-self:start}
+  .services-head{grid-template-columns:1fr;gap:24px}
+  .services-intro{justify-self:start}
   .svc-detail-head{grid-template-columns:1fr;gap:18px}
   .svc-detail-lede{text-align:left;justify-self:start}
 }
@@ -796,8 +807,6 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   .pricing-facts{grid-template-columns:1fr}
   .pricing-fact{border-right:none;border-bottom:1px solid var(--rule-soft)}
   .pricing-fact:last-child{border-bottom:none}
-  .why-item{grid-template-columns:60px 1fr;gap:14px;padding:28px 0}
-  .why-item-tag{grid-column:1/-1;padding-left:60px}
   .team-grid{grid-template-columns:1fr;gap:48px}
   /* Booking mobile */
   /* Grid → day-picker + slot-list on mobile */
@@ -851,29 +860,59 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   border:1px solid var(--rule);border-top:none;
   display:flex;flex-direction:column;
 }
+/* Mobile slot · same 4 states as desktop; taller rows for touch */
 .booking-mobile-slot{
   display:flex;align-items:center;justify-content:space-between;
-  padding:16px 20px;border-bottom:1px solid var(--rule-soft);
+  min-height:56px;padding:0 20px;
+  border:none;border-bottom:1px solid var(--rule-soft);
   background:var(--paper);cursor:pointer;
-  font-family:var(--display);font-weight:500;font-size:18px;
-  letter-spacing:-0.01em;color:var(--ink);
-  position:relative;
-  transition:background-color .28s var(--ease),color .28s var(--ease);
+  font-family:var(--display);font-weight:500;font-size:18px;line-height:1;
+  letter-spacing:-0.005em;color:var(--ink);
+  font-feature-settings:"tnum" 1,"lnum" 1;
+  position:relative;text-align:left;
+  transition:background-color .25s var(--ease),color .25s var(--ease);
 }
 .booking-mobile-slot:last-child{border-bottom:none}
+.booking-mobile-slot-time{display:inline-block}
+
+/* State 1 · Available */
 .booking-mobile-slot::before{
   content:'';position:absolute;left:0;top:0;bottom:0;width:0;
-  background:var(--tan);transition:width .2s var(--ease);
+  background:var(--tan);transition:width .22s var(--ease);
 }
-.booking-mobile-slot:hover::before{width:3px}
-.booking-mobile-slot:hover{background:rgba(212,163,115,0.06)}
+.booking-mobile-slot:hover:not(.is-unavailable):not(.is-selected):not(.booking-mobile-slot--closed)::before{width:3px}
+.booking-mobile-slot:hover:not(.is-unavailable):not(.is-selected):not(.booking-mobile-slot--closed){background:rgba(212,163,115,0.06)}
+
+/* State 2 · Selected */
 .booking-mobile-slot.is-selected{background:var(--tan);color:var(--paper)}
 .booking-mobile-slot.is-selected::before{display:none}
-.booking-mobile-slot.is-unavailable{opacity:0.32;cursor:default;text-decoration:line-through}
-.booking-mobile-slot.is-unavailable::before{display:none}
-.booking-mobile-slot.is-unavailable:hover{background:var(--paper)}
 .booking-mobile-slot-check{display:none}
 .booking-mobile-slot.is-selected .booking-mobile-slot-check{display:block}
+
+/* State 3 · Reserved (booked or past) */
+.booking-mobile-slot.is-unavailable{opacity:0.32;cursor:default}
+.booking-mobile-slot.is-unavailable::before{display:none}
+.booking-mobile-slot.is-unavailable::after{
+  content:'';position:absolute;right:24px;top:50%;transform:translateY(-50%);
+  width:5px;height:1px;background:var(--ink);opacity:0.6;
+}
+.booking-mobile-slot.is-unavailable:hover{background:var(--paper)}
+
+/* State 4 · Closed (outside operating window) */
+.booking-mobile-slot--closed{
+  cursor:default;background:var(--surface-a);
+  color:var(--ink);
+  pointer-events:none;
+}
+.booking-mobile-slot--closed .booking-mobile-slot-time{opacity:0.32}
+.booking-mobile-slot--closed::before,
+.booking-mobile-slot--closed::after{display:none}
+.booking-mobile-slot--closed:hover{background:var(--surface-a)}
+.booking-mobile-slot-closed-dot{
+  display:block;width:3px;height:3px;border-radius:50%;
+  background:var(--tan);opacity:0.32;
+}
+
 .booking-mobile-empty{
   padding:32px 20px;
   font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;
@@ -1093,6 +1132,14 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   </div>
 </section>
 
+<!-- Editorial filter break · Paper · transitional moment, not a section -->
+<aside class="break" aria-label="Filtre de positionnement">
+  <div class="break-rule"></div>
+  <div class="container">
+    <p class="break-line fade-in" data-i="filter">Aucune caméra. Aucune danse. Vous restez dentiste.</p>
+  </div>
+</aside>
+
 <!-- 04 · PROCESS · Surface B -->
 <section class="section section--surface-b" id="process">
   <div class="section-rule"></div>
@@ -1125,51 +1172,12 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   </div>
 </section>
 
-<!-- 05 · WHY · Paper -->
-<section class="section section--paper" id="why">
-  <div class="section-rule"></div>
-  <div class="container">
-    <div class="section-head fade-in">
-      <span class="num">05</span><span class="sep"></span>
-      <span data-i="whyLabel">Pourquoi SSS</span>
-    </div>
-
-    <div class="why-head">
-      <h2 class="why-title fade-in d1" data-i="whyTitle">Une discipline. Un seul vertical.</h2>
-      <p class="why-sub fade-in d2" data-i="whySub">Quatre raisons. Aucune en trop.</p>
-    </div>
-
-    <ul class="why-list">
-      <li class="why-item fade-in d1">
-        <span class="why-item-num">i</span>
-        <span class="why-item-text" data-i="why1">Forfait fixe. Pas de pourcentage du média.</span>
-        <span class="why-item-tag" data-i="why1Tag">Prix fixe</span>
-      </li>
-      <li class="why-item fade-in d2">
-        <span class="why-item-num">ii</span>
-        <span class="why-item-text" data-i="why2">Nous opérons. Vous possédez.</span>
-        <span class="why-item-tag" data-i="why2Tag">Propriété</span>
-      </li>
-      <li class="why-item fade-in d3">
-        <span class="why-item-num">iii</span>
-        <span class="why-item-text" data-i="why3">Optimisation continue des campagnes. Pas une fois par trimestre.</span>
-        <span class="why-item-tag" data-i="why3Tag">Discipline</span>
-      </li>
-      <li class="why-item fade-in d4">
-        <span class="why-item-num">iv</span>
-        <span class="why-item-text" data-i="why4">Montréal. Bilingue. Une seule équipe.</span>
-        <span class="why-item-tag" data-i="why4Tag">Local</span>
-      </li>
-    </ul>
-  </div>
-</section>
-
-<!-- 06 · TEAM · Surface A -->
+<!-- 05 · TEAM · Surface A -->
 <section class="section section--surface-a" id="team">
   <div class="section-rule"></div>
   <div class="container">
     <div class="section-head fade-in">
-      <span class="num">06</span><span class="sep"></span>
+      <span class="num">05</span><span class="sep"></span>
       <span data-i="teamLabel">Équipe</span>
     </div>
 
@@ -1206,12 +1214,12 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   </div>
 </section>
 
-<!-- 07 · CLOSE + BOOK · Sage signature panel → Paper calendar -->
+<!-- 06 · CLOSE + BOOK · Sage signature panel → Paper calendar -->
 <section class="final" id="contact" aria-labelledby="closeTitle">
   <div class="final-rule"></div>
   <div class="container">
     <div class="section-head section-head--close fade-in">
-      <span class="num">07</span><span class="sep"></span>
+      <span class="num">06</span><span class="sep"></span>
       <span data-i="closeLabel">Réserver</span>
     </div>
     <h2 class="final-title fade-in d1" id="closeTitle" data-i="closeTitle">Un fauteuil vide coûte plus cher qu'un forfait marketing.</h2>
@@ -1352,10 +1360,10 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 (function(){
   const i18n = {
     fr:{
-      cta:"Réserver un audit de 30 min",skipLink:"Aller au contenu",eyebrow:"Acquisition de patients dentaires",heroTitle:"Marketing dentaire. Par des opérateurs.",heroTitleAccent:"Un fauteuil occupé.",heroSub:"Un seul indicateur compte. Search-first. Mesuré au fauteuil.",heroCta:"Réserver un audit de 30 min",scrollLabel:"Défiler",problemLabel:"Le problème",prob1:"Les agences traditionnelles vendent de la visibilité. Nous générons des patients.",prob2:"La plupart des agences ne comprennent pas pourquoi quelqu'un cherche « dentiste d'urgence » à 22h. Nous, oui.",servicesLabel:"Services",servicesTitle:"Six leviers. Un seul forfait.",servicesIntro:"Opéré en interne. Mesuré mensuellement.",svc1Name:"Google Ads — Search",svc1Desc:"Captés à la requête. Quand ils cherchent.",svc2Name:"Google Business Profile",svc2Desc:"Premier sur la carte. Profil défendu.",svc3Name:"Data Analytics",svc3Desc:"Chaque dollar tracé au fauteuil.",svc4Name:"Google Ads — Display",svc4Desc:"Présence ciblée. Mesurable.",svc5Name:"Google Ads — Vidéo",svc5Desc:"YouTube géolocalisé. Format court.",svc6Name:"Avis Google · NFC",svc6Desc:"Un tap. Un avis. Un signal.",svcDetailCue:"+ Voir les livrables",pricingLabel:"Tarification",pricingMo:"par mois · CAD",pf1Label:"Inclus",pf1Value:"Six leviers",pf1Note:"Search, GBP, Data, Display, Vidéo, NFC.",pf2Label:"Onboarding",pf2Note:"Six leviers configurés. Tableau de bord activé.",pf3Label:"Publicité Google",pf3Value:"Facturée directement",pf3Note:"Vous gardez le contrôle. Aucun frais caché.",pf4Label:"Spécialisation",pf4Value:"Dentaire uniquement",pf4Note:"Aucun autre vertical.",pricingCta:"Réserver un audit de 30 min",processLabel:"Processus",step1Num:"Étape 01",step1Unit:"min",step1Title:"Audit",step1Desc:"Présence Google. Compétiteurs. Opportunités locales.",step2Num:"Étape 02",step2Anchor:"Plan",step2Title:"Stratégie",step2Desc:"Plan d'action. Budget par levier. Cibles mensuelles.",step3Num:"Étape 03",step3Unit:"jours",step3Title:"Mise en ligne",step3Desc:"Campagnes actives. Mesure dès le premier mois.",whyLabel:"Pourquoi SSS",whyTitle:"Une discipline. Un seul vertical.",whySub:"Quatre raisons. Aucune en trop.",why1:"Forfait fixe. Pas de pourcentage du média.",why1Tag:"Prix fixe",why2:"Nous opérons. Vous possédez.",why2Tag:"Propriété",why3:"Optimisation continue des campagnes. Pas une fois par trimestre.",why3Tag:"Discipline",why4:"Montréal. Bilingue. Une seule équipe.",why4Tag:"Local",teamLabel:"Équipe",teamTitle:"Chaque dollar a un opérateur.",teamSub:"Aucun budget laissé à un algorithme. Aucun mot publié sans validation. Aucune ligne entre nous et votre clinique.",hamzaRole:"Fondateur",hamzaName:"Hamza A.",hamzaBio:"Dix ans en marketing. Quatre ans en clinique — appels, urgences, plans de traitement. La majorité des agences n'ont jamais vu ça de l'intérieur.",shayanRole:"Partenaire · Conseiller clinique",shayanName:"Dr. Shayan Araghi",shayanBio:"14 ans de pratique clinique. Plusieurs cliniques bâties de zéro. DMD, Université de Montréal. Investisseur et partenaire stratégique.",aliRole:"Partenaire · Conseiller opérationnel",aliName:"Ali K.",aliBio:"Plus de 10 ans à l'intérieur des cliniques dentaires. Opérations quotidiennes, navigation des assurances, comptabilité clinique, expérience patient. A piloté des cliniques de plusieurs millions. Sait ce qui se passe entre le clic et le fauteuil.",closeLabel:"Réserver",closeTitle:"Un fauteuil vide coûte plus cher qu'un forfait marketing.",closeSub:"30 minutes. Google Meet. Gratuit.",bookingConfirmEyebrow:"Votre audit",bookingConfirmMeta:"Google Meet · 30 minutes",bookingConfirmDesc:"Audit de croissance dentaire — préparé pour votre clinique.",bookingConfirmReset:"← Modifier le créneau",bookingConfirmCtaEyebrow:"Réservation",bookingConfirmCtaCopy:"Confirmez votre créneau via Google Agenda. Confirmation instantanée par email.",bookingConfirmCta:"Confirmer la réservation",bookingStrip1:"Confirmation immédiate",bookingStrip2:"Aucune carte requise",bookingStrip3:"Annulation libre",bookingIframeFallback:"Accéder directement au calendrier Google",footerTag:"Marketing dentaire. Search-first.",footerNav:"Navigation",footerNavSvc:"Services",footerNavPrice:"Tarification",footerNavProc:"Processus",footerNavTeam:"Équipe",footerContact:"Contact",footerBook:"Réserver un audit",footerLoc:"Montréal, QC",footerLegal:"© 2026 SSS Marketing. Tous droits réservés.",detailCloseLabel:"Fermer"
+      cta:"Réserver un audit de 30 min",skipLink:"Aller au contenu",eyebrow:"Acquisition de patients dentaires",heroTitle:"Marketing dentaire. Par des opérateurs.",heroTitleAccent:"Un fauteuil occupé.",heroSub:"Un seul indicateur compte. Search-first. Mesuré au fauteuil.",heroCta:"Réserver un audit de 30 min",scrollLabel:"Défiler",problemLabel:"Le problème",prob1:"Les agences traditionnelles vendent de la visibilité. Nous générons des patients.",prob2:"La plupart des agences ne comprennent pas pourquoi quelqu'un cherche « dentiste d'urgence » à 22h. Nous, oui.",servicesLabel:"Services",servicesTitle:"Six leviers. Un seul forfait.",servicesIntro:"Opéré en interne. Mesuré mensuellement.",svc1Name:"Google Ads — Search",svc1Desc:"Captés à la requête. Quand ils cherchent.",svc2Name:"Google Business Profile",svc2Desc:"Premier sur la carte. Profil défendu.",svc3Name:"Data Analytics",svc3Desc:"Chaque dollar tracé au fauteuil.",svc4Name:"Google Ads — Display",svc4Desc:"Présence ciblée. Mesurable.",svc5Name:"Google Ads — Vidéo",svc5Desc:"YouTube géolocalisé. Format court.",svc6Name:"Avis Google · NFC",svc6Desc:"Un tap. Un avis. Un signal.",svcDetailCue:"+ Voir les livrables",pricingLabel:"Tarification",pricingMo:"par mois · CAD",pf1Label:"Inclus",pf1Value:"Six leviers",pf1Note:"Search, GBP, Data, Display, Vidéo, NFC.",pf2Label:"Onboarding",pf2Note:"Six leviers configurés. Tableau de bord activé.",pf3Label:"Publicité Google",pf3Value:"Facturée directement",pf3Note:"Vous gardez le contrôle. Aucun frais caché.",pf4Label:"Spécialisation",pf4Value:"Dentaire uniquement",pf4Note:"Aucun autre vertical.",pricingCta:"Réserver un audit de 30 min",processLabel:"Processus",step1Num:"Étape 01",step1Unit:"min",step1Title:"Audit",step1Desc:"Présence Google. Compétiteurs. Opportunités locales.",step2Num:"Étape 02",step2Anchor:"Plan",step2Title:"Stratégie",step2Desc:"Plan d'action. Budget par levier. Cibles mensuelles.",step3Num:"Étape 03",step3Unit:"jours",step3Title:"Mise en ligne",step3Desc:"Campagnes actives. Mesure dès le premier mois.",filter:"Aucune caméra. Aucune danse. Vous restez dentiste.",teamLabel:"Équipe",teamTitle:"Chaque dollar a un opérateur.",teamSub:"Aucun budget laissé à un algorithme. Aucun mot publié sans validation. Aucune ligne entre nous et votre clinique.",hamzaRole:"Fondateur",hamzaName:"Hamza A.",hamzaBio:"Dix ans en marketing. Quatre ans en clinique — appels, urgences, plans de traitement. La majorité des agences n'ont jamais vu ça de l'intérieur.",shayanRole:"Partenaire · Conseiller clinique",shayanName:"Dr. Shayan Araghi",shayanBio:"14 ans de pratique clinique. Plusieurs cliniques bâties de zéro. DMD, Université de Montréal. Investisseur et partenaire stratégique.",aliRole:"Partenaire · Conseiller opérationnel",aliName:"Ali K.",aliBio:"Plus de 10 ans à l'intérieur des cliniques dentaires. Opérations quotidiennes, navigation des assurances, comptabilité clinique, expérience patient. A piloté des cliniques de plusieurs millions. Sait ce qui se passe entre le clic et le fauteuil.",closeLabel:"Réserver",closeTitle:"Un fauteuil vide coûte plus cher qu'un forfait marketing.",closeSub:"30 minutes. Google Meet. Gratuit.",bookingConfirmEyebrow:"Votre audit",bookingConfirmMeta:"Google Meet · 30 minutes",bookingConfirmDesc:"Audit de croissance dentaire — préparé pour votre clinique.",bookingConfirmReset:"← Modifier le créneau",bookingConfirmCtaEyebrow:"Réservation",bookingConfirmCtaCopy:"Confirmez votre créneau via Google Agenda. Confirmation instantanée par email.",bookingConfirmCta:"Confirmer la réservation",bookingStrip1:"Confirmation immédiate",bookingStrip2:"Aucune carte requise",bookingStrip3:"Annulation libre",bookingIframeFallback:"Accéder directement au calendrier Google",footerTag:"Marketing dentaire. Search-first.",footerNav:"Navigation",footerNavSvc:"Services",footerNavPrice:"Tarification",footerNavProc:"Processus",footerNavTeam:"Équipe",footerContact:"Contact",footerBook:"Réserver un audit",footerLoc:"Montréal, QC",footerLegal:"© 2026 SSS Marketing. Tous droits réservés.",detailCloseLabel:"Fermer"
     },
     en:{
-      cta:"Book a 30-min audit",skipLink:"Skip to content",eyebrow:"Dental patient acquisition",heroTitle:"Dental marketing. By operators.",heroTitleAccent:"A booked chair.",heroSub:"One metric matters. Search-first. Measured at the chair.",heroCta:"Book a 30-min audit",scrollLabel:"Scroll",problemLabel:"The problem",prob1:"Traditional agencies sell visibility. We generate patients.",prob2:"Most agencies don't understand why someone searches \u201Cemergency dentist\u201D at 10 PM. We do.",servicesLabel:"Services",servicesTitle:"Six levers. One plan.",servicesIntro:"Run in-house. Measured monthly.",svc1Name:"Google Ads — Search",svc1Desc:"Captured at the query. When they search.",svc2Name:"Google Business Profile",svc2Desc:"First on the map. Profile defended.",svc3Name:"Data Analytics",svc3Desc:"Every dollar traced to the chair.",svc4Name:"Google Ads — Display",svc4Desc:"Targeted presence. Measurable.",svc5Name:"Google Ads — Video",svc5Desc:"Geo-targeted YouTube. Short format.",svc6Name:"Google Reviews · NFC",svc6Desc:"One tap. One review. One signal.",svcDetailCue:"+ See deliverables",pricingLabel:"Pricing",pricingMo:"per month · CAD",pf1Label:"Included",pf1Value:"Six levers",pf1Note:"Search, GBP, Data, Display, Video, NFC.",pf2Label:"Onboarding",pf2Note:"Six levers configured. Dashboard live.",pf3Label:"Google ad spend",pf3Value:"Billed directly",pf3Note:"You keep control. No hidden fees.",pf4Label:"Specialization",pf4Value:"Dental only",pf4Note:"No other vertical.",pricingCta:"Book a 30-min audit",processLabel:"Process",step1Num:"Step 01",step1Unit:"min",step1Title:"Audit",step1Desc:"Google presence. Competitors. Local opportunities.",step2Num:"Step 02",step2Anchor:"Plan",step2Title:"Strategy",step2Desc:"Action plan. Budget per channel. Monthly targets.",step3Num:"Step 03",step3Unit:"days",step3Title:"Live",step3Desc:"Campaigns active. Measured from month one.",whyLabel:"Why SSS",whyTitle:"A discipline. One vertical.",whySub:"Four reasons. None spare.",why1:"Flat plan. No percentage of media spend.",why1Tag:"Flat fee",why2:"We operate. You own.",why2Tag:"Ownership",why3:"Continuous campaign optimization. Not once a quarter.",why3Tag:"Discipline",why4:"Montréal. Bilingual. One team.",why4Tag:"Local",teamLabel:"Team",teamTitle:"Every dollar has an operator.",teamSub:"No budget left to an algorithm. No copy posted without review. No layer between us and your practice.",hamzaRole:"Founder",hamzaName:"Hamza A.",hamzaBio:"Ten years in marketing. Four years inside a clinic — phones, emergencies, treatment plans. Most agencies haven't seen this from the inside.",shayanRole:"Partner · Clinical advisor",shayanName:"Dr. Shayan Araghi",shayanBio:"14 years of clinical practice. Several clinics built from scratch. DMD, Université de Montréal. Investor and strategic partner.",aliRole:"Partner · Operations advisor",aliName:"Ali K.",aliBio:"10+ years inside dental clinics. Daily operations, insurance navigation, clinic accounting, patient experience. Has run multi-million-dollar clinics. Knows exactly what happens between the click and the chair.",closeLabel:"Book",closeTitle:"An empty chair costs more than a marketing plan.",closeSub:"30 minutes. Google Meet. Free.",bookingConfirmEyebrow:"Your audit",bookingConfirmMeta:"Google Meet · 30 minutes",bookingConfirmDesc:"Dental growth audit — prepared for your practice.",bookingConfirmReset:"← Modify slot",bookingConfirmCtaEyebrow:"Booking",bookingConfirmCtaCopy:"Confirm your slot via Google Calendar. Instant email confirmation.",bookingConfirmCta:"Confirm booking",bookingStrip1:"Instant confirmation",bookingStrip2:"No card required",bookingStrip3:"Cancel anytime",bookingIframeFallback:"Open Google Calendar directly",footerTag:"Dental marketing. Search-first.",footerNav:"Navigation",footerNavSvc:"Services",footerNavPrice:"Pricing",footerNavProc:"Process",footerNavTeam:"Team",footerContact:"Contact",footerBook:"Book an audit",footerLoc:"Montréal, QC",footerLegal:"© 2026 SSS Marketing. All rights reserved.",detailCloseLabel:"Close"
+      cta:"Book a 30-min audit",skipLink:"Skip to content",eyebrow:"Dental patient acquisition",heroTitle:"Dental marketing. By operators.",heroTitleAccent:"A booked chair.",heroSub:"One metric matters. Search-first. Measured at the chair.",heroCta:"Book a 30-min audit",scrollLabel:"Scroll",problemLabel:"The problem",prob1:"Traditional agencies sell visibility. We generate patients.",prob2:"Most agencies don't understand why someone searches \u201Cemergency dentist\u201D at 10 PM. We do.",servicesLabel:"Services",servicesTitle:"Six levers. One plan.",servicesIntro:"Run in-house. Measured monthly.",svc1Name:"Google Ads — Search",svc1Desc:"Captured at the query. When they search.",svc2Name:"Google Business Profile",svc2Desc:"First on the map. Profile defended.",svc3Name:"Data Analytics",svc3Desc:"Every dollar traced to the chair.",svc4Name:"Google Ads — Display",svc4Desc:"Targeted presence. Measurable.",svc5Name:"Google Ads — Video",svc5Desc:"Geo-targeted YouTube. Short format.",svc6Name:"Google Reviews · NFC",svc6Desc:"One tap. One review. One signal.",svcDetailCue:"+ See deliverables",pricingLabel:"Pricing",pricingMo:"per month · CAD",pf1Label:"Included",pf1Value:"Six levers",pf1Note:"Search, GBP, Data, Display, Video, NFC.",pf2Label:"Onboarding",pf2Note:"Six levers configured. Dashboard live.",pf3Label:"Google ad spend",pf3Value:"Billed directly",pf3Note:"You keep control. No hidden fees.",pf4Label:"Specialization",pf4Value:"Dental only",pf4Note:"No other vertical.",pricingCta:"Book a 30-min audit",processLabel:"Process",step1Num:"Step 01",step1Unit:"min",step1Title:"Audit",step1Desc:"Google presence. Competitors. Local opportunities.",step2Num:"Step 02",step2Anchor:"Plan",step2Title:"Strategy",step2Desc:"Action plan. Budget per channel. Monthly targets.",step3Num:"Step 03",step3Unit:"days",step3Title:"Live",step3Desc:"Campaigns active. Measured from month one.",filter:"No camera. No dancing. You stay a dentist.",teamLabel:"Team",teamTitle:"Every dollar has an operator.",teamSub:"No budget left to an algorithm. No copy posted without review. No layer between us and your practice.",hamzaRole:"Founder",hamzaName:"Hamza A.",hamzaBio:"Ten years in marketing. Four years inside a clinic — phones, emergencies, treatment plans. Most agencies haven't seen this from the inside.",shayanRole:"Partner · Clinical advisor",shayanName:"Dr. Shayan Araghi",shayanBio:"14 years of clinical practice. Several clinics built from scratch. DMD, Université de Montréal. Investor and strategic partner.",aliRole:"Partner · Operations advisor",aliName:"Ali K.",aliBio:"10+ years inside dental clinics. Daily operations, insurance navigation, clinic accounting, patient experience. Has run multi-million-dollar clinics. Knows exactly what happens between the click and the chair.",closeLabel:"Book",closeTitle:"An empty chair costs more than a marketing plan.",closeSub:"30 minutes. Google Meet. Free.",bookingConfirmEyebrow:"Your audit",bookingConfirmMeta:"Google Meet · 30 minutes",bookingConfirmDesc:"Dental growth audit — prepared for your practice.",bookingConfirmReset:"← Modify slot",bookingConfirmCtaEyebrow:"Booking",bookingConfirmCtaCopy:"Confirm your slot via Google Calendar. Instant email confirmation.",bookingConfirmCta:"Confirm booking",bookingStrip1:"Instant confirmation",bookingStrip2:"No card required",bookingStrip3:"Cancel anytime",bookingIframeFallback:"Open Google Calendar directly",footerTag:"Dental marketing. Search-first.",footerNav:"Navigation",footerNavSvc:"Services",footerNavPrice:"Pricing",footerNavProc:"Process",footerNavTeam:"Team",footerContact:"Contact",footerBook:"Book an audit",footerLoc:"Montréal, QC",footerLegal:"© 2026 SSS Marketing. All rights reserved.",detailCloseLabel:"Close"
     }
   };
   const svcDetail = {
@@ -1434,6 +1442,21 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       5: ['10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30'],
       6: ['11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30']
     };
+
+    // ── Constant business-hours skeleton ─────────────────────────────────────
+    // Every day shows the same 19 rows. Operating windows (10:00–16:30) are
+    // active or reserved. Outside that window, slots render as "closed" —
+    // visible, structural, but typographically silent.
+    var BUSINESS_HOURS_TIMES = (function(){
+      var arr=[], h, m;
+      for(h=8; h<=17; h++){
+        for(m=0; m<60; m+=30){
+          if(h===17 && m>0) break; // stop at 17:00
+          arr.push((h<10?'0'+h:h)+':'+(m===0?'00':m));
+        }
+      }
+      return arr; // ['08:00','08:30',...,'17:00'] — 19 rows
+    })();
 
     // Simulated booked slots (slot is the ISO-like key "YYYY-MM-DD|HH:MM")
     var BOOKED = (function(){
@@ -1533,8 +1556,6 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     function renderWeek(){
       updateNavLabels();
       if(isMobile){renderMobilePicker();return;}
-      // Find all slot times across week for consistent row count
-      var allTimes = getWeekAllTimes();
       gridEl.innerHTML='';
       gridEl.classList.add('is-transitioning');
       if(pendingRaf!==null){cancelAnimationFrame(pendingRaf);}
@@ -1559,13 +1580,21 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
           head.appendChild(dn);head.appendChild(dnum);
           colEl.appendChild(head);
           var daySlotsArr = SLOTS[dow]||[];
-          // Render all time rows in consistent order
-          allTimes.forEach(function(t){
+          // Render the full business-hours skeleton — every day, same row count.
+          // Closed slots (outside this day's operating window) render as
+          // structural placeholders, not invisible holes.
+          BUSINESS_HOURS_TIMES.forEach(function(t){
             var hasSlot = daySlotsArr.indexOf(t)!==-1;
             if(!hasSlot){
-              var empty = document.createElement('div');
-              empty.className='booking-slot-empty';
-              colEl.appendChild(empty);
+              // Closed: outside this day's operating window.
+              var closed = document.createElement('div');
+              closed.className='booking-slot booking-slot--closed';
+              closed.setAttribute('aria-hidden','true');
+              var dot = document.createElement('span');
+              dot.className='booking-slot-closed-dot';
+              dot.setAttribute('aria-hidden','true');
+              closed.appendChild(dot);
+              colEl.appendChild(closed);
               return;
             }
             var sk = slotKey(day,t);
@@ -1602,15 +1631,6 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       });
     }
 
-    function getWeekAllTimes(){
-      var set={};
-      for(var col=0;col<7;col++){
-        var dow=addDays(currentWeekStart,col).getDay();
-        (SLOTS[dow]||[]).forEach(function(t){set[t]=true;});
-      }
-      return Object.keys(set).sort();
-    }
-
     // ── Render mobile picker ─────────────────────────────────────────────────
     function renderMobilePicker(){
       mobileRail.innerHTML='';
@@ -1641,11 +1661,28 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       var daySlotsArr=SLOTS[dow]||[];
       mobileSlots.innerHTML='';
       if(!daySlotsArr.length){
+        // Day fully closed — single message rather than 19 closed placeholders
         var emp=document.createElement('div');emp.className='booking-mobile-empty';
-        emp.textContent=getLang()==='en'?'No slots available':'Aucun créneau disponible';
+        emp.textContent=getLang()==='en'?'No slots this day':'Aucun créneau ce jour-là';
         mobileSlots.appendChild(emp);return;
       }
-      daySlotsArr.forEach(function(t){
+      // Render the full business-hours skeleton — same as desktop.
+      BUSINESS_HOURS_TIMES.forEach(function(t){
+        var hasSlot = daySlotsArr.indexOf(t)!==-1;
+        if(!hasSlot){
+          var closed=document.createElement('div');
+          closed.className='booking-mobile-slot booking-mobile-slot--closed';
+          closed.setAttribute('aria-hidden','true');
+          var timeSpan=document.createElement('span');
+          timeSpan.className='booking-mobile-slot-time';
+          timeSpan.textContent=t;
+          var dot=document.createElement('span');
+          dot.className='booking-mobile-slot-closed-dot';
+          dot.setAttribute('aria-hidden','true');
+          closed.appendChild(timeSpan);closed.appendChild(dot);
+          mobileSlots.appendChild(closed);
+          return;
+        }
         var sk=slotKey(day,t);
         var booked=!!BOOKED[sk];var past=isPast(day,t);
         var isSel=selectedSlot&&selectedSlot.key===sk;
@@ -1655,7 +1692,9 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
         btn.setAttribute('role','listitem');
         var unavailLabel=getLang()==='en'?' — unavailable':' — non disponible';
         btn.setAttribute('aria-label',t+(booked||past?unavailLabel:''));
-        var timeSpan=document.createElement('span');timeSpan.textContent=t;
+        var timeSpan=document.createElement('span');
+        timeSpan.className='booking-mobile-slot-time';
+        timeSpan.textContent=t;
         var chkSpan=document.createElement('span');chkSpan.className='booking-mobile-slot-check';
         var chkSvg=document.createElementNS('http://www.w3.org/2000/svg','svg');
         chkSvg.setAttribute('width','10');chkSvg.setAttribute('height','8');chkSvg.setAttribute('viewBox','0 0 10 8');chkSvg.setAttribute('fill','none');chkSvg.setAttribute('aria-hidden','true');
