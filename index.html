@@ -557,6 +557,97 @@ nav.scrolled .nav-logo{height:26px}
 .booking-nav-btn:hover{opacity:1;color:var(--tan)}
 .booking-nav-btn:focus-visible{outline:1px solid var(--tan);outline-offset:3px}
 
+/* ── Calendar anchor offset (clears the fixed nav) ── */
+#contact{scroll-margin-top:calc(var(--nav-h) + 24px)}
+
+/* ── Today eyebrow ── */
+.booking-today-eyebrow{
+  display:inline-flex;align-items:center;gap:12px;
+  font-family:var(--body);font-size:10px;letter-spacing:0.26em;text-transform:uppercase;
+  color:var(--tan);margin-bottom:18px;min-height:14px;
+}
+.booking-today-eyebrow::before{
+  content:'';width:18px;height:1px;background:var(--tan);display:inline-block;flex-shrink:0;
+}
+
+/* ── Day / Week view switch ── */
+.booking-view-switch{
+  display:inline-flex;align-items:stretch;
+  border:1px solid var(--rule-soft);
+}
+.booking-view-btn{
+  font-family:var(--body);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;
+  background:transparent;border:none;color:var(--ink);opacity:0.55;
+  padding:8px 14px;cursor:pointer;line-height:1;
+  transition:color .25s var(--ease),background-color .25s var(--ease),opacity .25s var(--ease);
+}
+.booking-view-btn + .booking-view-btn{border-left:1px solid var(--rule-soft)}
+.booking-view-btn:hover{opacity:1;color:var(--tan)}
+.booking-view-btn.is-active{background:var(--tan);color:var(--paper);opacity:1}
+.booking-view-btn:focus-visible{outline:1px solid var(--tan);outline-offset:2px}
+
+/* ── Single-day view ── */
+.booking-day{
+  border:1px solid var(--rule-soft);
+  background:var(--paper);
+  opacity:1;transition:opacity .35s var(--ease);
+}
+.booking-day.is-transitioning{opacity:0}
+.booking-day-head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:24px;
+  padding:26px 32px 22px;
+  border-bottom:1px solid var(--rule-soft);
+  background:var(--paper);
+  position:relative;
+}
+.booking-day-head.is-today::after{
+  content:'';position:absolute;left:32px;bottom:-1px;
+  width:32px;height:2px;background:var(--tan);
+}
+.booking-day-title{
+  font-family:var(--display);font-weight:500;
+  font-size:clamp(28px,3.4vw,40px);line-height:1;letter-spacing:-0.02em;
+  color:var(--ink);
+  font-feature-settings:"tnum" 1,"lnum" 1;
+}
+.booking-day-title .booking-day-weekday{color:var(--ink)}
+.booking-day-title .booking-day-num{color:var(--tan);margin-left:8px}
+.booking-day-meta{
+  font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;
+  color:var(--ink);opacity:0.6;text-align:right;
+}
+.booking-day-slots{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(132px,1fr));
+  gap:1px;
+  background:var(--rule-soft);
+}
+.booking-slot.booking-slot--day{
+  min-height:56px;padding:0 12px;
+  font-size:14px;
+  background:var(--paper);
+  border:none;
+}
+.booking-slot.booking-slot--day::before{width:0;top:0;bottom:0;left:0}
+.booking-slot.booking-slot--day:hover:not(.is-busy):not(.is-selected)::before{width:3px}
+.booking-slot.booking-slot--day.is-busy::after{left:14px;right:14px}
+.booking-day-empty{
+  padding:48px 28px;
+  font-family:var(--body);font-size:10px;letter-spacing:0.26em;text-transform:uppercase;
+  color:var(--ink);opacity:0.45;text-align:center;
+}
+
+/* ── Week-grid · today column wash (sage, signature surface) ── */
+.booking-col-head.is-today{
+  background:linear-gradient(to bottom,rgba(204,213,174,0.22),var(--paper));
+}
+
+/* ── Refined hover lead on standard slot ── */
+.booking-slot:hover:not(.is-busy):not(.is-selected)::before{width:3px}
+
+/* ── Selected slot · reads as a destination ── */
+.booking-slot.is-selected{box-shadow:inset 0 0 0 1px var(--ink)}
+
 /* ── 7-column availability grid ── */
 .booking-grid{
   display:grid;grid-template-columns:repeat(7,1fr);
@@ -844,10 +935,14 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   .pricing-fact:last-child{border-bottom:none}
   .team-grid{grid-template-columns:1fr;gap:48px}
   /* Booking mobile */
-  /* Grid → day-picker + slot-list on mobile */
+  /* Grid + day view → mobile day-picker + slot-list */
   .booking-nav{flex-direction:column;align-items:flex-start;gap:12px;padding-bottom:16px}
+  .booking-nav-controls{flex-wrap:wrap;row-gap:10px;column-gap:14px}
+  .booking-view-switch{order:99}
   .booking-grid{display:none}
+  .booking-day{display:none !important}
   .booking-mobile-picker{display:flex}
+  .booking-today-eyebrow{font-size:9px;letter-spacing:0.22em;gap:10px;margin-bottom:14px}
   .booking-confirm{padding:28px 0 0;margin-top:24px}
   .booking-confirm-cta-panel{padding:28px 24px 24px}
   .booking-confirm-strip{flex-direction:column;gap:6px}
@@ -1240,7 +1335,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 </section>
 
 <!-- 06 · CLOSE + BOOK · Sage signature panel → Paper calendar -->
-<section class="final" id="contact" aria-labelledby="closeTitle">
+<section class="final" id="book" aria-labelledby="closeTitle">
   <div class="final-rule"></div>
   <div class="container">
     <div class="section-head section-head--close fade-in">
@@ -1253,7 +1348,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 </section>
 
 <!-- Booking calendar -->
-<section class="section section--paper" aria-label="Réservation">
+<section class="section section--paper" id="contact" aria-label="Réservation">
   <div class="container">
     <!--
       data-booking-api: paste the Apps Script /exec URL here after deploying booking.gs
@@ -1263,17 +1358,28 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     -->
     <div class="contact-flow" id="bookingFlow" data-booking-api="https://script.google.com/macros/s/AKfycbyUCkOQ0cJetWlekZkTucC4KkWuAEXlQ825QXhFMrBuL5lcu2PivWXT7T_EKfhRJwqu/exec">
 
-        <!-- Week navigator -->
+        <!-- Today eyebrow (auto-filled from real-time date) -->
+        <div class="booking-today-eyebrow fade-in" id="bookingTodayEyebrow" aria-live="polite"></div>
+
+        <!-- Week / Day navigator -->
         <div class="booking-nav fade-in d1">
           <span class="booking-nav-week" id="bookingNavWeek">Semaine du —</span>
           <div class="booking-nav-controls">
             <span class="booking-nav-month" id="bookingNavMonth"></span>
-            <button class="booking-nav-btn" id="bookingPrev" type="button" aria-label="Semaine précédente">
+            <div class="booking-view-switch" role="tablist" aria-label="Vue">
+              <button class="booking-view-btn is-active" id="bookingViewDay" type="button" role="tab" aria-selected="true">
+                <span data-i="bookingViewDay">Jour</span>
+              </button>
+              <button class="booking-view-btn" id="bookingViewWeek" type="button" role="tab" aria-selected="false">
+                <span data-i="bookingViewWeek">Semaine</span>
+              </button>
+            </div>
+            <button class="booking-nav-btn" id="bookingPrev" type="button" aria-label="Précédent">
               <svg width="10" height="16" viewBox="0 0 10 16" fill="none" aria-hidden="true">
                 <path d="M8 2L2 8l6 6" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
               </svg>
             </button>
-            <button class="booking-nav-btn" id="bookingNext" type="button" aria-label="Semaine suivante">
+            <button class="booking-nav-btn" id="bookingNext" type="button" aria-label="Suivant">
               <svg width="10" height="16" viewBox="0 0 10 16" fill="none" aria-hidden="true">
                 <path d="M2 2l6 6-6 6" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
               </svg>
@@ -1281,8 +1387,11 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
           </div>
         </div>
 
-        <!-- Desktop 7-column grid -->
-        <div class="booking-grid fade-in d2" id="bookingGrid" role="grid" aria-label="Créneaux disponibles"></div>
+        <!-- Single-day view (default landing surface on desktop) -->
+        <div class="booking-day fade-in d2" id="bookingDay" role="grid" aria-label="Créneaux du jour"></div>
+
+        <!-- Desktop 7-column grid (revealed when user toggles to Semaine) -->
+        <div class="booking-grid fade-in d2" id="bookingGrid" role="grid" aria-label="Créneaux disponibles" style="display:none;"></div>
 
         <!-- Mobile day-picker (hidden on desktop) -->
         <div class="booking-mobile-picker fade-in d2" id="bookingMobilePicker">
@@ -1466,7 +1575,11 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     bookingErrTaken: "Ce créneau vient d'être réservé. Choisissez-en un autre.",
     bookingErrTooSoon: "Ce créneau est trop proche. Choisissez un horaire plus tard.",
     bookingErrNetwork: "Impossible de joindre le service de réservation. Réessayez ou écrivez à info@sss.marketing.",
-    bookingErrGeneric: "Une erreur est survenue. Réessayez ou écrivez à info@sss.marketing."
+    bookingErrGeneric: "Une erreur est survenue. Réessayez ou écrivez à info@sss.marketing.",
+    bookingViewDay: "Jour",
+    bookingViewWeek: "Semaine",
+    bookingTodayLabel: "Aujourd'hui",
+    bookingDayEmpty: "Aucune disponibilité ce jour — essayez le suivant."
   });
   Object.assign(i18n.en, {
     bookingFieldName: "Name",
@@ -1485,7 +1598,11 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     bookingErrTaken: "That slot was just booked. Please pick another.",
     bookingErrTooSoon: "That slot is too soon. Please pick a later time.",
     bookingErrNetwork: "Could not reach the booking service. Please retry or email info@sss.marketing.",
-    bookingErrGeneric: "Something went wrong. Please retry or email info@sss.marketing."
+    bookingErrGeneric: "Something went wrong. Please retry or email info@sss.marketing.",
+    bookingViewDay: "Day",
+    bookingViewWeek: "Week",
+    bookingTodayLabel: "Today",
+    bookingDayEmpty: "No availability this day — try the next one."
   });
 
   const svcDetail = {
@@ -1674,7 +1791,12 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       }).then(function(r){ return r.json(); });
     }
 
-    var currentWeekStart = getWeekStart(new Date());
+    // State ────────────────────────────────────────────────────────────────
+    // Day view is the default landing surface; week grid is opt-in via toggle.
+    var today = new Date(); today.setHours(0,0,0,0);
+    var selectedDay      = new Date(today);
+    var currentWeekStart = getWeekStart(selectedDay);
+    var currentView      = 'day';          // 'day' | 'week'
     var selectedSlot = null; // {date: Date, time: '12:30', key: 'YYYY-MM-DD|HH:MM'}
     var isMobile = false;
     var mobileDayIndex = 0;
@@ -1692,6 +1814,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     function dateKey(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
     function slotKey(d,t){return dateKey(d)+'|'+t;}
     function isToday(d){var t=new Date();return dateKey(d)===dateKey(t);}
+    function isSameDay(a,b){return dateKey(a)===dateKey(b);}
     function isPast(d,t){
       var now=new Date();
       var parts=t.split(':');
@@ -1723,10 +1846,14 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 
     // ── DOM refs ─────────────────────────────────────────────────────────────
     var gridEl   = document.getElementById('bookingGrid');
+    var dayEl    = document.getElementById('bookingDay');
     var navWeek  = document.getElementById('bookingNavWeek');
     var navMonth = document.getElementById('bookingNavMonth');
     var prevBtn  = document.getElementById('bookingPrev');
     var nextBtn  = document.getElementById('bookingNext');
+    var viewDayBtn   = document.getElementById('bookingViewDay');
+    var viewWeekBtn  = document.getElementById('bookingViewWeek');
+    var todayEyebrow = document.getElementById('bookingTodayEyebrow');
     var confirmWrap = document.getElementById('bookingConfirmWrap');
     var confirmDt   = document.getElementById('bookingConfirmDatetime');
     var confirmCta  = document.getElementById('bookingConfirmCta');
@@ -1740,11 +1867,54 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     // ── Detect mobile ────────────────────────────────────────────────────────
     function checkMobile(){
       isMobile = window.innerWidth <= 680;
-      if(isMobile){gridEl.style.display='none';mobilePicker.style.display='flex';}
-      else{gridEl.style.display='';mobilePicker.style.display='none';}
+      if(isMobile){
+        gridEl.style.display='none';
+        if(dayEl) dayEl.style.display='none';
+        mobilePicker.style.display='flex';
+      } else {
+        mobilePicker.style.display='none';
+        if(dayEl) dayEl.style.display = (currentView==='day')  ? '' : 'none';
+        gridEl.style.display          = (currentView==='week') ? '' : 'none';
+      }
     }
     checkMobile();
-    window.addEventListener('resize',function(){checkMobile();renderWeek();},{passive:true});
+    window.addEventListener('resize',function(){checkMobile();render();},{passive:true});
+
+    // ── Render dispatcher ────────────────────────────────────────────────────
+    function render(){
+      updateNavLabels();
+      updateTodayEyebrow();
+      if(isMobile){ renderMobilePicker(); return; }
+      if(currentView==='day'){ renderDay(); } else { renderWeek(); }
+    }
+    function setView(v){
+      if(v!=='day' && v!=='week') return;
+      currentView = v;
+      if(viewDayBtn){
+        viewDayBtn.classList.toggle('is-active',  v==='day');
+        viewDayBtn.setAttribute('aria-selected',  v==='day'?'true':'false');
+      }
+      if(viewWeekBtn){
+        viewWeekBtn.classList.toggle('is-active', v==='week');
+        viewWeekBtn.setAttribute('aria-selected', v==='week'?'true':'false');
+      }
+      if(!isMobile && dayEl){
+        dayEl.style.display  = v==='day'  ? '' : 'none';
+        gridEl.style.display = v==='week' ? '' : 'none';
+      }
+      // Keep selected day inside the current week when switching to week view
+      if(v==='week'){ currentWeekStart = getWeekStart(selectedDay); }
+      render();
+    }
+    function updateTodayEyebrow(){
+      if(!todayEyebrow) return;
+      var lang = getLang();
+      var loc  = lang==='en' ? 'en-CA' : 'fr-CA';
+      var label = (i18n[lang] && i18n[lang].bookingTodayLabel) || (lang==='en'?'Today':"Aujourd'hui");
+      var full = new Intl.DateTimeFormat(loc,{weekday:'long',month:'long',day:'numeric'}).format(new Date());
+      full = full.charAt(0).toUpperCase() + full.slice(1);
+      todayEyebrow.textContent = label + ' · ' + full;
+    }
 
     // ── Render week (desktop grid) ───────────────────────────────────────────
     function renderWeek(){
@@ -1811,6 +1981,98 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
             colEl.appendChild(btn);
           });
           gridEl.appendChild(colEl);
+        }
+      });
+    }
+
+    // ── Render single-day view (default desktop surface) ─────────────────────
+    function renderDay(){
+      if(!dayEl) return;
+      var lang = getLang();
+      var loc  = lang==='en' ? 'en-CA' : 'fr-CA';
+      var day  = selectedDay;
+      var isCurrentDay = isSameDay(day, new Date());
+      var todayLabel = (i18n[lang] && i18n[lang].bookingTodayLabel) || (lang==='en'?'Today':"Aujourd'hui");
+
+      var weekday = new Intl.DateTimeFormat(loc,{weekday:'long'}).format(day);
+      weekday = weekday.charAt(0).toUpperCase() + weekday.slice(1);
+      var monthYr = new Intl.DateTimeFormat(loc,{month:'long',year:'numeric'}).format(day);
+
+      dayEl.innerHTML = '';
+      dayEl.classList.add('is-transitioning');
+      if(pendingRaf!==null){cancelAnimationFrame(pendingRaf);}
+      pendingRaf = requestAnimationFrame(function(){
+        pendingRaf = null;
+        dayEl.classList.remove('is-transitioning');
+
+        var head = document.createElement('div');
+        head.className = 'booking-day-head' + (isCurrentDay ? ' is-today' : '');
+        var title = document.createElement('div');
+        title.className = 'booking-day-title';
+        var wkSpan = document.createElement('span');
+        wkSpan.className = 'booking-day-weekday';
+        wkSpan.textContent = weekday;
+        var numSpan = document.createElement('span');
+        numSpan.className = 'booking-day-num';
+        numSpan.textContent = day.getDate();
+        title.appendChild(wkSpan); title.appendChild(numSpan);
+        var meta = document.createElement('div');
+        meta.className = 'booking-day-meta';
+        meta.textContent = monthYr + (isCurrentDay ? ' · ' + todayLabel : '');
+        head.appendChild(title); head.appendChild(meta);
+        dayEl.appendChild(head);
+
+        var daySlotsArr = slotsForDay(day);
+        var anyAvailable = false;
+
+        var slotsWrap = document.createElement('div');
+        slotsWrap.className = 'booking-day-slots';
+
+        BUSINESS_HOURS_TIMES.forEach(function(t){
+          var hasSlot = daySlotsArr.indexOf(t)!==-1;
+          var sk = slotKey(day,t);
+          var booked = isSlotBooked(sk);
+          var past   = isPast(day,t);
+          var isBusy = !hasSlot || booked || past;
+          var isSel  = !isBusy && selectedSlot && selectedSlot.key===sk;
+          if(!isBusy) anyAvailable = true;
+
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'booking-slot booking-slot--day' + (isBusy?' is-busy':'') + (isSel?' is-selected':'');
+          btn.textContent = t;
+          var busyLabel = lang==='en' ? ' — unavailable' : ' — non disponible';
+          btn.setAttribute('aria-label', t + (isBusy?busyLabel:''));
+          if(isBusy){ btn.disabled = true; btn.setAttribute('aria-disabled','true'); }
+
+          var chk = document.createElementNS('http://www.w3.org/2000/svg','svg');
+          chk.setAttribute('class','booking-slot-check');
+          chk.setAttribute('width','10'); chk.setAttribute('height','8');
+          chk.setAttribute('viewBox','0 0 10 8'); chk.setAttribute('fill','none');
+          chk.setAttribute('aria-hidden','true');
+          var path = document.createElementNS('http://www.w3.org/2000/svg','path');
+          path.setAttribute('d','M1 4l2.5 2.5L9 1');
+          path.setAttribute('stroke','currentColor');
+          path.setAttribute('stroke-width','1.2');
+          path.setAttribute('stroke-linecap','square');
+          chk.appendChild(path); btn.appendChild(chk);
+
+          if(!isBusy){
+            btn.addEventListener('click', (function(_sk,_d,_t){
+              return function(){ selectSlot(_sk,_d,_t); };
+            })(sk,day,t));
+          }
+          slotsWrap.appendChild(btn);
+        });
+
+        dayEl.appendChild(slotsWrap);
+
+        if(!anyAvailable){
+          var empty = document.createElement('div');
+          empty.className = 'booking-day-empty';
+          empty.textContent = (i18n[lang] && i18n[lang].bookingDayEmpty) ||
+            (lang==='en' ? 'No availability this day — try the next one.' : "Aucune disponibilité ce jour — essayez le suivant.");
+          dayEl.appendChild(empty);
         }
       });
     }
@@ -1890,7 +2152,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
         confirmWrap.scrollIntoView({behavior:'smooth', block: blockMode});
       }, 80);
       // Re-render to update selected state
-      if(isMobile){renderMobileDaySlots(day);}else{renderWeek();}
+      if(isMobile){renderMobileDaySlots(day);}else{render();}
     }
 
     // ── Reset ────────────────────────────────────────────────────────────────
@@ -1899,7 +2161,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
         selectedSlot=null;
         confirmWrap.classList.remove('is-open');
         confirmWrap.setAttribute('aria-hidden','true');
-        if(isMobile){renderMobilePicker();}else{renderWeek();}
+        render();
       });
     }
 
@@ -1915,32 +2177,70 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       if(!API_ENABLED) return Promise.resolve();
       var weekEnd = addDays(currentWeekStart, 6);
       return fetchAvailability(currentWeekStart, weekEnd).then(function(){
-        if(isMobile){ renderMobilePicker(); } else { renderWeek(); }
+        render();
       });
     }
     if(prevBtn){prevBtn.addEventListener('click',function(){
-      gridEl.classList.add('is-transitioning');
-      setTimeout(function(){
-        currentWeekStart=addDays(currentWeekStart,-7);
-        mobileDayIndex=0;
-        renderWeek();
-        ensureWeekLoaded();
-      },180);
+      if(currentView==='day' && !isMobile){
+        // Don't allow stepping into the past
+        var candidate = addDays(selectedDay,-1);
+        if(candidate < today) return;
+        dayEl && dayEl.classList.add('is-transitioning');
+        setTimeout(function(){
+          selectedDay = candidate;
+          currentWeekStart = getWeekStart(selectedDay);
+          render();
+          ensureWeekLoaded();
+        },180);
+      } else {
+        gridEl.classList.add('is-transitioning');
+        setTimeout(function(){
+          currentWeekStart=addDays(currentWeekStart,-7);
+          if(getWeekStart(today) > currentWeekStart){
+            currentWeekStart = getWeekStart(today);
+          }
+          defaultMobileDayIndexToToday();
+          render();
+          ensureWeekLoaded();
+        },180);
+      }
     });}
     if(nextBtn){nextBtn.addEventListener('click',function(){
-      gridEl.classList.add('is-transitioning');
-      setTimeout(function(){
-        currentWeekStart=addDays(currentWeekStart,7);
-        mobileDayIndex=0;
-        renderWeek();
-        ensureWeekLoaded();
-      },180);
+      if(currentView==='day' && !isMobile){
+        dayEl && dayEl.classList.add('is-transitioning');
+        setTimeout(function(){
+          selectedDay = addDays(selectedDay,1);
+          currentWeekStart = getWeekStart(selectedDay);
+          render();
+          ensureWeekLoaded();
+        },180);
+      } else {
+        gridEl.classList.add('is-transitioning');
+        setTimeout(function(){
+          currentWeekStart=addDays(currentWeekStart,7);
+          mobileDayIndex=0;
+          render();
+          ensureWeekLoaded();
+        },180);
+      }
     });}
+
+    if(viewDayBtn)  viewDayBtn.addEventListener('click',  function(){ setView('day');  });
+    if(viewWeekBtn) viewWeekBtn.addEventListener('click', function(){ setView('week'); });
 
     // ── Language change re-render ────────────────────────────────────────────
     document.querySelectorAll('.lang-btn').forEach(function(b){
-      b.addEventListener('click',function(){setTimeout(renderWeek,50);});
+      b.addEventListener('click',function(){setTimeout(render,50);});
     });
+
+    // ── Default mobile dayrail focus to today (not Monday) ───────────────────
+    function defaultMobileDayIndexToToday(){
+      for(var i=0;i<7;i++){
+        if(isSameDay(addDays(currentWeekStart,i), today)){ mobileDayIndex = i; return; }
+      }
+      mobileDayIndex = 0;
+    }
+    defaultMobileDayIndexToToday();
 
     // ── Booking form wiring ──────────────────────────────────────────────────
     var formEl       = document.getElementById('bookingForm');
@@ -2099,7 +2399,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     });
 
     // ── Initial render ───────────────────────────────────────────────────────
-    renderWeek();
+    render();
     ensureWeekLoaded();
 
     // ── Accessible fallback: silent iframe background load ───────────────────
@@ -2124,6 +2424,48 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       }
     }
 
+  })();
+
+  // ── CTA → Calendar · smooth, centered scroll ──────────────────────────────
+  (function(){
+    var target = document.getElementById('contact');
+    if(!target) return;
+
+    function scrollToCalendar(){
+      var dayEl  = document.getElementById('bookingDay');
+      var gridEl = document.getElementById('bookingGrid');
+      var mobEl  = document.getElementById('bookingMobilePicker');
+      // Pick the calendar surface currently on screen
+      var focusEl =
+        (mobEl  && mobEl.offsetParent)  ? mobEl  :
+        (dayEl  && dayEl.offsetParent)  ? dayEl  :
+        (gridEl && gridEl.offsetParent) ? gridEl :
+        target;
+
+      var navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'),10) || 72;
+      var rect = focusEl.getBoundingClientRect();
+      // Center the calendar surface in the viewport
+      var y = window.scrollY + rect.top - Math.max((window.innerHeight - rect.height)/2, navH + 24);
+      // Clamp so the section eyebrow never tucks under the nav
+      var minY = window.scrollY + target.getBoundingClientRect().top - navH - 16;
+      y = Math.max(y, minY);
+
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
+      try { history.replaceState(null, '', '#contact'); } catch(_e){}
+    }
+
+    document.querySelectorAll('a[href="#contact"]').forEach(function(a){
+      a.addEventListener('click', function(e){
+        e.preventDefault();
+        scrollToCalendar();
+      });
+    });
+
+    // Deep-link landing on /#contact also gets the centered framing
+    if(window.location.hash === '#contact'){
+      requestAnimationFrame(function(){ setTimeout(scrollToCalendar, 60); });
+    }
   })();
 
 })();
