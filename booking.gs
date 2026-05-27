@@ -6,6 +6,10 @@
  *        → { tz, slots: { "YYYY-MM-DD": ["09:00","09:30",...] } }
  *   GET  ?action=ping
  *        → { ok:true }
+ *   GET  ?action=debug_events&start=YYYY-MM-DD&end=YYYY-MM-DD
+ *        → { events: [{startIso, endIso, allDay, myStatus, blocking}, ...] }
+ *          (No event titles are exposed — only metadata. Useful to diagnose
+ *           "every slot reports slot_taken" by seeing what's on the calendar.)
  *   POST { action:"book", name, email, phone?, clinic?, notes?, date, slot, tz, duration, lang }
  *        → { ok:true, eventId, summary, googleLink }
  *        or { error:"slot_taken" | "missing_fields" | "invalid_email" | ... }
@@ -91,6 +95,9 @@ function doGet(e) {
     if (action === 'ping') {
       return jsonOut_({ ok: true, tz: CONFIG.TIMEZONE, duration: CONFIG.DURATION_MINUTES });
     }
+    if (action === 'debug_events') {
+      return jsonOut_(debugEvents_(params.start, params.end));
+    }
     return jsonOut_({ error: 'unknown_action', action: action });
   } catch (err) {
     Logger.log('doGet error: ' + (err && err.stack || err));
@@ -120,6 +127,37 @@ function jsonOut_(obj) {
 
 /* ────────────────── Availability ────────────────── */
 
+/**
+ * Returns the events on `cal` between [start, end) that should BLOCK a slot.
+ *
+ * This is the single source of truth for "is the calendar busy". Both
+ * getAvailability_ (which decides what shows up as free in the UI) and book_
+ * (which decides whether to accept a booking) MUST go through this. If these
+ * two paths ever disagree, the UI will show a slot as free and submitting it
+ * will fail with slot_taken — exactly the bug we hit in production.
+ *
+ * Filter rules:
+ *   - All-day events do NOT block. Google adds many automatic all-day events
+ *     to a calendar (Working Location, Birthday, Tasks, Out-of-office in
+ *     some configurations) that would otherwise lock out every slot in a day.
+ *     If a full-day block is intended, the operator should remove the day
+ *     from WORKING_DAYS or temporarily shrink WORKING_HOURS_BY_DOW.
+ *   - Events the deploying user has declined do NOT block. They've said no
+ *     to that meeting, so they're effectively free at that time.
+ */
+function listBusyEvents_(cal, rangeStart, rangeEnd) {
+  const NO_STATUS = (CalendarApp.GuestStatus && CalendarApp.GuestStatus.NO) || null;
+  return cal.getEvents(rangeStart, rangeEnd).filter(function(ev){
+    try { if (ev.isAllDayEvent()) return false; } catch (_) {}
+    try {
+      if (NO_STATUS && typeof ev.getMyStatus === 'function') {
+        if (ev.getMyStatus() === NO_STATUS) return false;
+      }
+    } catch (_) { /* getMyStatus throws on non-attendable events; ignore */ }
+    return true;
+  });
+}
+
 function getAvailability_(startStr, endStr) {
   if (!isYmd_(startStr) || !isYmd_(endStr)) return {};
 
@@ -136,12 +174,9 @@ function getAvailability_(startStr, endStr) {
   if (rangeEnd > latest) rangeEnd = latest;
   if (rangeStart > rangeEnd) return {};
 
-  const events = cal.getEvents(rangeStart, rangeEnd).filter(function(ev){
-    return !ev.isAllDayEvent();
-  });
+  const events = listBusyEvents_(cal, rangeStart, rangeEnd);
 
   const result = {};
-  const oneDayMs = 86400 * 1000;
 
   // Walk each day in the range (in business tz).
   let cursorYmd = startStr;
@@ -181,6 +216,54 @@ function overlaps_(events, start, end) {
   return false;
 }
 
+/**
+ * Returns the FIRST blocking event that overlaps [start, end), or null.
+ * Used by book_ to log a diagnostic before returning slot_taken.
+ */
+function firstOverlap_(events, start, end) {
+  for (let i = 0; i < events.length; i++) {
+    const evS = events[i].getStartTime();
+    const evE = events[i].getEndTime();
+    if (start < evE && end > evS) return events[i];
+  }
+  return null;
+}
+
+/**
+ * Diagnostic endpoint: returns event metadata (no titles) so operators can
+ * see what's on the calendar without leaking content. Safe to expose.
+ */
+function debugEvents_(startStr, endStr) {
+  if (!isYmd_(startStr) || !isYmd_(endStr)) return { error: 'invalid_range' };
+  const tz = CONFIG.TIMEZONE;
+  const cal = resolveCalendar_();
+  if (!cal) return { error: 'no_calendar' };
+  const rangeStart = parseTzDate_(startStr, '00:00', tz);
+  const rangeEnd   = parseTzDate_(endStr,   '23:59', tz);
+  const all = cal.getEvents(rangeStart, rangeEnd);
+  const NO_STATUS = (CalendarApp.GuestStatus && CalendarApp.GuestStatus.NO) || null;
+  const out = all.map(function(ev){
+    let allDay = false, myStatus = null;
+    try { allDay = ev.isAllDayEvent(); } catch (_) {}
+    try { myStatus = (ev.getMyStatus && ev.getMyStatus().toString()) || null; } catch (_) {}
+    const blocking = !allDay && !(NO_STATUS && myStatus === NO_STATUS.toString());
+    return {
+      startIso: ev.getStartTime().toISOString(),
+      endIso:   ev.getEndTime().toISOString(),
+      allDay:   allDay,
+      myStatus: myStatus,
+      blocking: blocking,
+    };
+  });
+  return {
+    tz: tz,
+    range: { start: startStr, end: endStr },
+    total: out.length,
+    blocking: out.filter(function(e){ return e.blocking; }).length,
+    events: out,
+  };
+}
+
 /* ────────────────── Booking ────────────────── */
 
 function book_(body) {
@@ -216,7 +299,16 @@ function book_(body) {
 
   let event, summary, googleLink;
   try {
-    if (overlaps_(cal.getEvents(start, end), start, end)) {
+    // Use the SAME filter as availability so the two paths never disagree.
+    // If they ever do, a slot will look free in the UI but every booking
+    // attempt will fail with slot_taken — the production bug we just fixed.
+    const busy = listBusyEvents_(cal, start, end);
+    const blocker = firstOverlap_(busy, start, end);
+    if (blocker) {
+      Logger.log('slot_taken at ' + start.toISOString() +
+                 ' blocked by event ' + blocker.getStartTime().toISOString() +
+                 '..' + blocker.getEndTime().toISOString() +
+                 ' (allDay=' + blocker.isAllDayEvent() + ')');
       return { error: 'slot_taken' };
     }
 
