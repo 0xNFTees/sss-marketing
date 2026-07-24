@@ -103,6 +103,19 @@ nav.scrolled .nav-logo{height:26px}
   color:var(--tan);
 }
 
+/* ===== LANGUAGE TOGGLE ===== */
+.nav-right{display:flex;align-items:center;gap:22px}
+.lang-toggle{display:flex;align-items:center;gap:7px;font-family:var(--body);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;flex-shrink:0}
+.lang-toggle button{color:var(--tan);opacity:0.55;padding:2px 0;letter-spacing:inherit;transition:opacity .2s var(--ease),color .2s var(--ease)}
+.lang-toggle button:hover{opacity:0.9}
+.lang-toggle button[aria-pressed="true"]{color:var(--ink);opacity:1}
+.lang-toggle .lsep{color:var(--tan);opacity:0.4}
+@media(max-width:600px){
+  .nav-right{gap:14px}
+  .nav-tag{display:none}
+}
+@media print{.lang-toggle{display:none !important}}
+
 .vh{
   position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
   clip:rect(0,0,0,0);white-space:nowrap;border:0;
@@ -425,7 +438,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 </head>
 <body>
 
-<a class="skip-link" href="#main-content">Skip to content</a>
+<a class="skip-link" href="#main-content" data-i="skip">Skip to content</a>
 
 <nav id="nav" aria-label="Document header">
   <div class="nav-inner">
@@ -438,7 +451,14 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
            loading="eager"
            decoding="async">
     </a>
-    <span class="nav-tag">Prepared for 123Dentist</span>
+    <div class="nav-right">
+      <span class="nav-tag" data-i="navTag">Prepared for 123Dentist</span>
+      <div class="lang-toggle" role="group" aria-label="Language / Langue">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <span class="lsep" aria-hidden="true">/</span>
+        <button type="button" data-lang="fr" aria-pressed="false">FR</button>
+      </div>
+    </div>
   </div>
 </nav>
 
@@ -446,9 +466,9 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 <header class="hero" id="top">
   <div class="container">
     <div class="hero-left">
-      <p class="eyebrow fade-in d1">Pilot proposal · Prepared for 123Dentist</p>
-      <h1 class="fade-in d2">Six clinics. Four months. <em>One number.</em></h1>
-      <p class="hero-sub fade-in d3">Patients find dentists on Google. We run the six services that turn searches into booked chairs — one system, deployed the same way at every location. This is a proposal to prove it on six of your clinics before anyone talks about four hundred and twenty-five.</p>
+      <p class="eyebrow fade-in d1" data-i="heroEyebrow">Pilot proposal · Prepared for 123Dentist</p>
+      <h1 class="fade-in d2" data-i="heroH1">Six clinics. Four months. <em>One number.</em></h1>
+      <p class="hero-sub fade-in d3" data-i="heroSub">Patients find dentists on Google. We run the six services that turn searches into booked chairs — one system, deployed the same way at every location. This is a proposal to prove it on six of your clinics before anyone talks about four hundred and twenty-five.</p>
     </div>
   </div>
 </header>
@@ -459,32 +479,32 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   <div class="container">
     <div class="section-head fade-in">
       <span class="num">01</span><span class="sep"></span>
-      <span>The proposal</span>
+      <span data-i="s01head">The proposal</span>
     </div>
-    <h2 class="vh" id="proposalTitle">The proposal</h2>
+    <h2 class="vh" id="proposalTitle" data-i="s01vh">The proposal</h2>
 
     <div class="process-steps">
       <div class="process-step fade-in d1">
-        <div class="process-step-num">Scope</div>
-        <div class="process-step-anchor">6<small>clinics</small></div>
-        <h3 class="process-step-title">Selected by 123Dentist.</h3>
-        <p class="process-step-desc">Mixed profiles: urban and suburban, high and low competition, high and low treatment value, varying open chair capacity.</p>
+        <div class="process-step-num" data-i="scopeLabel">Scope</div>
+        <div class="process-step-anchor" data-i="scopeAnchor">6<small>clinics</small></div>
+        <h3 class="process-step-title" data-i="scopeTitle">Selected by 123Dentist.</h3>
+        <p class="process-step-desc" data-i="scopeDesc">Mixed profiles: urban and suburban, high and low competition, high and low treatment value, varying open chair capacity.</p>
       </div>
       <div class="process-step fade-in d2">
-        <div class="process-step-num">Timeline</div>
-        <div class="process-step-anchor">14<small>days</small></div>
-        <h3 class="process-step-title">Live after account access.</h3>
-        <p class="process-step-desc">Month one is learning. Months two through four are the scorecard.</p>
+        <div class="process-step-num" data-i="timeLabel">Timeline</div>
+        <div class="process-step-anchor" data-i="timeAnchor">14<small>days</small></div>
+        <h3 class="process-step-title" data-i="timeTitle">Live after account access.</h3>
+        <p class="process-step-desc" data-i="timeDesc">Month one is learning. Months two through four are the scorecard.</p>
       </div>
       <div class="process-step fade-in d3">
-        <div class="process-step-num">Commitment</div>
-        <div class="process-step-anchor">449<small>/ clinic / mo</small></div>
-        <h3 class="process-step-title">Month to month.</h3>
-        <p class="process-step-desc">Cancel anytime. No term, no minimum.</p>
+        <div class="process-step-num" data-i="commitLabel">Commitment</div>
+        <div class="process-step-anchor" data-i="commitAnchor">449<small>/ clinic / mo</small></div>
+        <h3 class="process-step-title" data-i="commitTitle">Month to month.</h3>
+        <p class="process-step-desc" data-i="commitDesc">Cancel anytime. No term, no minimum.</p>
       </div>
     </div>
 
-    <p class="statement fade-in">The pilot does not test six clinics. It tests whether one system, deployed identically, produces a comparable cost per booked patient across different market conditions. If it repeats, it scales.</p>
+    <p class="statement fade-in" data-i="s01statement">The pilot does not test six clinics. It tests whether one system, deployed identically, produces a comparable cost per booked patient across different market conditions. If it repeats, it scales.</p>
   </div>
 </section>
 
@@ -494,34 +514,34 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   <div class="container">
     <div class="section-head fade-in">
       <span class="num">02</span><span class="sep"></span>
-      <span>What makes it a yes</span>
+      <span data-i="s02head">What makes it a yes</span>
     </div>
-    <h2 class="section-title fade-in d1" id="criteriaTitle">Success criteria, pre-agreed.</h2>
+    <h2 class="section-title fade-in d1" id="criteriaTitle" data-i="s02title">Success criteria, pre-agreed.</h2>
 
     <div class="criteria-grid">
       <div class="criteria-cell fade-in d1">
-        <div class="criteria-label">Primary</div>
-        <div class="criteria-value">Under $400 CAD per booked new patient</div>
-        <p class="criteria-note">All-in — ad spend plus our fee, divided by booked new patients. Sustained across months 2, 3 and 4.</p>
+        <div class="criteria-label" data-i="crit1Label">Primary</div>
+        <div class="criteria-value" data-i="crit1Value">Under $400 CAD per booked new patient</div>
+        <p class="criteria-note" data-i="crit1Note">All-in — ad spend plus our fee, divided by booked new patients. Sustained across months 2, 3 and 4.</p>
       </div>
       <div class="criteria-cell fade-in d2">
-        <div class="criteria-label">Floor</div>
-        <div class="criteria-value">8 booked new patients per clinic per month</div>
-        <p class="criteria-note">Minimum, by month 3.</p>
+        <div class="criteria-label" data-i="crit2Label">Floor</div>
+        <div class="criteria-value" data-i="crit2Value">8 booked new patients per clinic per month</div>
+        <p class="criteria-note" data-i="crit2Note">Minimum, by month 3.</p>
       </div>
       <div class="criteria-cell fade-in d3">
-        <div class="criteria-label">Capacity</div>
-        <div class="criteria-value">20% of measured open hours recovered</div>
-        <p class="criteria-note">Open hygiene and doctor hours, by month 4.</p>
+        <div class="criteria-label" data-i="crit3Label">Capacity</div>
+        <div class="criteria-value" data-i="crit3Value">20% of measured open hours recovered</div>
+        <p class="criteria-note" data-i="crit3Note">Open hygiene and doctor hours, by month 4.</p>
       </div>
       <div class="criteria-cell fade-in d4">
-        <div class="criteria-label">Diagnostic</div>
-        <div class="criteria-value">Call answer rate, reported monthly</div>
-        <p class="criteria-note">Not scored.</p>
+        <div class="criteria-label" data-i="crit4Label">Diagnostic</div>
+        <div class="criteria-value" data-i="crit4Value">Call answer rate, reported monthly</div>
+        <p class="criteria-note" data-i="crit4Note">Not scored.</p>
       </div>
     </div>
 
-    <p class="criteria-close fade-in">These are our proposed thresholds. If $400 is the wrong number for your economics, we use yours. The point is that it is set before there is data to argue about.</p>
+    <p class="criteria-close fade-in" data-i="critClose">These are our proposed thresholds. If $400 is the wrong number for your economics, we use yours. The point is that it is set before there is data to argue about.</p>
   </div>
 </section>
 
@@ -531,32 +551,32 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   <div class="container">
     <div class="section-head fade-in">
       <span class="num">03</span><span class="sep"></span>
-      <span>How a booked patient is measured</span>
+      <span data-i="s03head">How a booked patient is measured</span>
     </div>
-    <h2 class="section-title fade-in d1" id="measureTitle">Three layers. Two are ours. One is yours.</h2>
+    <h2 class="section-title fade-in d1" id="measureTitle" data-i="s03title">Three layers. Two are ours. One is yours.</h2>
 
     <div class="layers">
       <div class="layer fade-in d1">
-        <div class="layer-num">Layer one</div>
-        <div class="layer-owner">Ours.</div>
-        <p class="layer-body">A tracked number per clinic, inserted dynamically on your existing site. Which call came from which keyword, at what hour, in which city. Your site. Your brand. Our tracking.</p>
+        <div class="layer-num" data-i="layer1Num">Layer one</div>
+        <div class="layer-owner" data-i="layer1Owner">Ours.</div>
+        <p class="layer-body" data-i="layer1Body">A tracked number per clinic, inserted dynamically on your existing site. Which call came from which keyword, at what hour, in which city. Your site. Your brand. Our tracking.</p>
       </div>
       <div class="layer fade-in d2">
-        <div class="layer-num">Layer two</div>
-        <div class="layer-owner">Ours.</div>
-        <p class="layer-body">The booking path on the site, tracked end to end.</p>
+        <div class="layer-num" data-i="layer2Num">Layer two</div>
+        <div class="layer-owner" data-i="layer2Owner">Ours.</div>
+        <p class="layer-body" data-i="layer2Body">The booking path on the site, tracked end to end.</p>
       </div>
       <div class="layer fade-in d3">
-        <div class="layer-num">Layer three</div>
-        <div class="layer-owner">Yours.</div>
-        <p class="layer-body">Whether the call became an appointment, and whether the patient showed. That lives in your practice management system.</p>
+        <div class="layer-num" data-i="layer3Num">Layer three</div>
+        <div class="layer-owner" data-i="layer3Owner">Yours.</div>
+        <p class="layer-body" data-i="layer3Body">Whether the call became an appointment, and whether the patient showed. That lives in your practice management system.</p>
       </div>
     </div>
 
     <div class="sage-block fade-in">
-      <p class="sage-lead">We do not integrate with Dentrix, Tracker, Cleardent, or any other practice management system. No integration. No IT project. No patient data leaves the clinic.</p>
-      <p>We need six columns in a shared sheet — date, tracked number, answered, booked, appointment date, showed. We fill the left half automatically. The front desk fills three columns. Two minutes a week.</p>
-      <p>Where a clinic cannot complete the reconciliation, that clinic's dashboard reads "qualified calls," not "booked patients." We would rather under-claim than be caught over-claiming.</p>
+      <p class="sage-lead" data-i="sageLead">We do not integrate with Dentrix, Tracker, Cleardent, or any other practice management system. No integration. No IT project. No patient data leaves the clinic.</p>
+      <p data-i="sageP2">We need six columns in a shared sheet — date, tracked number, answered, booked, appointment date, showed. We fill the left half automatically. The front desk fills three columns. Two minutes a week.</p>
+      <p data-i="sageP3">Where a clinic cannot complete the reconciliation, that clinic's dashboard reads “qualified calls,” not “booked patients.” We would rather under-claim than be caught over-claiming.</p>
     </div>
   </div>
 </section>
@@ -567,10 +587,10 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   <div class="container">
     <div class="section-head fade-in">
       <span class="num">04</span><span class="sep"></span>
-      <span>The shared number</span>
+      <span data-i="s04head">The shared number</span>
     </div>
-    <h2 class="section-title section-title--tight fade-in d1" id="sharedTitle">We can make the phone ring. We cannot answer it.</h2>
-    <p class="shared-body fade-in d2">If a clinic answers half its inbound calls, cost per patient doubles and it looks like the advertising failed. Answer rate goes on the dashboard from day one — our number to generate, yours to act on. Where it is low, it is the cheapest fix in the program and it costs zero in ad spend.</p>
+    <h2 class="section-title section-title--tight fade-in d1" id="sharedTitle" data-i="s04title">We can make the phone ring. We cannot answer it.</h2>
+    <p class="shared-body fade-in d2" data-i="s04body">If a clinic answers half its inbound calls, cost per patient doubles and it looks like the advertising failed. Answer rate goes on the dashboard from day one — our number to generate, yours to act on. Where it is low, it is the cheapest fix in the program and it costs zero in ad spend.</p>
   </div>
 </section>
 
@@ -580,46 +600,46 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   <div class="container">
     <div class="section-head fade-in">
       <span class="num">05</span><span class="sep"></span>
-      <span>The six services</span>
+      <span data-i="s05head">The six services</span>
     </div>
-    <h2 class="section-title fade-in d1" id="servicesTitle">Six services. One plan. Every clinic.</h2>
+    <h2 class="section-title fade-in d1" id="servicesTitle" data-i="s05title">Six services. One plan. Every clinic.</h2>
 
     <div class="six-grid">
       <div class="six fade-in d1">
-        <div class="six-num">01 / Search</div>
+        <div class="six-num" data-i="svc1Num">01 / Search</div>
         <div class="six-rule"></div>
-        <h3 class="six-name">Google Ads — Search</h3>
-        <p class="six-desc">Your clinic, first, when a patient searches.</p>
+        <h3 class="six-name" data-i="svc1Name">Google Ads — Search</h3>
+        <p class="six-desc" data-i="svc1Desc">Your clinic, first, when a patient searches.</p>
       </div>
       <div class="six fade-in d2">
-        <div class="six-num">02 / Local</div>
+        <div class="six-num" data-i="svc2Num">02 / Local</div>
         <div class="six-rule"></div>
-        <h3 class="six-name">Google Business Profile</h3>
-        <p class="six-desc">First on the map. Reviews answered.</p>
+        <h3 class="six-name" data-i="svc2Name">Google Business Profile</h3>
+        <p class="six-desc" data-i="svc2Desc">First on the map. Reviews answered.</p>
       </div>
       <div class="six fade-in d3">
-        <div class="six-num">03 / Data</div>
+        <div class="six-num" data-i="svc3Num">03 / Data</div>
         <div class="six-rule"></div>
-        <h3 class="six-name">Dashboard &amp; Analytics</h3>
-        <p class="six-desc">Every dollar traced to the chair.</p>
+        <h3 class="six-name" data-i="svc3Name">Dashboard &amp; Analytics</h3>
+        <p class="six-desc" data-i="svc3Desc">Every dollar traced to the chair.</p>
       </div>
       <div class="six fade-in d1">
-        <div class="six-num">04 / Display</div>
+        <div class="six-num" data-i="svc4Num">04 / Display</div>
         <div class="six-rule"></div>
-        <h3 class="six-name">Google Ads — Display</h3>
-        <p class="six-desc">Banner ads on the sites patients visit.</p>
+        <h3 class="six-name" data-i="svc4Name">Google Ads — Display</h3>
+        <p class="six-desc" data-i="svc4Desc">Banner ads on the sites patients visit.</p>
       </div>
       <div class="six fade-in d2">
-        <div class="six-num">05 / Video</div>
+        <div class="six-num" data-i="svc5Num">05 / Video</div>
         <div class="six-rule"></div>
-        <h3 class="six-name">Google Ads — Video</h3>
-        <p class="six-desc">YouTube ads in the clinic's city.</p>
+        <h3 class="six-name" data-i="svc5Name">Google Ads — Video</h3>
+        <p class="six-desc" data-i="svc5Desc">YouTube ads in the clinic's city.</p>
       </div>
       <div class="six fade-in d3">
-        <div class="six-num">06 / NFC</div>
+        <div class="six-num" data-i="svc6Num">06 / NFC</div>
         <div class="six-rule"></div>
-        <h3 class="six-name">Google Reviews · NFC</h3>
-        <p class="six-desc">A tap pad at the front desk. A Google review in seconds.</p>
+        <h3 class="six-name" data-i="svc6Name">Google Reviews · NFC</h3>
+        <p class="six-desc" data-i="svc6Desc">A tap pad at the front desk. A Google review in seconds.</p>
       </div>
     </div>
   </div>
@@ -631,46 +651,46 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   <div class="container">
     <div class="section-head fade-in">
       <span class="num">06</span><span class="sep"></span>
-      <span>What it costs</span>
+      <span data-i="s06head">What it costs</span>
     </div>
-    <h2 class="vh" id="pricingTitle">What it costs</h2>
+    <h2 class="vh" id="pricingTitle" data-i="s06vh">What it costs</h2>
 
     <div class="pricing-stage">
       <div class="pricing-numeral fade-in d2" aria-label="449 dollars per month, per location, Canadian dollars">449<sup>$</sup></div>
-      <div class="pricing-mo fade-in d3">per month · per location · CAD · month to month</div>
+      <div class="pricing-mo fade-in d3" data-i="pricingMo">per month · per location · CAD · month to month</div>
     </div>
 
     <div class="pricing-divider fade-in"></div>
 
     <div class="pricing-facts">
       <div class="pricing-fact fade-in d1">
-        <div class="pricing-fact-label">Included</div>
-        <div class="pricing-fact-value">All six services</div>
-        <div class="pricing-fact-note">One dashboard per clinic.</div>
+        <div class="pricing-fact-label" data-i="pf1Label">Included</div>
+        <div class="pricing-fact-value" data-i="pf1Value">All six services</div>
+        <div class="pricing-fact-note" data-i="pf1Note">One dashboard per clinic.</div>
       </div>
       <div class="pricing-fact fade-in d2">
-        <div class="pricing-fact-label">Onboarding</div>
+        <div class="pricing-fact-label" data-i="pf2Label">Onboarding</div>
         <div class="pricing-fact-value">499<sup style="font-size:0.55em;color:var(--tan);vertical-align:0.45em">$</sup></div>
-        <div class="pricing-fact-note">One-time. Six services configured. Dashboard live.</div>
+        <div class="pricing-fact-note" data-i="pf2Note">One-time. Six services configured. Dashboard live.</div>
       </div>
       <div class="pricing-fact fade-in d3">
-        <div class="pricing-fact-label">Ad spend</div>
-        <div class="pricing-fact-value">Billed directly by Google</div>
-        <div class="pricing-fact-note">You keep control. No markup. No hidden fees.</div>
+        <div class="pricing-fact-label" data-i="pf3Label">Ad spend</div>
+        <div class="pricing-fact-value" data-i="pf3Value">Billed directly by Google</div>
+        <div class="pricing-fact-note" data-i="pf3Note">You keep control. No markup. No hidden fees.</div>
       </div>
       <div class="pricing-fact fade-in d4">
-        <div class="pricing-fact-label">Budget</div>
-        <div class="pricing-fact-value">$1,500–$7,000 per clinic per month</div>
-        <div class="pricing-fact-note">Set by open hygiene and doctor hours — not by a percentage of revenue.</div>
+        <div class="pricing-fact-label" data-i="pf4Label">Budget</div>
+        <div class="pricing-fact-value" data-i="pf4Value">$1,500–$7,000 per clinic per month</div>
+        <div class="pricing-fact-note" data-i="pf4Note">Set by open hygiene and doctor hours — not by a percentage of revenue.</div>
       </div>
       <div class="pricing-fact fade-in d5">
-        <div class="pricing-fact-label">Term</div>
-        <div class="pricing-fact-value">Month to month</div>
-        <div class="pricing-fact-note">No minimum. Cancel anytime.</div>
+        <div class="pricing-fact-label" data-i="pf5Label">Term</div>
+        <div class="pricing-fact-value" data-i="pf5Value">Month to month</div>
+        <div class="pricing-fact-note" data-i="pf5Note">No minimum. Cancel anytime.</div>
       </div>
     </div>
 
-    <p class="pricing-close fade-in">A typical clinic runs roughly $2,500 all-in. More than four of every five dollars goes to Google, not to us.</p>
+    <p class="pricing-close fade-in" data-i="pricingClose">A typical clinic runs roughly $2,500 all-in. More than four of every five dollars goes to Google, not to us.</p>
   </div>
 </section>
 
@@ -680,29 +700,29 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   <div class="container">
     <div class="section-head fade-in">
       <span class="num">07</span><span class="sep"></span>
-      <span>What we need from you</span>
+      <span data-i="s07head">What we need from you</span>
     </div>
-    <h2 class="vh" id="askTitle">What we need from you</h2>
+    <h2 class="vh" id="askTitle" data-i="s07vh">What we need from you</h2>
 
     <div class="ask-grid">
       <div class="ask-col fade-in d1">
-        <div class="ask-col-label">At setup — one session</div>
+        <div class="ask-col-label" data-i="ask1Label">At setup — one session</div>
         <ul>
-          <li>Management access — Google Ads, Business Profile, Analytics, Tag Manager</li>
-          <li>Tracking snippet placed on clinic sites</li>
-          <li>One tracked phone number per location</li>
+          <li data-i="ask1Li1">Management access — Google Ads, Business Profile, Analytics, Tag Manager</li>
+          <li data-i="ask1Li2">Tracking snippet placed on clinic sites</li>
+          <li data-i="ask1Li3">One tracked phone number per location</li>
         </ul>
       </div>
       <div class="ask-col fade-in d2">
-        <div class="ask-col-label">Ongoing</div>
+        <div class="ask-col-label" data-i="ask2Label">Ongoing</div>
         <ul>
-          <li>Two minutes per week, per front desk — reconciliation sheet</li>
-          <li>One 30-minute monthly review</li>
+          <li data-i="ask2Li1">Two minutes per week, per front desk — reconciliation sheet</li>
+          <li data-i="ask2Li2">One 30-minute monthly review</li>
         </ul>
       </div>
     </div>
 
-    <p class="ask-line fade-in">That is the entire ask. No standing meetings. No PMS access. No patient data.</p>
+    <p class="ask-line fade-in" data-i="askLine">That is the entire ask. No standing meetings. No PMS access. No patient data.</p>
   </div>
 </section>
 
@@ -712,26 +732,26 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   <div class="container">
     <div class="section-head fade-in">
       <span class="num">08</span><span class="sep"></span>
-      <span>Multi-location</span>
+      <span data-i="s08head">Multi-location</span>
     </div>
-    <h2 class="section-title section-title--tight fade-in d1" id="groupsTitle">One system. Every location.</h2>
-    <p class="section-lede fade-in d2">Local search is won locally. Each clinic gets the six services, its own budget, its own dashboard. No pooled spend — pooled spend hides the location that is failing.</p>
+    <h2 class="section-title section-title--tight fade-in d1" id="groupsTitle" data-i="s08title">One system. Every location.</h2>
+    <p class="section-lede fade-in d2" data-i="s08lede">Local search is won locally. Each clinic gets the six services, its own budget, its own dashboard. No pooled spend — pooled spend hides the location that is failing.</p>
 
     <div class="process-steps">
       <div class="process-step fade-in d1">
-        <div class="process-step-num">Per location</div>
-        <h3 class="process-step-title">Its own budget. Its own dashboard.</h3>
-        <p class="process-step-desc">The same six services at every clinic. Spend is never pooled across locations.</p>
+        <div class="process-step-num" data-i="g1Num">Per location</div>
+        <h3 class="process-step-title" data-i="g1Title">Its own budget. Its own dashboard.</h3>
+        <p class="process-step-desc" data-i="g1Desc">The same six services at every clinic. Spend is never pooled across locations.</p>
       </div>
       <div class="process-step fade-in d2">
-        <div class="process-step-num">Reporting</div>
-        <h3 class="process-step-title">Results roll up monthly.</h3>
-        <p class="process-step-desc">Location by location, dollar by dollar. The failing clinic has nowhere to hide.</p>
+        <div class="process-step-num" data-i="g2Num">Reporting</div>
+        <h3 class="process-step-title" data-i="g2Title">Results roll up monthly.</h3>
+        <p class="process-step-desc" data-i="g2Desc">Location by location, dollar by dollar. The failing clinic has nowhere to hide.</p>
       </div>
       <div class="process-step fade-in d3">
-        <div class="process-step-num">Rollout</div>
-        <h3 class="process-step-title">Fourteen days to live, per clinic.</h3>
-        <p class="process-step-desc">The same system, every time. Start with six clinics or fifty.</p>
+        <div class="process-step-num" data-i="g3Num">Rollout</div>
+        <h3 class="process-step-title" data-i="g3Title">Fourteen days to live, per clinic.</h3>
+        <p class="process-step-desc" data-i="g3Desc">The same system, every time. Start with six clinics or fifty.</p>
       </div>
     </div>
   </div>
@@ -743,35 +763,35 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   <div class="container">
     <div class="section-head fade-in">
       <span class="num">09</span><span class="sep"></span>
-      <span>Who runs it</span>
+      <span data-i="s09head">Who runs it</span>
     </div>
 
     <div class="team-head fade-in d1">
-      <h2 class="team-title" id="teamTitle">Every dollar has an operator.</h2>
+      <h2 class="team-title" id="teamTitle" data-i="teamTitle">Every dollar has an operator.</h2>
     </div>
 
     <div class="team-grid">
       <article class="team-card fade-in d1">
         <div class="team-meta">
-          <div class="team-role">Founder</div>
+          <div class="team-role" data-i="t1Role">Founder</div>
           <h3 class="team-name">Hamza A.</h3>
-          <p class="team-bio">Ten years in marketing. Four years inside a clinic — phones, emergencies, treatment plans. Most agencies haven't seen this from the inside.</p>
+          <p class="team-bio" data-i="t1Bio">Ten years in marketing. Four years inside a clinic — phones, emergencies, treatment plans. Most agencies haven't seen this from the inside.</p>
         </div>
       </article>
 
       <article class="team-card fade-in d2">
         <div class="team-meta">
-          <div class="team-role">Partner · Clinical advisor</div>
-          <h3 class="team-name">Dr. Shayan Araghi</h3>
-          <p class="team-bio">14 years of clinical practice. Several clinics built from scratch. DMD, Université de Montréal. Investor and strategic partner.</p>
+          <div class="team-role" data-i="t2Role">Partner · Clinical advisor</div>
+          <h3 class="team-name" data-i="t2Name">Dr. Shayan Araghi</h3>
+          <p class="team-bio" data-i="t2Bio">14 years of clinical practice. Several clinics built from scratch. DMD, Université de Montréal. Investor and strategic partner.</p>
         </div>
       </article>
 
       <article class="team-card fade-in d3">
         <div class="team-meta">
-          <div class="team-role">Partner · Operations advisor</div>
+          <div class="team-role" data-i="t3Role">Partner · Operations advisor</div>
           <h3 class="team-name">Ali K.</h3>
-          <p class="team-bio">10+ years inside dental clinics. Daily operations, insurance navigation, clinic accounting, patient experience. Has run multi-million-dollar clinics. Knows exactly what happens between the click and the chair.</p>
+          <p class="team-bio" data-i="t3Bio">10+ years inside dental clinics. Daily operations, insurance navigation, clinic accounting, patient experience. Has run multi-million-dollar clinics. Knows exactly what happens between the click and the chair.</p>
         </div>
       </article>
     </div>
@@ -784,11 +804,11 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   <div class="container">
     <div class="section-head fade-in">
       <span class="num">10</span><span class="sep"></span>
-      <span>What we are not claiming</span>
+      <span data-i="s10head">What we are not claiming</span>
     </div>
-    <h2 class="vh" id="notclaimTitle">What we are not claiming</h2>
+    <h2 class="vh" id="notclaimTitle" data-i="s10vh">What we are not claiming</h2>
 
-    <p class="notclaim-body fade-in d1">We have no dental case study. That is precisely why this proposal asks for six clinics and not four hundred and twenty-five. We are not asking 123Dentist to trust a claim — we are proposing the cheapest available test of one. If the number holds, the data is yours and it came from your clinics. If it does not, the cost is a few months of a cancelable fee, an ad budget you controlled the whole time, and a clear read on where the Google funnel breaks.</p>
+    <p class="notclaim-body fade-in d1" data-i="notclaimBody">We have no dental case study. That is precisely why this proposal asks for six clinics and not four hundred and twenty-five. We are not asking 123Dentist to trust a claim — we are proposing the cheapest available test of one. If the number holds, the data is yours and it came from your clinics. If it does not, the cost is a few months of a cancelable fee, an ad budget you controlled the whole time, and a clear read on where the Google funnel breaks.</p>
   </div>
 </section>
 
@@ -798,18 +818,18 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   <div class="container">
     <div class="section-head section-head--close fade-in">
       <span class="num">11</span><span class="sep"></span>
-      <span>Next</span>
+      <span data-i="s11head">Next</span>
     </div>
-    <h2 class="final-title fade-in d1" id="closeTitle">An empty chair costs more than a marketing plan. Multiply that by four hundred and twenty-five.</h2>
+    <h2 class="final-title fade-in d1" id="closeTitle" data-i="finalTitle">An empty chair costs more than a marketing plan. Multiply that by four hundred and twenty-five.</h2>
 
     <div class="final-asks">
       <div class="final-ask fade-in d2">
-        <div class="final-ask-num">One</div>
-        <p class="final-ask-body">Six clinic names, selected by 123Dentist.</p>
+        <div class="final-ask-num" data-i="fa1Num">One</div>
+        <p class="final-ask-body" data-i="fa1Body">Six clinic names, selected by 123Dentist.</p>
       </div>
       <div class="final-ask fade-in d3">
-        <div class="final-ask-num">Two</div>
-        <p class="final-ask-body">A review of the data together, four months from launch.</p>
+        <div class="final-ask-num" data-i="fa2Num">Two</div>
+        <p class="final-ask-body" data-i="fa2Body">A review of the data together, four months from launch.</p>
       </div>
     </div>
 
@@ -831,11 +851,11 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
              loading="lazy"
              decoding="async">
       </div>
-      <p class="footer-brand-tag">Dental marketing. Built on Google search.</p>
+      <p class="footer-brand-tag" data-i="footerTag">Dental marketing. Built on Google search.</p>
     </div>
     <div class="footer-legal">
       <span>© 2026 SSS Marketing.</span>
-      <span class="footer-private">Private document. Prepared for 123Dentist. Not for distribution.</span>
+      <span class="footer-private" data-i="footerPrivate">Private document. Prepared for 123Dentist. Not for distribution.</span>
     </div>
   </div>
 </footer>
@@ -860,6 +880,148 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     });
   },{threshold:0.12,rootMargin:"0px 0px -40px 0px"});
   document.querySelectorAll(".fade-in").forEach(function(el){io.observe(el);});
+})();
+</script>
+
+<script>
+(function(){
+  var TITLE={en:"SSS — Pilot Proposal · Prepared for 123Dentist",fr:"SSS — Proposition pilote · Préparé pour 123Dentist"};
+  var DICT={
+    en:{
+      navTag:"Prepared for 123Dentist",
+      skip:"Skip to content",
+      heroEyebrow:"Pilot proposal · Prepared for 123Dentist",
+      heroH1:"Six clinics. Four months. <em>One number.</em>",
+      heroSub:"Patients find dentists on Google. We run the six services that turn searches into booked chairs — one system, deployed the same way at every location. This is a proposal to prove it on six of your clinics before anyone talks about four hundred and twenty-five.",
+      s01head:"The proposal", s01vh:"The proposal",
+      scopeLabel:"Scope", scopeAnchor:"6<small>clinics</small>", scopeTitle:"Selected by 123Dentist.", scopeDesc:"Mixed profiles: urban and suburban, high and low competition, high and low treatment value, varying open chair capacity.",
+      timeLabel:"Timeline", timeAnchor:"14<small>days</small>", timeTitle:"Live after account access.", timeDesc:"Month one is learning. Months two through four are the scorecard.",
+      commitLabel:"Commitment", commitAnchor:"449<small>/ clinic / mo</small>", commitTitle:"Month to month.", commitDesc:"Cancel anytime. No term, no minimum.",
+      s01statement:"The pilot does not test six clinics. It tests whether one system, deployed identically, produces a comparable cost per booked patient across different market conditions. If it repeats, it scales.",
+      s02head:"What makes it a yes", s02title:"Success criteria, pre-agreed.",
+      crit1Label:"Primary", crit1Value:"Under $400 CAD per booked new patient", crit1Note:"All-in — ad spend plus our fee, divided by booked new patients. Sustained across months 2, 3 and 4.",
+      crit2Label:"Floor", crit2Value:"8 booked new patients per clinic per month", crit2Note:"Minimum, by month 3.",
+      crit3Label:"Capacity", crit3Value:"20% of measured open hours recovered", crit3Note:"Open hygiene and doctor hours, by month 4.",
+      crit4Label:"Diagnostic", crit4Value:"Call answer rate, reported monthly", crit4Note:"Not scored.",
+      critClose:"These are our proposed thresholds. If $400 is the wrong number for your economics, we use yours. The point is that it is set before there is data to argue about.",
+      s03head:"How a booked patient is measured", s03title:"Three layers. Two are ours. One is yours.",
+      layer1Num:"Layer one", layer1Owner:"Ours.", layer1Body:"A tracked number per clinic, inserted dynamically on your existing site. Which call came from which keyword, at what hour, in which city. Your site. Your brand. Our tracking.",
+      layer2Num:"Layer two", layer2Owner:"Ours.", layer2Body:"The booking path on the site, tracked end to end.",
+      layer3Num:"Layer three", layer3Owner:"Yours.", layer3Body:"Whether the call became an appointment, and whether the patient showed. That lives in your practice management system.",
+      sageLead:"We do not integrate with Dentrix, Tracker, Cleardent, or any other practice management system. No integration. No IT project. No patient data leaves the clinic.",
+      sageP2:"We need six columns in a shared sheet — date, tracked number, answered, booked, appointment date, showed. We fill the left half automatically. The front desk fills three columns. Two minutes a week.",
+      sageP3:"Where a clinic cannot complete the reconciliation, that clinic's dashboard reads “qualified calls,” not “booked patients.” We would rather under-claim than be caught over-claiming.",
+      s04head:"The shared number", s04title:"We can make the phone ring. We cannot answer it.", s04body:"If a clinic answers half its inbound calls, cost per patient doubles and it looks like the advertising failed. Answer rate goes on the dashboard from day one — our number to generate, yours to act on. Where it is low, it is the cheapest fix in the program and it costs zero in ad spend.",
+      s05head:"The six services", s05title:"Six services. One plan. Every clinic.",
+      svc1Num:"01 / Search", svc1Name:"Google Ads — Search", svc1Desc:"Your clinic, first, when a patient searches.",
+      svc2Num:"02 / Local", svc2Name:"Google Business Profile", svc2Desc:"First on the map. Reviews answered.",
+      svc3Num:"03 / Data", svc3Name:"Dashboard &amp; Analytics", svc3Desc:"Every dollar traced to the chair.",
+      svc4Num:"04 / Display", svc4Name:"Google Ads — Display", svc4Desc:"Banner ads on the sites patients visit.",
+      svc5Num:"05 / Video", svc5Name:"Google Ads — Video", svc5Desc:"YouTube ads in the clinic's city.",
+      svc6Num:"06 / NFC", svc6Name:"Google Reviews · NFC", svc6Desc:"A tap pad at the front desk. A Google review in seconds.",
+      s06head:"What it costs", s06vh:"What it costs", pricingMo:"per month · per location · CAD · month to month",
+      pf1Label:"Included", pf1Value:"All six services", pf1Note:"One dashboard per clinic.",
+      pf2Label:"Onboarding", pf2Note:"One-time. Six services configured. Dashboard live.",
+      pf3Label:"Ad spend", pf3Value:"Billed directly by Google", pf3Note:"You keep control. No markup. No hidden fees.",
+      pf4Label:"Budget", pf4Value:"$1,500–$7,000 per clinic per month", pf4Note:"Set by open hygiene and doctor hours — not by a percentage of revenue.",
+      pf5Label:"Term", pf5Value:"Month to month", pf5Note:"No minimum. Cancel anytime.",
+      pricingClose:"A typical clinic runs roughly $2,500 all-in. More than four of every five dollars goes to Google, not to us.",
+      s07head:"What we need from you", s07vh:"What we need from you",
+      ask1Label:"At setup — one session", ask1Li1:"Management access — Google Ads, Business Profile, Analytics, Tag Manager", ask1Li2:"Tracking snippet placed on clinic sites", ask1Li3:"One tracked phone number per location",
+      ask2Label:"Ongoing", ask2Li1:"Two minutes per week, per front desk — reconciliation sheet", ask2Li2:"One 30-minute monthly review",
+      askLine:"That is the entire ask. No standing meetings. No PMS access. No patient data.",
+      s08head:"Multi-location", s08title:"One system. Every location.", s08lede:"Local search is won locally. Each clinic gets the six services, its own budget, its own dashboard. No pooled spend — pooled spend hides the location that is failing.",
+      g1Num:"Per location", g1Title:"Its own budget. Its own dashboard.", g1Desc:"The same six services at every clinic. Spend is never pooled across locations.",
+      g2Num:"Reporting", g2Title:"Results roll up monthly.", g2Desc:"Location by location, dollar by dollar. The failing clinic has nowhere to hide.",
+      g3Num:"Rollout", g3Title:"Fourteen days to live, per clinic.", g3Desc:"The same system, every time. Start with six clinics or fifty.",
+      s09head:"Who runs it", teamTitle:"Every dollar has an operator.",
+      t1Role:"Founder", t1Bio:"Ten years in marketing. Four years inside a clinic — phones, emergencies, treatment plans. Most agencies haven't seen this from the inside.",
+      t2Role:"Partner · Clinical advisor", t2Name:"Dr. Shayan Araghi", t2Bio:"14 years of clinical practice. Several clinics built from scratch. DMD, Université de Montréal. Investor and strategic partner.",
+      t3Role:"Partner · Operations advisor", t3Bio:"10+ years inside dental clinics. Daily operations, insurance navigation, clinic accounting, patient experience. Has run multi-million-dollar clinics. Knows exactly what happens between the click and the chair.",
+      s10head:"What we are not claiming", s10vh:"What we are not claiming", notclaimBody:"We have no dental case study. That is precisely why this proposal asks for six clinics and not four hundred and twenty-five. We are not asking 123Dentist to trust a claim — we are proposing the cheapest available test of one. If the number holds, the data is yours and it came from your clinics. If it does not, the cost is a few months of a cancelable fee, an ad budget you controlled the whole time, and a clear read on where the Google funnel breaks.",
+      s11head:"Next", finalTitle:"An empty chair costs more than a marketing plan. Multiply that by four hundred and twenty-five.",
+      fa1Num:"One", fa1Body:"Six clinic names, selected by 123Dentist.", fa2Num:"Two", fa2Body:"A review of the data together, four months from launch.",
+      footerTag:"Dental marketing. Built on Google search.", footerPrivate:"Private document. Prepared for 123Dentist. Not for distribution."
+    },
+    fr:{
+      navTag:"Préparé pour 123Dentist",
+      skip:"Aller au contenu",
+      heroEyebrow:"Proposition pilote · Préparé pour 123Dentist",
+      heroH1:"Six cliniques. Quatre mois. <em>Un seul chiffre.</em>",
+      heroSub:"Les patients trouvent leur dentiste sur Google. Nous opérons les six services qui transforment les recherches en fauteuils remplis — un seul système, déployé de la même façon à chaque emplacement. Cette proposition vise à le prouver sur six de vos cliniques, avant même de parler des quatre cent vingt-cinq.",
+      s01head:"La proposition", s01vh:"La proposition",
+      scopeLabel:"Portée", scopeAnchor:"6<small>cliniques</small>", scopeTitle:"Choisies par 123Dentist.", scopeDesc:"Profils variés : urbain et banlieue, forte et faible concurrence, valeur de traitement élevée et faible, capacité de fauteuils disponibles variable.",
+      timeLabel:"Échéancier", timeAnchor:"14<small>jours</small>", timeTitle:"En ligne dès l’accès aux comptes.", timeDesc:"Le premier mois sert à apprendre. Les mois deux à quatre sont le tableau de bord.",
+      commitLabel:"Engagement", commitAnchor:"449<small>/ clinique / mois</small>", commitTitle:"De mois en mois.", commitDesc:"Annulable en tout temps. Sans durée, sans minimum.",
+      s01statement:"Le pilote ne teste pas six cliniques. Il teste si un même système, déployé à l’identique, produit un coût par patient réservé comparable d’un marché à l’autre. Si le résultat se répète, il se déploie à grande échelle.",
+      s02head:"Ce qui en fait un oui", s02title:"Critères de succès, convenus d’avance.",
+      crit1Label:"Principal", crit1Value:"Moins de 400 $ CA par nouveau patient réservé", crit1Note:"Tout compris — budget publicitaire plus nos honoraires, divisé par les nouveaux patients réservés. Maintenu sur les mois 2, 3 et 4.",
+      crit2Label:"Plancher", crit2Value:"8 nouveaux patients réservés par clinique par mois", crit2Note:"Au minimum, dès le mois 3.",
+      crit3Label:"Capacité", crit3Value:"20 % des heures libres mesurées récupérées", crit3Note:"Heures libres d’hygiène et de dentiste, dès le mois 4.",
+      crit4Label:"Diagnostic", crit4Value:"Taux de réponse aux appels, rapporté chaque mois", crit4Note:"Non comptabilisé.",
+      critClose:"Ce sont les seuils que nous proposons. Si 400 $ n’est pas le bon chiffre pour votre modèle, on utilise le vôtre. L’essentiel, c’est qu’il soit fixé avant qu’il y ait des données à débattre.",
+      s03head:"Comment un patient réservé est mesuré", s03title:"Trois couches. Deux sont à nous. Une est à vous.",
+      layer1Num:"Couche un", layer1Owner:"À nous.", layer1Body:"Un numéro suivi par clinique, inséré dynamiquement sur votre site existant. Quel appel vient de quel mot-clé, à quelle heure, dans quelle ville. Votre site. Votre marque. Notre suivi.",
+      layer2Num:"Couche deux", layer2Owner:"À nous.", layer2Body:"Le parcours de réservation sur le site, suivi de bout en bout.",
+      layer3Num:"Couche trois", layer3Owner:"À vous.", layer3Body:"Si l’appel est devenu un rendez-vous, et si le patient s’est présenté. Ça vit dans votre logiciel de gestion de clinique.",
+      sageLead:"Nous ne nous intégrons pas à Dentrix, Tracker, Cleardent, ni à aucun autre logiciel de gestion de clinique. Aucune intégration. Aucun projet TI. Aucune donnée de patient ne quitte la clinique.",
+      sageP2:"Il nous faut six colonnes dans un tableau partagé — date, numéro suivi, répondu, réservé, date du rendez-vous, présenté. Nous remplissons la moitié gauche automatiquement. La réception remplit trois colonnes. Deux minutes par semaine.",
+      sageP3:"Là où une clinique ne peut pas compléter le rapprochement, son tableau de bord affiche « appels qualifiés », pas « patients réservés ». Nous préférons sous-estimer que d’être pris à surestimer.",
+      s04head:"Le chiffre partagé", s04title:"Nous pouvons faire sonner le téléphone. Nous ne pouvons pas y répondre.", s04body:"Si une clinique répond à la moitié de ses appels entrants, le coût par patient double et on dirait que la publicité a échoué. Le taux de réponse apparaît au tableau de bord dès le premier jour — à nous de le générer, à vous d’agir. Là où il est bas, c’est le correctif le moins cher du programme, et il ne coûte rien en budget publicitaire.",
+      s05head:"Les six services", s05title:"Six services. Un seul plan. Chaque clinique.",
+      svc1Num:"01 / Recherche", svc1Name:"Google Ads — Recherche", svc1Desc:"Votre clinique, en premier, quand un patient cherche.",
+      svc2Num:"02 / Local", svc2Name:"Fiche d’établissement Google", svc2Desc:"Premier sur la carte. Avis répondus.",
+      svc3Num:"03 / Données", svc3Name:"Tableau de bord et analytique", svc3Desc:"Chaque dollar retracé jusqu’au fauteuil.",
+      svc4Num:"04 / Display", svc4Name:"Google Ads — Display", svc4Desc:"Bannières sur les sites que vos patients visitent.",
+      svc5Num:"05 / Vidéo", svc5Name:"Google Ads — Vidéo", svc5Desc:"Publicités YouTube dans la ville de la clinique.",
+      svc6Num:"06 / NFC", svc6Name:"Avis Google · NFC", svc6Desc:"Une pastille à toucher à la réception. Un avis Google en quelques secondes.",
+      s06head:"Ce que ça coûte", s06vh:"Ce que ça coûte", pricingMo:"par mois · par emplacement · CAD · de mois en mois",
+      pf1Label:"Inclus", pf1Value:"Les six services", pf1Note:"Un tableau de bord par clinique.",
+      pf2Label:"Mise en route", pf2Note:"Frais uniques. Six services configurés. Tableau de bord en ligne.",
+      pf3Label:"Budget publicitaire", pf3Value:"Facturé directement par Google", pf3Note:"Vous gardez le contrôle. Aucune majoration. Aucuns frais cachés.",
+      pf4Label:"Budget", pf4Value:"1 500 $ à 7 000 $ par clinique par mois", pf4Note:"Fixé selon les heures libres d’hygiène et de dentiste — pas selon un pourcentage du chiffre d’affaires.",
+      pf5Label:"Durée", pf5Value:"De mois en mois", pf5Note:"Aucun minimum. Annulable en tout temps.",
+      pricingClose:"Une clinique type dépense environ 2 500 $ tout compris. Plus de quatre dollars sur cinq vont à Google, pas à nous.",
+      s07head:"Ce dont nous avons besoin de vous", s07vh:"Ce dont nous avons besoin de vous",
+      ask1Label:"À la mise en route — une seule séance", ask1Li1:"Accès de gestion — Google Ads, Fiche d’établissement, Analytics, Tag Manager", ask1Li2:"Extrait de suivi installé sur les sites des cliniques", ask1Li3:"Un numéro de téléphone suivi par emplacement",
+      ask2Label:"En continu", ask2Li1:"Deux minutes par semaine, par réception — feuille de rapprochement", ask2Li2:"Une rencontre mensuelle de 30 minutes",
+      askLine:"C’est tout ce qu’on demande. Aucune réunion récurrente. Aucun accès au logiciel de gestion. Aucune donnée de patient.",
+      s08head:"Multi-emplacement", s08title:"Un seul système. Chaque emplacement.", s08lede:"La recherche locale se gagne localement. Chaque clinique reçoit les six services, son propre budget, son propre tableau de bord. Aucun budget mis en commun — un budget commun cache l’emplacement qui sous-performe.",
+      g1Num:"Par emplacement", g1Title:"Son propre budget. Son propre tableau de bord.", g1Desc:"Les mêmes six services à chaque clinique. Le budget n’est jamais mis en commun entre les emplacements.",
+      g2Num:"Reddition de comptes", g2Title:"Les résultats se consolident chaque mois.", g2Desc:"Emplacement par emplacement, dollar par dollar. La clinique qui sous-performe n’a nulle part où se cacher.",
+      g3Num:"Déploiement", g3Title:"Quatorze jours pour être en ligne, par clinique.", g3Desc:"Le même système, chaque fois. Commencez avec six cliniques ou cinquante.",
+      s09head:"Qui le pilote", teamTitle:"Chaque dollar a un responsable.",
+      t1Role:"Fondateur", t1Bio:"Dix ans en marketing. Quatre ans à l’intérieur d’une clinique — téléphones, urgences, plans de traitement. La plupart des agences n’ont jamais vu ça de l’intérieur.",
+      t2Role:"Associé · Conseiller clinique", t2Name:"Dr Shayan Araghi", t2Bio:"14 ans de pratique clinique. Plusieurs cliniques bâties à partir de zéro. DMD, Université de Montréal. Investisseur et associé stratégique.",
+      t3Role:"Associé · Conseiller aux opérations", t3Bio:"Plus de 10 ans à l’intérieur de cliniques dentaires. Opérations quotidiennes, navigation des assurances, comptabilité de clinique, expérience patient. A dirigé des cliniques de plusieurs millions de dollars. Sait exactement ce qui se passe entre le clic et le fauteuil.",
+      s10head:"Ce que nous ne prétendons pas", s10vh:"Ce que nous ne prétendons pas", notclaimBody:"Nous n’avons pas d’étude de cas en dentisterie. C’est précisément pourquoi cette proposition demande six cliniques et non quatre cent vingt-cinq. Nous ne demandons pas à 123Dentist de croire une affirmation — nous proposons le test le moins cher possible pour la vérifier. Si le chiffre tient, les données sont à vous et viennent de vos cliniques. Sinon, le coût se résume à quelques mois d’honoraires annulables, un budget publicitaire que vous avez contrôlé du début à la fin, et une lecture claire de l’endroit où l’entonnoir Google se brise.",
+      s11head:"La suite", finalTitle:"Un fauteuil vide coûte plus cher qu’un plan marketing. Multipliez ça par quatre cent vingt-cinq.",
+      fa1Num:"Un", fa1Body:"Six noms de cliniques, choisies par 123Dentist.", fa2Num:"Deux", fa2Body:"Une revue des données ensemble, quatre mois après le lancement.",
+      footerTag:"Marketing dentaire. Bâti sur la recherche Google.", footerPrivate:"Document privé. Préparé pour 123Dentist. Ne pas distribuer."
+    }
+  };
+
+  function applyLang(lang){
+    if(!DICT[lang]) lang="en";
+    var map=DICT[lang];
+    document.documentElement.lang=lang;
+    if(TITLE[lang]) document.title=TITLE[lang];
+    document.querySelectorAll("[data-i]").forEach(function(el){
+      var k=el.getAttribute("data-i");
+      if(map[k]!=null) el.innerHTML=map[k];
+    });
+    document.querySelectorAll(".lang-toggle button").forEach(function(b){
+      b.setAttribute("aria-pressed", b.getAttribute("data-lang")===lang ? "true" : "false");
+    });
+    try{ localStorage.setItem("sss123lang", lang); }catch(e){}
+  }
+
+  var saved=null; try{ saved=localStorage.getItem("sss123lang"); }catch(e){}
+  applyLang(saved==="fr" ? "fr" : "en");
+
+  document.querySelectorAll(".lang-toggle button").forEach(function(b){
+    b.addEventListener("click", function(){ applyLang(b.getAttribute("data-lang")); });
+  });
 })();
 </script>
 
