@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>SSS · Cornerstone Partner Briefing</title>
+<title>SSS · Prepared for Dr. Araghi</title>
 <meta name="description" content="Private equity memorandum. Confidential.">
 <meta name="theme-color" content="#fefae0">
 <link rel="canonical" href="https://sss.marketing/investor">
@@ -302,10 +302,65 @@ input[type="range"].sss-range:focus::-moz-range-thumb { box-shadow: 0 0 0 4px va
   .section--surface-a { background: #e9edc9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .section--surface-b { background: #faedcd !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
+
+.ledger { border-top: var(--rule); margin-top:8px; }
+.ledger__row { display:flex; justify-content:space-between; align-items:baseline; gap:20px;
+  padding:15px 0; border-bottom:var(--rule-ink); }
+.ledger__row--total { border-bottom:none; border-top:1px solid var(--ink); margin-top:4px; padding-top:18px; }
+.ledger__label { font-size:14px; color:var(--ink-72); }
+.ledger__row--total .ledger__label { font-weight:700; color:var(--ink); font-size:15px; }
+.ledger__value { font-size:16px; white-space:nowrap; }
+.ledger__row--total .ledger__value { font-size:26px; font-family:var(--display); }
+.ledger__note { font-size:11px; color:var(--ink-60); letter-spacing:.04em; margin-top:3px; }
+.ledger__cap { font-size:10px; text-transform:uppercase; letter-spacing:.2em; color:var(--tan); margin-bottom:14px; }
+
+.vt { width:100%; border-collapse:collapse; margin-top:26px; font-size:14px; }
+.vt th { text-align:right; font-size:10px; text-transform:uppercase; letter-spacing:.18em;
+  color:var(--ink-60); font-weight:400; padding:0 0 12px; border-bottom:1px solid var(--ink); }
+.vt th:first-child { text-align:left; }
+.vt td { padding:15px 0; border-bottom:var(--rule-ink); text-align:right; font-variant-numeric:tabular-nums; }
+.vt td:first-child { text-align:left; color:var(--ink-72); }
+.vt tr.is-primary td { background:rgba(212,163,115,.12); font-weight:700; color:var(--ink); }
+.vt tr.is-primary td:first-child { padding-left:12px; }
+.vt tr.is-primary td:last-child { padding-right:12px; }
+.vt__note { font-size:11px; color:var(--ink-60); margin-top:14px; line-height:1.55; }
+
+.faq { border-top:var(--rule); margin-top:34px; }
+.faq__i { border-bottom:var(--rule-ink); padding:24px 0; }
+.faq__q { font-family:var(--display); font-size:18px; margin-bottom:9px; }
+.faq__a { font-size:14px; color:var(--ink-72); line-height:1.68; }
+.faq__a strong { color:var(--ink); }
+
+.callout { border:1px solid var(--tan); padding:clamp(26px,3.4vw,40px); margin-top:40px;
+  background:rgba(212,163,115,.07); }
+.callout__label { font-size:10px; text-transform:uppercase; letter-spacing:.2em; color:var(--tan); margin-bottom:14px; }
+.callout__body { font-family:var(--display); font-size:clamp(19px,2.5vw,25px); line-height:1.42; }
+.callout__body strong { font-weight:500; }
+.callout__foot { font-size:13px; color:var(--ink-72); margin-top:16px; line-height:1.62; }
+
+.split { display:grid; grid-template-columns:1fr 1fr; gap:clamp(28px,4vw,64px); }
+@media (max-width:860px){ .split { grid-template-columns:1fr; } }
+
+.terms { width:100%; border-collapse:collapse; margin-top:26px; font-size:14px; }
+.terms td { padding:16px 0; border-bottom:var(--rule-ink); vertical-align:top; }
+.terms td:first-child { width:30%; color:var(--ink-60); font-size:11px; text-transform:uppercase;
+  letter-spacing:.14em; padding-right:24px; }
+.terms tr.is-key td { font-weight:700; }
+
+.rung { border:1px solid var(--ink-12); padding:clamp(22px,2.6vw,32px); margin-top:22px; background:var(--paper);
+  display:grid; grid-template-columns:auto 1fr; gap:clamp(20px,3vw,40px); align-items:start; }
+.rung__num { font-family:var(--display); font-size:clamp(38px,5vw,60px); line-height:.9; color:var(--tan); }
+.rung__title { font-family:var(--display); font-size:clamp(18px,2.1vw,23px); margin-bottom:8px; }
+.rung__body { font-size:14px; color:var(--ink-72); line-height:1.68; }
+.rung__meta { font-size:11px; text-transform:uppercase; letter-spacing:.16em; color:var(--ink-60); margin-top:12px; }
+@media (max-width:640px){ .rung { grid-template-columns:1fr; gap:12px; } }
+
+.optional { display:block; width:fit-content; align-self:flex-start; font-size:10px;
+  text-transform:uppercase; letter-spacing:.2em; color:var(--tan); border:1px solid var(--tan);
+  padding:5px 12px; margin-bottom:18px; }
 </style>
 </head>
 <body>
-
 <nav class="nav" id="nav" aria-label="Primary">
   <div class="nav__inner">
     <a href="/" class="wordmark" aria-label="SSS — Capital Partners">
@@ -313,55 +368,59 @@ input[type="range"].sss-range:focus::-moz-range-thumb { box-shadow: 0 0 0 4px va
       <span class="wordmark__label">Capital<br><span class="wordmark__label--small">Partners</span></span>
     </a>
     <div class="nav__meta">
-      <span class="meta__item meta__item--hide-xs"><span class="mark" aria-hidden="true"></span>Pilot · 3 Clinics</span>
-      <span class="meta__item meta__item--hide-sm">Cornerstone Partner · Confidential</span>
-      <span class="meta__item"><span class="num">Rev. 05.2026</span></span>
+      <span class="meta__item meta__item--hide-xs"><span class="mark" aria-hidden="true"></span>Pilot · 6 Clinics</span>
+      <span class="meta__item meta__item--hide-sm">Prepared for Dr. Araghi</span>
+      <span class="meta__item"><span class="num">Rev. 07.2026</span></span>
     </div>
   </div>
 </nav>
-
 <section class="hero" aria-labelledby="hero-title">
   <div class="hero__inner">
     <div class="hero__eyebrow eyebrow">
-      <span class="num">00</span><span>Partner Equity Memorandum</span>
-      <span class="dot" aria-hidden="true"></span><span>Private Briefing</span>
+      <span class="num">00</span><span>Private Briefing</span>
+      <span class="dot" aria-hidden="true"></span><span>Prepared for Dr. Araghi</span>
     </div>
     <h1 class="hero__title" id="hero-title">
-      A <span class="anchor mono">$45,000</span> position in the utility layer of North American dental care.
+      Ten percent is <span class="anchor mono">yours</span>. The rest is optional.
     </h1>
     <p class="hero__body">
-      <strong>15% perpetual net-profit share</strong> in the SSS clinic-services platform. Deployed as milestone-gated capital in three tranches of $15,000 across thirty-six months to <strong>150 clinics</strong>. The model includes 5% annual churn, founder compensation, a twelve-month AI adoption ramp, and zero revenue from independent clinics outside the initial network.
+      You opened the door to this network. That is worth <strong>10% of the company</strong> — no money,
+      no cheque, nothing to sign a payment for. It becomes yours as the clinics come on board. At ninety
+      clinics that stake is worth <strong>$72,242</strong> and pays you <strong>$22,679 a year</strong>.
+      Everything past this page is optional. The business is already profitable and does not need money.
+      But there is a way to own more of it — <strong>$35,000 for another 5%</strong> — and it is a real
+      gamble with a real prize, described honestly in section 04.
     </p>
   </div>
   <span class="hero__rule" aria-hidden="true"></span>
 </section>
 
-<section class="deal" aria-label="Deal terms at a glance">
+<section class="deal" aria-label="At a glance">
   <div class="deal__inner">
     <div class="deal__head">
-      <h2 class="deal__head-title">Deal terms — at a glance.</h2>
-      <span class="deal__head-meta mono">Four numbers · CAD · Net of Stripe</span>
+      <h2 class="deal__head-title">At a glance.</h2>
+      <span class="deal__head-meta mono">Four numbers · CAD</span>
     </div>
     <div class="tiles">
       <article class="tile">
-        <div class="tile__eyebrow"><span class="num mono">01</span>Capital</div>
-        <div class="tile__numeral mono">$45,000</div>
-        <p class="tile__caption">Milestone-gated. $15K at M1, M4, M7.</p>
+        <div class="tile__eyebrow"><span class="num mono">01</span>Already yours</div>
+        <div class="tile__numeral mono">10<span class="unit">%</span></div>
+        <p class="tile__caption">For the introduction. No money required.</p>
       </article>
       <article class="tile">
-        <div class="tile__eyebrow"><span class="num mono">02</span>Equity</div>
-        <div class="tile__numeral mono">15<span class="unit">%</span></div>
-        <p class="tile__caption">Perpetual net-profit share. No dilution clause.</p>
+        <div class="tile__eyebrow"><span class="num mono">02</span>Optional</div>
+        <div class="tile__numeral mono">$35,000</div>
+        <p class="tile__caption">For 5% more. A real bet — see section 04.</p>
       </article>
       <article class="tile">
-        <div class="tile__eyebrow"><span class="num mono">03</span>Horizon</div>
-        <div class="tile__numeral mono">36<span class="unit">mo</span></div>
-        <p class="tile__caption">Pilot to 150 clinics. Canada then US.</p>
+        <div class="tile__eyebrow"><span class="num mono">03</span>If ninety clinics sign</div>
+        <div class="tile__numeral mono">$11,339</div>
+        <p class="tile__caption">A year, from the extra 5%. Every year.</p>
       </article>
       <article class="tile">
-        <div class="tile__eyebrow"><span class="num mono">04</span>Payback</div>
-        <div class="tile__numeral mono">M31</div>
-        <p class="tile__caption">Cumulative partner share crosses the $45K deployment capital.</p>
+        <div class="tile__eyebrow"><span class="num mono">04</span>If the group goes all in</div>
+        <div class="tile__numeral mono">$183,199</div>
+        <p class="tile__caption">What that same 5% becomes at 475 practices.</p>
       </article>
     </div>
   </div>
@@ -370,148 +429,52 @@ input[type="range"].sss-range:focus::-moz-range-thumb { box-shadow: 0 0 0 4px va
 <section class="section" aria-labelledby="sec01-title" id="sec01">
   <div class="section__inner">
     <div class="section__head reveal">
-      <span class="eyebrow"><span class="num mono">01</span><span>Growth Strategy</span><span class="dot" aria-hidden="true"></span><span>Month-by-Month</span></span>
-      <h2 class="section__title" id="sec01-title">Thirty-six months. Slide through them.</h2>
-      <p class="section__lede">Zero to one hundred fifty gross deployments across thirty-six months, net of 5% annual churn. Deployment rate steps up with each capital tranche — four clinics per month through the Canadian network build, five per month in US expansion. AI adoption ramps from 5% at month twelve to 25% at month twenty-four. Drag the slider to walk the curve.</p>
+      <span class="eyebrow"><span class="num mono">01</span><span>Your Ten Percent</span><span class="dot" aria-hidden="true"></span><span>No Money Needed</span></span>
+      <h2 class="section__title" id="sec01-title">What the 10% is worth on its own.</h2>
+      <p class="section__lede">This is yours for opening the door, and it costs you nothing. It becomes fully yours in three steps as clinics start paying — a third at thirty clinics, a third at sixty, a third at ninety. If the network never happens, you have not spent a dollar.</p>
     </div>
-    <div class="growth__grid">
-      <div class="slider-panel reveal reveal--d1">
-        <div class="slider-panel__head">
-          <span class="slider-panel__caption">Active month</span>
-          <span class="slider-panel__month"><span id="monthDisplay" class="mono">M18</span><span class="label">of M36</span></span>
-        </div>
-        <div class="range-wrap">
-          <input type="range" min="1" max="36" value="18" step="1" class="sss-range" id="monthSlider" aria-label="Month selector">
-          <span class="range-progress" id="rangeProgress" aria-hidden="true"></span>
-          <div class="range-ticks"><span>M1 Pilot</span><span>M18</span><span>M36 Network</span></div>
-        </div>
-        <div class="kpis">
-          <div class="kpi">
-            <div class="kpi__label">Clinics Deployed</div>
-            <div class="kpi__value mono" id="kpiClinics">64</div>
-            <div class="kpi__delta" id="kpiClinicsDelta">+64 vs. M1</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi__label">Net Profit · Monthly</div>
-            <div class="kpi__value mono" id="kpiNet">$13,813</div>
-            <div class="kpi__delta">post-tax · CAD</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi__label">Partner Take · Monthly</div>
-            <div class="kpi__value mono" id="kpiPartner">$2,072</div>
-            <div class="kpi__delta">15% net · perpetual</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi__label">Cumulative Partner Div.</div>
-            <div class="kpi__value mono" id="kpiCum">$13,178</div>
-            <div class="kpi__delta" id="kpiCumDelta">29% of $45K position</div>
-          </div>
-        </div>
-      </div>
-      <div class="sparks">
-        <div class="spark reveal reveal--d2">
-          <div class="spark__head">
-            <span class="spark__label">Cumulative Partner Dividend</span>
-            <span class="spark__value mono" id="sparkValueCum">$13,178</span>
-          </div>
-          <svg id="sparkCum" viewBox="0 0 320 64" preserveAspectRatio="none" aria-hidden="true"></svg>
-          <div class="spark__foot"><span>M1</span><span>M36 · $67K</span></div>
-        </div>
-        <div class="spark reveal reveal--d3">
-          <div class="spark__head">
-            <span class="spark__label">Clinics Deployed</span>
-            <span class="spark__value mono" id="sparkValueClinics">64</span>
-          </div>
-          <svg id="sparkClinics" viewBox="0 0 320 64" preserveAspectRatio="none" aria-hidden="true"></svg>
-          <div class="spark__foot"><span>0</span><span>140</span></div>
-        </div>
-        <div class="pacing reveal reveal--d4">
-          <span class="pacing__label">Pacing Note</span>
-          <p class="pacing__copy">Three deployment phases by design. The pilot proves the model on six clinics; the second tranche accelerates onboarding; the third locks the network build at four clinics per month. 5% annual churn is modeled explicitly — rates above are gross, KPIs are net. Founder compensation is deferred: $2K in the pilot phase, $3K through the network build, $4K in steady state. The breakeven points sit in the timeline below.</p>
-        </div>
-      </div>
-    </div>
+    <table class="vt reveal reveal--d1">
+      <thead><tr><th>If the network reaches</th><th>The company is worth</th><th>Your 10% is worth</th><th>It pays you each year</th></tr></thead>
+      <tbody>
+        <tr><td>Nothing — pilot only</td><td class="mono">small</td><td class="mono">—</td><td class="mono">—</td></tr>
+        <tr class="is-primary"><td>Ninety clinics</td><td class="mono">$722,421</td><td class="mono">$72,242</td><td class="mono">$22,679</td></tr>
+        <tr><td>The full group · 475 practices</td><td class="mono">$3,663,976</td><td class="mono">$366,398</td><td class="mono">$105,000+</td></tr>
+      </tbody>
+    </table>
+    <p class="vt__note">You never write a cheque for this. The only thing it depends on is clinics actually signing up and paying — which is the same thing everything else here depends on.</p>
   </div>
 </section>
 
 <section class="section section--surface-a" aria-labelledby="sec02-title" id="sec02">
   <div class="section__inner">
     <div class="section__head reveal">
-      <span class="eyebrow"><span class="num mono">02</span><span>Unit Economics</span><span class="dot" aria-hidden="true"></span><span>The Math, Decomposed</span></span>
-      <h2 class="section__title" id="sec02-title">Three revenue lines. One margin model.</h2>
-      <p class="section__lede">Setup is one-time. Landing page refreshes annually. Management is the engine — flat $449 per clinic per month, $286.53 net of Stripe. Every dollar above traces to one of these three.</p>
+      <span class="eyebrow"><span class="num mono">02</span><span>How It Makes Money</span><span class="dot" aria-hidden="true"></span><span>Plainly</span></span>
+      <h2 class="section__title" id="sec02-title">Every clinic, every month.</h2>
+      <p class="section__lede">There is no complicated part. A clinic pays a monthly fee. A partner company does the delivery work for a fixed cost. What is left over is profit. Google ad money is paid by each clinic straight to Google — it never touches us.</p>
     </div>
-    <div class="profit-cards">
-      <article class="pcard reveal reveal--d1">
-        <div class="pcard__eyebrow"><span class="num mono">A</span>Setup · One-time</div>
-        <h3 class="pcard__name">Onboarding &amp; build.</h3>
-        <div class="pcard__rows">
-          <div class="pcard__row"><span class="pcard__row-label">Fee</span><span class="pcard__row-value mono">$499</span></div>
-          <div class="pcard__row"><span class="pcard__row-label">COGS</span><span class="pcard__row-value mono">$320</span></div>
-          <div class="pcard__row"><span class="pcard__row-label">Stripe 3%</span><span class="pcard__row-value mono">$14.97</span></div>
+    <div class="split">
+      <div class="reveal reveal--d1">
+        <div class="ledger__cap">Every month · per clinic</div>
+        <div class="ledger">
+          <div class="ledger__row"><div><div class="ledger__label">The clinic pays</div><div class="ledger__note">$449 during the pilot, $399 once the group signs</div></div><div class="ledger__value mono">$399.00</div></div>
+          <div class="ledger__row"><div><div class="ledger__label">Partner company does the work</div></div><div class="ledger__value mono">−$125.00</div></div>
+          <div class="ledger__row"><div><div class="ledger__label">Card processing</div></div><div class="ledger__value mono">−$11.97</div></div>
+          <div class="ledger__row ledger__row--total"><div><div class="ledger__label">Left over</div><div class="ledger__note">Per clinic · every month</div></div><div class="ledger__value mono">$262.03</div></div>
         </div>
-        <div class="pcard__net"><span class="pcard__net-label">Net per clinic</span><span class="pcard__net-value mono">$164.03</span></div>
-        <p class="pcard__foot">White-label build ($300) plus NFC kit ($20). Charged on signature.</p>
-      </article>
-      <article class="pcard reveal reveal--d2">
-        <div class="pcard__eyebrow"><span class="num mono">B</span>Landing Page · Annual Refresh</div>
-        <h3 class="pcard__name">Conversion surface.</h3>
-        <div class="pcard__rows">
-          <div class="pcard__row"><span class="pcard__row-label">Fee</span><span class="pcard__row-value mono">$999</span></div>
-          <div class="pcard__row"><span class="pcard__row-label">COGS</span><span class="pcard__row-value mono">$750</span></div>
-          <div class="pcard__row"><span class="pcard__row-label">Stripe 3%</span><span class="pcard__row-value mono">$29.97</span></div>
+      </div>
+      <div class="reveal reveal--d2">
+        <div class="ledger__cap">Once · when a clinic starts</div>
+        <div class="ledger">
+          <div class="ledger__row"><div><div class="ledger__label">Setup fee</div></div><div class="ledger__value mono">$499.00</div></div>
+          <div class="ledger__row"><div><div class="ledger__label">Setup cost</div></div><div class="ledger__value mono">−$320.00</div></div>
+          <div class="ledger__row"><div><div class="ledger__label">Card processing</div></div><div class="ledger__value mono">−$14.97</div></div>
+          <div class="ledger__row ledger__row--total"><div><div class="ledger__label">Left over</div><div class="ledger__note">This is what pays for the rollout</div></div><div class="ledger__value mono">$164.03</div></div>
         </div>
-        <div class="pcard__net"><span class="pcard__net-label">Net per refresh</span><span class="pcard__net-value mono">$219.03</span></div>
-        <p class="pcard__foot">One refresh per clinic per year, annualized into monthly P&amp;L.</p>
-      </article>
-      <article class="pcard reveal reveal--d3">
-        <div class="pcard__eyebrow"><span class="num mono">C</span>Management · Recurring</div>
-        <h3 class="pcard__name">The engine.</h3>
-        <div class="pcard__rows">
-          <div class="pcard__row"><span class="pcard__row-label">Fee · Monthly</span><span class="pcard__row-value mono">$449</span></div>
-          <div class="pcard__row"><span class="pcard__row-label">COGS · Monthly</span><span class="pcard__row-value mono">$149</span></div>
-          <div class="pcard__row"><span class="pcard__row-label">Stripe 3%</span><span class="pcard__row-value mono">$13.47</span></div>
-        </div>
-        <div class="pcard__net"><span class="pcard__net-label">Net per clinic · mo</span><span class="pcard__net-value mono">$286.53</span></div>
-        <p class="pcard__foot">Management fee covers six Google levers. Clinic pays its own ad spend directly to Google — not included in SSS COGS.</p>
-      </article>
+      </div>
     </div>
-    <div class="margin-stack reveal reveal--d4">
-      <div class="margin-stack__head">
-        <h3 class="margin-stack__title">Where each $449 lands.</h3>
-        <span class="margin-stack__total">Total <span class="v mono">$449.00</span></span>
-      </div>
-      <div class="bar" role="img" aria-label="Margin decomposition: COGS $149, Stripe $13.47, Net margin $286.53">
-        <div class="bar__seg bar__seg--cogs"   style="flex: 149 0 0;">COGS</div>
-        <div class="bar__seg bar__seg--stripe" style="flex: 13.47 0 0;"></div>
-        <div class="bar__seg bar__seg--margin" style="flex: 286.53 0 0;">Net Margin</div>
-      </div>
-      <div class="bar-legend">
-        <div class="bar-legend__item">
-          <span class="bar-legend__swatch bar-legend__swatch--cogs"></span>
-          <div>
-            <div class="bar-legend__label">Service COGS</div>
-            <div class="bar-legend__value mono">$149.00</div>
-            <div class="bar-legend__pct mono">33.2% · GMB + Analytics</div>
-          </div>
-        </div>
-        <div class="bar-legend__item">
-          <span class="bar-legend__swatch bar-legend__swatch--stripe"></span>
-          <div>
-            <div class="bar-legend__label">Stripe Fee · 3%</div>
-            <div class="bar-legend__value mono">$13.47</div>
-            <div class="bar-legend__pct mono">3.0% · payment friction</div>
-          </div>
-        </div>
-        <div class="bar-legend__item">
-          <span class="bar-legend__swatch bar-legend__swatch--margin"></span>
-          <div>
-            <div class="bar-legend__label">Net Margin · Post-Stripe</div>
-            <div class="bar-legend__value mono">$286.53</div>
-            <div class="bar-legend__pct mono">63.8% · per clinic · mo</div>
-          </div>
-        </div>
-      </div>
+    <div class="mandate reveal reveal--d4">
+      <span class="mandate__label">Two things worth knowing</span>
+      <p class="mandate__body">Running the whole business costs <strong>$1,860 a month</strong> — software and accounting, nothing else. That is why it turns a profit at seven clinics. And the $50 group discount is <strong>split with our partner</strong>: we give $25, they give $25. So the discount that wins the deal only costs us $23.50 per clinic, not $50.</p>
     </div>
   </div>
 </section>
@@ -519,245 +482,203 @@ input[type="range"].sss-range:focus::-moz-range-thumb { box-shadow: 0 0 0 4px va
 <section class="section" aria-labelledby="sec03-title" id="sec03">
   <div class="section__inner">
     <div class="section__head reveal">
-      <span class="eyebrow"><span class="num mono">03</span><span>Capital Efficiency</span><span class="dot" aria-hidden="true"></span><span>Payback &amp; Compound</span></span>
-      <h2 class="section__title" id="sec03-title">Payback at month thirty-one. Compound after.</h2>
-      <p class="section__lede">The cumulative partner share crosses the $45,000 deployment capital at month thirty-one. Everything past that point is yield on a position already recovered. The model includes 5% annual churn, deferred founder compensation, a twelve-month AI adoption ramp, Canadian and US sales overhead, and US market-entry costs. Forward returns assume the network locks at 150 gross clinics with no further expansion — the conservative case.</p>
+      <span class="eyebrow"><span class="num mono">03</span><span>The Plan</span><span class="dot" aria-hidden="true"></span><span>Seven Months</span></span>
+      <h2 class="section__title" id="sec03-title">Prove it, then roll it out.</h2>
+      <p class="section__lede">Four months running six clinics at full price, to show the system works with real numbers. Then two to three months to bring the rest on board. The business pays for its own rollout — it never runs out of money at any point.</p>
     </div>
-    <div class="payback reveal reveal--d1">
-      <div class="payback__head">
-        <h3 class="payback__title">Cumulative partner dividend, M1 → M36.</h3>
-        <div class="payback__legend">
-          <span class="payback__legend-item"><span class="payback__legend-line"></span>Partner Share</span>
-          <span class="payback__legend-item"><span class="payback__legend-line dashed"></span>$45,000 Position</span>
-          <span class="payback__legend-item mono" style="letter-spacing: 0.16em;">CAD · CUMULATIVE</span>
-        </div>
-      </div>
-      <svg class="chart" id="paybackChart" viewBox="0 0 800 320" preserveAspectRatio="none" aria-label="Cumulative partner share chart with $45,000 deployment capital line and M31 payback crossover"></svg>
-    </div>
-    <div class="strips">
-      <div class="strip reveal reveal--d2">
-        <div class="strip__head"><span class="dot"></span>Deployment Phase · M1 → M36</div>
-        <div class="strip__rows">
-          <div class="strip__row"><span class="strip__row-marker mono">M1–M3</span><span class="strip__row-label">Pilot · 6 clinics</span><span class="strip__row-value mono">Tranche 1</span></div>
-          <div class="strip__row"><span class="strip__row-marker mono">M4–M6</span><span class="strip__row-label">Acceleration · 18 clinics</span><span class="strip__row-value mono">Tranche 2</span></div>
-          <div class="strip__row"><span class="strip__row-marker mono">M15</span><span class="strip__row-label">Venture breakeven</span><span class="strip__row-value mono">$50,451<span class="mult">1.12×</span></span></div>
-          <div class="strip__row"><span class="strip__row-marker mono">M31</span><span class="strip__row-label">Partner payback</span><span class="strip__row-value mono">$46,712<span class="mult">1.04×</span></span></div>
-          <div class="strip__row"><span class="strip__row-marker mono">M36</span><span class="strip__row-label">140 active · 150 gross</span><span class="strip__row-value mono">$66,746<span class="mult">1.48×</span></span></div>
-        </div>
-      </div>
-      <div class="strip reveal reveal--d3">
-        <div class="strip__head"><span class="dot"></span>Forward Returns · Steady State</div>
-        <div class="strip__rows">
-          <div class="strip__row"><span class="strip__row-marker mono">Y3</span><span class="strip__row-label">End of year three</span><span class="strip__row-value mono">$67K<span class="mult">1.5×</span></span></div>
-          <div class="strip__row"><span class="strip__row-marker mono">Y5</span><span class="strip__row-label">End of year five</span><span class="strip__row-value mono">$182K<span class="mult">4.0×</span></span></div>
-          <div class="strip__row"><span class="strip__row-marker mono">Y10</span><span class="strip__row-label">End of year ten</span><span class="strip__row-value mono">$469K<span class="mult">10.4×</span></span></div>
-          <div class="strip__row"><span class="strip__row-marker mono">∞</span><span class="strip__row-label">Steady-state · monthly</span><span class="strip__row-value mono">$4,791 / mo</span></div>
-        </div>
-      </div>
+    <table class="vt reveal reveal--d1">
+      <thead><tr><th>Month</th><th>What is happening</th><th>Clinics</th><th>Profit that month</th><th>Money in the bank</th></tr></thead>
+      <tbody>
+        <tr><td>M1–M4</td><td class="mono">Pilot</td><td class="mono">6</td><td class="mono">small</td><td class="mono">$1,515</td></tr>
+        <tr><td>M5</td><td class="mono">Rollout begins</td><td class="mono">34</td><td class="mono">$10,318</td><td class="mono">$11,832</td></tr>
+        <tr><td>M6</td><td class="mono">Rollout</td><td class="mono">62</td><td class="mono">$16,571</td><td class="mono">$28,403</td></tr>
+        <tr class="is-primary"><td>M7</td><td class="mono">All ninety live</td><td class="mono">90</td><td class="mono">$22,797</td><td class="mono">$51,200</td></tr>
+        <tr><td>M12</td><td class="mono">Steady</td><td class="mono">90</td><td class="mono">$18,856</td><td class="mono">$145,479</td></tr>
+      </tbody>
+    </table>
+    <p class="vt__note">The pilot is not meant to make money — six clinics barely covers costs. Its job is to produce real results to negotiate with. Even if the rollout takes six months instead of three, the business still never needs outside money.</p>
+    <div class="callout reveal reveal--d2">
+      <div class="callout__label">Where it lands</div>
+      <p class="callout__body">First year: <strong>$263,422</strong> coming in, <strong>$145,479</strong> profit. Every year after: <strong>$428,841</strong> in, <strong>$226,269</strong> profit.</p>
+      <p class="callout__foot">New products get built out of that profit, not out of anyone's investment. In its first year the business can put more into building new tools than this entire investment is worth.</p>
     </div>
   </div>
 </section>
 
-<section class="section" aria-labelledby="sec04-title" id="sec04">
+<section class="section section--surface-b" aria-labelledby="sec04-title" id="sec04">
   <div class="section__inner">
     <div class="section__head reveal">
-      <span class="eyebrow"><span class="num mono">04</span><span>Capital Deployment</span><span class="dot" aria-hidden="true"></span><span>What the $45K Builds</span></span>
-      <h2 class="section__title" id="sec04-title">Capital builds infrastructure, not runway.</h2>
-      <p class="section__lede">The $45,000 is not operating cash. It is deployed as three milestone-gated tranches into assets that compound — proprietary systems, automation infrastructure, and a technology layer the clinics cannot build themselves. Each tranche unlocks only after the prior phase proves out.</p>
+      <span class="optional">Optional</span>
+      <span class="eyebrow"><span class="num mono">04</span><span>If You Want More</span><span class="dot" aria-hidden="true"></span><span>Nothing Required</span></span>
+      <h2 class="section__title" id="sec04-title">Thirty-five thousand, and no guarantees.</h2>
+      <p class="section__lede">You do not have to do this, and I am not going to dress it up. Nothing is signed with the group yet. If the network never closes you lose most of this money. If it closes, it pays you every year for as long as you hold it. And if the group eventually commits all 475 of its practices, it is the best thing you will do this year.</p>
     </div>
-
-    <div class="profit-cards">
-      <article class="pcard reveal reveal--d1">
-        <div class="pcard__eyebrow"><span class="num mono">T1</span>Tranche One · M1</div>
-        <h3 class="pcard__name">Foundation &amp; systems.</h3>
-        <div class="pcard__rows">
-          <div class="pcard__row"><span class="pcard__row-label">Legal &amp; Structuring</span><span class="pcard__row-value mono">Entity · IP · TM</span></div>
-          <div class="pcard__row"><span class="pcard__row-label">Operating Stack</span><span class="pcard__row-value mono">CRM · Automation</span></div>
-          <div class="pcard__row"><span class="pcard__row-label">Delivery Infra</span><span class="pcard__row-value mono">NFC · Dashboards</span></div>
-          <div class="pcard__row"><span class="pcard__row-label">Acquisition Test</span><span class="pcard__row-value mono">Paid · Content</span></div>
+    <table class="vt reveal reveal--d1">
+      <thead><tr><th>What happens</th><th>Your extra 5% is worth</th><th>It pays you each year</th><th>On your $35,000</th></tr></thead>
+      <tbody>
+        <tr><td>The network never closes</td><td class="mono">almost nothing</td><td class="mono">—</td><td class="mono">You lose most of it</td></tr>
+        <tr class="is-primary"><td>Ninety clinics sign</td><td class="mono">$36,121</td><td class="mono">$11,339</td><td class="mono">32% a year</td></tr>
+        <tr><td>The group commits all 475 practices</td><td class="mono">$183,199</td><td class="mono">$46,883</td><td class="mono">5.2× and still paying</td></tr>
+      </tbody>
+    </table>
+    <p class="vt__note">At ninety clinics the extra 5% hands you $11,339 a year — <strong>32% a year on your money</strong>. You have it all back inside three years and you still own the shares. To earn that much from the stock market you would need about $113,000 invested. Nothing has to be sold for you to get paid, and nobody has to agree to buy you out.</p>
+    <div class="split" style="margin-top:44px;">
+      <div class="reveal reveal--d2">
+        <div class="ledger__cap">Without investing · at ninety clinics</div>
+        <div class="ledger">
+          <div class="ledger__row"><div><div class="ledger__label">You own</div></div><div class="ledger__value mono">10%</div></div>
+          <div class="ledger__row"><div><div class="ledger__label">Worth</div></div><div class="ledger__value mono">$72,242</div></div>
+          <div class="ledger__row"><div><div class="ledger__label">Pays you each year</div></div><div class="ledger__value mono">$22,679</div></div>
+          <div class="ledger__row ledger__row--total"><div><div class="ledger__label">If all 475 sign</div><div class="ledger__note">Worth $366,398</div></div><div class="ledger__value mono">$93,766</div></div>
         </div>
-        <div class="pcard__net"><span class="pcard__net-label">Builds</span><span class="pcard__net-value mono">$15,000</span></div>
-        <p class="pcard__foot">Company registration, corporate structuring, accounting setup, trademark and IP protection, domain and brand systems, CRM and automation infrastructure, and the first paid-acquisition tests. The operating spine every clinic runs on.</p>
-      </article>
-
-      <article class="pcard reveal reveal--d2">
-        <div class="pcard__eyebrow"><span class="num mono">T2</span>Tranche Two · M4</div>
-        <h3 class="pcard__name">Scale the spine.</h3>
-        <div class="pcard__rows">
-          <div class="pcard__row"><span class="pcard__row-label">Onboarding</span><span class="pcard__row-value mono">Pilot → Network</span></div>
-          <div class="pcard__row"><span class="pcard__row-label">Sales Pipeline</span><span class="pcard__row-value mono">CRM · Sequencing</span></div>
-          <div class="pcard__row"><span class="pcard__row-label">Hardware Build</span><span class="pcard__row-value mono">NFC Inventory</span></div>
-          <div class="pcard__row"><span class="pcard__row-label">R&amp;D Scoping</span><span class="pcard__row-value mono">AI Voice Layer</span></div>
-        </div>
-        <div class="pcard__net"><span class="pcard__net-label">Builds</span><span class="pcard__net-value mono">$15,000</span></div>
-        <p class="pcard__foot">Onboarding systems scaled from pilot to network capacity, sales-pipeline infrastructure, NFC hardware built ahead of the rollout, and R&amp;D scoping for the proprietary AI products. The leverage moment — infrastructure that serves every future clinic at near-zero marginal cost.</p>
-      </article>
-
-      <article class="pcard reveal reveal--d3">
-        <div class="pcard__eyebrow"><span class="num mono">T3</span>Tranche Three · M7</div>
-        <h3 class="pcard__name">Technology &amp; reach.</h3>
-        <div class="pcard__rows">
-          <div class="pcard__row"><span class="pcard__row-label">AI Development</span><span class="pcard__row-value mono">Proprietary</span></div>
-          <div class="pcard__row"><span class="pcard__row-label">Network Build</span><span class="pcard__row-value mono">123Dentist</span></div>
-          <div class="pcard__row"><span class="pcard__row-label">US Planning</span><span class="pcard__row-value mono">Entity · Comply</span></div>
-          <div class="pcard__row"><span class="pcard__row-label">Working Capital</span><span class="pcard__row-value mono">Team Transition</span></div>
-        </div>
-        <div class="pcard__net"><span class="pcard__net-label">Builds</span><span class="pcard__net-value mono">$15,000</span></div>
-        <p class="pcard__foot">Proprietary AI voice product development, sustained Canadian network deployment, US market-entry planning, and the working-capital reserve for the founder-led to team-led transition. The phase that converts a service into a technology platform.</p>
-      </article>
-    </div>
-
-    <div class="margin-stack reveal reveal--d4">
-      <div class="margin-stack__head">
-        <h3 class="margin-stack__title">The R&amp;D thesis: from acquisition to lifecycle.</h3>
-        <span class="margin-stack__total">Ecosystem <span class="v mono">3 Layers</span></span>
       </div>
-      <div class="moat-pillars">
-        <div class="moat-pillar">
-          <span class="moat-pillar__num mono">01</span>
-          <div>
-            <h4 class="moat-pillar__title">Proprietary AI development.</h4>
-            <p class="moat-pillar__body">AI receptionist, AI recall agent, and AI-powered patient-communication workflows — built in-house or white-labeled, fine-tuned on dental operations. Internal automation and workflow-optimization tools that compound delivery efficiency as the network scales. This is the IP the capital creates.</p>
-          </div>
-        </div>
-        <div class="moat-pillar">
-          <span class="moat-pillar__num mono">02</span>
-          <div>
-            <h4 class="moat-pillar__title">Service ecosystem expansion.</h4>
-            <p class="moat-pillar__body">Continuous research into complementary white-label products that clear the margin filter, retention-focused services, upsell systems, and lifetime-value mechanics. Each product layered onto an installed base acquired once and monetized repeatedly.</p>
-          </div>
-        </div>
-        <div class="moat-pillar">
-          <span class="moat-pillar__num mono">03</span>
-          <div>
-            <h4 class="moat-pillar__title">Scalable delivery infrastructure.</h4>
-            <p class="moat-pillar__body">Subscription and tooling stack, operational systems, future-hiring preparation, and market-expansion readiness — all built ahead of demand so growth meets capacity rather than chasing it. Lean by design, scalable by architecture.</p>
-          </div>
+      <div class="reveal reveal--d3">
+        <div class="ledger__cap">If you invest · at ninety clinics</div>
+        <div class="ledger">
+          <div class="ledger__row"><div><div class="ledger__label">You own</div></div><div class="ledger__value mono">15%</div></div>
+          <div class="ledger__row"><div><div class="ledger__label">Worth</div></div><div class="ledger__value mono">$108,363</div></div>
+          <div class="ledger__row"><div><div class="ledger__label">Pays you each year</div></div><div class="ledger__value mono">$34,018</div></div>
+          <div class="ledger__row ledger__row--total"><div><div class="ledger__label">If all 475 sign</div><div class="ledger__note">Worth $549,596</div></div><div class="ledger__value mono">$140,649</div></div>
         </div>
       </div>
     </div>
-
     <div class="mandate reveal reveal--d4">
-      <span class="mandate__label">The Through-Line</span>
-      <p class="mandate__body">You hired us to help generate new patients. <strong>Now we help clinics retain, reactivate, and manage them more efficiently.</strong> Every dollar of capital extends the same relationship deeper into the clinic's operations — acquisition first, then lifecycle, then the systems that run both. Infrastructure that compounds, not expenses that evaporate.</p>
+      <span class="mandate__label">Who owns what</span>
+      <p class="mandate__body">Hamza <strong>80%</strong> · Dr. Araghi <strong>15%</strong> · Ali Kazemian <strong>5%</strong>. Real shares in a real company, not a handshake — incorporated, with a shareholders' agreement signed before any money changes hands. If you choose not to invest, it is Hamza 85%, you 10%, Ali 5%, and nothing else changes.</p>
     </div>
   </div>
 </section>
 
-<section class="section section--sage" aria-labelledby="sec05-title" id="sec05">
+<section class="section" aria-labelledby="sec05-title" id="sec05">
   <div class="section__inner">
     <div class="section__head reveal">
-      <span class="eyebrow"><span class="num mono">05</span><span>Physical Moat</span><span class="dot" aria-hidden="true"></span><span>The NFC Pad</span></span>
-      <h2 class="section__title" id="sec05-title">Software doesn't have this.</h2>
-      <p class="section__lede">A 60mm disc on the front desk. The patient taps; the phone opens a clinic-branded portal; one tap later a Google review is filed. The pad is the moat — physical placement that compounds Maps rank, lowers the cost of the next patient, and survives ad-platform churn.</p>
+      <span class="eyebrow"><span class="num mono">05</span><span>The Price</span><span class="dot" aria-hidden="true"></span><span>What It Pays</span></span>
+      <h2 class="section__title" id="sec05-title">Thirty-five thousand buys an income.</h2>
+      <p class="section__lede">The price is set by what the 5% pays you every year, not by what it might sell for one day. On that basis it is priced better than anything a brokerage account will offer you — and unlike a stock, it pays without anything ever being sold.</p>
     </div>
-    <div class="moat__grid">
-      <div class="nfc-stage reveal reveal--d1" aria-hidden="true">
-        <svg viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="210" cy="332" rx="148" ry="14" fill="#1c1812" opacity="0.10"/>
-          <circle cx="210" cy="210" r="156" fill="#fefae0" stroke="#1c1812" stroke-width="0.8" stroke-opacity="0.18"/>
-          <circle cx="210" cy="210" r="140" fill="#faedcd"/>
-          <line x1="86" y1="210" x2="334" y2="210" stroke="#d4a373" stroke-width="0.8" opacity="0.5"/>
-          <image x="144" y="140" width="132" height="56" href="data:image/png;base64,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" preserveAspectRatio="xMidYMid meet"/>
-          <rect x="284" y="142" width="4" height="4" fill="#d4a373"/>
-          <text x="210" y="242" text-anchor="middle" font-family="ABC Walter, Helvetica, Arial, sans-serif" font-size="9" fill="#1c1812" opacity="0.62" letter-spacing="3">TAP TO REVIEW</text>
-          <g transform="translate(210, 282)" fill="none" stroke="#1c1812" stroke-opacity="0.55" stroke-linecap="round">
-            <path d="M -16 6 Q 0 -8, 16 6" stroke-width="1.4"/>
-            <path d="M -10 4 Q 0 -3, 10 4" stroke-width="1.4"/>
-            <circle cx="0" cy="3" r="1.4" fill="#1c1812" fill-opacity="0.55" stroke="none"/>
-          </g>
-          <line x1="30" y1="210" x2="46" y2="210" stroke="#d4a373" stroke-width="1"/>
-          <line x1="374" y1="210" x2="390" y2="210" stroke="#d4a373" stroke-width="1"/>
-          <line x1="210" y1="30" x2="210" y2="46" stroke="#d4a373" stroke-width="1"/>
-          <line x1="210" y1="374" x2="210" y2="390" stroke="#d4a373" stroke-width="1"/>
-          <line x1="160" y1="378" x2="260" y2="378" stroke="#1c1812" stroke-opacity="0.22" stroke-width="0.6"/>
-          <text x="210" y="395" text-anchor="middle" font-family="ABC Walter, Helvetica, Arial, sans-serif" font-size="8.5" fill="#1c1812" opacity="0.55" letter-spacing="2.8">Ø 60MM · FRONT DESK</text>
-        </svg>
+    <table class="vt reveal reveal--d1">
+      <thead><tr><th></th><th>Amount</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>What you pay, once</td><td class="mono">$35,000</td><td class="mono">—</td></tr>
+        <tr class="is-primary"><td>What it pays you, every year</td><td class="mono">$11,339</td><td class="mono">32% a year</td></tr>
+        <tr><td>Your money back</td><td class="mono">3 years</td><td class="mono">then it is free income</td></tr>
+        <tr><td>If the group commits all 475 practices</td><td class="mono">$46,883 / yr</td><td class="mono">and worth $183,199</td></tr>
+      </tbody>
+    </table>
+    <div class="callout reveal reveal--d2">
+      <div class="callout__label">Put it beside anything else you could do with $35,000</div>
+      <p class="callout__body">To earn <strong>$11,339 a year</strong> you would need roughly <strong>$113,000</strong> in the stock market, or <strong>$190,000</strong> in a rental property, or <strong>$283,000</strong> in dividend stocks or a GIC.</p>
+      <p class="callout__foot">Here it costs $35,000, and it pays every year for as long as you hold the shares. The one thing that has to happen is the network signing — that is the whole risk, and it is the only reason this is available at this price rather than three times it. A year from now, with ninety clinics live and paying, nobody sells 5% of this for $35,000.</p>
+    </div>
+    <p class="vt__note">For context on how the company itself is valued: today, with nothing signed and the pilot unfinished, it is worth roughly $330,000. Once ninety clinics are live, $722,421. If the group commits all 475 practices, $3,663,976. It is valued at 3.6 times yearly profit after deducting a $60,000 salary for whoever runs it — the standard way a business this size is priced. Nothing still being built is counted anywhere.</p>
+  </div>
+</section>
+
+<section class="section section--sage" aria-labelledby="sec06-title" id="sec06">
+  <div class="section__inner">
+    <div class="section__head reveal">
+      <span class="eyebrow"><span class="num mono">06</span><span>Exclusivity</span><span class="dot" aria-hidden="true"></span><span>Earned In Steps</span></span>
+      <h2 class="section__title" id="sec06-title">What the group gets for committing.</h2>
+      <p class="section__lede">The group can have exclusivity — we will not work with any competing dental group. But it is earned in steps, it grows with the number of practices they actually commit, and it ends if that number drops.</p>
+    </div>
+    <div class="rung reveal reveal--d1">
+      <div class="rung__num mono">01</div>
+      <div>
+        <h3 class="rung__title">Ninety clinics — Quebec.</h3>
+        <p class="rung__body">Once the ninety clinics sign twelve-month agreements, we work with no other dental group in Quebec. They also agree not to use another Google agency. Ends if they fall below seventy-five clinics.</p>
+        <div class="rung__meta">Quebec only · two years · renewed on results</div>
       </div>
-      <div class="moat-pillars reveal reveal--d2">
-        <div class="moat-pillar">
-          <span class="moat-pillar__num mono">01</span>
-          <div>
-            <h4 class="moat-pillar__title">Physical placement.</h4>
-            <p class="moat-pillar__body">On the front desk, in the patient's hand at checkout. No app to install. No friction the patient has to invent a reason to overcome.</p>
-          </div>
-        </div>
-        <div class="moat-pillar">
-          <span class="moat-pillar__num mono">02</span>
-          <div>
-            <h4 class="moat-pillar__title">Review velocity.</h4>
-            <p class="moat-pillar__body">Each tap routes through a clinic-branded portal that filters for satisfaction, then files the review on Google before the patient leaves the chair.</p>
-          </div>
-        </div>
-        <div class="moat-pillar">
-          <span class="moat-pillar__num mono">03</span>
-          <div>
-            <h4 class="moat-pillar__title">Compounding cost-per-patient.</h4>
-            <p class="moat-pillar__body">Reviews lift Maps rank. Maps rank lifts organic share of search. Organic share cuts the spend required to win the next patient. The loop closes monthly.</p>
-          </div>
-        </div>
-        <div class="moat-pillar">
-          <span class="moat-pillar__num mono">04</span>
-          <div>
-            <h4 class="moat-pillar__title">Zero clinic workload.</h4>
-            <p class="moat-pillar__body">No staff training. No content production. No on-camera dentist. The clinic delivers dentistry; the pad delivers the marketing flywheel.</p>
-          </div>
-        </div>
+    </div>
+    <div class="rung reveal reveal--d2">
+      <div class="rung__num mono">02</div>
+      <div>
+        <h3 class="rung__title">All practices — Canada.</h3>
+        <p class="rung__body">If they commit their full estate — around 475 practices — exclusivity covers every dental group in Canada. Same terms both ways. Ends if they fall below four hundred.</p>
+        <div class="rung__meta">All of Canada · list of locations attached</div>
+      </div>
+    </div>
+    <div class="mandate reveal reveal--d4">
+      <span class="mandate__label">What we never give up</span>
+      <p class="mandate__body">Independent practices — roughly sixteen thousand in Canada — and the entire United States. <strong>That is on purpose, and it helps them too:</strong> a practice with a full schedule is a more profitable practice, and a more profitable practice is a better one to buy. Every independent we help is a candidate they did not have to find.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="sec07-title" id="sec07">
+  <div class="section__inner">
+    <div class="section__head reveal">
+      <span class="eyebrow"><span class="num mono">07</span><span>Straight Answers</span><span class="dot" aria-hidden="true"></span><span>Including The Awkward Ones</span></span>
+      <h2 class="section__title" id="sec07-title">What you should be asking.</h2>
+    </div>
+    <div class="faq reveal reveal--d1">
+      <div class="faq__i">
+        <p class="faq__q">Do I have to invest anything?</p>
+        <p class="faq__a"><strong>No.</strong> The 10% is yours either way, and the business does not need money — it is profitable at seven clinics and pays for its own rollout. The $35,000 exists because you asked what a bigger share would look like, not because there is a hole to fill.</p>
+      </div>
+      <div class="faq__i">
+        <p class="faq__q">Is $35,000 for 5% a good price?</p>
+        <p class="faq__a"><strong>Yes — because of what it pays you.</strong> At ninety clinics that 5% hands you $11,339 every year. That is <strong>32% a year</strong> on your money. To earn $11,339 a year from the stock market you would need about $113,000 invested; from dividend stocks or a rental property, closer to $200,000–$280,000. Here it costs $35,000. You have your money back in three years and you still own the shares. No stock, no rental, no crypto position pays like that.</p>
+      </div>
+      <div class="faq__i">
+        <p class="faq__q">What if the network never signs?</p>
+        <p class="faq__a">You lose most of the $35,000, and your 10% does not vest either because it is tied to clinics actually paying. You would own 5% of a small but profitable six-clinic business with no debt. That is the downside, stated plainly — it is a bet, and bets can lose.</p>
+      </div>
+      <div class="faq__i">
+        <p class="faq__q">Another company does the actual work. What stops them going straight to the group?</p>
+        <p class="faq__a">Right now, a contract we have not written yet — which is the first thing being fixed. Before the network closes: a written agreement with a notice period, a clause preventing them approaching our clients, and every client contract, website, Google account and analytics login held by us, not them. We are also lining up a second supplier so we are never dependent on one.</p>
+      </div>
+      <div class="faq__i">
+        <p class="faq__q">Ninety clinics is really one customer. Isn't that risky?</p>
+        <p class="faq__a">Yes, and it is the main risk in the business. Two things reduce it: moving the group from month-to-month onto twelve-month agreements, which is what the exclusivity in section 06 is designed to buy — and building up independent practices alongside, which is exactly why exclusivity is never extended to them.</p>
+      </div>
+      <div class="faq__i">
+        <p class="faq__q">The profit margin looks too good. Is it real?</p>
+        <p class="faq__a">It is real, and there are four reasons. Another company does the delivery, so there is no payroll. Google ad money never passes through us. There is no cost of finding customers while the group supplies them. And Hamza takes profit rather than a salary — which is why a $60,000 manager's salary is deducted before the company is valued, so that last point is not quietly inflating the price.</p>
+      </div>
+      <div class="faq__i">
+        <p class="faq__q">How would I ever get my money out?</p>
+        <p class="faq__a">The main way is that you do not have to — the shares pay you every year without anything being sold. Beyond that: the company is sold to a bigger marketing group, a dental organisation buys it to bring marketing in-house, or the company buys your shares back. The last one goes in the shareholders' agreement with a set formula rather than being left to good intentions.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section section--surface-b" aria-labelledby="sec06-title" id="sec06">
+<section class="section section--surface-a" aria-labelledby="sec08-title" id="sec08">
   <div class="section__inner">
     <div class="section__head reveal">
-      <span class="eyebrow"><span class="num mono">06</span><span>Forward Optionality</span><span class="dot" aria-hidden="true"></span><span>Beyond Base Case</span></span>
-      <h2 class="section__title" id="sec06-title">Two products beyond the base case.</h2>
-      <p class="section__lede">Both white-label. Both passive on the clinic side. Both clear the filter — &gt;85% margin at near-zero delivery cost, dental-tunable. Adoption is ramped: 5% at month twelve, scaling linearly to 25% by month twenty-four. AI infrastructure costs modeled separately from month ten. Both inside the partner's 15% perpetual share.</p>
+      <span class="eyebrow"><span class="num mono">08</span><span>Being Built</span><span class="dot" aria-hidden="true"></span><span>Not Counted Anywhere</span></span>
+      <h2 class="section__title" id="sec08-title">What comes after Google.</h2>
+      <p class="section__lede">None of this is in any number on this page. Putting revenue against products that do not exist yet is how projections stop being believable. It is described because it is where profit gets reinvested — and because it is the long answer to the supplier question.</p>
     </div>
     <div class="pipe">
       <article class="pipe-card reveal reveal--d1">
-        <div class="pipe-card__top">
-          <span class="pipe-card__tag"><span class="num mono">P1</span>AI Voice · Inbound</span>
-          <span class="pipe-card__price mono">$149<span class="per">/mo</span></span>
-        </div>
-        <h3 class="pipe-card__name">AI Receptionist · After-Hours.</h3>
-        <p class="pipe-card__body">Answers the line when the clinic doesn't. Books, triages emergencies, captures the lead. The hours dentists lose to voicemail become billable chair time the next morning.</p>
-        <div class="pipe-card__stats">
-          <div class="pipe-card__stat"><div class="pipe-card__stat-label">Margin</div><div class="pipe-card__stat-value mono">90%</div></div>
-          <div class="pipe-card__stat"><div class="pipe-card__stat-label">Attach</div><div class="pipe-card__stat-value mono">25%</div></div>
-          <div class="pipe-card__stat"><div class="pipe-card__stat-label">ARR @ 150</div><div class="pipe-card__stat-value mono">$58K</div></div>
-        </div>
+        <div class="pipe-card__top"><span class="pipe-card__tag"><span class="num mono">01</span>Waiting Room</span></div>
+        <h3 class="pipe-card__name">Wi-Fi Sign-In Screen.</h3>
+        <p class="pipe-card__body">Patients connect to the clinic's Wi-Fi and land on a screen carrying the group's brand. The group owns the moment; we own the system behind it and the patient information it collects, with consent. A supplier working remotely cannot put anything in a waiting room.</p>
       </article>
       <article class="pipe-card reveal reveal--d2">
-        <div class="pipe-card__top">
-          <span class="pipe-card__tag"><span class="num mono">P2</span>AI Voice · Outbound</span>
-          <span class="pipe-card__price mono">$249<span class="per">/mo</span></span>
-        </div>
-        <h3 class="pipe-card__name">AI Recall Agent · Outbound.</h3>
-        <p class="pipe-card__body">Calls the recall list the clinic never has time to call. Re-books lapsed hygiene, fills cancelled slots, confirms tomorrow's schedule. The hygienist's chair stops being a guessing game.</p>
-        <div class="pipe-card__stats">
-          <div class="pipe-card__stat"><div class="pipe-card__stat-label">Margin</div><div class="pipe-card__stat-value mono">88%</div></div>
-          <div class="pipe-card__stat"><div class="pipe-card__stat-label">Attach</div><div class="pipe-card__stat-value mono">25%</div></div>
-          <div class="pipe-card__stat"><div class="pipe-card__stat-label">ARR @ 150</div><div class="pipe-card__stat-value mono">$95K</div></div>
-        </div>
+        <div class="pipe-card__top"><span class="pipe-card__tag"><span class="num mono">02</span>Phone</span></div>
+        <h3 class="pipe-card__name">Recall Assistant.</h3>
+        <p class="pipe-card__body">Calls the patients who have stopped coming in — the list every front desk means to work through and never does. The cheapest patient in dentistry is the one already in the file, and the big treatment plans usually come from patients who were diagnosed and never came back.</p>
+      </article>
+      <article class="pipe-card reveal reveal--d3">
+        <div class="pipe-card__top"><span class="pipe-card__tag"><span class="num mono">03</span>Front Desk</span></div>
+        <h3 class="pipe-card__name">Branded Hardware.</h3>
+        <p class="pipe-card__body">Phone chargers and review pads on the counter, carrying the group's brand into every practice they own. Physical things in the room bring in reviews, and reviews lower the cost of the next patient.</p>
       </article>
     </div>
-    <div class="mandate reveal reveal--d3">
-      <span class="mandate__label">Standing Mandate</span>
-      <p class="mandate__body">The 15% net-profit share is <strong>perpetual and product-agnostic</strong>. Every line of revenue the platform ships — base case, forward optionality, anything that survives the white-label + automatable + dental-tunable + 60%+ margin filter — flows through the same split. The forward stack is upside on a position already paid back.</p>
+    <div class="callout reveal reveal--d4">
+      <div class="callout__label">How it gets paid for</div>
+      <p class="callout__body">Out of profit. In its first year the business can put <strong>more into building these</strong> than this whole investment is worth.</p>
+      <p class="callout__foot">That is the point of buying into something already making money — none of it depends on the cheque. Your share covers what exists today and everything the business builds from its own earnings.</p>
     </div>
   </div>
 </section>
-
 <footer class="foot">
   <div class="foot__inner">
     <div class="foot__memo">
       <span class="foot__memo-label">Confidentiality</span>
-      <div class="foot__memo-body">
-        <p>This document is private. One reader. Operational figures derive from verified clinic data and a Node-simulated 36-month unit-economics model — Partner Payback M31, Venture Breakeven M15 — verified outputs that resist parameter optimization.</p>
-        <p>Projections include 5% annual churn, deferred founder compensation ($2K–$4K graduated draw), twelve-month AI adoption ramp, Canadian and US sales overhead, US market-entry costs, and AI infrastructure scaling. Corporate tax at the Canadian small business rate of 13%. This is not an offer. Not an obligation. A briefing between two operators.</p>
-      </div>
+      <div class="foot__memo-body"><p>Private. The pilot runs four months at six clinics. The ninety-clinic network is in negotiation and nothing is signed. Every number past the pilot assumes it closes — if it does not, the optional investment in section 04 loses most of its value.</p><p>Figures include 5% yearly cancellations, card processing fees, Canadian corporate tax, and a $60,000 manager salary deducted before the company is valued. They do not include any product still being built, any independent practice, the United States, or anything past ninety clinics. These are models, not promises.</p></div>
     </div>
     <div class="foot__strip">
       <img class="foot__mark" src="data:image/png;base64,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" alt="SSS" width="64" height="27">
@@ -765,265 +686,17 @@ input[type="range"].sss-range:focus::-moz-range-thumb { box-shadow: 0 0 0 4px va
     </div>
   </div>
 </footer>
-
 <script>
-const CONFIG = {
-  targetClinics: 150, horizonMonths: 36,
-  mgmtFee: 449, mgmtCost: 149,
-  setupFee: 499, setupCost: 320,
-  lpFee: 999, lpCost: 750,
-  stripe: 0.03, corpTax: 0.13,
-  partnerShare: 0.15,
-  swBase: 400, swMax: 1800,
-  // 5% annual churn modeled explicitly
-  annualChurn: 0.05,
-  // Founder salary — deferred draw, scales with cash flow
-  // M1-M6: $2,000 | M7-M18: $3,000 | M19-M36: $4,000
-  founderSched: [[0,6,2000],[6,18,3000],[18,36,4000]],
-  // Canadian network sales — activated after all tranches deployed (M7)
-  caSalesStart: 7, caSalesMonthly: 2500,
-  // US expansion — sales overhead
-  usSalesMonthly: 11000, usSalesStart: 25,
-  // US market entry — entity formation, compliance (M28: plan before spend)
-  usLegalMonth: 28, usLegalCost: 12000,
-  // AI upsell — ramped adoption, infrastructure from launch month
-  aiStartMonth: 12, aiFullAttach: 0.25,
-  recallFee: 249, recallMargin: 0.88,
-  receptFee: 149, receptMargin: 0.90,
-  aiInfraBase: 500, aiInfraMax: 2500, aiInfraStart: 12,
-  // Capital — three milestone-gated tranches
-  injections: { 1: 15000, 4: 15000, 7: 15000 },
-  injection: 45000,
-  // Deployment rates per phase
-  r1: 2.0, r2: 4.0, r3: 4.0, // r4 derived: (150 - r4Start) / 12
-};
-
-const SETUP_NET      = CONFIG.setupFee - CONFIG.setupCost - CONFIG.setupFee * CONFIG.stripe;
-const LP_NET         = CONFIG.lpFee    - CONFIG.lpCost    - CONFIG.lpFee    * CONFIG.stripe;
-const RECURRING_NET  = (CONFIG.mgmtFee - CONFIG.mgmtCost) - CONFIG.mgmtFee * CONFIG.stripe;
-const RECALL_NET     = CONFIG.recallFee  * (CONFIG.recallMargin  - CONFIG.stripe);
-const RECEPT_NET     = CONFIG.receptFee  * (CONFIG.receptMargin  - CONFIG.stripe);
-const AI_NET_PER_ADOPTER = RECALL_NET + RECEPT_NET;
-const MONTHLY_CHURN  = 1 - Math.pow(1 - CONFIG.annualChurn, 1/12);
-
-// Piecewise gross deployment — rate steps matched to capital tranches
-// M1-M3: 2/mo | M4-M6: 4/mo | M7-M24: 4/mo (increased from V3) | M25-M36: 5/mo
-const R4_START = 3*CONFIG.r1 + 3*CONFIG.r2 + 18*CONFIG.r3; // = 90 at M24
-const R4 = (150 - R4_START) / 12; // = 5.0/mo
-
-function grossDeployedAt(month) {
-  if (month <= 0) return 0;
-  if (month <= 3)  return month * CONFIG.r1;
-  if (month <= 6)  return 3*CONFIG.r1 + (month - 3) * CONFIG.r2;
-  if (month <= 24) return 3*CONFIG.r1 + 3*CONFIG.r2 + (month - 6) * CONFIG.r3;
-  return R4_START + (month - 24) * R4;
-}
-
-// AI adoption ramp: 5% at M12 → 25% at M24, holds after
-function aiAttachRate(month) {
-  if (month < CONFIG.aiStartMonth) return 0;
-  if (month <= 24) return 0.05 + (CONFIG.aiFullAttach - 0.05) * ((month - 12) / 12);
-  return CONFIG.aiFullAttach;
-}
-
-function founderSalary(month) {
-  for (var i = 0; i < CONFIG.founderSched.length; i++) {
-    var s = CONFIG.founderSched[i];
-    if (month > s[0] && month <= s[1]) return s[2];
-  }
-  return CONFIG.founderSched[CONFIG.founderSched.length - 1][2];
-}
-
-// Pre-compute full 36-month series with stateful churn simulation
-var _active = 0;
-var SERIES = [];
-for (var _m = 1; _m <= CONFIG.horizonMonths; _m++) {
-  var _gross = grossDeployedAt(_m);
-  var _prevGross = grossDeployedAt(_m - 1);
-  var _new = Math.max(0, _gross - _prevGross);
-  _active = _active * (1 - MONTHLY_CHURN) + _new;
-  var _c = _active;
-  var _att = aiAttachRate(_m);
-
-  var _rec   = _c * RECURRING_NET;
-  var _setup = _new * SETUP_NET;
-  var _lp    = (_c * LP_NET) / 12;
-  var _ai    = _att > 0 ? _c * _att * AI_NET_PER_ADOPTER : 0;
-  var _gp    = _rec + _setup + _lp + _ai;
-
-  var _sw      = CONFIG.swBase + (CONFIG.swMax - CONFIG.swBase) * Math.min(1, _c / CONFIG.targetClinics);
-  var _ca      = _m >= CONFIG.caSalesStart ? CONFIG.caSalesMonthly : 0;
-  var _us      = _m >= CONFIG.usSalesStart ? CONFIG.usSalesMonthly : 0;
-  var _found   = founderSalary(_m);
-  var _aiInfra = 0;
-  if (_m >= CONFIG.aiInfraStart) {
-    if (_att > 0) {
-      var _adopters = _c * _att;
-      _aiInfra = CONFIG.aiInfraBase + (CONFIG.aiInfraMax - CONFIG.aiInfraBase) *
-        Math.min(1, _adopters / (CONFIG.targetClinics * CONFIG.aiFullAttach));
-    } else {
-      _aiInfra = CONFIG.aiInfraBase;
-    }
-  }
-  var _usLegal = _m === CONFIG.usLegalMonth ? CONFIG.usLegalCost : 0;
-  var _opex = _sw + _ca + _us + _found + _aiInfra + _usLegal;
-
-  var _ebt = _gp - _opex;
-  var _tax  = _ebt > 0 ? _ebt * CONFIG.corpTax : 0;
-  var _net  = _ebt - _tax;
-
-  SERIES.push({
-    month: _m, clinics: _c, gross: _gross, net: _net,
-    partner: _net * CONFIG.partnerShare, ai: _ai
-  });
-}
-
-var _cumP = 0;
-var SERIES_CUM = SERIES.map(function (r) {
-  _cumP += r.partner;
-  return Object.assign({}, r, { cumPartner: _cumP });
-});
-
-var MAX_CUM_PARTNER = SERIES_CUM[CONFIG.horizonMonths - 1].cumPartner;
-var MAX_CLINICS     = SERIES_CUM[CONFIG.horizonMonths - 1].clinics;
-
-var fmtUSD = function (v) { return '$' + Math.round(v).toLocaleString('en-US'); };
-var fmtN   = function (v) { return Math.round(v).toLocaleString('en-US'); };
-
-var slider          = document.getElementById('monthSlider');
-var monthDisplay    = document.getElementById('monthDisplay');
-var rangeProgress   = document.getElementById('rangeProgress');
-var kpiClinics      = document.getElementById('kpiClinics');
-var kpiClinicsDelta = document.getElementById('kpiClinicsDelta');
-var kpiNet          = document.getElementById('kpiNet');
-var kpiPartner      = document.getElementById('kpiPartner');
-var kpiCum          = document.getElementById('kpiCum');
-var kpiCumDelta     = document.getElementById('kpiCumDelta');
-var sparkValueCum   = document.getElementById('sparkValueCum');
-var sparkValueClin  = document.getElementById('sparkValueClinics');
-
-function paintSpark(id, values, max, activeMonth) {
-  var svg = document.getElementById(id);
-  if (!svg) return;
-  var W = 320, H = 64, pad = 4;
-  var pts = values.map(function (v, i) {
-    var x = (i / (values.length - 1)) * (W - pad * 2) + pad;
-    var y = H - pad - (v / max) * (H - pad * 2);
-    return [x, y];
-  });
-  var d = pts.map(function (p, i) { return (i === 0 ? 'M ' : 'L ') + p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ');
-  var areaD = 'M ' + pad + ',' + (H - pad) + ' ' + pts.map(function (p) { return 'L ' + p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ') + ' L ' + (W - pad) + ',' + (H - pad) + ' Z';
-  var ax = pts[activeMonth - 1][0];
-  var ay = pts[activeMonth - 1][1];
-  svg.innerHTML =
-    '<path d="' + areaD + '" fill="rgba(212, 163, 115, 0.12)" />' +
-    '<path d="' + d + '" fill="none" stroke="#1c1812" stroke-opacity="0.7" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>' +
-    '<line x1="' + ax.toFixed(1) + '" x2="' + ax.toFixed(1) + '" y1="' + pad + '" y2="' + (H - pad) + '" stroke="#d4a373" stroke-width="1" stroke-dasharray="2 3" opacity="0.7"/>' +
-    '<circle cx="' + ax.toFixed(1) + '" cy="' + ay.toFixed(1) + '" r="4" fill="#d4a373"/>';
-}
-
-function update(month) {
-  var row = SERIES_CUM[month - 1];
-  monthDisplay.textContent    = 'M' + month;
-  kpiClinics.textContent      = fmtN(row.clinics);
-  kpiClinicsDelta.textContent = '+' + fmtN(row.clinics) + ' vs. M1';
-  kpiNet.textContent          = fmtUSD(row.net);
-  kpiPartner.textContent      = fmtUSD(row.partner);
-  kpiCum.textContent          = fmtUSD(row.cumPartner);
-  sparkValueCum.textContent   = fmtUSD(row.cumPartner);
-  sparkValueClin.textContent  = fmtN(row.clinics);
-  var pct = Math.min(100, Math.round((row.cumPartner / CONFIG.injection) * 100));
-  kpiCumDelta.textContent = pct + '% of $45K position';
-  var pctSlide = ((month - 1) / (CONFIG.horizonMonths - 1)) * 100;
-  rangeProgress.style.width = 'calc(' + pctSlide + '% + 9px - ' + (pctSlide * 0.18) + 'px)';
-  paintSpark('sparkCum',     SERIES_CUM.map(function (r) { return r.cumPartner; }), MAX_CUM_PARTNER, month);
-  paintSpark('sparkClinics', SERIES_CUM.map(function (r) { return r.clinics; }),    MAX_CLINICS,     month);
-}
-
-function paintPayback() {
-  var svg = document.getElementById('paybackChart');
-  if (!svg) return;
-  var W = 800, H = 320, padL = 8, padR = 8, padT = 16, padB = 36;
-  var innerW = W - padL - padR, innerH = H - padT - padB;
-  var maxY = Math.max(MAX_CUM_PARTNER * 1.12, CONFIG.injection * 1.55);
-  var xAt = function (i) { return padL + (i / (CONFIG.horizonMonths - 1)) * innerW; };
-  var yAt = function (v) { return padT + innerH - (v / maxY) * innerH; };
-  var pts = SERIES_CUM.map(function (r, i) { return [xAt(i), yAt(r.cumPartner)]; });
-  var d = pts.map(function (p, i) { return (i === 0 ? 'M ' : 'L ') + p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ');
-  var areaD = 'M ' + padL + ',' + yAt(0) + ' ' + pts.map(function (p) { return 'L ' + p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ') + ' L ' + (W - padR) + ',' + yAt(0) + ' Z';
-  var injY = yAt(CONFIG.injection);
-  var idxPayback = 30; // M31, zero-indexed
-  var cx = xAt(idxPayback);
-  var cy = yAt(SERIES_CUM[idxPayback].cumPartner);
-  var grid = '';
-  for (var i = 1; i <= 3; i++) {
-    var gy = padT + (innerH * i) / 4;
-    grid += '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + gy + '" y2="' + gy + '" stroke="#1c1812" stroke-opacity="0.06" stroke-width="0.5"/>';
-  }
-  var xLabels = '';
-  [1, 6, 12, 18, 24, 30, 36].forEach(function (m) {
-    var x = xAt(m - 1);
-    xLabels +=
-      '<line x1="' + x.toFixed(1) + '" x2="' + x.toFixed(1) + '" y1="' + (padT + innerH) + '" y2="' + (padT + innerH + 4) + '" stroke="#1c1812" stroke-opacity="0.35" stroke-width="0.6"/>' +
-      '<text x="' + x.toFixed(1) + '" y="' + (padT + innerH + 18) + '" text-anchor="middle" font-family="ABC Walter, Helvetica, Arial, sans-serif" font-size="10" fill="#1c1812" fill-opacity="0.55" letter-spacing="1.2">M' + m + '</text>';
-  });
-  var injMarkers = '';
-  Object.keys(CONFIG.injections).forEach(function (mKey) {
-    var mNum = parseInt(mKey, 10);
-    var ix = xAt(mNum - 1);
-    injMarkers +=
-      '<line x1="' + ix.toFixed(1) + '" x2="' + ix.toFixed(1) + '" y1="' + (padT - 4) + '" y2="' + padT + '" stroke="#1c1812" stroke-opacity="0.5" stroke-width="0.8"/>' +
-      '<text x="' + ix.toFixed(1) + '" y="' + (padT - 8) + '" text-anchor="middle" font-family="ABC Walter, Helvetica, Arial, sans-serif" font-size="9" fill="#1c1812" fill-opacity="0.6" letter-spacing="1.2">+$15K</text>';
-  });
-  svg.innerHTML =
-    grid +
-    '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + injY.toFixed(1) + '" y2="' + injY.toFixed(1) + '" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1" stroke-dasharray="6 5"/>' +
-    '<text x="' + (W - padR - 6) + '" y="' + (injY - 6).toFixed(1) + '" text-anchor="end" font-family="ABC Walter, Helvetica, Arial, sans-serif" font-size="10" fill="#1c1812" fill-opacity="0.7" letter-spacing="1.6">$45,000 POSITION</text>' +
-    '<path d="' + areaD + '" fill="rgba(212, 163, 115, 0.16)"/>' +
-    '<path d="' + d + '" fill="none" stroke="#d4a373" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>' +
-    '<line x1="' + cx.toFixed(1) + '" x2="' + cx.toFixed(1) + '" y1="' + cy.toFixed(1) + '" y2="' + (padT + innerH) + '" stroke="#d4a373" stroke-width="1" stroke-dasharray="3 3" opacity="0.7"/>' +
-    '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="9" fill="#d4a373" fill-opacity="0.18"/>' +
-    '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="4.5" fill="#d4a373"/>' +
-    '<text x="' + (cx + 12).toFixed(1) + '" y="' + (cy - 10).toFixed(1) + '" font-family="Rhymes Text, Palatino Linotype, Georgia, serif" font-size="14" fill="#1c1812" letter-spacing="-0.2">Payback · M31</text>' +
-    injMarkers +
-    xLabels;
-}
-
-(function () {
-  var nav = document.getElementById('nav');
-  if (!nav) return;
-  var ticking = false;
-  function tick() {
-    if (window.scrollY > 80) nav.classList.add('is-scrolled');
-    else nav.classList.remove('is-scrolled');
-    ticking = false;
-  }
-  window.addEventListener('scroll', function () {
-    if (!ticking) { window.requestAnimationFrame(tick); ticking = true; }
-  }, { passive: true });
+(function(){
+  var nav=document.getElementById('nav');
+  if(nav) window.addEventListener('scroll',function(){
+    if(window.scrollY>60) nav.classList.add('is-scrolled'); else nav.classList.remove('is-scrolled');
+  },{passive:true});
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target);} });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
 })();
-
-(function () {
-  var els = document.querySelectorAll('.reveal');
-  if (!('IntersectionObserver' in window)) {
-    els.forEach(function (el) { el.classList.add('is-in'); });
-    return;
-  }
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) {
-      if (en.isIntersecting) {
-        en.target.classList.add('is-in');
-        io.unobserve(en.target);
-      }
-    });
-  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-  els.forEach(function (el) { io.observe(el); });
-})();
-
-slider.addEventListener('input', function () { update(parseInt(slider.value, 10)); });
-update(parseInt(slider.value, 10));
-paintPayback();
 </script>
-
 </body>
 </html>
