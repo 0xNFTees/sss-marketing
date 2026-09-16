@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fefae0">
+<title>CDCP Eligibility Calculator — Live Demo | SSS</title>
+<meta name="description" content="Try the exact CDCP eligibility calculator SSS builds into dental client websites. Four questions, sixty seconds, real federal coverage tiers.">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://sss.marketing/cdcp/">
+<link rel="alternate" hreflang="en-CA" href="https://sss.marketing/cdcp/">
+<link rel="alternate" hreflang="fr-CA" href="https://sss.marketing/rcsd/">
+<link rel="alternate" hreflang="x-default" href="https://sss.marketing/cdcp/">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
+<link rel="shortcut icon" href="/favicon.ico">
+
+<link rel="preload" as="image" href="/logo-nav.png">
+<link rel="preload" as="font" type="font/otf" href="/fonts/RhymesTextMedium.otf" crossorigin>
+<link rel="preload" as="font" type="font/otf" href="/fonts/ABCWalterAlte-Roentgentherapie.otf" crossorigin>
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SSS">
+<meta property="og:locale" content="en_CA">
+<meta property="og:url" content="https://sss.marketing/cdcp/">
+<meta property="og:title" content="SSS — CDCP Eligibility Calculator">
+<meta property="og:description" content="The exact CDCP tool we build into every SSS dental client's site. Try it in 60 seconds.">
+<meta property="og:image" content="https://sss.marketing/cdcp/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SSS — CDCP Eligibility Calculator">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SSS — CDCP Eligibility Calculator">
+<meta name="twitter:description" content="The exact CDCP tool we build into every SSS dental client's site. Try it in 60 seconds.">
+<meta name="twitter:image" content="https://sss.marketing/cdcp/og-image.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+{"@type":"Question","name":"Am I eligible for CDCP?","acceptedAnswer":{"@type":"Answer","text":"Three conditions, all required: no access to private dental insurance, an adjusted family net income under $90,000, and a filed Canadian tax return for you — and your spouse or partner, if applicable — for the previous year."}},
+{"@type":"Question","name":"What income cuts off CDCP coverage?","acceptedAnswer":{"@type":"Answer","text":"Under $70,000 covers up to 100%. $70,000–$79,999 covers up to 60%. $80,000–$89,999 covers up to 40%. $90,000 or more isn't eligible."}},
+{"@type":"Question","name":"Does CDCP cover implants or Invisalign?","acceptedAnswer":{"@type":"Answer","text":"No. Implants and orthodontics — including Invisalign — are excluded at every income level, with no clinical exceptions."}},
+{"@type":"Question","name":"When can I apply or renew?","acceptedAnswer":{"@type":"Answer","text":"The main renewal window runs mid-April to early June each year. Miss it and there's no retroactive reimbursement — but new, first-time applications are accepted on a rolling basis all year."}},
+{"@type":"Question","name":"How much does CDCP actually save patients?","acceptedAnswer":{"@type":"Answer","text":"About $900 a year on average, per the federal program's own April 2026 figures, across more than 6.5 million enrolled Canadians."}}
+  ]
+}
+</script>
+
+<style>
+@font-face{font-family:'RhymesText';src:url('/fonts/RhymesTextMedium.otf') format('opentype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'ABCWalter';src:url('/fonts/ABCWalterAlte-Roentgentherapie.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
+
+:root{
+  --paper:#fefae0;
+  --surface-a:#e9edc9;
+  --surface-b:#faedcd;
+  --sage:#ccd5ae;
+  --tan:#d4a373;
+  --ink:#1c1812;
+
+  --display:'RhymesText','Palatino Linotype',Georgia,serif;
+  --body:'ABCWalter',Helvetica,Arial,sans-serif;
+
+  --ease:cubic-bezier(0.16,1,0.3,1);
+  --nav-h:72px;
+  --container:1240px;
+  --gutter:40px;
+  --section-y:clamp(96px,12vw,160px);
+
+  --rule:rgba(28,24,18,0.15);
+  --rule-soft:rgba(28,24,18,0.10);
+
+  --good:#4d7c4a;
+  --warn:#a3672c;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px;scroll-padding-top:100px}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-weight:400;line-height:1.6;letter-spacing:0.005em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;background:none;border:none;cursor:pointer;color:inherit;padding:0}
+ul{list-style:none}
+::selection{background:var(--tan);color:var(--paper)}
+.container{max-width:var(--container);margin:0 auto;padding:0 var(--gutter)}
+.vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link{position:absolute;top:-100px;left:8px;z-index:200;background:var(--ink);color:var(--paper);font-family:var(--body);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;padding:12px 18px;transition:top .25s var(--ease)}
+.skip-link:focus{top:8px;outline:1px solid var(--tan);outline-offset:2px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(254,250,224,0.92);backdrop-filter:saturate(1.1) blur(8px);-webkit-backdrop-filter:saturate(1.1) blur(8px);border-bottom:1px solid transparent;padding:20px 0;transition:padding .35s var(--ease),border-color .35s var(--ease),background .35s var(--ease)}
+nav.scrolled{padding:14px 0;border-bottom-color:var(--tan);background:rgba(254,250,224,0.96)}
+.nav-inner{max-width:var(--container);margin:0 auto;padding:0 var(--gutter);display:flex;align-items:center;justify-content:space-between;gap:32px}
+.nav-logo{display:flex;align-items:center;height:30px;line-height:1}
+.nav-logo img{display:block;height:100%;width:auto}
+.nav-logo:hover{opacity:0.68}
+nav.scrolled .nav-logo{height:26px}
+.nav-right{display:flex;align-items:center;gap:22px}
+.nav-lang-link{font-family:var(--body);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink);opacity:0.55;padding:4px 2px;border-bottom:1px solid transparent;transition:opacity .2s var(--ease),border-color .2s var(--ease)}
+.nav-lang-link:hover{opacity:1;border-color:var(--tan)}
+.cta-nav{display:inline-flex;align-items:center;background:var(--ink);color:var(--paper);font-family:var(--body);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;padding:11px 20px;transition:background .25s var(--ease)}
+.cta-nav:hover{background:var(--tan);color:var(--ink)}
+
+/* HERO */
+.hero{position:relative;min-height:72vh;padding-top:calc(var(--nav-h) + 72px);padding-bottom:96px;display:flex;align-items:center;background:var(--paper)}
+.hero-left{max-width:840px}
+.eyebrow{font-family:var(--body);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--tan);margin-bottom:32px;display:flex;align-items:center;gap:14px}
+.eyebrow::before{content:'';width:32px;height:1px;background:var(--tan);display:inline-block;flex-shrink:0}
+.hero h1{font-family:var(--display);font-weight:500;font-size:clamp(38px,5.6vw,68px);line-height:1.08;letter-spacing:-0.02em;color:var(--ink);margin-bottom:28px}
+.hero h1 em{font-style:normal;color:var(--tan)}
+.hero-sub{font-family:var(--body);font-size:17px;line-height:1.6;color:var(--ink);opacity:0.78;max-width:620px}
+
+/* SECTION SCAFFOLD */
+.section{position:relative;padding:var(--section-y) 0}
+.section--paper{background:var(--paper)}
+.section--surface-a{background:var(--surface-a)}
+.section--surface-b{background:var(--surface-b)}
+.section-rule{position:absolute;top:0;left:0;right:0;height:1px;background:var(--tan);opacity:0.55}
+.section-head{display:flex;align-items:baseline;gap:16px;margin-bottom:48px;font-family:var(--body);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink);opacity:0.72}
+.section-head .num{color:var(--tan);font-feature-settings:"tnum" 1}
+.section-head .sep{width:24px;height:1px;background:var(--ink);opacity:0.25;display:inline-block}
+.section-title{font-family:var(--display);font-weight:500;font-size:clamp(30px,3.8vw,48px);line-height:1.08;letter-spacing:-0.015em;color:var(--ink);max-width:680px;margin-bottom:24px}
+.section-lede{font-family:var(--body);font-size:16px;line-height:1.7;color:var(--ink);opacity:0.78;max-width:600px;margin-bottom:40px}
+
+/* CRITERIA GRID (reused pattern) */
+.criteria-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule);border-left:1px solid var(--rule)}
+.criteria-cell{padding:32px 28px 36px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:12px}
+.criteria-label{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan)}
+.criteria-value{font-family:var(--display);font-weight:500;font-size:clamp(18px,1.9vw,22px);line-height:1.3;letter-spacing:-0.01em;color:var(--ink)}
+.criteria-note{font-family:var(--body);font-size:13.5px;line-height:1.6;color:var(--ink);opacity:0.75}
+.criteria-close{margin-top:40px;font-family:var(--body);font-size:14px;line-height:1.7;color:var(--ink);opacity:0.65;max-width:640px}
+
+/* SAGE CALLOUT (reused pattern) */
+.sage-block{background:var(--sage);padding:clamp(32px,4vw,48px)}
+.sage-block .sage-eyebrow{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--ink);opacity:0.6;margin-bottom:16px}
+.sage-block .sage-lead{font-family:var(--display);font-weight:500;font-size:clamp(20px,2.2vw,26px);line-height:1.3;letter-spacing:-0.01em;max-width:760px;margin-bottom:14px}
+.sage-block p{font-family:var(--body);font-size:15px;line-height:1.75;color:var(--ink);max-width:720px}
+
+/* QUIZ CARD */
+.quiz-wrap{max-width:640px}
+.quiz-demo-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink);opacity:0.55;margin-bottom:20px}
+.quiz-demo-tag::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--tan)}
+.quiz-card{background:var(--paper);border:1px solid var(--rule);padding:clamp(28px,4vw,44px)}
+.quiz-progress{display:flex;gap:6px;margin-bottom:20px}
+.quiz-dot{height:3px;flex:1;background:var(--rule);transition:background .3s var(--ease)}
+.quiz-dot.on{background:var(--tan)}
+.quiz-steplabel{font-family:var(--body);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink);opacity:0.5;margin-bottom:28px;display:flex;justify-content:space-between;align-items:center}
+.quiz-back{font-family:var(--body);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink);opacity:0.5;cursor:pointer}
+.quiz-back:hover{opacity:0.9}
+.quiz-q{font-family:var(--display);font-weight:500;font-size:clamp(19px,2.2vw,23px);line-height:1.32;letter-spacing:-0.01em;color:var(--ink);margin-bottom:22px}
+.quiz-opts{display:flex;flex-direction:column;gap:10px}
+.opt-btn{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;padding:15px 18px;border:1px solid var(--rule);background:var(--paper);font-family:var(--body);font-size:14.5px;color:var(--ink);transition:border-color .2s var(--ease),background .2s var(--ease)}
+.opt-btn:hover{border-color:var(--tan);background:var(--surface-b)}
+.opt-hint{font-size:12px;opacity:0.55;font-weight:400;margin-left:8px}
+.opt-arrow{opacity:0.35;flex-shrink:0}
+.quiz-skip{margin-top:18px;font-family:var(--body);font-size:12.5px;color:var(--ink);opacity:0.6}
+.quiz-skip a{color:var(--ink);opacity:1;border-bottom:1px solid var(--tan)}
+
+.result-badge{display:flex;align-items:center;gap:14px;padding:18px 20px;border:1px solid var(--rule)}
+.result-badge.tier100{background:var(--surface-a);border-color:rgba(77,124,74,0.35)}
+.result-badge.tier60{background:var(--surface-b);border-color:var(--tan)}
+.result-badge.tier40{background:var(--surface-b);border-color:var(--tan)}
+.result-badge.ineligible{background:var(--paper);border-color:var(--rule)}
+.result-badge-icon{font-size:22px;line-height:1}
+.result-badge-text{font-family:var(--display);font-weight:500;font-size:17px;letter-spacing:-0.005em;color:var(--ink)}
+.result-msg{margin-top:16px;font-family:var(--body);font-size:14px;line-height:1.65;color:var(--ink);opacity:0.8}
+.result-warn{margin-top:16px;padding:12px 16px;border-left:2px solid var(--warn);background:var(--surface-b);font-family:var(--body);font-size:13px;line-height:1.6;color:var(--ink)}
+.result-cols{margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.result-col-label{font-family:var(--body);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink);opacity:0.6;margin-bottom:10px}
+.result-col ul{display:flex;flex-direction:column;gap:7px}
+.result-col li{font-family:var(--body);font-size:13.5px;line-height:1.5;color:var(--ink);opacity:0.85;padding-left:16px;position:relative}
+.result-col.covered li::before{content:'+';position:absolute;left:0;color:var(--good);font-weight:700}
+.result-col.excluded li::before{content:'–';position:absolute;left:0;color:#b3432f;font-weight:700}
+.result-source{margin-top:20px;font-family:var(--body);font-size:11.5px;line-height:1.6;color:var(--ink);opacity:0.5}
+.result-retake{margin-top:18px;display:inline-flex;align-items:center;gap:6px;font-family:var(--body);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink);opacity:0.55;cursor:pointer}
+.result-retake:hover{opacity:0.9}
+
+.demo-cta{margin-top:28px;padding:24px 28px;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.demo-cta p{font-family:var(--display);font-weight:500;font-size:clamp(16px,1.8vw,19px);line-height:1.3;letter-spacing:-0.005em;max-width:420px}
+.demo-cta .cta-nav{background:var(--tan);color:var(--ink);flex-shrink:0}
+.demo-cta .cta-nav:hover{background:var(--paper)}
+
+/* FAQ */
+.faq{border-top:1px solid var(--rule)}
+.faq details{border-bottom:1px solid var(--rule);padding:22px 0}
+.faq summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:20px;font-family:var(--display);font-weight:500;font-size:clamp(16px,1.8vw,19px);letter-spacing:-0.008em;color:var(--ink)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';font-family:var(--body);font-size:20px;color:var(--tan);flex-shrink:0;transition:transform .25s var(--ease)}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq .faq-a{margin-top:14px;font-family:var(--body);font-size:14.5px;line-height:1.7;color:var(--ink);opacity:0.8;max-width:680px}
+
+/* FOOTER */
+footer{background:var(--paper);padding:64px 0 48px;position:relative}
+.footer-rule{position:absolute;top:0;left:0;right:0;height:1px;background:var(--tan);opacity:0.55}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;padding-bottom:40px;border-bottom:1px solid var(--rule-soft)}
+.footer-brand-mark{display:block;height:52px;line-height:1;margin-bottom:16px}
+.footer-brand-mark img{display:block;height:100%;width:auto}
+.footer-brand-tag{font-family:var(--body);font-size:13px;line-height:1.65;color:var(--ink);opacity:0.7;max-width:320px}
+.footer-col-label{font-family:var(--body);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--tan);margin-bottom:14px}
+.footer-col ul{display:flex;flex-direction:column;gap:10px}
+.footer-col a{font-family:var(--body);font-size:13.5px;color:var(--ink);opacity:0.75}
+.footer-col a:hover{opacity:1;text-decoration:underline}
+.footer-legal{margin-top:28px;font-family:var(--body);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink);opacity:0.5}
+
+.fade-in{opacity:0;transform:translateY(14px);transition:opacity 1.0s var(--ease),transform 1.0s var(--ease)}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+.fade-in.d1{transition-delay:.06s}
+.fade-in.d2{transition-delay:.14s}
+.fade-in.d3{transition-delay:.22s}
+
+@media(max-width:960px){
+  .container,.nav-inner{padding:0 24px}
+  .hero{padding-top:calc(var(--nav-h) + 48px);padding-bottom:64px}
+  .criteria-grid{grid-template-columns:1fr}
+  .result-cols{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr;gap:32px}
+  .demo-cta{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:680px){
+  :root{--gutter:20px;--section-y:64px}
+  .hero h1{font-size:clamp(30px,8vw,44px)}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:0.001ms !important;transition-duration:0.001ms !important}
+  .fade-in{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+:focus-visible{outline:1px solid var(--tan);outline-offset:3px}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<nav id="nav" aria-label="Site header">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo" aria-label="SSS">
+      <img src="/logo-nav.png" srcset="/logo-nav.png 1x, /logo-nav@2x.png 2x, /logo-nav@3x.png 3x" alt="SSS" width="74" height="30" fetchpriority="high" loading="eager" decoding="async">
+    </a>
+    <div class="nav-right">
+      <a class="nav-lang-link" href="/rcsd/" hreflang="fr">Français (RCSD)</a>
+      <a href="/#contact" class="cta-nav">Book a 30-min audit</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main-content">
+<header class="hero" id="top">
+  <div class="container">
+    <div class="hero-left">
+      <p class="eyebrow fade-in d1">Live product demo</p>
+      <h1 class="fade-in d2">6.5 million Canadians have CDCP coverage.<br><em>Try the tool that turns them into booked patients.</em></h1>
+      <p class="hero-sub fade-in d3">This is the exact CDCP eligibility calculator we build into every SSS client's dental site — unedited. Run it the way a patient would, then see it running on yours.</p>
+    </div>
+  </div>
+</header>
+
+<section class="section section--surface-b" id="calculator" aria-labelledby="calcTitle">
+  <div class="section-rule"></div>
+  <div class="container">
+    <div class="section-head fade-in"><span class="num">01</span><span class="sep"></span><span>The calculator</span></div>
+    <h2 class="vh" id="calcTitle">The calculator</h2>
+    <div class="quiz-wrap fade-in">
+      <div class="quiz-demo-tag">Patient-facing tool — this is what visitors on your site would see</div>
+      <div class="quiz-card">
+        <p style="font-family:var(--body);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--tan);margin-bottom:6px">Free eligibility check</p>
+        <h3 style="font-family:var(--display);font-weight:500;font-size:clamp(22px,2.6vw,28px);letter-spacing:-0.015em;margin-bottom:8px">Check your CDCP coverage in 60 seconds</h3>
+        <p style="font-family:var(--body);font-size:14px;color:var(--ink);opacity:.75;margin-bottom:24px">Four quick questions. No account, no waiting.</p>
+        <div id="quizRoot"></div>
+      </div>
+      <div class="demo-cta">
+        <p>This calculator is a standard build on every SSS dental client's site — not a mockup.</p>
+        <a href="/#contact" class="cta-nav">Get this on your site</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper" id="eligibility" aria-labelledby="eligTitle">
+  <div class="section-rule"></div>
+  <div class="container">
+    <div class="section-head fade-in"><span class="num">02</span><span class="sep"></span><span>What actually qualifies</span></div>
+    <h2 class="section-title fade-in d1" id="eligTitle">Three conditions. No exceptions.</h2>
+    <p class="section-lede fade-in d2">CDCP eligibility isn't a judgment call — it's three federal conditions, checked in order.</p>
+    <div class="criteria-grid"><div class="criteria-cell fade-in"><div class="criteria-label">No private coverage</div><div class="criteria-value">Any of the three disqualifies</div><p class="criteria-note">An employer plan, private insurance, or a health spending account that covers dental — any one of them ends eligibility, regardless of income.</p></div><div class="criteria-cell fade-in"><div class="criteria-label">Income</div><div class="criteria-value">Under $90,000</div><p class="criteria-note">Adjusted family net income, from the last tax return. Coverage steps down from 100% to 60% to 40% as income rises inside that ceiling.</p></div><div class="criteria-cell fade-in"><div class="criteria-label">Tax filed</div><div class="criteria-value">You, and your spouse or partner</div><p class="criteria-note">For the previous tax year. No return on file with the CRA means no coverage, no matter how low the income.</p></div></div>
+    <p class="criteria-close fade-in">These aren't thresholds SSS or any clinic can negotiate — they're federal policy, verified against canada.ca on 2026-09-15.</p>
+    <p class="criteria-close fade-in" style="margin-top:12px">In Quebec? RAMQ covers basic care for children under 10 separately from CDCP — see the French version of this page for the full breakdown.</p>
+  </div>
+</section>
+
+
+
+<section class="section section--surface-b" id="renewal" aria-labelledby="renewalTitle">
+  <div class="section-rule"></div>
+  <div class="container">
+    <div class="section-head fade-in"><span class="num">03</span><span class="sep"></span><span>Timing</span></div>
+    <h2 class="section-title section-title--tight fade-in d1" id="renewalTitle">Renewal is an annual event, not a one-time signup.</h2>
+    <p class="section-lede fade-in d2" style="margin-bottom:0">The 2026 renewal window ran April 15 to June 1 — patients who missed it are left with a coverage gap and no retroactive reimbursement. New, first-time applications are still accepted on a rolling basis year-round; the next renewal window opens in spring 2027. On a client site, this section is worth refreshing every February, ahead of the April spike.</p>
+  </div>
+</section>
+
+<section class="section section--paper" id="faq" aria-labelledby="faqTitle">
+  <div class="section-rule"></div>
+  <div class="container">
+    <div class="section-head fade-in"><span class="num">04</span><span class="sep"></span><span>Questions patients actually ask</span></div>
+    <h2 class="section-title fade-in d1" id="faqTitle">Straight answers, structured for search.</h2>
+    <div class="faq fade-in d2"><details><summary>Am I eligible for CDCP?<span class="vh">Toggle answer</span></summary><div class="faq-a">Three conditions, all required: no access to private dental insurance, an adjusted family net income under $90,000, and a filed Canadian tax return for you — and your spouse or partner, if applicable — for the previous year.</div></details>
+<details><summary>What income cuts off CDCP coverage?<span class="vh">Toggle answer</span></summary><div class="faq-a">Under $70,000 covers up to 100%. $70,000–$79,999 covers up to 60%. $80,000–$89,999 covers up to 40%. $90,000 or more isn't eligible.</div></details>
+<details><summary>Does CDCP cover implants or Invisalign?<span class="vh">Toggle answer</span></summary><div class="faq-a">No. Implants and orthodontics — including Invisalign — are excluded at every income level, with no clinical exceptions.</div></details>
+<details><summary>When can I apply or renew?<span class="vh">Toggle answer</span></summary><div class="faq-a">The main renewal window runs mid-April to early June each year. Miss it and there's no retroactive reimbursement — but new, first-time applications are accepted on a rolling basis all year.</div></details>
+<details><summary>How much does CDCP actually save patients?<span class="vh">Toggle answer</span></summary><div class="faq-a">About $900 a year on average, per the federal program's own April 2026 figures, across more than 6.5 million enrolled Canadians.</div></details></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-rule"></div>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-mark"><img src="/logo-mark.png" srcset="/logo-mark.png 1x, /logo-mark@2x.png 2x, /logo-mark@3x.png 3x" alt="SSS" width="148" height="61" loading="lazy" decoding="async"></div>
+        <p class="footer-brand-tag">Dental marketing. Built on Google search.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-label">Navigation</div>
+        <ul>
+          <li><a href="/#services">Services</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/rcsd/">Français (RCSD)</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-label">Contact</div>
+        <ul>
+          <li><a href="mailto:info@sss.marketing">info@sss.marketing</a></li>
+          <li><a href="/#contact">Book an audit</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-legal">© 2026 SSS Marketing.</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var nav=document.getElementById("nav");
+  var ticking=false;
+  window.addEventListener("scroll",function(){
+    if(!ticking){window.requestAnimationFrame(function(){
+      if(window.scrollY>24)nav.classList.add("scrolled");else nav.classList.remove("scrolled");
+      ticking=false;
+    });ticking=true;}
+  },{passive:true});
+
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add("visible");io.unobserve(e.target);}});
+  },{threshold:0.12,rootMargin:"0px 0px -40px 0px"});
+  document.querySelectorAll(".fade-in").forEach(function(el){io.observe(el);});
+})();
+
+(function(){
+  var L = {"stepLabel": "Step {current} of {total}", "back": "Back", "retake": "Run it again", "skipPrompt": "Prefer to skip straight to the point?", "skipBook": "Book a 30-min audit", "bookingUrl": "/#contact", "step1": {"question": "Do you (or a family member) currently have access to private dental insurance — through an employer, a private plan, or a health spending account?", "yes": "Yes, I have private coverage", "no": "No private coverage"}, "step2": {"question": "What was your adjusted family net income on your last tax return?", "under70": "Under $70,000", "under70Hint": "up to 100% covered", "band70": "$70,000–$79,999", "band70Hint": "up to 60% covered", "band80": "$80,000–$89,999", "band80Hint": "up to 40% covered", "over90": "$90,000 or more", "over90Hint": "not eligible"}, "step3": {"question": "Have you (and your spouse or partner, if applicable) filed a Canadian tax return for the previous year?", "yes": "Yes, filed", "no": "Not yet"}, "step4": {"question": "Who are you checking eligibility for?", "senior": "Senior, 65+", "child": "Child under 18", "dtc": "Adult with a valid Disability Tax Credit", "adult": "Adult, 18–64"}, "results": {"tier100Badge": "Qualifies for up to 100% CDCP coverage", "tier60Badge": "Qualifies for up to 60% CDCP coverage", "tier40Badge": "Qualifies for up to 40% CDCP coverage", "ineligibleInsuranceBadge": "Not eligible — private coverage on file", "ineligibleIncomeBadge": "Not eligible — income above the threshold", "ineligibleInsuranceMessage": "CDCP is only available with no access to private dental insurance or a health spending account that covers dental care.", "ineligibleIncomeMessage": "CDCP eligibility requires an adjusted family net income under $90,000.", "needsToFileWarning": "Tax filing is required by the CRA to access CDCP. This answer flagged no return on file yet — coverage starts as soon as it's filed.", "childRamqNote": "In Quebec, RAMQ already covers basic dental care for children under 10 — CDCP fills the gap for kids 10 and up.", "coverageHeading": "Typically covered at this tier", "coveredItems": ["Exams, cleanings & X-rays", "Fillings", "Root canals", "Complete & partial dentures", "Extractions"], "excludedHeading": "Never covered by CDCP, at any income level", "excludedItems": ["Dental implants", "Orthodontics — including Invisalign"], "sourceNote": "Coverage tiers reflect the federal CDCP fee schedule on canada.ca. Verified 2026-09-15."}};
+  var root = document.getElementById("quizRoot");
+  if(!root) return;
+
+  var INCOME_TIER = {under70:"100",band70:"60",band80:"40"};
+  var state = {step:1, answers:{privateInsurance:null,income:null,taxFiling:null,status:null}, result:null};
+
+  function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML;}
+
+  function optRow(label,hint,onClick){
+    var b=document.createElement("button");
+    b.type="button";b.className="opt-btn";
+    b.innerHTML='<span>'+esc(label)+(hint?' <span class="opt-hint">('+esc(hint)+')</span>':'')+'</span><span class="opt-arrow">&#8594;</span>';
+    b.addEventListener("click",onClick);
+    return b;
+  }
+
+  function renderProgress(){
+    var dots='';for(var i=1;i<=4;i++){dots+='<div class="quiz-dot'+(i<=state.step?' on':'')+'"></div>';}
+    return '<div class="quiz-progress">'+dots+'</div>'+
+      '<div class="quiz-steplabel"><span>'+L.stepLabel.replace("{current}",state.step).replace("{total}","4")+'</span>'+
+      (state.step>1?'<span class="quiz-back" id="quizBack">&#8592; '+esc(L.back)+'</span>':'')+'</div>';
+  }
+
+  function render(){
+    root.innerHTML='';
+
+    if(!state.result){
+      var head=document.createElement('div');
+      head.innerHTML=renderProgress();
+      root.appendChild(head);
+      var backBtn=document.getElementById("quizBack");
+      if(backBtn) backBtn.addEventListener("click",function(){state.step=Math.max(1,state.step-1);render();});
+    }
+
+    var body=document.createElement('div');
+
+    if(!state.result && state.step===1){
+      body.innerHTML='<div class="quiz-q">'+esc(L.step1.question)+'</div>';
+      var opts=document.createElement('div');opts.className='quiz-opts';
+      opts.appendChild(optRow(L.step1.yes,null,function(){
+        state.answers.privateInsurance="yes";
+        state.result={tier:null,reason:"insurance",needsToFile:false,status:null};render();
+      }));
+      opts.appendChild(optRow(L.step1.no,null,function(){
+        state.answers.privateInsurance="no";state.step=2;render();
+      }));
+      body.appendChild(opts);
+      var skip=document.createElement('div');skip.className='quiz-skip';
+      skip.innerHTML=L.skipPrompt+' <a href="'+L.bookingUrl+'">'+L.skipBook+'</a>';
+      body.appendChild(skip);
+    }
+
+    if(!state.result && state.step===2){
+      body.innerHTML='<div class="quiz-q">'+esc(L.step2.question)+'</div>';
+      var opts2=document.createElement('div');opts2.className='quiz-opts';
+      [["under70","under70Hint"],["band70","band70Hint"],["band80","band80Hint"],["over90","over90Hint"]].forEach(function(pair){
+        opts2.appendChild(optRow(L.step2[pair[0]],L.step2[pair[1]],function(){
+          state.answers.income=pair[0];
+          if(pair[0]==="over90"){state.result={tier:null,reason:"income",needsToFile:false,status:null};render();return;}
+          state.step=3;render();
+        }));
+      });
+      body.appendChild(opts2);
+    }
+
+    if(!state.result && state.step===3){
+      body.innerHTML='<div class="quiz-q">'+esc(L.step3.question)+'</div>';
+      var opts3=document.createElement('div');opts3.className='quiz-opts';
+      opts3.appendChild(optRow(L.step3.yes,null,function(){state.answers.taxFiling="yes";state.step=4;render();}));
+      opts3.appendChild(optRow(L.step3.no,null,function(){state.answers.taxFiling="no";state.step=4;render();}));
+      body.appendChild(opts3);
+    }
+
+    if(!state.result && state.step===4){
+      body.innerHTML='<div class="quiz-q">'+esc(L.step4.question)+'</div>';
+      var opts4=document.createElement('div');opts4.className='quiz-opts';
+      ["senior","child","dtc","adult"].forEach(function(key){
+        opts4.appendChild(optRow(L.step4[key],null,function(){
+          var tier=state.answers.income&&state.answers.income!=="over90"?INCOME_TIER[state.answers.income]:null;
+          state.answers.status=key;
+          state.result={tier:tier,reason:null,needsToFile:state.answers.taxFiling==="no",status:key};
+          render();
+        }));
+      });
+      body.appendChild(opts4);
+    }
+
+    if(state.result){
+      var r=state.result;
+      var isQ=r.tier!==null;
+      var badgeClass=isQ?('tier'+r.tier):'ineligible';
+      var icon=isQ?(r.tier==="100"?"&#127881;":"&#10003;"):"&#10005;";
+      var badgeText=isQ?L.results['tier'+r.tier+'Badge']:(r.reason==="insurance"?L.results.ineligibleInsuranceBadge:L.results.ineligibleIncomeBadge);
+      var html='<div class="result-badge '+badgeClass+'"><span class="result-badge-icon">'+icon+'</span><span class="result-badge-text">'+esc(badgeText)+'</span></div>';
+      if(!isQ){
+        html+='<div class="result-msg">'+esc(r.reason==="insurance"?L.results.ineligibleInsuranceMessage:L.results.ineligibleIncomeMessage)+'</div>';
+      }
+      if(r.needsToFile){
+        html+='<div class="result-warn">'+esc(L.results.needsToFileWarning)+'</div>';
+      }
+      if(isQ && r.status==="child" && L.results.childRamqNote){
+        html+='<div class="result-msg">'+esc(L.results.childRamqNote)+'</div>';
+      }
+      if(isQ){
+        html+='<div class="result-cols"><div class="result-col covered"><div class="result-col-label">'+esc(L.results.coverageHeading)+'</div><ul>'+
+          L.results.coveredItems.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul></div>'+
+          '<div class="result-col excluded"><div class="result-col-label">'+esc(L.results.excludedHeading)+'</div><ul>'+
+          L.results.excludedItems.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul></div></div>';
+      }
+      html+='<div class="result-source">'+esc(L.results.sourceNote)+'</div>';
+      html+='<div class="result-retake" id="quizRetake">&#8635; '+esc(L.retake)+'</div>';
+      body.innerHTML=html;
+    }
+
+    root.appendChild(body);
+
+    // Wired after appendChild -- getElementById can't find a node that
+    // isn't in the document yet, which is what a detached `body` is until
+    // this line runs.
+    if(state.result){
+      var retakeBtn=document.getElementById("quizRetake");
+      if(retakeBtn) retakeBtn.addEventListener("click",function(){
+        state={step:1,answers:{privateInsurance:null,income:null,taxFiling:null,status:null},result:null};render();
+      });
+    }
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
