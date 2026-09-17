@@ -144,29 +144,64 @@ nav.scrolled .nav-logo{height:26px}
 .quiz-demo-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink);opacity:0.55;margin-bottom:20px}
 .quiz-demo-tag::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--tan)}
 .quiz-card{background:var(--paper);border:1px solid var(--rule);padding:clamp(28px,4vw,44px)}
-.quiz-progress{display:flex;gap:6px;margin-bottom:20px}
-.quiz-dot{height:3px;flex:1;background:var(--rule);transition:background .3s var(--ease)}
-.quiz-dot.on{background:var(--tan)}
-.quiz-steplabel{font-family:var(--body);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink);opacity:0.5;margin-bottom:28px;display:flex;justify-content:space-between;align-items:center}
-.quiz-back{font-family:var(--body);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink);opacity:0.5;cursor:pointer}
+
+/* Single continuous progress line (replaces the old 4-dot row) whose fill
+   smoothly grows via a width transition -- same motion language as the
+   dental-clinic-template React build's StepProgressBar. */
+.quiz-track{height:3px;border-radius:2px;background:var(--rule);overflow:hidden;margin-bottom:20px}
+.quiz-fill{height:100%;background:var(--tan);width:0%;transition:width .5s var(--ease)}
+.quiz-steplabel{font-family:var(--body);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink);opacity:0.5;margin-bottom:28px;display:flex;justify-content:space-between;align-items:center;min-height:44px}
+.quiz-back{display:inline-flex;align-items:center;background:none;border:none;font-family:var(--body);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink);opacity:0.5;cursor:pointer;min-height:44px;padding:4px 2px;animation:quizBackIn .25s var(--ease)}
 .quiz-back:hover{opacity:0.9}
-.quiz-q{font-family:var(--display);font-weight:500;font-size:clamp(19px,2.2vw,23px);line-height:1.32;letter-spacing:-0.01em;color:var(--ink);margin-bottom:22px}
+@keyframes quizBackIn{from{opacity:0;transform:translateX(6px)}to{opacity:0.5;transform:translateX(0)}}
+
+/* The step/result swap region. JS (transitionSwap) toggles height/position
+   on this element directly -- it starts plain-flow so a JS-off or
+   pre-hydration render never clips content. */
+.quiz-viewport{position:relative}
+
+.quiz-q{display:flex;align-items:flex-start;gap:14px;font-family:var(--display);font-weight:500;font-size:clamp(19px,2.2vw,23px);line-height:1.32;letter-spacing:-0.01em;color:var(--ink);margin-bottom:22px}
+.quiz-q-icon{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--surface-b);color:var(--tan);display:flex;align-items:center;justify-content:center;font-size:16px;margin-top:2px}
 .quiz-opts{display:flex;flex-direction:column;gap:10px}
-.opt-btn{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;padding:15px 18px;border:1px solid var(--rule);background:var(--paper);font-family:var(--body);font-size:14.5px;color:var(--ink);transition:border-color .2s var(--ease),background .2s var(--ease)}
-.opt-btn:hover{border-color:var(--tan);background:var(--surface-b)}
-.opt-hint{font-size:12px;opacity:0.55;font-weight:400;margin-left:8px}
-.opt-arrow{opacity:0.35;flex-shrink:0}
+
+.opt-btn{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:48px;text-align:left;padding:15px 44px 15px 18px;border:1px solid var(--rule);background:var(--paper);font-family:var(--body);font-size:14.5px;color:var(--ink);transition:border-color .2s var(--ease),background .2s var(--ease),box-shadow .2s var(--ease),transform .2s var(--ease),opacity .2s var(--ease)}
+.opt-btn:hover:not(:disabled){border-color:var(--tan);background:var(--surface-b);transform:translateY(-2px);box-shadow:0 8px 18px -10px rgba(28,24,18,0.22)}
+.opt-btn:disabled{cursor:default}
+.opt-btn.dimmed{opacity:0.4}
+.opt-btn.selected{border-color:var(--ink);border-width:1.5px;background:var(--surface-b);box-shadow:0 0 0 3px rgba(28,24,18,0.08),0 10px 22px -12px rgba(28,24,18,0.4);animation:optPulse .22s var(--ease) forwards}
+@keyframes optPulse{0%{transform:scale(1)}45%{transform:scale(1.02)}100%{transform:scale(0.98)}}
+.opt-label-wrap{display:flex;flex-direction:column;gap:2px}
+.opt-hint{font-size:12px;opacity:0.55;font-weight:400}
+.opt-arrow{opacity:0.35;flex-shrink:0;transition:transform .2s var(--ease),opacity .2s var(--ease)}
+.opt-btn:hover:not(:disabled) .opt-arrow{transform:translateX(2px);opacity:0.7}
+.opt-btn.selected .opt-arrow{opacity:0}
+.opt-check{position:absolute;right:14px;top:50%;width:22px;height:22px;margin-top:-11px;border-radius:50%;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1;transform:scale(0);opacity:0;transition:transform .25s cubic-bezier(0.34,1.56,0.64,1),opacity .2s var(--ease)}
+.opt-btn.selected .opt-check{transform:scale(1);opacity:1}
+
 .quiz-skip{margin-top:18px;font-family:var(--body);font-size:12.5px;color:var(--ink);opacity:0.6}
 .quiz-skip a{color:var(--ink);opacity:1;border-bottom:1px solid var(--tan)}
 
 .result-badge{display:flex;align-items:center;gap:14px;padding:18px 20px;border:1px solid var(--rule)}
-.result-badge.tier100{background:var(--surface-a);border-color:rgba(77,124,74,0.35)}
-.result-badge.tier60{background:var(--surface-b);border-color:var(--tan)}
-.result-badge.tier40{background:var(--surface-b);border-color:var(--tan)}
+.result-badge.tier100{background:var(--surface-a);border-color:rgba(77,124,74,0.35);--pulse-color:rgba(77,124,74,0.4)}
+.result-badge.tier60{background:var(--surface-b);border-color:var(--tan);--pulse-color:rgba(212,163,115,0.45)}
+.result-badge.tier40{background:var(--surface-b);border-color:var(--tan);--pulse-color:rgba(212,163,115,0.45)}
 .result-badge.ineligible{background:var(--paper);border-color:var(--rule)}
+.result-badge.pulsing{animation:resultBadgePulse 2.4s ease-in-out infinite}
+@keyframes resultBadgePulse{0%,100%{box-shadow:0 0 0 0 var(--pulse-color,transparent)}50%{box-shadow:0 0 0 8px transparent}}
 .result-badge-icon{font-size:22px;line-height:1}
 .result-badge-text{font-family:var(--display);font-weight:500;font-size:17px;letter-spacing:-0.005em;color:var(--ink)}
 .result-msg{margin-top:16px;font-family:var(--body);font-size:14px;line-height:1.65;color:var(--ink);opacity:0.8}
+
+/* Coverage ring + animated counter (JS-driven stroke-dashoffset/text via
+   animateNumber -- see calculator_js). Rotated -90deg so the fill starts
+   at 12 o'clock, same convention as the React build's CoverageRing. */
+.ring-row{margin-top:20px;display:flex;align-items:center;gap:18px;padding:16px 18px;border:1px solid var(--rule);background:var(--surface-a)}
+.ring-wrap{position:relative;width:64px;height:64px;flex-shrink:0}
+.ring-svg{transform:rotate(-90deg)}
+.ring-track{stroke:var(--rule)}
+.ring-fill{stroke-linecap:round}
+.ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--body);font-weight:700;font-size:14px;color:var(--ink);font-feature-settings:"tnum" 1}
+.ring-caption{font-family:var(--body);font-size:14px;font-weight:600;color:var(--ink)}
 .result-warn{margin-top:16px;padding:12px 16px;border-left:2px solid var(--warn);background:var(--surface-b);font-family:var(--body);font-size:13px;line-height:1.6;color:var(--ink)}
 .result-cols{margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .result-col-label{font-family:var(--body);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink);opacity:0.6;margin-bottom:10px}
@@ -175,13 +210,15 @@ nav.scrolled .nav-logo{height:26px}
 .result-col.covered li::before{content:'+';position:absolute;left:0;color:var(--good);font-weight:700}
 .result-col.excluded li::before{content:'–';position:absolute;left:0;color:#b3432f;font-weight:700}
 .result-source{margin-top:20px;font-family:var(--body);font-size:11.5px;line-height:1.6;color:var(--ink);opacity:0.5}
-.result-retake{margin-top:18px;display:inline-flex;align-items:center;gap:6px;font-family:var(--body);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink);opacity:0.55;cursor:pointer}
+.result-retake{margin-top:18px;display:inline-flex;align-items:center;gap:6px;background:none;border:none;font-family:var(--body);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink);opacity:0.55;cursor:pointer;min-height:44px}
 .result-retake:hover{opacity:0.9}
 
 .demo-cta{margin-top:28px;padding:24px 28px;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .demo-cta p{font-family:var(--display);font-weight:500;font-size:clamp(16px,1.8vw,19px);line-height:1.3;letter-spacing:-0.005em;max-width:420px}
-.demo-cta .cta-nav{background:var(--tan);color:var(--ink);flex-shrink:0}
-.demo-cta .cta-nav:hover{background:var(--paper)}
+.demo-cta .cta-nav{background:var(--tan);color:var(--ink);flex-shrink:0;transition:background .25s var(--ease),transform .2s var(--ease)}
+.demo-cta .cta-nav:hover{background:var(--paper);transform:translateY(-1px)}
+.cta-arrow{display:inline-block;margin-left:8px;transition:transform .2s var(--ease)}
+.cta-nav:hover .cta-arrow{transform:translateX(3px)}
 
 /* FAQ */
 .faq{border-top:1px solid var(--rule)}
@@ -273,7 +310,7 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
       </div>
       <div class="demo-cta">
         <p>Ce calculateur fait partie du forfait standard sur le site de chaque client SSS — ce n'est pas une maquette.</p>
-        <a href="/#contact" class="cta-nav">Obtenez cet outil sur votre site</a>
+        <a href="/#contact" class="cta-nav">Obtenez cet outil sur votre site<span class="cta-arrow">&#8594;</span></a>
       </div>
     </div>
   </div>
@@ -373,135 +410,315 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
 })();
 
 (function(){
-  var L = {"stepLabel": "Étape {current} sur {total}", "back": "Retour", "retake": "Recommencer", "skipPrompt": "Vous préférez aller droit au but?", "skipBook": "Réserver un audit de 30 min", "bookingUrl": "/#contact", "step1": {"question": "Vous (ou un membre de votre famille) avez-vous actuellement accès à une assurance dentaire privée — par un employeur, un régime privé ou un compte de gestion santé?", "yes": "Oui, j'ai une couverture privée", "no": "Aucune couverture privée"}, "step2": {"question": "Quel était votre revenu familial net rajusté sur votre dernière déclaration de revenus?", "under70": "Moins de 70 000 $", "under70Hint": "jusqu'à 100 % couvert", "band70": "70 000 $ à 79 999 $", "band70Hint": "jusqu'à 60 % couvert", "band80": "80 000 $ à 89 999 $", "band80Hint": "jusqu'à 40 % couvert", "over90": "90 000 $ ou plus", "over90Hint": "non admissible"}, "step3": {"question": "Avez-vous (et votre conjoint(e), le cas échéant) produit une déclaration de revenus canadienne pour l'année précédente?", "yes": "Oui, produite", "no": "Pas encore"}, "step4": {"question": "Pour qui vérifiez-vous l'admissibilité?", "senior": "Aîné(e), 65 ans ou plus", "child": "Enfant de moins de 18 ans", "dtc": "Adulte détenant un crédit d'impôt pour personnes handicapées valide", "adult": "Adulte, 18 à 64 ans"}, "results": {"tier100Badge": "Admissible à une couverture RCSD pouvant atteindre 100 %", "tier60Badge": "Admissible à une couverture RCSD pouvant atteindre 60 %", "tier40Badge": "Admissible à une couverture RCSD pouvant atteindre 40 %", "ineligibleInsuranceBadge": "Non admissible — couverture privée déclarée", "ineligibleIncomeBadge": "Non admissible — revenu au-dessus du seuil", "ineligibleInsuranceMessage": "Le RCSD est offert seulement sans accès à une assurance dentaire privée ni à un compte de gestion santé couvrant le dentaire.", "ineligibleIncomeMessage": "L'admissibilité au RCSD exige un revenu familial net rajusté sous 90 000 $.", "needsToFileWarning": "L'ARC exige une déclaration de revenus produite pour accéder au RCSD. Cette réponse indique qu'elle n'est pas encore produite — la couverture commence dès qu'elle le sera.", "childRamqNote": "Au Québec, la RAMQ couvre déjà les soins dentaires de base pour les enfants de moins de 10 ans — le RCSD prend le relais pour les enfants de 10 ans et plus.", "coverageHeading": "Généralement couvert à ce palier", "coveredItems": ["Examens, nettoyages et radiographies", "Plombages", "Traitements de canal", "Prothèses dentaires complètes et partielles", "Extractions"], "excludedHeading": "Jamais couvert par le RCSD, peu importe le revenu", "excludedItems": ["Implants dentaires", "Orthodontie — y compris l'Invisalign"], "sourceNote": "Les paliers de couverture reflètent la grille tarifaire fédérale du RCSD publiée sur canada.ca. Vérifié le 2026-09-15."}};
+  var L = {"stepLabel": "Étape {current} sur {total}", "back": "Retour", "retake": "Recommencer", "skipPrompt": "Vous préférez aller droit au but?", "skipBook": "Réserver un audit de 30 min", "bookingUrl": "/#contact", "step1": {"question": "Vous (ou un membre de votre famille) avez-vous actuellement accès à une assurance dentaire privée — par un employeur, un régime privé ou un compte de gestion santé?", "yes": "Oui, j'ai une couverture privée", "no": "Aucune couverture privée"}, "step2": {"question": "Quel était votre revenu familial net rajusté sur votre dernière déclaration de revenus?", "under70": "Moins de 70 000 $", "under70Hint": "jusqu'à 100 % couvert", "band70": "70 000 $ à 79 999 $", "band70Hint": "jusqu'à 60 % couvert", "band80": "80 000 $ à 89 999 $", "band80Hint": "jusqu'à 40 % couvert", "over90": "90 000 $ ou plus", "over90Hint": "non admissible"}, "step3": {"question": "Avez-vous (et votre conjoint(e), le cas échéant) produit une déclaration de revenus canadienne pour l'année précédente?", "yes": "Oui, produite", "no": "Pas encore"}, "step4": {"question": "Pour qui vérifiez-vous l'admissibilité?", "senior": "Aîné(e), 65 ans ou plus", "child": "Enfant de moins de 18 ans", "dtc": "Adulte détenant un crédit d'impôt pour personnes handicapées valide", "adult": "Adulte, 18 à 64 ans"}, "results": {"tier100Badge": "Admissible à une couverture RCSD pouvant atteindre 100 %", "tier60Badge": "Admissible à une couverture RCSD pouvant atteindre 60 %", "tier40Badge": "Admissible à une couverture RCSD pouvant atteindre 40 %", "ineligibleInsuranceBadge": "Non admissible — couverture privée déclarée", "ineligibleIncomeBadge": "Non admissible — revenu au-dessus du seuil", "ineligibleInsuranceMessage": "Le RCSD est offert seulement sans accès à une assurance dentaire privée ni à un compte de gestion santé couvrant le dentaire.", "ineligibleIncomeMessage": "L'admissibilité au RCSD exige un revenu familial net rajusté sous 90 000 $.", "needsToFileWarning": "L'ARC exige une déclaration de revenus produite pour accéder au RCSD. Cette réponse indique qu'elle n'est pas encore produite — la couverture commence dès qu'elle le sera.", "childRamqNote": "Au Québec, la RAMQ couvre déjà les soins dentaires de base pour les enfants de moins de 10 ans — le RCSD prend le relais pour les enfants de 10 ans et plus.", "tierRingCaption": "Votre palier de couverture", "coverageHeading": "Généralement couvert à ce palier", "coveredItems": ["Examens, nettoyages et radiographies", "Plombages", "Traitements de canal", "Prothèses dentaires complètes et partielles", "Extractions"], "excludedHeading": "Jamais couvert par le RCSD, peu importe le revenu", "excludedItems": ["Implants dentaires", "Orthodontie — y compris l'Invisalign"], "sourceNote": "Les paliers de couverture reflètent la grille tarifaire fédérale du RCSD publiée sur canada.ca. Vérifié le 2026-09-15."}};
   var root = document.getElementById("quizRoot");
   if(!root) return;
 
+  var REDUCE_MOTION = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  var EASE = "cubic-bezier(0.22,1,0.36,1)";
+  var STEP_DURATION = REDUCE_MOTION ? 1 : 320;
+  var SELECT_PAUSE = REDUCE_MOTION ? 0 : 200;
+  var COUNT_DURATION = REDUCE_MOTION ? 1 : 900;
+
   var INCOME_TIER = {under70:"100",band70:"60",band80:"40"};
+  var TIER_RING_COLOR = {"100":"var(--good)","60":"var(--tan)","40":"var(--tan)"};
   var state = {step:1, answers:{privateInsurance:null,income:null,taxFiling:null,status:null}, result:null};
+  var direction = 1; // +1 forward (slide in from right), -1 back
 
   function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML;}
 
-  function optRow(label,hint,onClick){
-    var b=document.createElement("button");
-    b.type="button";b.className="opt-btn";
-    b.innerHTML='<span>'+esc(label)+(hint?' <span class="opt-hint">('+esc(hint)+')</span>':'')+'</span><span class="opt-arrow">&#8594;</span>';
-    b.addEventListener("click",onClick);
-    return b;
+  /** rAF-driven numeric tween (framer-motion's standalone `animate()`, by
+   *  hand -- no dependency to pull in for one easing curve). Cubic
+   *  ease-out approximates EASE closely enough for a 60-90 unit count-up. */
+  function animateNumber(from,to,duration,onUpdate){
+    if(duration<=1){onUpdate(to);return;}
+    var start=null;
+    function tick(ts){
+      if(start===null)start=ts;
+      var p=Math.min((ts-start)/duration,1);
+      var eased=1-Math.pow(1-p,3);
+      onUpdate(from+(to-from)*eased);
+      if(p<1)window.requestAnimationFrame(tick);
+    }
+    window.requestAnimationFrame(tick);
   }
 
-  function renderProgress(){
-    var dots='';for(var i=1;i<=4;i++){dots+='<div class="quiz-dot'+(i<=state.step?' on':'')+'"></div>';}
-    return '<div class="quiz-progress">'+dots+'</div>'+
-      '<div class="quiz-steplabel"><span>'+L.stepLabel.replace("{current}",state.step).replace("{total}","4")+'</span>'+
-      (state.step>1?'<span class="quiz-back" id="quizBack">&#8592; '+esc(L.back)+'</span>':'')+'</div>';
+  function coverageRing(percent,colorVar){
+    var wrap=document.createElement('div');wrap.className='ring-wrap';
+    var C=2*Math.PI*26;
+    wrap.innerHTML=
+      '<svg width="64" height="64" viewBox="0 0 64 64" class="ring-svg" aria-hidden="true">'+
+        '<circle cx="32" cy="32" r="26" stroke-width="6" fill="none" class="ring-track"></circle>'+
+        '<circle cx="32" cy="32" r="26" stroke-width="6" fill="none" class="ring-fill" stroke="'+colorVar+'" '+
+          'stroke-dasharray="'+C+'" stroke-dashoffset="'+C+'"></circle>'+
+      '</svg><span class="ring-label">0%</span>';
+    var fillEl=wrap.querySelector('.ring-fill');
+    var labelEl=wrap.querySelector('.ring-label');
+    animateNumber(0,percent,COUNT_DURATION,function(v){
+      labelEl.textContent=Math.round(v)+'%';
+      fillEl.setAttribute('stroke-dashoffset',C-(v/100)*C);
+    });
+    return wrap;
   }
 
-  function render(){
-    root.innerHTML='';
+  /** role="radiogroup" + roving tabindex (arrow keys move focus, native
+   *  button Enter/Space activates), the "~200ms select pulse, then
+   *  advance" micro-UX, and a whole-group disable once one option is
+   *  pending so a second click mid-pulse can't double-fire. Mirrors
+   *  OptionGroup/OptionCard in dental-clinic-template's CDCPCalculator.tsx. */
+  function buildOptions(container,question,options){
+    container.className='quiz-opts';
+    container.setAttribute('role','radiogroup');
+    container.setAttribute('aria-label',question);
+    var buttons=[];
+    var pending=false;
+    var focusIdx=0;
 
-    if(!state.result){
-      var head=document.createElement('div');
-      head.innerHTML=renderProgress();
-      root.appendChild(head);
-      var backBtn=document.getElementById("quizBack");
-      if(backBtn) backBtn.addEventListener("click",function(){state.step=Math.max(1,state.step-1);render();});
+    options.forEach(function(opt,idx){
+      var b=document.createElement('button');
+      b.type='button';b.className='opt-btn';
+      b.setAttribute('role','radio');
+      b.setAttribute('aria-checked','false');
+      b.tabIndex=idx===0?0:-1;
+      b.innerHTML=
+        '<span class="opt-label-wrap"><span>'+esc(opt.label)+'</span>'+
+        (opt.hint?'<span class="opt-hint">'+esc(opt.hint)+'</span>':'')+'</span>'+
+        '<span class="opt-arrow" aria-hidden="true">&#8594;</span>'+
+        '<span class="opt-check" aria-hidden="true">&#10003;</span>';
+      b.addEventListener('click',function(){
+        if(pending)return;
+        pending=true;
+        buttons.forEach(function(other){
+          other.disabled=true;
+          if(other===b){other.classList.add('selected');other.setAttribute('aria-checked','true');}
+          else other.classList.add('dimmed');
+        });
+        window.setTimeout(function(){opt.onSelect();},SELECT_PAUSE);
+      });
+      b.addEventListener('focus',function(){
+        focusIdx=idx;
+        buttons.forEach(function(x,i){x.tabIndex=i===idx?0:-1;});
+      });
+      buttons.push(b);
+      container.appendChild(b);
+    });
+
+    container.addEventListener('keydown',function(e){
+      var count=buttons.length;if(!count)return;
+      var next=null;
+      if(e.key==='ArrowDown'||e.key==='ArrowRight')next=(focusIdx+1)%count;
+      else if(e.key==='ArrowUp'||e.key==='ArrowLeft')next=(focusIdx-1+count)%count;
+      else if(e.key==='Home')next=0;
+      else if(e.key==='End')next=count-1;
+      if(next!==null){e.preventDefault();focusIdx=next;buttons[next].focus();}
+    });
+  }
+
+  function buildQuestionPanel(target,question,options){
+    var head=document.createElement('div');head.className='quiz-q';
+    head.innerHTML='<span class="quiz-q-icon">?</span><span>'+esc(question)+'</span>';
+    target.appendChild(head);
+    var opts=document.createElement('div');
+    buildOptions(opts,question,options);
+    target.appendChild(opts);
+  }
+
+  function buildResultPanel(target,r){
+    var isQ=r.tier!==null;
+    var badgeClass=isQ?('tier'+r.tier):'ineligible';
+    var icon=isQ?(r.tier==="100"?"&#127881;":"&#10003;"):"&#10005;";
+    var badgeText=isQ?L.results['tier'+r.tier+'Badge']:(r.reason==="insurance"?L.results.ineligibleInsuranceBadge:L.results.ineligibleIncomeBadge);
+
+    var badge=document.createElement('div');
+    badge.className='result-badge '+badgeClass+(isQ?' pulsing':'');
+    badge.innerHTML='<span class="result-badge-icon">'+icon+'</span><span class="result-badge-text">'+esc(badgeText)+'</span>';
+    target.appendChild(badge);
+
+    var html='';
+    if(!isQ){
+      html+='<div class="result-msg">'+esc(r.reason==="insurance"?L.results.ineligibleInsuranceMessage:L.results.ineligibleIncomeMessage)+'</div>';
+    }
+    if(r.needsToFile){
+      html+='<div class="result-warn">'+esc(L.results.needsToFileWarning)+'</div>';
+    }
+    if(isQ && r.status==="child" && L.results.childRamqNote){
+      html+='<div class="result-msg">'+esc(L.results.childRamqNote)+'</div>';
+    }
+    var rest=document.createElement('div');rest.innerHTML=html;
+    target.appendChild(rest);
+
+    if(isQ){
+      var ringRow=document.createElement('div');ringRow.className='ring-row';
+      ringRow.appendChild(coverageRing(Number(r.tier),TIER_RING_COLOR[r.tier]));
+      var caption=document.createElement('span');caption.className='ring-caption';caption.textContent=L.results.tierRingCaption;
+      ringRow.appendChild(caption);
+      target.appendChild(ringRow);
+
+      var cols=document.createElement('div');cols.className='result-cols';
+      cols.innerHTML=
+        '<div class="result-col covered"><div class="result-col-label">'+esc(L.results.coverageHeading)+'</div><ul>'+
+        L.results.coveredItems.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul></div>'+
+        '<div class="result-col excluded"><div class="result-col-label">'+esc(L.results.excludedHeading)+'</div><ul>'+
+        L.results.excludedItems.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul></div>';
+      target.appendChild(cols);
     }
 
-    var body=document.createElement('div');
+    var tail=document.createElement('div');
+    tail.innerHTML=
+      '<div class="result-source">'+esc(L.results.sourceNote)+'</div>'+
+      '<button type="button" class="result-retake" id="quizRetake">&#8635; '+esc(L.retake)+'</button>';
+    target.appendChild(tail);
 
+    var retakeBtn=tail.querySelector('#quizRetake');
+    retakeBtn.addEventListener('click',function(){
+      direction=1;
+      state={step:1,answers:{privateInsurance:null,income:null,taxFiling:null,status:null},result:null};
+      renderStep();
+    });
+  }
+
+  function buildStepContent(target){
     if(!state.result && state.step===1){
-      body.innerHTML='<div class="quiz-q">'+esc(L.step1.question)+'</div>';
-      var opts=document.createElement('div');opts.className='quiz-opts';
-      opts.appendChild(optRow(L.step1.yes,null,function(){
-        state.answers.privateInsurance="yes";
-        state.result={tier:null,reason:"insurance",needsToFile:false,status:null};render();
-      }));
-      opts.appendChild(optRow(L.step1.no,null,function(){
-        state.answers.privateInsurance="no";state.step=2;render();
-      }));
-      body.appendChild(opts);
+      buildQuestionPanel(target,L.step1.question,[
+        {label:L.step1.yes,onSelect:function(){
+          state.answers.privateInsurance="yes";direction=1;
+          state.result={tier:null,reason:"insurance",needsToFile:false,status:null};renderStep();
+        }},
+        {label:L.step1.no,onSelect:function(){
+          state.answers.privateInsurance="no";direction=1;state.step=2;renderStep();
+        }},
+      ]);
       var skip=document.createElement('div');skip.className='quiz-skip';
       skip.innerHTML=L.skipPrompt+' <a href="'+L.bookingUrl+'">'+L.skipBook+'</a>';
-      body.appendChild(skip);
+      target.appendChild(skip);
     }
 
     if(!state.result && state.step===2){
-      body.innerHTML='<div class="quiz-q">'+esc(L.step2.question)+'</div>';
-      var opts2=document.createElement('div');opts2.className='quiz-opts';
-      [["under70","under70Hint"],["band70","band70Hint"],["band80","band80Hint"],["over90","over90Hint"]].forEach(function(pair){
-        opts2.appendChild(optRow(L.step2[pair[0]],L.step2[pair[1]],function(){
-          state.answers.income=pair[0];
-          if(pair[0]==="over90"){state.result={tier:null,reason:"income",needsToFile:false,status:null};render();return;}
-          state.step=3;render();
-        }));
-      });
-      body.appendChild(opts2);
+      buildQuestionPanel(target,L.step2.question,
+        [["under70","under70Hint"],["band70","band70Hint"],["band80","band80Hint"],["over90","over90Hint"]].map(function(pair){
+          return {label:L.step2[pair[0]],hint:L.step2[pair[1]],onSelect:function(){
+            state.answers.income=pair[0];direction=1;
+            if(pair[0]==="over90"){state.result={tier:null,reason:"income",needsToFile:false,status:null};renderStep();return;}
+            state.step=3;renderStep();
+          }};
+        })
+      );
     }
 
     if(!state.result && state.step===3){
-      body.innerHTML='<div class="quiz-q">'+esc(L.step3.question)+'</div>';
-      var opts3=document.createElement('div');opts3.className='quiz-opts';
-      opts3.appendChild(optRow(L.step3.yes,null,function(){state.answers.taxFiling="yes";state.step=4;render();}));
-      opts3.appendChild(optRow(L.step3.no,null,function(){state.answers.taxFiling="no";state.step=4;render();}));
-      body.appendChild(opts3);
+      buildQuestionPanel(target,L.step3.question,[
+        {label:L.step3.yes,onSelect:function(){state.answers.taxFiling="yes";direction=1;state.step=4;renderStep();}},
+        {label:L.step3.no,onSelect:function(){state.answers.taxFiling="no";direction=1;state.step=4;renderStep();}},
+      ]);
     }
 
     if(!state.result && state.step===4){
-      body.innerHTML='<div class="quiz-q">'+esc(L.step4.question)+'</div>';
-      var opts4=document.createElement('div');opts4.className='quiz-opts';
-      ["senior","child","dtc","adult"].forEach(function(key){
-        opts4.appendChild(optRow(L.step4[key],null,function(){
-          var tier=state.answers.income&&state.answers.income!=="over90"?INCOME_TIER[state.answers.income]:null;
-          state.answers.status=key;
-          state.result={tier:tier,reason:null,needsToFile:state.answers.taxFiling==="no",status:key};
-          render();
-        }));
-      });
-      body.appendChild(opts4);
+      buildQuestionPanel(target,L.step4.question,
+        ["senior","child","dtc","adult"].map(function(key){
+          return {label:L.step4[key],onSelect:function(){
+            var tier=state.answers.income&&state.answers.income!=="over90"?INCOME_TIER[state.answers.income]:null;
+            state.answers.status=key;direction=1;
+            state.result={tier:tier,reason:null,needsToFile:state.answers.taxFiling==="no",status:key};
+            renderStep();
+          }};
+        })
+      );
     }
 
     if(state.result){
-      var r=state.result;
-      var isQ=r.tier!==null;
-      var badgeClass=isQ?('tier'+r.tier):'ineligible';
-      var icon=isQ?(r.tier==="100"?"&#127881;":"&#10003;"):"&#10005;";
-      var badgeText=isQ?L.results['tier'+r.tier+'Badge']:(r.reason==="insurance"?L.results.ineligibleInsuranceBadge:L.results.ineligibleIncomeBadge);
-      var html='<div class="result-badge '+badgeClass+'"><span class="result-badge-icon">'+icon+'</span><span class="result-badge-text">'+esc(badgeText)+'</span></div>';
-      if(!isQ){
-        html+='<div class="result-msg">'+esc(r.reason==="insurance"?L.results.ineligibleInsuranceMessage:L.results.ineligibleIncomeMessage)+'</div>';
-      }
-      if(r.needsToFile){
-        html+='<div class="result-warn">'+esc(L.results.needsToFileWarning)+'</div>';
-      }
-      if(isQ && r.status==="child" && L.results.childRamqNote){
-        html+='<div class="result-msg">'+esc(L.results.childRamqNote)+'</div>';
-      }
-      if(isQ){
-        html+='<div class="result-cols"><div class="result-col covered"><div class="result-col-label">'+esc(L.results.coverageHeading)+'</div><ul>'+
-          L.results.coveredItems.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul></div>'+
-          '<div class="result-col excluded"><div class="result-col-label">'+esc(L.results.excludedHeading)+'</div><ul>'+
-          L.results.excludedItems.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul></div></div>';
-      }
-      html+='<div class="result-source">'+esc(L.results.sourceNote)+'</div>';
-      html+='<div class="result-retake" id="quizRetake">&#8635; '+esc(L.retake)+'</div>';
-      body.innerHTML=html;
-    }
-
-    root.appendChild(body);
-
-    // Wired after appendChild -- getElementById can't find a node that
-    // isn't in the document yet, which is what a detached `body` is until
-    // this line runs.
-    if(state.result){
-      var retakeBtn=document.getElementById("quizRetake");
-      if(retakeBtn) retakeBtn.addEventListener("click",function(){
-        state={step:1,answers:{privateInsurance:null,income:null,taxFiling:null,status:null},result:null};render();
-      });
+      buildResultPanel(target,state.result);
     }
   }
 
-  render();
+  function renderHead(){
+    var existing=document.getElementById('quizHead');
+    if(state.result){
+      if(existing)existing.remove();
+      return;
+    }
+    var html=
+      '<div class="quiz-track"><div class="quiz-fill" style="width:'+(state.step/4*100)+'%"></div></div>'+
+      '<div class="quiz-steplabel"><span>'+L.stepLabel.replace('{current}',state.step).replace('{total}','4')+'</span>'+
+      (state.step>1?'<button type="button" class="quiz-back" id="quizBack">&#8592; '+esc(L.back)+'</button>':'')+'</div>';
+    var head=existing;
+    if(!head){
+      head=document.createElement('div');head.id='quizHead';
+      root.insertBefore(head,root.firstChild);
+    }
+    head.innerHTML=html;
+    var backBtn=document.getElementById('quizBack');
+    if(backBtn)backBtn.addEventListener('click',function(){
+      direction=-1;state.step=Math.max(1,state.step-1);renderStep();
+    });
+  }
+
+  /** Hand-rolled version of Framer Motion's AnimatePresence(mode="popLayout")
+   *  + an outer `layout`-animated wrapper: slide+fade (or scale+fade for the
+   *  results reveal) between the outgoing and incoming panel, while the
+   *  viewport's own height tweens between the two measured heights instead
+   *  of jumping -- same "zero layout shift between a 2-option and a
+   *  4-option step" requirement, solved with the Web Animations API instead
+   *  of a framework runtime. */
+  function transitionSwap(){
+    var viewport=document.getElementById('quizViewport');
+    var isResult=!!state.result;
+    var oldEl=viewport.firstElementChild;
+
+    var newEl=document.createElement('div');
+    buildStepContent(newEl);
+
+    var oldHeight=oldEl?oldEl.getBoundingClientRect().height:0;
+
+    newEl.style.visibility='hidden';
+    newEl.style.position='absolute';
+    newEl.style.left='0';newEl.style.right='0';newEl.style.top='0';
+    viewport.appendChild(newEl);
+    var newHeight=newEl.getBoundingClientRect().height;
+    viewport.removeChild(newEl);
+    newEl.style.visibility='';newEl.style.position='';newEl.style.left='';newEl.style.right='';newEl.style.top='';
+
+    if(!oldEl || STEP_DURATION<=1){
+      viewport.innerHTML='';
+      viewport.appendChild(newEl);
+      return;
+    }
+
+    viewport.style.position='relative';
+    viewport.style.overflow='hidden';
+    viewport.style.height=oldHeight+'px';
+
+    oldEl.style.position='absolute';oldEl.style.left='0';oldEl.style.right='0';oldEl.style.top='0';
+    var exitFrames=isResult
+      ?[{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(0.97)'}]
+      :[{opacity:1,transform:'translateX(0)'},{opacity:0,transform:'translateX('+(direction>=0?-24:24)+'px)'}];
+    var exitAnim=oldEl.animate(exitFrames,{duration:STEP_DURATION,easing:EASE,fill:'forwards'});
+
+    newEl.style.opacity='0';
+    viewport.appendChild(newEl);
+    var enterFrames=isResult
+      ?[{opacity:0,transform:'scale(0.95)'},{opacity:1,transform:'scale(1)'}]
+      :[{opacity:0,transform:'translateX('+(direction>=0?24:-24)+'px)'},{opacity:1,transform:'translateX(0)'}];
+    newEl.animate(enterFrames,{duration:STEP_DURATION,easing:EASE,fill:'forwards'});
+
+    viewport.animate([{height:oldHeight+'px'},{height:newHeight+'px'}],{duration:STEP_DURATION,easing:EASE}).finished
+      .catch(function(){})
+      .then(function(){viewport.style.height='';viewport.style.overflow='';});
+
+    exitAnim.finished.catch(function(){}).then(function(){
+      if(oldEl.parentNode)oldEl.parentNode.removeChild(oldEl);
+    });
+  }
+
+  function renderStep(){
+    renderHead();
+    transitionSwap();
+  }
+
+  if(!document.getElementById('quizViewport')){
+    var vp=document.createElement('div');vp.id='quizViewport';vp.className='quiz-viewport';
+    root.appendChild(vp);
+  }
+  renderStep();
 })();
 </script>
 </body>
