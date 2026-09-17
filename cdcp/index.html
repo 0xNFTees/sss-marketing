@@ -252,6 +252,19 @@ nav.scrolled .nav-logo{height:26px}
 .result-col.covered li::before{content:'+';position:absolute;left:0;color:var(--good);font-weight:700}
 .result-col.excluded li::before{content:'–';position:absolute;left:0;color:#b3432f;font-weight:700}
 .result-source{margin-top:20px;font-family:var(--body);font-size:11.5px;line-height:1.6;color:var(--ink);opacity:0.5}
+
+/* Billing-transparency notice -- routine disclosure every qualified visitor
+   should see (CDCP tiers are coverage against the federal fee schedule, not
+   a guarantee against what a dentist actually bills), so it gets the same
+   restrained, muted treatment as .result-source rather than an alarming
+   warning color. Built from this page's own paper/surface-a/rule/ink tokens
+   -- deliberately NOT the dental-clinic-template's Tailwind slate palette,
+   which has no equivalent here and would be a foreign color introduction
+   against this site's own approved brand system (see Pillar 3 -- no blue,
+   no colors outside paper/sage/tan/ink). */
+.billing-notice{margin-top:20px;padding:16px 18px;border:1px solid var(--rule);background:var(--surface-a)}
+.billing-notice-heading{font-family:var(--body);font-weight:700;font-size:13px;color:var(--ink)}
+.billing-notice-body{margin-top:5px;font-family:var(--body);font-size:12.5px;line-height:1.65;color:var(--ink);opacity:0.75}
 .result-retake{margin-top:18px;display:inline-flex;align-items:center;gap:6px;background:none;border:none;font-family:var(--body);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink);opacity:0.55;cursor:pointer;min-height:44px}
 .result-retake:hover{opacity:0.9}
 
@@ -442,7 +455,7 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
 })();
 
 (function(){
-  var L = {"stepLabel": "Step {current} of {total}", "back": "Back", "retake": "Run it again", "skipPrompt": "Prefer to skip straight to the point?", "skipBook": "Book a 30-min audit", "bookingUrl": "/#contact", "cdcpApplyUrl": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html", "craMyAccountUrl": "https://www.canada.ca/en/revenue-agency/services/e-services/digital-services-individuals/account-individuals.html", "step1": {"question": "Do you (or a family member) currently have access to private dental insurance — through an employer, a private plan, or a health spending account?", "yes": "Yes, I have private coverage", "no": "No private coverage"}, "step2": {"question": "What was your adjusted family net income on your last tax return?", "under70": "Under $70,000", "under70Hint": "up to 100% covered", "band70": "$70,000–$79,999", "band70Hint": "up to 60% covered", "band80": "$80,000–$89,999", "band80Hint": "up to 40% covered", "over90": "$90,000 or more", "over90Hint": "not eligible"}, "step3": {"question": "Have you (and your spouse or partner, if applicable) filed a Canadian tax return for the previous year?", "yes": "Yes, filed", "no": "Not yet"}, "step4": {"question": "Who are you checking eligibility for?", "senior": "Senior, 65+", "child": "Child under 18", "dtc": "Adult with a valid Disability Tax Credit", "adult": "Adult, 18–64"}, "results": {"tier100Badge": "Qualifies for up to 100% CDCP coverage", "tier60Badge": "Qualifies for up to 60% CDCP coverage", "tier40Badge": "Qualifies for up to 40% CDCP coverage", "childRamqNote": "In Quebec, RAMQ already covers basic dental care for children under 10 — CDCP fills the gap for kids 10 and up.", "tierRingCaption": "Your coverage tier", "coverageHeading": "Typically covered at this tier", "coveredItems": ["Exams, cleanings & X-rays", "Fillings", "Root canals", "Complete & partial dentures", "Extractions"], "excludedHeading": "Never covered by CDCP, at any income level", "excludedItems": ["Dental implants", "Orthodontics — including Invisalign"], "sourceNote": "Coverage tiers reflect the federal CDCP fee schedule on canada.ca. Verified 2026-09-15.", "branchInsurance": {"headline": "Great news! You don't need to wait for government coverage.", "banner": "Fully Covered by Your Existing Insurance Plan", "microCopy": "Since you already have private coverage, you can access immediate care without government application delays or waiting periods.", "primaryCta": "Book Your Appointment Now", "insurersNote": "On your own site, this panel shows the insurers your clinic accepts — for example:", "insurers": ["Sun Life", "Manulife", "Canada Life", "Green Shield Canada"]}, "branchIncome": {"headline": "You're not eligible for CDCP, but you still have affordable care options.", "banner": "Standard Care & Flexible Payment Options Available", "microCopy": "While government coverage caps at $90,000 in household income, our clinic offers direct-to-patient membership plans, flexible payment arrangements, and a transparent fee guide.", "primaryCta": "Book a New Patient Exam & Consultation"}, "branchTaxFiling": {"headline": "You're 1 step away from accessing CDCP coverage!", "banner": "Action Required: Complete Your Tax Return to Access CDCP", "microCopy": "Health Canada requires an up-to-date tax filing with the CRA to verify your household income. Once you file, you can apply right away.", "primaryCta": "File or Check Your Status on Canada.ca", "secondaryCta": "Pre-Book Your Appointment for Next Month"}, "branchQualified": {"headline": "🎉 You Qualify! Lock in your spot while you apply.", "step1Title": "Step 1 — Apply for Your CDCP Card", "step1Body": "Applications are processed through Health Canada, in partnership with Sun Life.", "step1Cta": "Open CDCP Application Portal", "step2Title": "Step 2 — Book While You Wait", "step2MicroCopy": "⚡ Pro tip: CDCP cards and welcome packages typically take 4 to 8 weeks to arrive by mail. Book your visit 6 to 8 weeks out today, so your spot is ready the moment your card arrives.", "step2Cta": "Book Your Future CDCP Appointment", "step3Title": "Step 3 — Get Help If You Need It", "step3Cta": "Contact Our Front Desk"}}};
+  var L = {"stepLabel": "Step {current} of {total}", "back": "Back", "retake": "Run it again", "skipPrompt": "Prefer to skip straight to the point?", "skipBook": "Book a 30-min audit", "bookingUrl": "/#contact", "cdcpApplyUrl": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html", "craMyAccountUrl": "https://www.canada.ca/en/revenue-agency/services/e-services/digital-services-individuals/account-individuals.html", "step1": {"question": "Do you (or a family member) currently have access to private dental insurance — through an employer, a private plan, or a health spending account?", "yes": "Yes, I have private coverage", "no": "No private coverage"}, "step2": {"question": "What was your adjusted family net income on your last tax return?", "under70": "Under $70,000", "under70Hint": "up to 100% covered", "band70": "$70,000–$79,999", "band70Hint": "up to 60% covered", "band80": "$80,000–$89,999", "band80Hint": "up to 40% covered", "over90": "$90,000 or more", "over90Hint": "not eligible"}, "step3": {"question": "Have you (and your spouse or partner, if applicable) filed a Canadian tax return for the previous year?", "yes": "Yes, filed", "no": "Not yet"}, "step4": {"question": "Who are you checking eligibility for?", "senior": "Senior, 65+", "child": "Child under 18", "dtc": "Adult with a valid Disability Tax Credit", "adult": "Adult, 18–64"}, "results": {"tier100Badge": "Qualifies for up to 100% CDCP coverage", "tier60Badge": "Qualifies for up to 60% CDCP coverage", "tier40Badge": "Qualifies for up to 40% CDCP coverage", "childRamqNote": "In Quebec, RAMQ already covers basic dental care for children under 10 — CDCP fills the gap for kids 10 and up.", "tierRingCaption": "Your coverage tier", "coverageHeading": "Typically covered at this tier", "coveredItems": ["Exams, cleanings & X-rays", "Fillings", "Root canals", "Complete & partial dentures", "Extractions"], "excludedHeading": "Never covered by CDCP, at any income level", "excludedItems": ["Dental implants", "Orthodontics — including Invisalign"], "sourceNote": "Coverage tiers reflect the federal CDCP fee schedule on canada.ca. Verified 2026-09-15.", "billingNoticeHeading": "Billing Transparency Notice", "billingNoticeBody": "Your coverage tier applies to CDCP's own fee schedule, not necessarily your dentist's actual charges. If a provider's fee for a service is higher than CDCP's set rate, you're responsible for that difference — separate from your tier's regular co-payment. Ask for a written treatment estimate before any procedure so you know your full out-of-pocket cost.", "branchInsurance": {"headline": "Great news! You don't need to wait for government coverage.", "banner": "Fully Covered by Your Existing Insurance Plan", "microCopy": "Since you already have private coverage, you can access immediate care without government application delays or waiting periods.", "primaryCta": "Book Your Appointment Now", "insurersNote": "On your own site, this panel shows the insurers your clinic accepts — for example:", "insurers": ["Sun Life", "Manulife", "Canada Life", "Green Shield Canada"]}, "branchIncome": {"headline": "You're not eligible for CDCP, but you still have affordable care options.", "banner": "Standard Care & Flexible Payment Options Available", "microCopy": "While government coverage caps at $90,000 in household income, our clinic offers direct-to-patient membership plans, flexible payment arrangements, and a transparent fee guide.", "primaryCta": "Book a New Patient Exam & Consultation"}, "branchTaxFiling": {"headline": "You're 1 step away from accessing CDCP coverage!", "banner": "Action Required: Complete Your Tax Return to Access CDCP", "microCopy": "Health Canada requires an up-to-date tax filing with the CRA to verify your household income. Once you file, you can apply right away.", "primaryCta": "File or Check Your Status on Canada.ca", "secondaryCta": "Pre-Book Your Appointment for Next Month"}, "branchQualified": {"headline": "Verification Complete — You Qualify for CDCP Coverage", "step1Title": "Step 1 — Apply for Your CDCP Card", "step1Body": "Applications are processed through Health Canada, in partnership with Sun Life.", "step1Cta": "Open CDCP Application Portal", "step2Title": "Step 2 — Book While You Wait", "step2MicroCopy": "Application Timeline Notice: CDCP cards and welcome packages typically arrive within 4 to 8 weeks. Booking a visit 6 to 8 weeks out helps ensure your appointment lines up with your card's arrival.", "step2Cta": "Book Your Future CDCP Appointment", "step3Title": "Step 3 — Get Help If You Need It", "step3Cta": "Contact Our Front Desk"}}};
   var root = document.getElementById("quizRoot");
   if(!root) return;
 
@@ -513,6 +526,21 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
   }
 
   function ctaRow(){var d=document.createElement('div');d.className='cta-row';return d;}
+
+  /** Billing-transparency disclosure for the qualified branch -- CDCP's
+   *  tier percentages are coverage against the federal CDCP fee schedule,
+   *  not a guarantee against what a dentist actually charges. Verified
+   *  directly against canada.ca's own "Examples of co-payments and
+   *  additional charges" factsheet: a provider's fee above CDCP's set rate
+   *  is billed to the patient directly, separate from the tier co-payment
+   *  itself. Mirrors dental-clinic-template's BillingTransparencyNotice --
+   *  same verified content, same placement (right after the coverage ring,
+   *  before the apply/book funnel), styled in this page's own idiom. */
+  function billingNotice(heading,body){
+    var d=document.createElement('div');d.className='billing-notice';
+    d.innerHTML='<div class="billing-notice-heading">'+esc(heading)+'</div><div class="billing-notice-body">'+esc(body)+'</div>';
+    return d;
+  }
 
   /** Numbered card for the qualified branch's 3-step apply -> book -> get
    *  help funnel -- the actual conversion sequence, so it gets more visual
@@ -613,7 +641,11 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
   function buildBranchQualified(target,r){
     var R=L.results.branchQualified;
     var badgeText=L.results['tier'+r.tier+'Badge'];
-    var icon=r.tier==='100'?'&#127881;':'&#10003;';
+    // Zero emoji: all three tiers now share the same plain checkmark glyph
+    // instead of tier100 alone getting a party-popper pictograph -- matches
+    // dental-clinic-template's TIER_ICON, where every tier already renders
+    // through the same restrained icon system.
+    var icon='&#10003;';
 
     target.appendChild(resultHeadline(R.headline));
 
@@ -631,6 +663,8 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
     var caption=document.createElement('span');caption.className='ring-caption';caption.textContent=L.results.tierRingCaption;
     ringRow.appendChild(caption);
     target.appendChild(ringRow);
+
+    target.appendChild(billingNotice(L.results.billingNoticeHeading,L.results.billingNoticeBody));
 
     var step1Row=ctaRow();
     step1Row.appendChild(ctaLink(L.cdcpApplyUrl,'&#128196;',R.step1Cta,{external:true}));
