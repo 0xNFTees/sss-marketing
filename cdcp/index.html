@@ -181,16 +181,58 @@ nav.scrolled .nav-logo{height:26px}
 .quiz-skip{margin-top:18px;font-family:var(--body);font-size:12.5px;color:var(--ink);opacity:0.6}
 .quiz-skip a{color:var(--ink);opacity:1;border-bottom:1px solid var(--tan)}
 
+/* Headline every branch leads with -- the four branches previously had no
+   heading at all above the badge; the CRO branching model gives each one
+   a distinct, opinionated opening line (see EN/FR results.branch*.headline). */
+.result-headline{font-family:var(--display);font-weight:500;font-size:clamp(19px,2.2vw,22px);line-height:1.3;letter-spacing:-0.01em;color:var(--ink);margin-bottom:14px}
+
 .result-badge{display:flex;align-items:center;gap:14px;padding:18px 20px;border:1px solid var(--rule)}
 .result-badge.tier100{background:var(--surface-a);border-color:rgba(77,124,74,0.35);--pulse-color:rgba(77,124,74,0.4)}
 .result-badge.tier60{background:var(--surface-b);border-color:var(--tan);--pulse-color:rgba(212,163,115,0.45)}
 .result-badge.tier40{background:var(--surface-b);border-color:var(--tan);--pulse-color:rgba(212,163,115,0.45)}
-.result-badge.ineligible{background:var(--paper);border-color:var(--rule)}
 .result-badge.pulsing{animation:resultBadgePulse 2.4s ease-in-out infinite}
 @keyframes resultBadgePulse{0%,100%{box-shadow:0 0 0 0 var(--pulse-color,transparent)}50%{box-shadow:0 0 0 8px transparent}}
 .result-badge-icon{font-size:22px;line-height:1}
 .result-badge-text{font-family:var(--display);font-weight:500;font-size:17px;letter-spacing:-0.005em;color:var(--ink)}
 .result-msg{margin-top:16px;font-family:var(--body);font-size:14px;line-height:1.65;color:var(--ink);opacity:0.8}
+
+/* Branch-result tones (insurance/income/tax-filing) -- deliberately distinct
+   from each other AND from the qualified tiers above, same rationale as
+   dental-clinic-template's ResultBanner: "you have insurance" or "you're
+   over income" must never read as "you qualified for CDCP." Built from the
+   same three surfaces/tan/warn tokens everything else on this page uses --
+   no new colors introduced. */
+.result-badge.tone-positive{background:var(--sage);border-color:var(--ink)}
+.result-badge.tone-neutral{background:var(--paper);border-color:var(--rule)}
+.result-badge.tone-warning{background:var(--surface-b);border-color:var(--warn)}
+
+/* CTA buttons inside branch results -- same ink/tan idiom as .cta-nav
+   elsewhere on the page, scaled down to sit inside the quiz card. */
+.cta-row{margin-top:24px;display:flex;flex-wrap:wrap;gap:12px}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:13px 20px;font-family:var(--body);font-size:12.5px;letter-spacing:0.08em;text-transform:uppercase;transition:background .25s var(--ease),color .25s var(--ease),transform .2s var(--ease),border-color .2s var(--ease)}
+.cta-btn-primary{background:var(--ink);color:var(--paper)}
+.cta-btn-primary:hover{background:var(--tan);color:var(--ink);transform:translateY(-1px)}
+.cta-btn-secondary{border:1px solid var(--rule);color:var(--ink)}
+.cta-btn-secondary:hover{border-color:var(--tan);background:var(--surface-b)}
+.cta-btn-icon{font-size:14px;line-height:1}
+.cta-ext{opacity:0.65;font-size:11px;margin-left:-2px}
+
+/* Qualified-branch 3-step funnel (apply -> book -> get help). */
+.step-card{margin-top:12px;border:1px solid var(--rule);background:rgba(255,255,255,0.4);padding:18px 20px}
+.step-card:first-of-type{margin-top:20px}
+.step-card-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.step-num{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.step-title{font-family:var(--body);font-weight:700;font-size:13.5px;color:var(--ink)}
+.step-body{font-family:var(--body);font-size:13px;line-height:1.6;color:var(--ink);opacity:0.85}
+.step-body .cta-row{margin-top:12px}
+
+/* Branch-A insurer pills -- text only, never logos (no licensed assets,
+   and lifting real companies' marks without permission is a trademark
+   risk); flat rectangular chips to match this page's sharp-edged language
+   rather than the rounded-pill look used elsewhere on the web. */
+.insurer-note{margin-top:18px;font-family:var(--body);font-size:12.5px;line-height:1.6;color:var(--ink);opacity:0.7}
+.insurer-pills{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}
+.insurer-pill{font-family:var(--body);font-size:11px;letter-spacing:0.03em;padding:7px 12px;border:1px solid var(--rule);color:var(--ink);opacity:0.85}
 
 /* Coverage ring + animated counter (JS-driven stroke-dashoffset/text via
    animateNumber -- see calculator_js). Rotated -90deg so the fill starts
@@ -400,7 +442,7 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
 })();
 
 (function(){
-  var L = {"stepLabel": "Step {current} of {total}", "back": "Back", "retake": "Run it again", "skipPrompt": "Prefer to skip straight to the point?", "skipBook": "Book a 30-min audit", "bookingUrl": "/#contact", "step1": {"question": "Do you (or a family member) currently have access to private dental insurance — through an employer, a private plan, or a health spending account?", "yes": "Yes, I have private coverage", "no": "No private coverage"}, "step2": {"question": "What was your adjusted family net income on your last tax return?", "under70": "Under $70,000", "under70Hint": "up to 100% covered", "band70": "$70,000–$79,999", "band70Hint": "up to 60% covered", "band80": "$80,000–$89,999", "band80Hint": "up to 40% covered", "over90": "$90,000 or more", "over90Hint": "not eligible"}, "step3": {"question": "Have you (and your spouse or partner, if applicable) filed a Canadian tax return for the previous year?", "yes": "Yes, filed", "no": "Not yet"}, "step4": {"question": "Who are you checking eligibility for?", "senior": "Senior, 65+", "child": "Child under 18", "dtc": "Adult with a valid Disability Tax Credit", "adult": "Adult, 18–64"}, "results": {"tier100Badge": "Qualifies for up to 100% CDCP coverage", "tier60Badge": "Qualifies for up to 60% CDCP coverage", "tier40Badge": "Qualifies for up to 40% CDCP coverage", "ineligibleInsuranceBadge": "Not eligible — private coverage on file", "ineligibleIncomeBadge": "Not eligible — income above the threshold", "ineligibleInsuranceMessage": "CDCP is only available with no access to private dental insurance or a health spending account that covers dental care.", "ineligibleIncomeMessage": "CDCP eligibility requires an adjusted family net income under $90,000.", "needsToFileWarning": "Tax filing is required by the CRA to access CDCP. This answer flagged no return on file yet — coverage starts as soon as it's filed.", "childRamqNote": "In Quebec, RAMQ already covers basic dental care for children under 10 — CDCP fills the gap for kids 10 and up.", "tierRingCaption": "Your coverage tier", "coverageHeading": "Typically covered at this tier", "coveredItems": ["Exams, cleanings & X-rays", "Fillings", "Root canals", "Complete & partial dentures", "Extractions"], "excludedHeading": "Never covered by CDCP, at any income level", "excludedItems": ["Dental implants", "Orthodontics — including Invisalign"], "sourceNote": "Coverage tiers reflect the federal CDCP fee schedule on canada.ca. Verified 2026-09-15."}};
+  var L = {"stepLabel": "Step {current} of {total}", "back": "Back", "retake": "Run it again", "skipPrompt": "Prefer to skip straight to the point?", "skipBook": "Book a 30-min audit", "bookingUrl": "/#contact", "cdcpApplyUrl": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html", "craMyAccountUrl": "https://www.canada.ca/en/revenue-agency/services/e-services/digital-services-individuals/account-individuals.html", "step1": {"question": "Do you (or a family member) currently have access to private dental insurance — through an employer, a private plan, or a health spending account?", "yes": "Yes, I have private coverage", "no": "No private coverage"}, "step2": {"question": "What was your adjusted family net income on your last tax return?", "under70": "Under $70,000", "under70Hint": "up to 100% covered", "band70": "$70,000–$79,999", "band70Hint": "up to 60% covered", "band80": "$80,000–$89,999", "band80Hint": "up to 40% covered", "over90": "$90,000 or more", "over90Hint": "not eligible"}, "step3": {"question": "Have you (and your spouse or partner, if applicable) filed a Canadian tax return for the previous year?", "yes": "Yes, filed", "no": "Not yet"}, "step4": {"question": "Who are you checking eligibility for?", "senior": "Senior, 65+", "child": "Child under 18", "dtc": "Adult with a valid Disability Tax Credit", "adult": "Adult, 18–64"}, "results": {"tier100Badge": "Qualifies for up to 100% CDCP coverage", "tier60Badge": "Qualifies for up to 60% CDCP coverage", "tier40Badge": "Qualifies for up to 40% CDCP coverage", "childRamqNote": "In Quebec, RAMQ already covers basic dental care for children under 10 — CDCP fills the gap for kids 10 and up.", "tierRingCaption": "Your coverage tier", "coverageHeading": "Typically covered at this tier", "coveredItems": ["Exams, cleanings & X-rays", "Fillings", "Root canals", "Complete & partial dentures", "Extractions"], "excludedHeading": "Never covered by CDCP, at any income level", "excludedItems": ["Dental implants", "Orthodontics — including Invisalign"], "sourceNote": "Coverage tiers reflect the federal CDCP fee schedule on canada.ca. Verified 2026-09-15.", "branchInsurance": {"headline": "Great news! You don't need to wait for government coverage.", "banner": "Fully Covered by Your Existing Insurance Plan", "microCopy": "Since you already have private coverage, you can access immediate care without government application delays or waiting periods.", "primaryCta": "Book Your Appointment Now", "insurersNote": "On your own site, this panel shows the insurers your clinic accepts — for example:", "insurers": ["Sun Life", "Manulife", "Canada Life", "Green Shield Canada"]}, "branchIncome": {"headline": "You're not eligible for CDCP, but you still have affordable care options.", "banner": "Standard Care & Flexible Payment Options Available", "microCopy": "While government coverage caps at $90,000 in household income, our clinic offers direct-to-patient membership plans, flexible payment arrangements, and a transparent fee guide.", "primaryCta": "Book a New Patient Exam & Consultation"}, "branchTaxFiling": {"headline": "You're 1 step away from accessing CDCP coverage!", "banner": "Action Required: Complete Your Tax Return to Access CDCP", "microCopy": "Health Canada requires an up-to-date tax filing with the CRA to verify your household income. Once you file, you can apply right away.", "primaryCta": "File or Check Your Status on Canada.ca", "secondaryCta": "Pre-Book Your Appointment for Next Month"}, "branchQualified": {"headline": "🎉 You Qualify! Lock in your spot while you apply.", "step1Title": "Step 1 — Apply for Your CDCP Card", "step1Body": "Applications are processed through Health Canada, in partnership with Sun Life.", "step1Cta": "Open CDCP Application Portal", "step2Title": "Step 2 — Book While You Wait", "step2MicroCopy": "⚡ Pro tip: CDCP cards and welcome packages typically take 4 to 8 weeks to arrive by mail. Book your visit 6 to 8 weeks out today, so your spot is ready the moment your card arrives.", "step2Cta": "Book Your Future CDCP Appointment", "step3Title": "Step 3 — Get Help If You Need It", "step3Cta": "Contact Our Front Desk"}}};
   var root = document.getElementById("quizRoot");
   if(!root) return;
 
@@ -416,6 +458,204 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
   var direction = 1; // +1 forward (slide in from right), -1 back
 
   function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML;}
+
+  /** Appends context params to a booking URL so it's traceable which branch
+   *  a visitor converted from -- mirrors dental-clinic-template's
+   *  withBookingParams() exactly, except the base is a relative in-page
+   *  anchor (L.bookingUrl === "/#contact") rather than an absolute clinic
+   *  URL, so it needs an explicit base to parse against. Never applied to
+   *  an outbound canada.ca link -- decorating a government URL with our own
+   *  tracking params isn't ours to do. */
+  function withBookingParams(url,params){
+    try{
+      var u=new URL(url,window.location.origin);
+      Object.keys(params).forEach(function(k){u.searchParams.set(k,params[k]);});
+      return u.toString();
+    }catch(e){return url;}
+  }
+
+  /** ISO yyyy-mm-dd `weeks` from today -- same "pre-book N weeks out" intent
+   *  as the template's addWeeksIso(), passed as a suggestedDate param. */
+  function addWeeksIso(weeks){
+    var d=new Date();d.setDate(d.getDate()+weeks*7);
+    return d.toISOString().slice(0,10);
+  }
+
+  /** The colored status box every branch leads with. Three tones (see
+   *  .tone-positive/.tone-neutral/.tone-warning in CSS), deliberately
+   *  distinct from each other and from the qualified branch's own tier
+   *  badge so "you have insurance" can never read as "you qualified." */
+  function resultBanner(icon,text,tone){
+    var d=document.createElement('div');
+    d.className='result-badge tone-'+tone;
+    d.innerHTML='<span class="result-badge-icon">'+icon+'</span><span class="result-badge-text">'+esc(text)+'</span>';
+    return d;
+  }
+
+  function resultHeadline(text){
+    var h=document.createElement('h3');h.className='result-headline';h.textContent=text;
+    return h;
+  }
+
+  /** One button style for every branch's calls-to-action -- primary (solid
+   *  ink, tan on hover) or secondary (outline), matching .cta-nav's idiom
+   *  elsewhere on the page. `external` adds target=_blank + rel=noopener
+   *  plus a trailing arrow that signals "this leaves the site." */
+  function ctaLink(href,icon,label,opts){
+    opts=opts||{};
+    var a=document.createElement('a');
+    a.href=href;
+    a.className='cta-btn '+(opts.variant==='secondary'?'cta-btn-secondary':'cta-btn-primary');
+    if(opts.external){a.target='_blank';a.rel='noopener noreferrer';}
+    a.innerHTML='<span class="cta-btn-icon" aria-hidden="true">'+icon+'</span><span>'+esc(label)+'</span>'+
+      (opts.external?'<span class="cta-ext" aria-hidden="true">&#8599;</span>':'');
+    return a;
+  }
+
+  function ctaRow(){var d=document.createElement('div');d.className='cta-row';return d;}
+
+  /** Numbered card for the qualified branch's 3-step apply -> book -> get
+   *  help funnel -- the actual conversion sequence, so it gets more visual
+   *  weight than a plain paragraph. bodyChildren is an array of nodes. */
+  function stepCard(number,title,bodyChildren){
+    var d=document.createElement('div');d.className='step-card';
+    d.innerHTML='<div class="step-card-head"><span class="step-num">'+number+'</span><span class="step-title">'+esc(title)+'</span></div>';
+    var body=document.createElement('div');body.className='step-body';
+    bodyChildren.forEach(function(node){body.appendChild(node);});
+    d.appendChild(body);
+    return d;
+  }
+
+  function textNode(tag,className,text){
+    var el=document.createElement(tag);if(className)el.className=className;el.textContent=text;return el;
+  }
+
+  function retakeButtonEl(){
+    var btn=document.createElement('button');
+    btn.type='button';btn.className='result-retake';btn.id='quizRetake';
+    btn.innerHTML='&#8635; '+esc(L.retake);
+    btn.addEventListener('click',function(){
+      direction=1;
+      state={step:1,answers:{privateInsurance:null,income:null,taxFiling:null,status:null},result:null};
+      renderStep();
+    });
+    return btn;
+  }
+
+  /** Branch A -- has private insurance. Reframed as good news, not a
+   *  rejection: "you don't need CDCP, you can book today." Insurer pills
+   *  are illustrative on this demo page (no real clinic/roster behind
+   *  sss.marketing itself) -- on a client's own site this list is swapped
+   *  in from their real accepted-insurer config, same as the React build's
+   *  optional acceptedInsuranceProviders prop. Text only, never logos: no
+   *  licensed assets exist, and lifting real companies' marks without
+   *  permission is a trademark risk -- same doctrine as the template. */
+  function buildBranchInsurance(target){
+    var R=L.results.branchInsurance;
+    target.appendChild(resultHeadline(R.headline));
+    target.appendChild(resultBanner('&#128737;',R.banner,'positive'));
+    target.appendChild(textNode('p','result-msg',R.microCopy));
+
+    var row=ctaRow();
+    var bookHref=withBookingParams(L.bookingUrl,{branch:'insurance',utm_source:'cdcp-calculator'});
+    row.appendChild(ctaLink(bookHref,'&#128197;',R.primaryCta));
+    target.appendChild(row);
+
+    if(R.insurers && R.insurers.length){
+      target.appendChild(textNode('p','insurer-note',R.insurersNote));
+      var pills=document.createElement('div');pills.className='insurer-pills';
+      R.insurers.forEach(function(name){pills.appendChild(textNode('span','insurer-pill',name));});
+      target.appendChild(pills);
+    }
+
+    target.appendChild(retakeButtonEl());
+  }
+
+  /** Branch B -- ineligible on income (>$90,000). Still "you're welcome
+   *  here" with a booking path, not a dead end. */
+  function buildBranchIncome(target){
+    var R=L.results.branchIncome;
+    target.appendChild(resultHeadline(R.headline));
+    target.appendChild(resultBanner('&#128179;',R.banner,'neutral'));
+    target.appendChild(textNode('p','result-msg',R.microCopy));
+
+    var row=ctaRow();
+    var bookHref=withBookingParams(L.bookingUrl,{branch:'income',utm_source:'cdcp-calculator'});
+    row.appendChild(ctaLink(bookHref,'&#128197;',R.primaryCta));
+    target.appendChild(row);
+
+    target.appendChild(retakeButtonEl());
+  }
+
+  /** Branch C -- hasn't filed taxes yet. The only branch with an external
+   *  (government) link, and the only one where the "internal" CTA is a
+   *  pre-book rather than a book-now, since there's nothing to confirm yet. */
+  function buildBranchTaxFiling(target){
+    var R=L.results.branchTaxFiling;
+    target.appendChild(resultHeadline(R.headline));
+    target.appendChild(resultBanner('&#9888;',R.banner,'warning'));
+    target.appendChild(textNode('p','result-msg',R.microCopy));
+
+    var row=ctaRow();
+    row.appendChild(ctaLink(L.craMyAccountUrl,'&#128196;',R.primaryCta,{external:true}));
+    var preBookHref=withBookingParams(L.bookingUrl,{branch:'tax-filing',utm_source:'cdcp-calculator',suggestedDate:addWeeksIso(4)});
+    row.appendChild(ctaLink(preBookHref,'&#128197;',R.secondaryCta,{variant:'secondary'}));
+    target.appendChild(row);
+
+    target.appendChild(retakeButtonEl());
+  }
+
+  /** Branch D -- qualified. Keeps the pulsing tier badge, animated coverage
+   *  ring and covered/excluded reference lists, and adds the 3-step
+   *  conversion funnel: apply -> pre-book using the 4-to-8-week processing
+   *  window -> get help. Funnel sits above the reference material -- the
+   *  funnel is what converts, the coverage detail is for after. */
+  function buildBranchQualified(target,r){
+    var R=L.results.branchQualified;
+    var badgeText=L.results['tier'+r.tier+'Badge'];
+    var icon=r.tier==='100'?'&#127881;':'&#10003;';
+
+    target.appendChild(resultHeadline(R.headline));
+
+    var badge=document.createElement('div');
+    badge.className='result-badge tier'+r.tier+' pulsing';
+    badge.innerHTML='<span class="result-badge-icon">'+icon+'</span><span class="result-badge-text">'+esc(badgeText)+'</span>';
+    target.appendChild(badge);
+
+    if(r.status==='child' && L.results.childRamqNote){
+      target.appendChild(textNode('p','result-msg',L.results.childRamqNote));
+    }
+
+    var ringRow=document.createElement('div');ringRow.className='ring-row';
+    ringRow.appendChild(coverageRing(Number(r.tier),TIER_RING_COLOR[r.tier]));
+    var caption=document.createElement('span');caption.className='ring-caption';caption.textContent=L.results.tierRingCaption;
+    ringRow.appendChild(caption);
+    target.appendChild(ringRow);
+
+    var step1Row=ctaRow();
+    step1Row.appendChild(ctaLink(L.cdcpApplyUrl,'&#128196;',R.step1Cta,{external:true}));
+    target.appendChild(stepCard(1,R.step1Title,[textNode('p',null,R.step1Body),step1Row]));
+
+    var futureBookHref=withBookingParams(L.bookingUrl,{branch:'qualified',cdcpTier:r.tier,utm_source:'cdcp-calculator',suggestedDate:addWeeksIso(7)});
+    var step2Row=ctaRow();
+    step2Row.appendChild(ctaLink(futureBookHref,'&#128197;',R.step2Cta));
+    target.appendChild(stepCard(2,R.step2Title,[textNode('p',null,R.step2MicroCopy),step2Row]));
+
+    var step3Row=ctaRow();
+    step3Row.appendChild(ctaLink(withBookingParams(L.bookingUrl,{branch:'qualified-help',utm_source:'cdcp-calculator'}),'&#9993;',R.step3Cta));
+    target.appendChild(stepCard(3,R.step3Title,[step3Row]));
+
+    var cols=document.createElement('div');cols.className='result-cols';
+    cols.innerHTML=
+      '<div class="result-col covered"><div class="result-col-label">'+esc(L.results.coverageHeading)+'</div><ul>'+
+      L.results.coveredItems.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul></div>'+
+      '<div class="result-col excluded"><div class="result-col-label">'+esc(L.results.excludedHeading)+'</div><ul>'+
+      L.results.excludedItems.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul></div>';
+    target.appendChild(cols);
+
+    target.appendChild(textNode('div','result-source',L.results.sourceNote));
+    target.appendChild(retakeButtonEl());
+  }
 
   /** rAF-driven numeric tween (framer-motion's standalone `animate()`, by
    *  hand -- no dependency to pull in for one easing curve). Cubic
@@ -513,58 +753,14 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
     target.appendChild(opts);
   }
 
+  /** Four mutually exclusive branches, not three-plus-a-flag -- dispatches
+   *  on r.branch exactly like dental-clinic-template's discriminated
+   *  CalculatorResult union. Only "qualified" carries tier/status. */
   function buildResultPanel(target,r){
-    var isQ=r.tier!==null;
-    var badgeClass=isQ?('tier'+r.tier):'ineligible';
-    var icon=isQ?(r.tier==="100"?"&#127881;":"&#10003;"):"&#10005;";
-    var badgeText=isQ?L.results['tier'+r.tier+'Badge']:(r.reason==="insurance"?L.results.ineligibleInsuranceBadge:L.results.ineligibleIncomeBadge);
-
-    var badge=document.createElement('div');
-    badge.className='result-badge '+badgeClass+(isQ?' pulsing':'');
-    badge.innerHTML='<span class="result-badge-icon">'+icon+'</span><span class="result-badge-text">'+esc(badgeText)+'</span>';
-    target.appendChild(badge);
-
-    var html='';
-    if(!isQ){
-      html+='<div class="result-msg">'+esc(r.reason==="insurance"?L.results.ineligibleInsuranceMessage:L.results.ineligibleIncomeMessage)+'</div>';
-    }
-    if(r.needsToFile){
-      html+='<div class="result-warn">'+esc(L.results.needsToFileWarning)+'</div>';
-    }
-    if(isQ && r.status==="child" && L.results.childRamqNote){
-      html+='<div class="result-msg">'+esc(L.results.childRamqNote)+'</div>';
-    }
-    var rest=document.createElement('div');rest.innerHTML=html;
-    target.appendChild(rest);
-
-    if(isQ){
-      var ringRow=document.createElement('div');ringRow.className='ring-row';
-      ringRow.appendChild(coverageRing(Number(r.tier),TIER_RING_COLOR[r.tier]));
-      var caption=document.createElement('span');caption.className='ring-caption';caption.textContent=L.results.tierRingCaption;
-      ringRow.appendChild(caption);
-      target.appendChild(ringRow);
-
-      var cols=document.createElement('div');cols.className='result-cols';
-      cols.innerHTML=
-        '<div class="result-col covered"><div class="result-col-label">'+esc(L.results.coverageHeading)+'</div><ul>'+
-        L.results.coveredItems.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul></div>'+
-        '<div class="result-col excluded"><div class="result-col-label">'+esc(L.results.excludedHeading)+'</div><ul>'+
-        L.results.excludedItems.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul></div>';
-      target.appendChild(cols);
-    }
-
-    var tail=document.createElement('div');
-    tail.innerHTML=
-      '<div class="result-source">'+esc(L.results.sourceNote)+'</div>'+
-      '<button type="button" class="result-retake" id="quizRetake">&#8635; '+esc(L.retake)+'</button>';
-    target.appendChild(tail);
-
-    var retakeBtn=tail.querySelector('#quizRetake');
-    retakeBtn.addEventListener('click',function(){
-      direction=1;
-      state={step:1,answers:{privateInsurance:null,income:null,taxFiling:null,status:null},result:null};
-      renderStep();
-    });
+    if(r.branch==='insurance'){buildBranchInsurance(target);}
+    else if(r.branch==='income'){buildBranchIncome(target);}
+    else if(r.branch==='tax-filing'){buildBranchTaxFiling(target);}
+    else{buildBranchQualified(target,r);}
   }
 
   function buildStepContent(target){
@@ -572,7 +768,7 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
       buildQuestionPanel(target,L.step1.question,[
         {label:L.step1.yes,onSelect:function(){
           state.answers.privateInsurance="yes";direction=1;
-          state.result={tier:null,reason:"insurance",needsToFile:false,status:null};renderStep();
+          state.result={branch:"insurance"};renderStep();
         }},
         {label:L.step1.no,onSelect:function(){
           state.answers.privateInsurance="no";direction=1;state.step=2;renderStep();
@@ -588,27 +784,38 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
         [["under70","under70Hint"],["band70","band70Hint"],["band80","band80Hint"],["over90","over90Hint"]].map(function(pair){
           return {label:L.step2[pair[0]],hint:L.step2[pair[1]],onSelect:function(){
             state.answers.income=pair[0];direction=1;
-            if(pair[0]==="over90"){state.result={tier:null,reason:"income",needsToFile:false,status:null};renderStep();return;}
+            if(pair[0]==="over90"){state.result={branch:"income"};renderStep();return;}
             state.step=3;renderStep();
           }};
         })
       );
     }
 
+    // Step 3 short-circuits straight to the tax-filing branch on "not yet
+    // filed" -- deliberately skips step 4 entirely, same behavior change
+    // as dental-clinic-template's CDCPCalculator.tsx handleStep3 (a filed
+    // return is required before a tier can even be discussed, so there's
+    // nothing for step 4 to refine yet).
     if(!state.result && state.step===3){
       buildQuestionPanel(target,L.step3.question,[
         {label:L.step3.yes,onSelect:function(){state.answers.taxFiling="yes";direction=1;state.step=4;renderStep();}},
-        {label:L.step3.no,onSelect:function(){state.answers.taxFiling="no";direction=1;state.step=4;renderStep();}},
+        {label:L.step3.no,onSelect:function(){
+          state.answers.taxFiling="no";direction=1;
+          state.result={branch:"tax-filing"};renderStep();
+        }},
       ]);
     }
 
+    // Reached only when taxFiling==="yes" (step 3's "no" short-circuits
+    // above), so income is guaranteed to be one of under70/band70/band80
+    // here (over90 short-circuited in step 2) -- the tier is always
+    // resolvable, no more bolted-on needsToFile flag.
     if(!state.result && state.step===4){
       buildQuestionPanel(target,L.step4.question,
         ["senior","child","dtc","adult"].map(function(key){
           return {label:L.step4[key],onSelect:function(){
-            var tier=state.answers.income&&state.answers.income!=="over90"?INCOME_TIER[state.answers.income]:null;
             state.answers.status=key;direction=1;
-            state.result={tier:tier,reason:null,needsToFile:state.answers.taxFiling==="no",status:key};
+            state.result={branch:"qualified",tier:INCOME_TIER[state.answers.income],status:key};
             renderStep();
           }};
         })
