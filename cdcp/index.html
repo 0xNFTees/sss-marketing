@@ -265,6 +265,36 @@ nav.scrolled .nav-logo{height:26px}
 .billing-notice{margin-top:20px;padding:16px 18px;border:1px solid var(--rule);background:var(--surface-a)}
 .billing-notice-heading{font-family:var(--body);font-weight:700;font-size:13px;color:var(--ink)}
 .billing-notice-body{margin-top:5px;font-family:var(--body);font-size:12.5px;line-height:1.65;color:var(--ink);opacity:0.75}
+
+/* Coverage & Authorization Matrix -- replaces the old flat two-column
+   covered/excluded list (.result-cols, above) with three clinical tiers,
+   each its own accordion row: standard/no-approval, major/predetermination-
+   required, strictly-excluded. Native <details name="..."> gives a single-
+   open-at-a-time accordion and full keyboard/screen-reader disclosure
+   semantics for free -- same zero-custom-JS-for-toggle philosophy as this
+   page's own .faq accordion below, just built by the quiz JS instead of
+   server-rendered, since it lives inside the dynamic qualified-branch
+   result. Icons are plain Unicode glyphs (check/warning/X), not an icon
+   library -- none is loaded here, same doctrine as every other hand-rolled
+   piece of this build. */
+.matrix{margin-top:24px;border-top:1px solid var(--rule)}
+.matrix-item{border-bottom:1px solid var(--rule)}
+.matrix-item summary{cursor:pointer;list-style:none;display:flex;align-items:flex-start;gap:14px;padding:16px 4px;font-family:var(--body)}
+.matrix-item summary::-webkit-details-marker{display:none}
+.matrix-item-icon{flex-shrink:0;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:1px}
+.matrix-item.tone-standard .matrix-item-icon{background:var(--surface-a);color:var(--good)}
+.matrix-item.tone-major .matrix-item-icon{background:var(--surface-b);color:var(--warn)}
+.matrix-item.tone-excluded .matrix-item-icon{background:var(--surface-b);color:#b3432f}
+.matrix-item-head{flex:1;min-width:0}
+.matrix-item-title{font-family:var(--body);font-weight:700;font-size:13.5px;color:var(--ink)}
+.matrix-item-subtitle{margin-top:2px;font-family:var(--body);font-size:12px;color:var(--ink);opacity:0.65}
+.matrix-item-chevron{flex-shrink:0;font-family:var(--body);font-size:16px;color:var(--tan);margin-top:1px;transition:transform .25s var(--ease)}
+.matrix-item[open] .matrix-item-chevron{transform:rotate(45deg)}
+.matrix-item-body{padding:0 4px 18px 40px}
+.matrix-item-body ul{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.matrix-item-body li{font-family:var(--body);font-size:13px;line-height:1.5;color:var(--ink);opacity:0.85;padding-left:14px;position:relative}
+.matrix-item-body li::before{content:'–';position:absolute;left:0;opacity:0.5}
+.matrix-item-note{font-family:var(--body);font-size:12px;line-height:1.6;color:var(--ink);opacity:0.75;border-left:2px solid var(--rule);padding-left:12px}
 .result-retake{margin-top:18px;display:inline-flex;align-items:center;gap:6px;background:none;border:none;font-family:var(--body);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink);opacity:0.55;cursor:pointer;min-height:44px}
 .result-retake:hover{opacity:0.9}
 
@@ -455,7 +485,7 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
 })();
 
 (function(){
-  var L = {"stepLabel": "Step {current} of {total}", "back": "Back", "retake": "Run it again", "skipPrompt": "Prefer to skip straight to the point?", "skipBook": "Book a 30-min audit", "bookingUrl": "/#contact", "cdcpApplyUrl": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html", "craMyAccountUrl": "https://www.canada.ca/en/revenue-agency/services/e-services/digital-services-individuals/account-individuals.html", "step1": {"question": "Do you (or a family member) currently have access to private dental insurance — through an employer, a private plan, or a health spending account?", "yes": "Yes, I have private coverage", "no": "No private coverage"}, "step2": {"question": "What was your adjusted family net income on your last tax return?", "under70": "Under $70,000", "under70Hint": "up to 100% covered", "band70": "$70,000–$79,999", "band70Hint": "up to 60% covered", "band80": "$80,000–$89,999", "band80Hint": "up to 40% covered", "over90": "$90,000 or more", "over90Hint": "not eligible"}, "step3": {"question": "Have you (and your spouse or partner, if applicable) filed a Canadian tax return for the previous year?", "yes": "Yes, filed", "no": "Not yet"}, "step4": {"question": "Who are you checking eligibility for?", "senior": "Senior, 65+", "child": "Child under 18", "dtc": "Adult with a valid Disability Tax Credit", "adult": "Adult, 18–64"}, "results": {"tier100Badge": "Qualifies for up to 100% CDCP coverage", "tier60Badge": "Qualifies for up to 60% CDCP coverage", "tier40Badge": "Qualifies for up to 40% CDCP coverage", "childRamqNote": "In Quebec, RAMQ already covers basic dental care for children under 10 — CDCP fills the gap for kids 10 and up.", "tierRingCaption": "Your coverage tier", "coverageHeading": "Typically covered at this tier", "coveredItems": ["Exams, cleanings & X-rays", "Fillings", "Root canals", "Complete & partial dentures", "Extractions"], "excludedHeading": "Never covered by CDCP, at any income level", "excludedItems": ["Dental implants", "Orthodontics — including Invisalign"], "sourceNote": "Coverage tiers reflect the federal CDCP fee schedule on canada.ca. Verified 2026-09-15.", "billingNoticeHeading": "Billing Transparency Notice", "billingNoticeBody": "Your coverage tier applies to CDCP's own fee schedule, not necessarily your dentist's actual charges. If a provider's fee for a service is higher than CDCP's set rate, you're responsible for that difference — separate from your tier's regular co-payment. Ask for a written treatment estimate before any procedure so you know your full out-of-pocket cost.", "branchInsurance": {"headline": "Great news! You don't need to wait for government coverage.", "banner": "Fully Covered by Your Existing Insurance Plan", "microCopy": "Since you already have private coverage, you can access immediate care without government application delays or waiting periods.", "primaryCta": "Book Your Appointment Now", "insurersNote": "On your own site, this panel shows the insurers your clinic accepts — for example:", "insurers": ["Sun Life", "Manulife", "Canada Life", "Green Shield Canada"]}, "branchIncome": {"headline": "You're not eligible for CDCP, but you still have affordable care options.", "banner": "Standard Care & Flexible Payment Options Available", "microCopy": "While government coverage caps at $90,000 in household income, our clinic offers direct-to-patient membership plans, flexible payment arrangements, and a transparent fee guide.", "primaryCta": "Book a New Patient Exam & Consultation"}, "branchTaxFiling": {"headline": "You're 1 step away from accessing CDCP coverage!", "banner": "Action Required: Complete Your Tax Return to Access CDCP", "microCopy": "Health Canada requires an up-to-date tax filing with the CRA to verify your household income. Once you file, you can apply right away.", "primaryCta": "File or Check Your Status on Canada.ca", "secondaryCta": "Pre-Book Your Appointment for Next Month"}, "branchQualified": {"headline": "Verification Complete — You Qualify for CDCP Coverage", "step1Title": "Step 1 — Apply for Your CDCP Card", "step1Body": "Applications are processed through Health Canada, in partnership with Sun Life.", "step1Cta": "Open CDCP Application Portal", "step2Title": "Step 2 — Book While You Wait", "step2MicroCopy": "Application Timeline Notice: CDCP cards and welcome packages typically arrive within 4 to 8 weeks. Booking a visit 6 to 8 weeks out helps ensure your appointment lines up with your card's arrival.", "step2Cta": "Book Your Future CDCP Appointment", "step3Title": "Step 3 — Get Help If You Need It", "step3Cta": "Contact Our Front Desk"}}};
+  var L = {"stepLabel": "Step {current} of {total}", "back": "Back", "retake": "Run it again", "skipPrompt": "Prefer to skip straight to the point?", "skipBook": "Book a 30-min audit", "bookingUrl": "/#contact", "cdcpApplyUrl": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html", "craMyAccountUrl": "https://www.canada.ca/en/revenue-agency/services/e-services/digital-services-individuals/account-individuals.html", "step1": {"question": "Do you (or a family member) currently have access to private dental insurance — through an employer, a private plan, or a health spending account?", "yes": "Yes, I have private coverage", "no": "No private coverage"}, "step2": {"question": "What was your adjusted family net income on your last tax return?", "under70": "Under $70,000", "under70Hint": "up to 100% covered", "band70": "$70,000–$79,999", "band70Hint": "up to 60% covered", "band80": "$80,000–$89,999", "band80Hint": "up to 40% covered", "over90": "$90,000 or more", "over90Hint": "not eligible"}, "step3": {"question": "Have you (and your spouse or partner, if applicable) filed a Canadian tax return for the previous year?", "yes": "Yes, filed", "no": "Not yet"}, "step4": {"question": "Who are you checking eligibility for?", "senior": "Senior, 65+", "child": "Child under 18", "dtc": "Adult with a valid Disability Tax Credit", "adult": "Adult, 18–64"}, "results": {"tier100Badge": "Qualifies for up to 100% CDCP coverage", "tier60Badge": "Qualifies for up to 60% CDCP coverage", "tier40Badge": "Qualifies for up to 40% CDCP coverage", "childRamqNote": "In Quebec, RAMQ already covers basic dental care for children under 10 — CDCP fills the gap for kids 10 and up.", "tierRingCaption": "Your coverage tier", "coverageMatrix": {"heading": "Coverage & Authorization Matrix", "standard": {"title": "Standard Covered Care", "subtitle": "No prior approval required", "services": ["Diagnostic exams", "Digital X-rays", "Standard cleaning / scaling (up to annual limits)", "Basic fillings", "Simple extractions"], "note": "Covered directly under standard CDCP fee guidelines."}, "major": {"title": "Major Services", "subtitle": "Requires clinical pre-authorization (predetermination)", "services": ["Porcelain crowns (and cores/posts)", "Complete & partial dentures", "Root canal retreatment", "Additional periodontal scaling (beyond annual limits)"], "note": "Important: Major restorative treatments (crowns, dentures) require a formal electronic Predetermination Request. Our clinical team will submit your diagnostic treatment plan directly to Sun Life / CDCP for approval prior to initiating care."}, "excluded": {"title": "Strictly Excluded Services", "subtitle": "Out-of-pocket or private insurance only", "services": ["Nightguards / bruxism appliances", "Teeth whitening", "Cosmetic veneers", "Elective orthodontics / Invisalign", "Dental implants"], "note": "The CDCP does not cover occlusal nightguards, cosmetic procedures, elective alignment, or dental implants. Optional private payment plans or direct insurance billing are available for these treatments."}}, "sourceNote": "Coverage tiers reflect the federal CDCP fee schedule on canada.ca. Verified 2026-09-15.", "billingNoticeHeading": "Billing Transparency Notice", "billingNoticeBody": "Your coverage tier applies to CDCP's own fee schedule, not necessarily your dentist's actual charges. If a provider's fee for a service is higher than CDCP's set rate, you're responsible for that difference — separate from your tier's regular co-payment. Ask for a written treatment estimate before any procedure so you know your full out-of-pocket cost.", "branchInsurance": {"headline": "Great news! You don't need to wait for government coverage.", "banner": "Fully Covered by Your Existing Insurance Plan", "microCopy": "Since you already have private coverage, you can access immediate care without government application delays or waiting periods.", "primaryCta": "Book Your Appointment Now", "insurersNote": "On your own site, this panel shows the insurers your clinic accepts — for example:", "insurers": ["Sun Life", "Manulife", "Canada Life", "Green Shield Canada"]}, "branchIncome": {"headline": "You're not eligible for CDCP, but you still have affordable care options.", "banner": "Standard Care & Flexible Payment Options Available", "microCopy": "While government coverage caps at $90,000 in household income, our clinic offers direct-to-patient membership plans, flexible payment arrangements, and a transparent fee guide.", "primaryCta": "Book a New Patient Exam & Consultation"}, "branchTaxFiling": {"headline": "You're 1 step away from accessing CDCP coverage!", "banner": "Action Required: Complete Your Tax Return to Access CDCP", "microCopy": "Health Canada requires an up-to-date tax filing with the CRA to verify your household income. Once you file, you can apply right away.", "primaryCta": "File or Check Your Status on Canada.ca", "secondaryCta": "Pre-Book Your Appointment for Next Month"}, "branchQualified": {"headline": "Verification Complete — You Qualify for CDCP Coverage", "step1Title": "Step 1 — Apply for Your CDCP Card", "step1Body": "Applications are processed through Health Canada, in partnership with Sun Life.", "step1Cta": "Open CDCP Application Portal", "step2Title": "Step 2 — Book While You Wait", "step2MicroCopy": "Application Timeline Notice: CDCP cards and welcome packages typically arrive within 4 to 8 weeks. Booking a visit 6 to 8 weeks out helps ensure your appointment lines up with your card's arrival.", "step2Cta": "Book Your Future CDCP Appointment", "step3Title": "Step 3 — Get Help If You Need It", "step3Cta": "Contact Our Front Desk"}}};
   var root = document.getElementById("quizRoot");
   if(!root) return;
 
@@ -540,6 +570,47 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
     var d=document.createElement('div');d.className='billing-notice';
     d.innerHTML='<div class="billing-notice-heading">'+esc(heading)+'</div><div class="billing-notice-body">'+esc(body)+'</div>';
     return d;
+  }
+
+  /** One accordion row of the Coverage & Authorization Matrix. `tone`
+   *  drives the icon color (standard/major/excluded); `groupName` is the
+   *  shared <details name> that makes the three rows mutually exclusive.
+   *  `data` is {title,subtitle,services[],note}. Mirrors dental-clinic-
+   *  template's CoverageMatrixItem: same three tiers, same copy verbatim,
+   *  same corrected "Root canal retreatment" labeling (not "complex root
+   *  canals" -- only retreatment needs predetermination) and the same
+   *  explicit Dental implants exclusion. */
+  function coverageMatrixItem(tone,icon,groupName,data,openByDefault){
+    var d=document.createElement('details');
+    d.className='matrix-item tone-'+tone;
+    d.name=groupName;
+    if(openByDefault)d.open=true;
+    var summary=document.createElement('summary');
+    summary.innerHTML=
+      '<span class="matrix-item-icon" aria-hidden="true">'+icon+'</span>'+
+      '<span class="matrix-item-head"><span class="matrix-item-title">'+esc(data.title)+'</span>'+
+      '<span class="matrix-item-subtitle">'+esc(data.subtitle)+'</span></span>'+
+      '<span class="matrix-item-chevron" aria-hidden="true">+</span>';
+    d.appendChild(summary);
+    var body=document.createElement('div');body.className='matrix-item-body';
+    body.innerHTML='<ul>'+data.services.map(function(s){return '<li>'+esc(s)+'</li>';}).join('')+'</ul>'+
+      '<p class="matrix-item-note">'+esc(data.note)+'</p>';
+    d.appendChild(body);
+    return d;
+  }
+
+  /** Three-tier replacement for the old flat covered/excluded list --
+   *  standard (no approval) / major (requires predetermination) / strictly
+   *  excluded, single-open, standard open by default since it's the most
+   *  immediately reassuring tier for a visitor who just qualified. */
+  function coverageMatrix(m){
+    var wrap=document.createElement('div');wrap.className='matrix';
+    var heading=document.createElement('div');heading.className='result-col-label';heading.textContent=m.heading;
+    wrap.appendChild(heading);
+    wrap.appendChild(coverageMatrixItem('standard','&#10003;','coverage-matrix',m.standard,true));
+    wrap.appendChild(coverageMatrixItem('major','&#9888;','coverage-matrix',m.major,false));
+    wrap.appendChild(coverageMatrixItem('excluded','&#10007;','coverage-matrix',m.excluded,false));
+    return wrap;
   }
 
   /** Numbered card for the qualified branch's 3-step apply -> book -> get
@@ -679,13 +750,7 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
     step3Row.appendChild(ctaLink(withBookingParams(L.bookingUrl,{branch:'qualified-help',utm_source:'cdcp-calculator'}),'&#9993;',R.step3Cta));
     target.appendChild(stepCard(3,R.step3Title,[step3Row]));
 
-    var cols=document.createElement('div');cols.className='result-cols';
-    cols.innerHTML=
-      '<div class="result-col covered"><div class="result-col-label">'+esc(L.results.coverageHeading)+'</div><ul>'+
-      L.results.coveredItems.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul></div>'+
-      '<div class="result-col excluded"><div class="result-col-label">'+esc(L.results.excludedHeading)+'</div><ul>'+
-      L.results.excludedItems.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul></div>';
-    target.appendChild(cols);
+    target.appendChild(coverageMatrix(L.results.coverageMatrix));
 
     target.appendChild(textNode('div','result-source',L.results.sourceNote));
     target.appendChild(retakeButtonEl());
