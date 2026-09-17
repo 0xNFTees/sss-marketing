@@ -265,6 +265,36 @@ nav.scrolled .nav-logo{height:26px}
 .billing-notice{margin-top:20px;padding:16px 18px;border:1px solid var(--rule);background:var(--surface-a)}
 .billing-notice-heading{font-family:var(--body);font-weight:700;font-size:13px;color:var(--ink)}
 .billing-notice-body{margin-top:5px;font-family:var(--body);font-size:12.5px;line-height:1.65;color:var(--ink);opacity:0.75}
+
+/* Coverage & Authorization Matrix -- replaces the old flat two-column
+   covered/excluded list (.result-cols, above) with three clinical tiers,
+   each its own accordion row: standard/no-approval, major/predetermination-
+   required, strictly-excluded. Native <details name="..."> gives a single-
+   open-at-a-time accordion and full keyboard/screen-reader disclosure
+   semantics for free -- same zero-custom-JS-for-toggle philosophy as this
+   page's own .faq accordion below, just built by the quiz JS instead of
+   server-rendered, since it lives inside the dynamic qualified-branch
+   result. Icons are plain Unicode glyphs (check/warning/X), not an icon
+   library -- none is loaded here, same doctrine as every other hand-rolled
+   piece of this build. */
+.matrix{margin-top:24px;border-top:1px solid var(--rule)}
+.matrix-item{border-bottom:1px solid var(--rule)}
+.matrix-item summary{cursor:pointer;list-style:none;display:flex;align-items:flex-start;gap:14px;padding:16px 4px;font-family:var(--body)}
+.matrix-item summary::-webkit-details-marker{display:none}
+.matrix-item-icon{flex-shrink:0;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:1px}
+.matrix-item.tone-standard .matrix-item-icon{background:var(--surface-a);color:var(--good)}
+.matrix-item.tone-major .matrix-item-icon{background:var(--surface-b);color:var(--warn)}
+.matrix-item.tone-excluded .matrix-item-icon{background:var(--surface-b);color:#b3432f}
+.matrix-item-head{flex:1;min-width:0}
+.matrix-item-title{font-family:var(--body);font-weight:700;font-size:13.5px;color:var(--ink)}
+.matrix-item-subtitle{margin-top:2px;font-family:var(--body);font-size:12px;color:var(--ink);opacity:0.65}
+.matrix-item-chevron{flex-shrink:0;font-family:var(--body);font-size:16px;color:var(--tan);margin-top:1px;transition:transform .25s var(--ease)}
+.matrix-item[open] .matrix-item-chevron{transform:rotate(45deg)}
+.matrix-item-body{padding:0 4px 18px 40px}
+.matrix-item-body ul{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.matrix-item-body li{font-family:var(--body);font-size:13px;line-height:1.5;color:var(--ink);opacity:0.85;padding-left:14px;position:relative}
+.matrix-item-body li::before{content:'–';position:absolute;left:0;opacity:0.5}
+.matrix-item-note{font-family:var(--body);font-size:12px;line-height:1.6;color:var(--ink);opacity:0.75;border-left:2px solid var(--rule);padding-left:12px}
 .result-retake{margin-top:18px;display:inline-flex;align-items:center;gap:6px;background:none;border:none;font-family:var(--body);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink);opacity:0.55;cursor:pointer;min-height:44px}
 .result-retake:hover{opacity:0.9}
 
@@ -465,7 +495,7 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
 })();
 
 (function(){
-  var L = {"stepLabel": "Étape {current} sur {total}", "back": "Retour", "retake": "Recommencer", "skipPrompt": "Vous préférez aller droit au but?", "skipBook": "Réserver un audit de 30 min", "bookingUrl": "/#contact", "cdcpApplyUrl": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html", "craMyAccountUrl": "https://www.canada.ca/fr/agence-revenu/services/services-electroniques/services-electroniques-particuliers/dossier-particuliers.html", "step1": {"question": "Vous (ou un membre de votre famille) avez-vous actuellement accès à une assurance dentaire privée — par un employeur, un régime privé ou un compte de gestion santé?", "yes": "Oui, j'ai une couverture privée", "no": "Aucune couverture privée"}, "step2": {"question": "Quel était votre revenu familial net rajusté sur votre dernière déclaration de revenus?", "under70": "Moins de 70 000 $", "under70Hint": "jusqu'à 100 % couvert", "band70": "70 000 $ à 79 999 $", "band70Hint": "jusqu'à 60 % couvert", "band80": "80 000 $ à 89 999 $", "band80Hint": "jusqu'à 40 % couvert", "over90": "90 000 $ ou plus", "over90Hint": "non admissible"}, "step3": {"question": "Avez-vous (et votre conjoint(e), le cas échéant) produit une déclaration de revenus canadienne pour l'année précédente?", "yes": "Oui, produite", "no": "Pas encore"}, "step4": {"question": "Pour qui vérifiez-vous l'admissibilité?", "senior": "Aîné(e), 65 ans ou plus", "child": "Enfant de moins de 18 ans", "dtc": "Adulte détenant un crédit d'impôt pour personnes handicapées valide", "adult": "Adulte, 18 à 64 ans"}, "results": {"tier100Badge": "Admissible à une couverture RCSD pouvant atteindre 100 %", "tier60Badge": "Admissible à une couverture RCSD pouvant atteindre 60 %", "tier40Badge": "Admissible à une couverture RCSD pouvant atteindre 40 %", "childRamqNote": "Au Québec, la RAMQ couvre déjà les soins dentaires de base pour les enfants de moins de 10 ans — le RCSD prend le relais pour les enfants de 10 ans et plus.", "tierRingCaption": "Votre palier de couverture", "coverageHeading": "Généralement couvert à ce palier", "coveredItems": ["Examens, nettoyages et radiographies", "Plombages", "Traitements de canal", "Prothèses dentaires complètes et partielles", "Extractions"], "excludedHeading": "Jamais couvert par le RCSD, peu importe le revenu", "excludedItems": ["Implants dentaires", "Orthodontie — y compris l'Invisalign"], "sourceNote": "Les paliers de couverture reflètent la grille tarifaire fédérale du RCSD publiée sur canada.ca. Vérifié le 2026-09-15.", "billingNoticeHeading": "Avis de transparence tarifaire", "billingNoticeBody": "Votre palier de couverture s'applique à la grille tarifaire propre au RCSD, et non nécessairement aux tarifs réels de votre dentiste. Si les honoraires exigés par un fournisseur pour un service dépassent le tarif établi par le RCSD, vous devrez payer cette différence, en plus de la quote-part habituelle liée à votre palier. Demandez une estimation écrite du traitement avant toute intervention afin de connaître l'ensemble des frais à votre charge.", "branchInsurance": {"headline": "Bonne nouvelle : vous n'avez pas à attendre la couverture gouvernementale.", "banner": "Entièrement couvert par votre assurance actuelle", "microCopy": "Puisque vous avez déjà une couverture privée, vous pouvez accéder à des soins immédiatement, sans délai de demande ni période d'attente gouvernementale.", "primaryCta": "Prendre rendez-vous maintenant", "insurersNote": "Sur votre propre site, ce module afficherait les assureurs acceptés par votre clinique — par exemple :", "insurers": ["Sun Life", "Manuvie", "Canada Vie", "Croix Bleue"]}, "branchIncome": {"headline": "Vous n'êtes pas admissible au RCSD, mais des options de soins abordables restent disponibles.", "banner": "Soins standards et options de paiement flexibles", "microCopy": "La couverture gouvernementale s'arrête à 90 000 $ de revenu familial, mais notre clinique offre des forfaits d'adhésion directs, des ententes de paiement flexibles et une grille tarifaire transparente.", "primaryCta": "Prendre rendez-vous pour un nouvel examen"}, "branchTaxFiling": {"headline": "Vous n'êtes qu'à une étape du RCSD !", "banner": "Action requise : produisez votre déclaration de revenus pour accéder au RCSD", "microCopy": "Santé Canada exige une déclaration de revenus à jour auprès de l'ARC pour vérifier votre revenu familial. Une fois celle-ci produite, vous pourrez faire une demande immédiatement.", "primaryCta": "Produire ou vérifier votre dossier sur Canada.ca", "secondaryCta": "Réserver votre rendez-vous pour le mois prochain"}, "branchQualified": {"headline": "Vérification terminée — Vous êtes admissible à la couverture RCSD", "step1Title": "Étape 1 — Faites la demande de votre carte RCSD", "step1Body": "Les demandes sont traitées par Santé Canada, en partenariat avec la Sun Life.", "step1Cta": "Ouvrir le portail de demande RCSD", "step2Title": "Étape 2 — Réservez pendant l'attente", "step2MicroCopy": "Avis sur les délais de traitement : la carte RCSD et la trousse de bienvenue arrivent généralement par la poste dans un délai de 4 à 8 semaines. Réserver votre visite dans 6 à 8 semaines permet d'aligner votre rendez-vous avec la réception de votre carte.", "step2Cta": "Réserver votre futur rendez-vous RCSD", "step3Title": "Étape 3 — Besoin d'aide ?", "step3Cta": "Contactez notre réception"}}};
+  var L = {"stepLabel": "Étape {current} sur {total}", "back": "Retour", "retake": "Recommencer", "skipPrompt": "Vous préférez aller droit au but?", "skipBook": "Réserver un audit de 30 min", "bookingUrl": "/#contact", "cdcpApplyUrl": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html", "craMyAccountUrl": "https://www.canada.ca/fr/agence-revenu/services/services-electroniques/services-electroniques-particuliers/dossier-particuliers.html", "step1": {"question": "Vous (ou un membre de votre famille) avez-vous actuellement accès à une assurance dentaire privée — par un employeur, un régime privé ou un compte de gestion santé?", "yes": "Oui, j'ai une couverture privée", "no": "Aucune couverture privée"}, "step2": {"question": "Quel était votre revenu familial net rajusté sur votre dernière déclaration de revenus?", "under70": "Moins de 70 000 $", "under70Hint": "jusqu'à 100 % couvert", "band70": "70 000 $ à 79 999 $", "band70Hint": "jusqu'à 60 % couvert", "band80": "80 000 $ à 89 999 $", "band80Hint": "jusqu'à 40 % couvert", "over90": "90 000 $ ou plus", "over90Hint": "non admissible"}, "step3": {"question": "Avez-vous (et votre conjoint(e), le cas échéant) produit une déclaration de revenus canadienne pour l'année précédente?", "yes": "Oui, produite", "no": "Pas encore"}, "step4": {"question": "Pour qui vérifiez-vous l'admissibilité?", "senior": "Aîné(e), 65 ans ou plus", "child": "Enfant de moins de 18 ans", "dtc": "Adulte détenant un crédit d'impôt pour personnes handicapées valide", "adult": "Adulte, 18 à 64 ans"}, "results": {"tier100Badge": "Admissible à une couverture RCSD pouvant atteindre 100 %", "tier60Badge": "Admissible à une couverture RCSD pouvant atteindre 60 %", "tier40Badge": "Admissible à une couverture RCSD pouvant atteindre 40 %", "childRamqNote": "Au Québec, la RAMQ couvre déjà les soins dentaires de base pour les enfants de moins de 10 ans — le RCSD prend le relais pour les enfants de 10 ans et plus.", "tierRingCaption": "Votre palier de couverture", "coverageMatrix": {"heading": "Matrice de couverture et d'autorisation", "standard": {"title": "Soins standards couverts", "subtitle": "Aucune approbation préalable requise", "services": ["Examens diagnostiques", "Radiographies numériques", "Nettoyage / détartrage standard (jusqu'aux limites annuelles)", "Plombages de base", "Extractions simples"], "note": "Couvert directement selon la grille tarifaire standard du RCSD."}, "major": {"title": "Services majeurs", "subtitle": "Nécessite une autorisation préalable (prédétermination)", "services": ["Couronnes en porcelaine (et tenons/moignons)", "Prothèses complètes et partielles", "Retraitement de canal", "Détartrage parodontal additionnel (au-delà des limites annuelles)"], "note": "Important : Les traitements de restauration majeurs (couronnes, prothèses) nécessitent une Demande d'autorisation préalable électronique. Notre équipe clinique soumettra votre plan de traitement diagnostique directement à la Sun Life / au RCSD pour approbation avant de débuter les soins."}, "excluded": {"title": "Services strictement exclus", "subtitle": "À payer directement ou par assurance privée", "services": ["Plaques occlusales / dispositifs contre le bruxisme", "Blanchiment des dents", "Facettes esthétiques", "Orthodontie élective / Invisalign", "Implants dentaires"], "note": "Le RCSD ne couvre pas les plaques occlusales, les soins esthétiques, l'orthodontie élective ni les implants dentaires. Des options de paiement privé ou de facturation directe à l'assurance sont disponibles pour ces traitements."}}, "sourceNote": "Les paliers de couverture reflètent la grille tarifaire fédérale du RCSD publiée sur canada.ca. Vérifié le 2026-09-15.", "billingNoticeHeading": "Avis de transparence tarifaire", "billingNoticeBody": "Votre palier de couverture s'applique à la grille tarifaire propre au RCSD, et non nécessairement aux tarifs réels de votre dentiste. Si les honoraires exigés par un fournisseur pour un service dépassent le tarif établi par le RCSD, vous devrez payer cette différence, en plus de la quote-part habituelle liée à votre palier. Demandez une estimation écrite du traitement avant toute intervention afin de connaître l'ensemble des frais à votre charge.", "branchInsurance": {"headline": "Bonne nouvelle : vous n'avez pas à attendre la couverture gouvernementale.", "banner": "Entièrement couvert par votre assurance actuelle", "microCopy": "Puisque vous avez déjà une couverture privée, vous pouvez accéder à des soins immédiatement, sans délai de demande ni période d'attente gouvernementale.", "primaryCta": "Prendre rendez-vous maintenant", "insurersNote": "Sur votre propre site, ce module afficherait les assureurs acceptés par votre clinique — par exemple :", "insurers": ["Sun Life", "Manuvie", "Canada Vie", "Croix Bleue"]}, "branchIncome": {"headline": "Vous n'êtes pas admissible au RCSD, mais des options de soins abordables restent disponibles.", "banner": "Soins standards et options de paiement flexibles", "microCopy": "La couverture gouvernementale s'arrête à 90 000 $ de revenu familial, mais notre clinique offre des forfaits d'adhésion directs, des ententes de paiement flexibles et une grille tarifaire transparente.", "primaryCta": "Prendre rendez-vous pour un nouvel examen"}, "branchTaxFiling": {"headline": "Vous n'êtes qu'à une étape du RCSD !", "banner": "Action requise : produisez votre déclaration de revenus pour accéder au RCSD", "microCopy": "Santé Canada exige une déclaration de revenus à jour auprès de l'ARC pour vérifier votre revenu familial. Une fois celle-ci produite, vous pourrez faire une demande immédiatement.", "primaryCta": "Produire ou vérifier votre dossier sur Canada.ca", "secondaryCta": "Réserver votre rendez-vous pour le mois prochain"}, "branchQualified": {"headline": "Vérification terminée — Vous êtes admissible à la couverture RCSD", "step1Title": "Étape 1 — Faites la demande de votre carte RCSD", "step1Body": "Les demandes sont traitées par Santé Canada, en partenariat avec la Sun Life.", "step1Cta": "Ouvrir le portail de demande RCSD", "step2Title": "Étape 2 — Réservez pendant l'attente", "step2MicroCopy": "Avis sur les délais de traitement : la carte RCSD et la trousse de bienvenue arrivent généralement par la poste dans un délai de 4 à 8 semaines. Réserver votre visite dans 6 à 8 semaines permet d'aligner votre rendez-vous avec la réception de votre carte.", "step2Cta": "Réserver votre futur rendez-vous RCSD", "step3Title": "Étape 3 — Besoin d'aide ?", "step3Cta": "Contactez notre réception"}}};
   var root = document.getElementById("quizRoot");
   if(!root) return;
 
@@ -550,6 +580,47 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
     var d=document.createElement('div');d.className='billing-notice';
     d.innerHTML='<div class="billing-notice-heading">'+esc(heading)+'</div><div class="billing-notice-body">'+esc(body)+'</div>';
     return d;
+  }
+
+  /** One accordion row of the Coverage & Authorization Matrix. `tone`
+   *  drives the icon color (standard/major/excluded); `groupName` is the
+   *  shared <details name> that makes the three rows mutually exclusive.
+   *  `data` is {title,subtitle,services[],note}. Mirrors dental-clinic-
+   *  template's CoverageMatrixItem: same three tiers, same copy verbatim,
+   *  same corrected "Root canal retreatment" labeling (not "complex root
+   *  canals" -- only retreatment needs predetermination) and the same
+   *  explicit Dental implants exclusion. */
+  function coverageMatrixItem(tone,icon,groupName,data,openByDefault){
+    var d=document.createElement('details');
+    d.className='matrix-item tone-'+tone;
+    d.name=groupName;
+    if(openByDefault)d.open=true;
+    var summary=document.createElement('summary');
+    summary.innerHTML=
+      '<span class="matrix-item-icon" aria-hidden="true">'+icon+'</span>'+
+      '<span class="matrix-item-head"><span class="matrix-item-title">'+esc(data.title)+'</span>'+
+      '<span class="matrix-item-subtitle">'+esc(data.subtitle)+'</span></span>'+
+      '<span class="matrix-item-chevron" aria-hidden="true">+</span>';
+    d.appendChild(summary);
+    var body=document.createElement('div');body.className='matrix-item-body';
+    body.innerHTML='<ul>'+data.services.map(function(s){return '<li>'+esc(s)+'</li>';}).join('')+'</ul>'+
+      '<p class="matrix-item-note">'+esc(data.note)+'</p>';
+    d.appendChild(body);
+    return d;
+  }
+
+  /** Three-tier replacement for the old flat covered/excluded list --
+   *  standard (no approval) / major (requires predetermination) / strictly
+   *  excluded, single-open, standard open by default since it's the most
+   *  immediately reassuring tier for a visitor who just qualified. */
+  function coverageMatrix(m){
+    var wrap=document.createElement('div');wrap.className='matrix';
+    var heading=document.createElement('div');heading.className='result-col-label';heading.textContent=m.heading;
+    wrap.appendChild(heading);
+    wrap.appendChild(coverageMatrixItem('standard','&#10003;','coverage-matrix',m.standard,true));
+    wrap.appendChild(coverageMatrixItem('major','&#9888;','coverage-matrix',m.major,false));
+    wrap.appendChild(coverageMatrixItem('excluded','&#10007;','coverage-matrix',m.excluded,false));
+    return wrap;
   }
 
   /** Numbered card for the qualified branch's 3-step apply -> book -> get
@@ -689,13 +760,7 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
     step3Row.appendChild(ctaLink(withBookingParams(L.bookingUrl,{branch:'qualified-help',utm_source:'cdcp-calculator'}),'&#9993;',R.step3Cta));
     target.appendChild(stepCard(3,R.step3Title,[step3Row]));
 
-    var cols=document.createElement('div');cols.className='result-cols';
-    cols.innerHTML=
-      '<div class="result-col covered"><div class="result-col-label">'+esc(L.results.coverageHeading)+'</div><ul>'+
-      L.results.coveredItems.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul></div>'+
-      '<div class="result-col excluded"><div class="result-col-label">'+esc(L.results.excludedHeading)+'</div><ul>'+
-      L.results.excludedItems.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul></div>';
-    target.appendChild(cols);
+    target.appendChild(coverageMatrix(L.results.coverageMatrix));
 
     target.appendChild(textNode('div','result-source',L.results.sourceNote));
     target.appendChild(retakeButtonEl());
