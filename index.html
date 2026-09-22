@@ -387,6 +387,14 @@ nav.scrolled .nav-logo{height:26px}
   padding:0;
 }
 .svc-detail.open{max-height:1200px;margin-top:0;padding:56px 0 64px}
+/* s5's drawer now also carries the embedded calculator (see renderSvcDetail):
+   its qualified-branch result (badge + ring + billing notice + matrix +
+   3-step funnel) measures ~2.3-2.4kpx tall with the original 3 descriptive
+   blocks above it, well past the 1200px cap every other card's text-only
+   content fits inside. #svcDetail.has-quiz.open (id+2 classes) outranks the
+   plain .svc-detail.open class rule above on specificity, so only s5 gets
+   the taller cap; s1-s4/s6 keep exactly the 1200px they already had. */
+#svcDetail.has-quiz.open{max-height:2800px}
 .svc-detail-head{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;margin-bottom:48px}
 .svc-detail-title{font-family:var(--display);font-weight:500;font-size:clamp(28px,3.4vw,40px);line-height:1.08;letter-spacing:-0.02em;color:var(--ink);max-width:640px}
 .svc-detail-lede{font-family:var(--body);font-size:14px;line-height:1.6;color:var(--ink);opacity:0.7;max-width:340px;text-align:right;justify-self:end}
@@ -1076,6 +1084,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   footer{padding:24pt 0 0 0;border-top:1pt solid #000}
 }
 </style>
+<link rel="stylesheet" href="/cdcp-embed.css">
 </head>
 <body>
 
@@ -1590,6 +1599,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   </svg>
 </button>
 
+<script src="/cdcp-embed.js"></script>
 <script>
 (function(){
   const i18n = {
@@ -1664,14 +1674,21 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     if(scrollCue&&dict.scrollLabel)scrollCue.setAttribute("aria-label",dict.scrollLabel);
     if(openSvc)renderSvcDetail(openSvc);
   }
+  const cdcpDemoTag={fr:"Outil patient — ce que verrait un visiteur sur votre site",en:"Patient-facing tool — this is what visitors on your site would see"};
   function renderSvcDetail(id){
     const data=svcDetail[lang][id];if(!data)return;
     const closeLabel=i18n[lang].detailCloseLabel;
     let html='<div class="svc-detail-inner"><div class="svc-detail-head"><h3 class="svc-detail-title">'+escapeHtml(data.name)+'</h3><p class="svc-detail-lede">'+escapeHtml(data.lede)+'</p></div><div class="svc-detail-blocks">';
     data.blocks.forEach(function(b){html+='<div class="svc-detail-block"><div class="svc-detail-block-label">'+escapeHtml(b.label)+'</div><ul>';b.items.forEach(function(i){html+='<li>'+escapeHtml(i)+'</li>';});html+='</ul></div>';});
-    html+='</div><button class="svc-detail-close" type="button" id="svcDetailClose">'+escapeHtml(closeLabel)+'</button></div>';
+    html+='</div>';
+    if(id==='s5'){
+      html+='<div class="quiz-wrap"><span class="quiz-demo-tag">'+escapeHtml(cdcpDemoTag[lang])+'</span><div class="quiz-card"><div id="cdcpQuizHome"></div></div></div>';
+    }
+    html+='<button class="svc-detail-close" type="button" id="svcDetailClose">'+escapeHtml(closeLabel)+'</button></div>';
     detailEl.innerHTML=html;detailEl.classList.add("open");
+    detailEl.classList.toggle("has-quiz",id==='s5');
     document.getElementById("svcDetailClose").addEventListener("click",closeSvc);
+    if(id==='s5'&&window.mountCdcpQuiz)window.mountCdcpQuiz(document.getElementById('cdcpQuizHome'),lang);
   }
   function closeSvc(){
     detailEl.classList.remove("open");
