@@ -1,0 +1,180 @@
+/*
+ * cdcp-embed.css -- styles for the embeddable CDCP/RCSD calculator.
+ *
+ * Extracted verbatim from claude/sss-pages-build.py's CSS block (the
+ * source that styles the live sss.marketing/cdcp/ and /rcsd/ pages),
+ * minus the standalone-page .demo-cta box, which doesn't apply to an
+ * embedded instance. Every other rule -- selectors, values, comments --
+ * is unchanged. .quiz-demo-tag is kept: the embed reuses it verbatim to
+ * label the mounted calculator with the same verified copy the standalone
+ * pages use ("Patient-facing tool -- this is what visitors on your site
+ * would see").
+ *
+ * Depends on the host page already defining these design tokens on
+ * :root: --paper --surface-a --surface-b --sage --tan --ink --display
+ * --body --ease --rule --rule-soft (index.html, 123/index.html and the
+ * build.py-generated /cdcp/, /rcsd/ all already share this exact set).
+ * --good/--warn are NOT in 123/index.html's :root, so every var(--good)/
+ * var(--warn) below carries an inline fallback (#4d7c4a / #a3672c -- the
+ * same values index.html and build.py's CSS assign those tokens) instead
+ * of requiring a :root edit on that host.
+ */
+
+/* QUIZ CARD */
+.quiz-wrap{max-width:640px}
+.quiz-demo-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink);opacity:0.55;margin-bottom:20px}
+.quiz-demo-tag::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--tan)}
+.quiz-card{background:var(--paper);border:1px solid var(--rule);padding:clamp(28px,4vw,44px)}
+
+/* Single continuous progress line (replaces the old 4-dot row) whose fill
+   smoothly grows via a width transition -- same motion language as the
+   dental-clinic-template React build's StepProgressBar. */
+.quiz-track{height:3px;border-radius:2px;background:var(--rule);overflow:hidden;margin-bottom:20px}
+.quiz-fill{height:100%;background:var(--tan);width:0%;transition:width .5s var(--ease)}
+.quiz-steplabel{font-family:var(--body);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink);opacity:0.5;margin-bottom:28px;display:flex;justify-content:space-between;align-items:center;min-height:44px}
+.quiz-back{display:inline-flex;align-items:center;background:none;border:none;font-family:var(--body);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink);opacity:0.5;cursor:pointer;min-height:44px;padding:4px 2px;animation:quizBackIn .25s var(--ease)}
+.quiz-back:hover{opacity:0.9}
+@keyframes quizBackIn{from{opacity:0;transform:translateX(6px)}to{opacity:0.5;transform:translateX(0)}}
+
+/* The step/result swap region. JS (transitionSwap) toggles height/position
+   on this element directly -- it starts plain-flow so a JS-off or
+   pre-hydration render never clips content. */
+.quiz-viewport{position:relative}
+
+.quiz-q{display:flex;align-items:flex-start;gap:14px;font-family:var(--display);font-weight:500;font-size:clamp(19px,2.2vw,23px);line-height:1.32;letter-spacing:-0.01em;color:var(--ink);margin-bottom:22px}
+.quiz-q-icon{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--surface-b);color:var(--tan);display:flex;align-items:center;justify-content:center;font-size:16px;margin-top:2px}
+.quiz-opts{display:flex;flex-direction:column;gap:10px}
+
+.opt-btn{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:48px;text-align:left;padding:15px 44px 15px 18px;border:1px solid var(--rule);background:var(--paper);font-family:var(--body);font-size:14.5px;color:var(--ink);transition:border-color .2s var(--ease),background .2s var(--ease),box-shadow .2s var(--ease),transform .2s var(--ease),opacity .2s var(--ease)}
+.opt-btn:hover:not(:disabled){border-color:var(--tan);background:var(--surface-b);transform:translateY(-2px);box-shadow:0 8px 18px -10px rgba(28,24,18,0.22)}
+.opt-btn:disabled{cursor:default}
+.opt-btn.dimmed{opacity:0.4}
+.opt-btn.selected{border-color:var(--ink);border-width:1.5px;background:var(--surface-b);box-shadow:0 0 0 3px rgba(28,24,18,0.08),0 10px 22px -12px rgba(28,24,18,0.4);animation:optPulse .22s var(--ease) forwards}
+@keyframes optPulse{0%{transform:scale(1)}45%{transform:scale(1.02)}100%{transform:scale(0.98)}}
+.opt-label-wrap{display:flex;flex-direction:column;gap:2px}
+.opt-hint{font-size:12px;opacity:0.55;font-weight:400}
+.opt-arrow{opacity:0.35;flex-shrink:0;transition:transform .2s var(--ease),opacity .2s var(--ease)}
+.opt-btn:hover:not(:disabled) .opt-arrow{transform:translateX(2px);opacity:0.7}
+.opt-btn.selected .opt-arrow{opacity:0}
+.opt-check{position:absolute;right:14px;top:50%;width:22px;height:22px;margin-top:-11px;border-radius:50%;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1;transform:scale(0);opacity:0;transition:transform .25s cubic-bezier(0.34,1.56,0.64,1),opacity .2s var(--ease)}
+.opt-btn.selected .opt-check{transform:scale(1);opacity:1}
+
+.quiz-skip{margin-top:18px;font-family:var(--body);font-size:12.5px;color:var(--ink);opacity:0.6}
+.quiz-skip a{color:var(--ink);opacity:1;border-bottom:1px solid var(--tan)}
+
+/* Headline every branch leads with -- the four branches previously had no
+   heading at all above the badge; the CRO branching model gives each one
+   a distinct, opinionated opening line (see EN/FR results.branch*.headline). */
+.result-headline{font-family:var(--display);font-weight:500;font-size:clamp(19px,2.2vw,22px);line-height:1.3;letter-spacing:-0.01em;color:var(--ink);margin-bottom:14px}
+
+.result-badge{display:flex;align-items:center;gap:14px;padding:18px 20px;border:1px solid var(--rule)}
+.result-badge.tier100{background:var(--surface-a);border-color:rgba(77,124,74,0.35);--pulse-color:rgba(77,124,74,0.4)}
+.result-badge.tier60{background:var(--surface-b);border-color:var(--tan);--pulse-color:rgba(212,163,115,0.45)}
+.result-badge.tier40{background:var(--surface-b);border-color:var(--tan);--pulse-color:rgba(212,163,115,0.45)}
+.result-badge.pulsing{animation:resultBadgePulse 2.4s ease-in-out infinite}
+@keyframes resultBadgePulse{0%,100%{box-shadow:0 0 0 0 var(--pulse-color,transparent)}50%{box-shadow:0 0 0 8px transparent}}
+.result-badge-icon{font-size:22px;line-height:1}
+.result-badge-text{font-family:var(--display);font-weight:500;font-size:17px;letter-spacing:-0.005em;color:var(--ink)}
+.result-msg{margin-top:16px;font-family:var(--body);font-size:14px;line-height:1.65;color:var(--ink);opacity:0.8}
+
+/* Branch-result tones (insurance/income/tax-filing) -- deliberately distinct
+   from each other AND from the qualified tiers above, same rationale as
+   dental-clinic-template's ResultBanner: "you have insurance" or "you're
+   over income" must never read as "you qualified for CDCP." Built from the
+   same three surfaces/tan/warn tokens everything else on this page uses --
+   no new colors introduced. */
+.result-badge.tone-positive{background:var(--sage);border-color:var(--ink)}
+.result-badge.tone-neutral{background:var(--paper);border-color:var(--rule)}
+.result-badge.tone-warning{background:var(--surface-b);border-color:var(--warn,#a3672c)}
+
+/* CTA buttons inside branch results -- same ink/tan idiom as .cta-nav
+   elsewhere on the page, scaled down to sit inside the quiz card. */
+.cta-row{margin-top:24px;display:flex;flex-wrap:wrap;gap:12px}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:13px 20px;font-family:var(--body);font-size:12.5px;letter-spacing:0.08em;text-transform:uppercase;transition:background .25s var(--ease),color .25s var(--ease),transform .2s var(--ease),border-color .2s var(--ease)}
+.cta-btn-primary{background:var(--ink);color:var(--paper)}
+.cta-btn-primary:hover{background:var(--tan);color:var(--ink);transform:translateY(-1px)}
+.cta-btn-secondary{border:1px solid var(--rule);color:var(--ink)}
+.cta-btn-secondary:hover{border-color:var(--tan);background:var(--surface-b)}
+.cta-btn-icon{font-size:14px;line-height:1}
+.cta-ext{opacity:0.65;font-size:11px;margin-left:-2px}
+
+/* Qualified-branch 3-step funnel (apply -> book -> get help). */
+.step-card{margin-top:12px;border:1px solid var(--rule);background:rgba(255,255,255,0.4);padding:18px 20px}
+.step-card:first-of-type{margin-top:20px}
+.step-card-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.step-num{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.step-title{font-family:var(--body);font-weight:700;font-size:13.5px;color:var(--ink)}
+.step-body{font-family:var(--body);font-size:13px;line-height:1.6;color:var(--ink);opacity:0.85}
+.step-body .cta-row{margin-top:12px}
+
+/* Branch-A insurer pills -- text only, never logos (no licensed assets,
+   and lifting real companies' marks without permission is a trademark
+   risk); flat rectangular chips to match this page's sharp-edged language
+   rather than the rounded-pill look used elsewhere on the web. */
+.insurer-note{margin-top:18px;font-family:var(--body);font-size:12.5px;line-height:1.6;color:var(--ink);opacity:0.7}
+.insurer-pills{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}
+.insurer-pill{font-family:var(--body);font-size:11px;letter-spacing:0.03em;padding:7px 12px;border:1px solid var(--rule);color:var(--ink);opacity:0.85}
+
+/* Coverage ring + animated counter (JS-driven stroke-dashoffset/text via
+   animateNumber -- see calculator_js). Rotated -90deg so the fill starts
+   at 12 o'clock, same convention as the React build's CoverageRing. */
+.ring-row{margin-top:20px;display:flex;align-items:center;gap:18px;padding:16px 18px;border:1px solid var(--rule);background:var(--surface-a)}
+.ring-wrap{position:relative;width:64px;height:64px;flex-shrink:0}
+.ring-svg{transform:rotate(-90deg)}
+.ring-track{stroke:var(--rule)}
+.ring-fill{stroke-linecap:round}
+.ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--body);font-weight:700;font-size:14px;color:var(--ink);font-feature-settings:"tnum" 1}
+.ring-caption{font-family:var(--body);font-size:14px;font-weight:600;color:var(--ink)}
+.result-warn{margin-top:16px;padding:12px 16px;border-left:2px solid var(--warn,#a3672c);background:var(--surface-b);font-family:var(--body);font-size:13px;line-height:1.6;color:var(--ink)}
+.result-cols{margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.result-col-label{font-family:var(--body);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink);opacity:0.6;margin-bottom:10px}
+.result-col ul{display:flex;flex-direction:column;gap:7px}
+.result-col li{font-family:var(--body);font-size:13.5px;line-height:1.5;color:var(--ink);opacity:0.85;padding-left:16px;position:relative}
+.result-col.covered li::before{content:'+';position:absolute;left:0;color:var(--good,#4d7c4a);font-weight:700}
+.result-col.excluded li::before{content:'–';position:absolute;left:0;color:#b3432f;font-weight:700}
+.result-source{margin-top:20px;font-family:var(--body);font-size:11.5px;line-height:1.6;color:var(--ink);opacity:0.5}
+
+/* Billing-transparency notice -- routine disclosure every qualified visitor
+   should see (CDCP tiers are coverage against the federal fee schedule, not
+   a guarantee against what a dentist actually bills), so it gets the same
+   restrained, muted treatment as .result-source rather than an alarming
+   warning color. Built from this page's own paper/surface-a/rule/ink tokens
+   -- deliberately NOT the dental-clinic-template's Tailwind slate palette,
+   which has no equivalent here and would be a foreign color introduction
+   against this site's own approved brand system (see Pillar 3 -- no blue,
+   no colors outside paper/sage/tan/ink). */
+.billing-notice{margin-top:20px;padding:16px 18px;border:1px solid var(--rule);background:var(--surface-a)}
+.billing-notice-heading{font-family:var(--body);font-weight:700;font-size:13px;color:var(--ink)}
+.billing-notice-body{margin-top:5px;font-family:var(--body);font-size:12.5px;line-height:1.65;color:var(--ink);opacity:0.75}
+
+/* Coverage & Authorization Matrix -- replaces the old flat two-column
+   covered/excluded list (.result-cols, above) with three clinical tiers,
+   each its own accordion row: standard/no-approval, major/predetermination-
+   required, strictly-excluded. Native <details name="..."> gives a single-
+   open-at-a-time accordion and full keyboard/screen-reader disclosure
+   semantics for free -- same zero-custom-JS-for-toggle philosophy as this
+   page's own .faq accordion below, just built by the quiz JS instead of
+   server-rendered, since it lives inside the dynamic qualified-branch
+   result. Icons are plain Unicode glyphs (check/warning/X), not an icon
+   library -- none is loaded here, same doctrine as every other hand-rolled
+   piece of this build. */
+.matrix{margin-top:24px;border-top:1px solid var(--rule)}
+.matrix-item{border-bottom:1px solid var(--rule)}
+.matrix-item summary{cursor:pointer;list-style:none;display:flex;align-items:flex-start;gap:14px;padding:16px 4px;font-family:var(--body)}
+.matrix-item summary::-webkit-details-marker{display:none}
+.matrix-item-icon{flex-shrink:0;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:1px}
+.matrix-item.tone-standard .matrix-item-icon{background:var(--surface-a);color:var(--good,#4d7c4a)}
+.matrix-item.tone-major .matrix-item-icon{background:var(--surface-b);color:var(--warn,#a3672c)}
+.matrix-item.tone-excluded .matrix-item-icon{background:var(--surface-b);color:#b3432f}
+.matrix-item-head{flex:1;min-width:0}
+.matrix-item-title{font-family:var(--body);font-weight:700;font-size:13.5px;color:var(--ink)}
+.matrix-item-subtitle{margin-top:2px;font-family:var(--body);font-size:12px;color:var(--ink);opacity:0.65}
+.matrix-item-chevron{flex-shrink:0;font-family:var(--body);font-size:16px;color:var(--tan);margin-top:1px;transition:transform .25s var(--ease)}
+.matrix-item[open] .matrix-item-chevron{transform:rotate(45deg)}
+.matrix-item-body{padding:0 4px 18px 40px}
+.matrix-item-body ul{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.matrix-item-body li{font-family:var(--body);font-size:13px;line-height:1.5;color:var(--ink);opacity:0.85;padding-left:14px;position:relative}
+.matrix-item-body li::before{content:'–';position:absolute;left:0;opacity:0.5}
+.matrix-item-note{font-family:var(--body);font-size:12px;line-height:1.6;color:var(--ink);opacity:0.75;border-left:2px solid var(--rule);padding-left:12px}
+.result-retake{margin-top:18px;display:inline-flex;align-items:center;gap:6px;background:none;border:none;font-family:var(--body);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink);opacity:0.55;cursor:pointer;min-height:44px}
+.result-retake:hover{opacity:0.9}
