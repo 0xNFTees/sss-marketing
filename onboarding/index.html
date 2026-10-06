@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>sss.marketing | Client Onboarding</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      fontFamily: { sans: ['Inter','system-ui','sans-serif'], display: ['Space Grotesk','Inter','sans-serif'] },
+      colors: { ink: '#0A0B0F', panel: '#12141A', line: '#23262F', accent: '#C6FF3D' }
+    } }
+  }
+</script>
+<style>
+  body { background: #0A0B0F; }
+  .glow { background: radial-gradient(600px 300px at 80% -10%, rgba(198,255,61,.10), transparent 60%), radial-gradient(500px 300px at 0% 110%, rgba(198,255,61,.05), transparent 60%); }
+  .field { width:100%; background:#0A0B0F; border:1px solid #23262F; border-radius:12px; padding:.8rem 1rem; color:#F2F3F5; transition:all .2s; }
+  .field::placeholder { color:#5B6070; }
+  .field:focus { outline:none; border-color:#C6FF3D; box-shadow:0 0 0 3px rgba(198,255,61,.15); }
+  .field.err { border-color:#FF5C5C; box-shadow:0 0 0 3px rgba(255,92,92,.12); }
+  .chip { cursor:pointer; border:1px solid #23262F; border-radius:999px; padding:.5rem 1rem; color:#B6BAC5; transition:all .2s; user-select:none; font-size:.9rem; }
+  .chip:hover { border-color:#4a4f5e; }
+  .chip.on { background:#C6FF3D; color:#0A0B0F; border-color:#C6FF3D; font-weight:600; }
+  .fade { animation: fade .35s ease both; }
+  @keyframes fade { from { opacity:0; transform:translateY(8px);} to { opacity:1; transform:none;} }
+  .btn { border-radius:12px; padding:.8rem 1.5rem; font-weight:600; transition:all .2s; }
+  .btn-primary { background:#C6FF3D; color:#0A0B0F; }
+  .btn-primary:hover { filter:brightness(1.08); transform:translateY(-1px); }
+  .btn-ghost { border:1px solid #23262F; color:#B6BAC5; }
+  .btn-ghost:hover { border-color:#4a4f5e; color:#fff; }
+  .dropzone { border:1.5px dashed #2f3340; border-radius:14px; transition:all .2s; }
+  .dropzone.drag, .dropzone:hover { border-color:#C6FF3D; background:rgba(198,255,61,.04); }
+</style>
+</head>
+<body class="font-sans text-gray-100 min-h-screen glow">
+
+<!-- HEADER -->
+<header class="max-w-3xl mx-auto px-5 pt-6 flex items-center justify-between">
+  <div class="font-display text-xl font-bold tracking-tight">sss<span class="text-accent">.</span>marketing</div>
+  <div class="flex items-center gap-3">
+    <button id="logoutBtn" class="hidden text-xs text-gray-500 hover:text-gray-300" onclick="logout()"></button>
+    <div class="flex rounded-full border border-line p-1 text-sm">
+      <button id="lang-en" class="px-3 py-1 rounded-full" onclick="setLang('en')">EN</button>
+      <button id="lang-fr" class="px-3 py-1 rounded-full" onclick="setLang('fr')">FR</button>
+    </div>
+  </div>
+</header>
+
+<main id="app" class="max-w-3xl mx-auto px-5 py-10"></main>
+
+<footer class="max-w-3xl mx-auto px-5 pb-10 text-center text-xs text-gray-600">© <span id="yr"></span> sss.marketing</footer>
+
+<script>
+/* =====================================================================
+   CONFIG — edit this block before deploying
+   ===================================================================== */
+const CONFIG = {
+  // Client-side gate. NOTE: anyone can read this in page source — it keeps the link
+  // from being casually opened, it is not real security. For real protection use
+  // Vercel/Netlify password protection or a serverless auth check.
+  PASSWORD: 'sss-onboarding',
+
+  // Email delivery — Web3Forms (free). Get a key at https://web3forms.com using your sss.marketing inbox.
+  EMAIL_PROVIDER: 'web3forms',            // 'web3forms' | 'emailjs'
+  WEB3FORMS_KEY: 'YOUR_WEB3FORMS_ACCESS_KEY',
+
+  // EmailJS alternative (https://www.emailjs.com). Template should use {{subject}}, {{client}}, {{message}}.
+  EMAILJS: { PUBLIC_KEY: 'YOUR_EMAILJS_PUBLIC_KEY', SERVICE_ID: 'YOUR_SERVICE_ID', TEMPLATE_ID: 'YOUR_TEMPLATE_ID', TO_EMAIL: 'hello@sss.marketing' },
+
+  // Pre-filled values for this client (set to {} for a blank form). Clients can still edit them.
+  PREFILL: { website: 'https://www.prolifte.ca/', phone: '514-323-2533', comp1: 'https://www.techlift.ca/', dest_site: 'https://www.prolifte.ca/' },
+
+  STORAGE_KEY: 'sss_onboarding_v1',
+  SESSION_KEY: 'sss_onboarding_auth'
+};
+
+/* =====================================================================
+   i18n — UI strings
+   ===================================================================== */
+const UI = {
+  en: {
+    gateTitle: 'Client onboarding', gateSub: 'Enter the access password we sent you to begin.',
+    pwd: 'Access password', enter: 'Enter', wrongPwd: 'Incorrect password. Please try again.',
+    logout: 'Log out', welcomeTitle: 'Strategic Discovery Questionnaire',
+    welcomeSub: 'Take 10–15 minutes to answer. Your answers let us build a strategy aligned with your business goals. Your progress saves automatically, so you can step away and come back.',
+    step: 'Step', of: 'of', complete: 'complete', next: 'Next', back: 'Back', submit: 'Submit questionnaire',
+    sending: 'Sending…', required: 'This field is required.', invalidEmail: 'Please enter a valid email.',
+    fixErrors: 'Please complete the highlighted fields.', yes: 'Yes', no: 'No',
+    add: 'Add another', remove: 'Remove', addItem: '+ Add item',
+    dropHere: 'Drag files here or click to browse', dropHint: 'Logos, brand guidelines, creatives (PDF, PNG, JPG, SVG…)',
+    filesNote: 'File names are included in your submission. We will follow up by email to collect the files themselves.',
+    thanksTitle: 'Thank you!', thanksSub: 'Your questionnaire has been received. Our team will review it and be in touch within one business day.',
+    startOver: 'Start a new questionnaire', sendFail: 'We could not send your answers.', notConfigured: 'Email is not configured yet (add your API key in CONFIG).',
+    downloadJson: 'Download my answers (JSON)', saved: 'Progress saved', ratingHint: '1 = poor · 5 = excellent',
+    select: 'Select…', service: 'Service / Product', lang: 'Language'
+  },
+  fr: {
+    gateTitle: 'Intégration client', gateSub: 'Entrez le mot de passe d’accès que nous vous avons transmis.',
+    pwd: 'Mot de passe', enter: 'Entrer', wrongPwd: 'Mot de passe incorrect. Veuillez réessayer.',
+    logout: 'Se déconnecter', welcomeTitle: 'Questionnaire de découverte stratégique',
+    welcomeSub: 'Comptez 10 à 15 minutes. Vos réponses nous permettent de bâtir une stratégie alignée avec vos objectifs d’affaires. Votre progression est sauvegardée automatiquement : vous pouvez quitter et revenir.',
+    step: 'Étape', of: 'sur', complete: 'complété', next: 'Suivant', back: 'Précédent', submit: 'Envoyer le questionnaire',
+    sending: 'Envoi…', required: 'Ce champ est obligatoire.', invalidEmail: 'Veuillez entrer un courriel valide.',
+    fixErrors: 'Veuillez compléter les champs en surbrillance.', yes: 'Oui', no: 'Non',
+    add: 'Ajouter un autre', remove: 'Retirer', addItem: '+ Ajouter',
+    dropHere: 'Glissez vos fichiers ici ou cliquez pour parcourir', dropHint: 'Logos, chartes graphiques, visuels (PDF, PNG, JPG, SVG…)',
+    filesNote: 'Les noms de fichiers sont inclus dans votre envoi. Nous vous écrirons pour récupérer les fichiers eux-mêmes.',
+    thanksTitle: 'Merci!', thanksSub: 'Votre questionnaire a bien été reçu. Notre équipe l’examinera et vous contactera sous un jour ouvrable.',
+    startOver: 'Remplir un nouveau questionnaire', sendFail: 'Impossible d’envoyer vos réponses.', notConfigured: 'Le courriel n’est pas encore configuré (ajoutez votre clé API dans CONFIG).',
+    downloadJson: 'Télécharger mes réponses (JSON)', saved: 'Progression sauvegardée', ratingHint: '1 = faible · 5 = excellent',
+    select: 'Sélectionner…', service: 'Service / Produit', lang: 'Langue'
+  }
+};
+
+/* =====================================================================
+   QUESTIONNAIRE — mapped to the document, field for field
+   types: text, email, tel, url, number, textarea, yesno, rating, choice, multi, list, services, files
+   ===================================================================== */
+const T = (en, fr) => ({ en, fr });
+const SECTIONS = [
+  { id: 'company', title: T('Company information', 'Informations générales'), intro: T('Tell us about your business and how you operate.', 'Parlez-nous de votre entreprise et de votre fonctionnement.'), fields: [
+    { id:'contact_name', type:'text', req:true, label:T('Your name','Votre nom') },
+    { id:'contact_email', type:'email', req:true, label:T('Your email','Votre courriel') },
+    { id:'company_type', type:'text', req:true, label:T('Type of business','Type d’entreprise'), ph:T('e.g. B2B equipment supplier','ex. fournisseur d’équipement B2B') },
+    { id:'sector', type:'text', req:true, label:T('Industry','Secteur d’activité') },
+    { id:'budget', type:'text', req:true, label:T('Monthly marketing budget','Budget mensuel alloué au marketing'), ph:T('e.g. $3,000 / month','ex. 3 000 $ / mois') },
+    { id:'employees', type:'number', label:T('Company size (employees)','Taille de l’entreprise (nombre d’employés)') },
+    { id:'seasonality', type:'textarea', label:T('Seasonality of your activity','Saisonnalité de votre activité') },
+    { id:'lead_handling', type:'multi', label:T('How do you handle leads?','Moyen de traitement des leads'), opts:[T('CRM','CRM'),T('Email','Courriel'),T('Phone','Téléphone'),T('Spreadsheet','Chiffrier'),T('Other','Autre')] },
+    { id:'manual_collection', type:'yesno', label:T('Do you collect client information manually?','Recueil manuel des informations clients') },
+    { id:'ltv', type:'text', label:T('Do you know your customer lifetime value (LTV)? If so, how much?','Connaissez-vous la valeur à vie d’un client (LTV)? Si oui, laquelle?') },
+    { id:'capacity', type:'textarea', label:T('Capacity of your admin team to absorb lead volume','Capacité d’absorption du volume par votre équipe administrative'), ph:T('e.g. We can handle ~30 qualified leads per week','ex. Nous pouvons traiter ~30 leads qualifiés par semaine') },
+    { id:'website', type:'url', req:true, label:T('Website address','Adresse du site Web'), ph:T('https://','https://') },
+    { id:'regions', type:'textarea', label:T('Geographic areas served','Zones géographiques desservies') },
+    { id:'hours', type:'text', label:T('Opening hours','Horaires d’ouverture') },
+    { id:'peak', type:'textarea', label:T('Key periods / peak times of the year','Périodes importantes / Temps forts de l’année') }
+  ]},
+  { id: 'history', title: T('Advertising history','Historique publicitaire'), intro: T('What you have tried so far, and how it went.','Ce que vous avez déjà essayé, et les résultats.'), fields: [
+    { id:'digital', type:'multi', label:T('Digital channels already used','Canaux numériques déjà utilisés'), opts:[T('Google Ads','Google Ads'),T('Meta (Facebook/Instagram)','Meta (Facebook/Instagram)'),T('LinkedIn','LinkedIn'),T('TikTok','TikTok'),T('YouTube','YouTube'),T('SEO','SEO'),T('Email marketing','Infolettre'),T('None','Aucun')], other:true },
+    { id:'traditional', type:'multi', label:T('Traditional channels already used','Canaux traditionnels déjà utilisés'), opts:[T('Radio','Radio'),T('Billboards','Affichage'),T('Print','Imprimé'),T('TV','Télévision'),T('Trade shows','Salons'),T('None','Aucun')], other:true },
+    { id:'has_reports', type:'yesno', label:T('Do you currently have access to performance reports?','Avez-vous actuellement accès à des rapports de performance?') },
+    { id:'impression', type:'rating', label:T('Overall impression of your past advertising','Impression générale de vos publicités passées') },
+    { id:'measurement', type:'textarea', label:T('Current method for measuring performance','Méthode actuelle de mesure des performances') }
+  ]},
+  { id: 'market', title: T('Market positioning','Positionnement dans le marché'), intro: T('Who you compete with and why clients choose you.','Vos concurrents et pourquoi on vous choisit.'), fields: [
+    { id:'comp1', type:'url', label:T('Direct competitor #1','1er concurrent direct'), ph:T('https://','https://') },
+    { id:'comp2', type:'url', label:T('Direct competitor #2','2e concurrent direct'), ph:T('https://','https://') },
+    { id:'comp3', type:'url', label:T('Direct competitor #3','3e concurrent direct'), ph:T('https://','https://') },
+    { id:'strengths', type:'textarea', label:T('Your main strengths against the competition','Principaux points forts de votre entreprise face à la concurrence') }
+  ]},
+  { id: 'services', title: T('Services & strengths','Services et points forts'), intro: T('List your priority services or products, highest priority first.','Listez vos services ou produits prioritaires, du plus important au moins important.'), fields: [
+    { id:'services', type:'services' }
+  ]},
+  { id: 'kpi', title: T('KPIs & objectives','KPIs et objectifs'), intro: T('How we will measure success.','Comment nous mesurerons le succès.'), fields: [
+    { id:'conversions', type:'multi', label:T('Expected conversion types','Types de conversion attendus'), opts:[T('Phone calls','Appels'),T('Forms','Formulaires'),T('Online sales','Ventes en ligne'),T('Quote requests','Demandes de soumission'),T('Chat / messages','Clavardage / messages')], other:true },
+    { id:'cpa_current', type:'text', label:T('Current CPA (cost per acquisition)','CPA actuel (coût par acquisition)'), ph:T('e.g. $120','ex. 120 $') },
+    { id:'cpa_target', type:'text', label:T('Target CPA','CPA cible souhaité') },
+    { id:'cpa_max', type:'text', label:T('Maximum unacceptable CPA','CPA maximum non acceptable') }
+  ]},
+  { id: 'persona', title: T('Target audience','Clientèle cible'), intro: T('Describe the people you most want to reach.','Décrivez les personnes que vous voulez rejoindre en priorité.'), fields: [
+    { id:'demographics', type:'textarea', label:T('Demographic profile (age, gender, location, role…)','Profil démographique (âge, sexe, localisation, fonction…)') },
+    { id:'interests', type:'textarea', label:T('Interests and lifestyle of your ideal clients','Intérêts et style de vie de vos clients idéaux') }
+  ]},
+  { id: 'campaign', title: T('Campaign settings','Paramètres de campagne'), intro: T('Answer in both French and English where relevant — campaigns run in both languages.','Répondez en français et en anglais au besoin — les campagnes sont diffusées dans les deux langues.'), fields: [
+    { id:'dest_site', type:'url', label:T('Destination website for the ads','Site Web de destination pour les annonces') },
+    { id:'phone', type:'tel', label:T('Phone number to display','Numéro de téléphone à afficher') },
+    { id:'target_regions', type:'textarea', label:T('Geographic areas targeted by the campaign','Zones géographiques ciblées par la campagne') },
+    { id:'offers_fr', type:'textarea', label:T('Specific offers to promote — FR','Offres spécifiques à mettre en avant — FR') },
+    { id:'offers_en', type:'textarea', label:T('Specific offers to promote — EN','Offres spécifiques à mettre en avant — EN') },
+    { id:'exclusions_fr', type:'textarea', label:T('Content exclusions (words or topics to avoid) — FR','Exclusion de contenu (mots ou sujets à éviter) — FR') },
+    { id:'exclusions_en', type:'textarea', label:T('Content exclusions (words or topics to avoid) — EN','Exclusion de contenu (mots ou sujets à éviter) — EN') }
+  ]},
+  { id: 'creative', title: T('Ad creation & brand assets','Création des publicités'), intro: T('Voice, look and any assets we should use.','Ton, apparence et ressources à utiliser.'), fields: [
+    { id:'headlines_fr', type:'textarea', label:T('Specific information or desired headlines — FR','Informations spécifiques ou titres souhaités — FR') },
+    { id:'headlines_en', type:'textarea', label:T('Specific information or desired headlines — EN','Informations spécifiques ou titres souhaités — EN') },
+    { id:'brand_rules', type:'textarea', label:T('Brand guidelines, restrictions or mandatory descriptions','Charte graphique, restrictions ou descriptions obligatoires') },
+    { id:'tone', type:'choice', label:T('Tone and communication style','Ton et style de communication'), opts:[T('Corporate','Corporatif'),T('Direct','Direct'),T('Friendly','Chaleureux'),T('Humorous','Humoristique'),T('Technical / expert','Technique / expert')], other:true },
+    { id:'assets', type:'files', label:T('Upload logos, brand guidelines or creatives','Téléversez logos, chartes graphiques ou visuels') }
+  ]}
+];
+
+/* =====================================================================
+   STATE
+   ===================================================================== */
+let lang = (localStorage.getItem('sss_lang') || (navigator.language||'en').slice(0,2) === 'fr' ? 'fr' : 'en');
+if (localStorage.getItem('sss_lang')) lang = localStorage.getItem('sss_lang');
+let state = loadState();
+let submitted = false;
+const t = k => UI[lang][k];
+const L = o => (o && typeof o === 'object') ? o[lang] : o;
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function loadState() {
+  try { const s = JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEY)); if (s && s.answers) return s; } catch(e) {}
+  return { step: -1, answers: { ...CONFIG.PREFILL }, files: [] };
+}
+function save() { try { localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(state)); flashSaved(); } catch(e) {} }
+let savedTimer; function flashSaved() { const el = document.getElementById('savedTag'); if (!el) return; el.style.opacity = 1; clearTimeout(savedTimer); savedTimer = setTimeout(()=> el.style.opacity = 0, 1200); }
+const isAuthed = () => sessionStorage.getItem(CONFIG.SESSION_KEY) === '1';
+
+/* =====================================================================
+   VIEWS
+   ===================================================================== */
+function setLang(l) { lang = l; localStorage.setItem('sss_lang', l); document.documentElement.lang = l; render(); }
+function logout() { sessionStorage.removeItem(CONFIG.SESSION_KEY); render(); }
+
+function render() {
+  document.getElementById('lang-en').className = 'px-3 py-1 rounded-full ' + (lang==='en' ? 'bg-accent text-ink font-semibold' : 'text-gray-400');
+  document.getElementById('lang-fr').className = 'px-3 py-1 rounded-full ' + (lang==='fr' ? 'bg-accent text-ink font-semibold' : 'text-gray-400');
+  const lo = document.getElementById('logoutBtn'); lo.textContent = t('logout'); lo.classList.toggle('hidden', !isAuthed());
+  const app = document.getElementById('app');
+  if (!isAuthed()) return app.innerHTML = gateView(), bindGate();
+  if (submitted) return app.innerHTML = thanksView(), bindThanks();
+  if (state.step < 0) return app.innerHTML = welcomeView(), bindWelcome();
+  app.innerHTML = formView(); bindForm();
+}
+
+function gateView() { return `
+  <div class="fade max-w-md mx-auto mt-16 bg-panel border border-line rounded-3xl p-8">
+    <div class="w-11 h-11 rounded-xl bg-accent/10 border border-accent/30 grid place-items-center mb-5">
+      <svg width="20" height="20" fill="none" stroke="#C6FF3D" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+    </div>
+    <h1 class="font-display text-3xl font-bold mb-2">${t('gateTitle')}</h1>
+    <p class="text-gray-400 mb-6">${t('gateSub')}</p>
+    <form id="gateForm" class="space-y-4">
+      <input id="pwd" type="password" class="field" placeholder="${t('pwd')}" autocomplete="current-password" autofocus />
+      <p id="pwdErr" class="text-sm text-[#FF5C5C] hidden">${t('wrongPwd')}</p>
+      <button class="btn btn-primary w-full">${t('enter')}</button>
+    </form>
+  </div>`; }
+function bindGate() {
+  document.getElementById('gateForm').onsubmit = e => {
+    e.preventDefault();
+    const v = document.getElementById('pwd').value;
+    if (v === CONFIG.PASSWORD) { sessionStorage.setItem(CONFIG.SESSION_KEY, '1'); render(); }
+    else { document.getElementById('pwdErr').classList.remove('hidden'); document.getElementById('pwd').classList.add('err'); }
+  };
+}
+
+function welcomeView() {
+  const hasProgress = Object.keys(state.answers).some(k => !(k in CONFIG.PREFILL) || state.answers[k] !== CONFIG.PREFILL[k]);
+  return `<div class="fade mt-10">
+    <p class="text-accent text-sm font-semibold tracking-widest uppercase mb-3">sss.marketing</p>
+    <h1 class="font-display text-4xl md:text-5xl font-bold leading-tight mb-4">${t('welcomeTitle')}</h1>
+    <p class="text-gray-400 text-lg max-w-2xl mb-8">${t('welcomeSub')}</p>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-10">
+      ${SECTIONS.slice(0,8).map((s,i)=>`<div class="bg-panel border border-line rounded-xl px-3 py-2 text-sm text-gray-300"><span class="text-accent font-semibold mr-1">${i+1}</span>${esc(L(s.title))}</div>`).join('')}
+    </div>
+    <button id="startBtn" class="btn btn-primary">${hasProgress ? (lang==='fr'?'Reprendre':'Resume') : (lang==='fr'?'Commencer':'Get started')} →</button>
+  </div>`;
+}
+function bindWelcome() { document.getElementById('startBtn').onclick = () => { state.step = Math.max(0, state.step < 0 ? 0 : state.step); save(); render(); window.scrollTo(0,0); }; }
+
+function formView() {
+  const total = SECTIONS.length, s = SECTIONS[state.step];
+  const pct = Math.round((state.step / total) * 100);
+  return `<div class="fade">
+    <div class="flex items-center justify-between text-sm text-gray-400 mb-2">
+      <span>${t('step')} ${state.step+1} ${t('of')} ${total}</span>
+      <span class="flex items-center gap-3"><span id="savedTag" class="text-accent text-xs transition-opacity" style="opacity:0">✓ ${t('saved')}</span>${pct}% ${t('complete')}</span>
+    </div>
+    <div class="h-1.5 rounded-full bg-line overflow-hidden mb-8"><div class="h-full bg-accent transition-all duration-500" style="width:${pct + (100/total)*0.5}%"></div></div>
+    <div class="flex gap-1.5 mb-6">${SECTIONS.map((x,i)=>`<button data-jump="${i}" title="${esc(L(x.title))}" class="h-1.5 flex-1 rounded-full ${i<=state.step?'bg-accent':'bg-line'} ${i<state.step?'opacity-60 hover:opacity-100':''}"></button>`).join('')}</div>
+    <div class="bg-panel border border-line rounded-3xl p-6 md:p-8">
+      <h2 class="font-display text-2xl md:text-3xl font-bold mb-1">${esc(L(s.title))}</h2>
+      <p class="text-gray-400 mb-7">${esc(L(s.intro))}</p>
+      <div id="fields" class="space-y-6">${s.fields.map(fieldView).join('')}</div>
+      <p id="formErr" class="text-sm text-[#FF5C5C] mt-5 hidden">${t('fixErrors')}</p>
+      <div class="flex items-center justify-between mt-8">
+        <button id="backBtn" class="btn btn-ghost">${t('back')}</button>
+        <button id="nextBtn" class="btn btn-primary">${state.step===total-1 ? t('submit') : t('next')+' →'}</button>
+      </div>
+    </div></div>`;
+}
+
+function labelHtml(f) { return `<label class="block text-sm font-medium text-gray-200 mb-2">${esc(L(f.label))}${f.req?' <span class="text-accent">*</span>':''}</label>`; }
+function fieldView(f) {
+  const v = state.answers[f.id];
+  const err = `<p class="err-msg text-xs text-[#FF5C5C] mt-1.5 hidden" data-err="${f.id}"></p>`;
+  const ph = f.ph ? `placeholder="${esc(L(f.ph))}"` : '';
+  const wrap = inner => `<div data-field="${f.id}">${inner}${err}</div>`;
+  switch (f.type) {
+    case 'text': case 'email': case 'tel': case 'url': case 'number':
+      return wrap(`${labelHtml(f)}<input class="field" type="${f.type}" data-id="${f.id}" value="${esc(v)}" ${ph} ${f.type==='number'?'min="0"':''}/>`);
+    case 'textarea':
+      return wrap(`${labelHtml(f)}<textarea class="field" rows="3" data-id="${f.id}" ${ph}>${esc(v)}</textarea>`);
+    case 'yesno':
+      return wrap(`${labelHtml(f)}<div class="flex gap-2">${['yes','no'].map(o=>`<span class="chip ${v===o?'on':''}" data-yn="${f.id}" data-val="${o}">${t(o)}</span>`).join('')}</div>`);
+    case 'rating':
+      return wrap(`${labelHtml(f)}<div class="flex gap-2 items-center">${[1,2,3,4,5].map(n=>`<span class="chip w-11 text-center ${Number(v)===n?'on':''}" data-rate="${f.id}" data-val="${n}">${n}</span>`).join('')}<span class="text-xs text-gray-500 ml-2">${t('ratingHint')}</span></div>`);
+    case 'choice': {
+      const cur = v || {}; const sel = cur.val || '';
+      return wrap(`${labelHtml(f)}<div class="flex flex-wrap gap-2">${f.opts.map(o=>`<span class="chip ${sel===o.en?'on':''}" data-choice="${f.id}" data-val="${esc(o.en)}">${esc(L(o))}</span>`).join('')}</div>
+        ${f.other?`<input class="field mt-3" data-other="${f.id}" value="${esc(cur.other||'')}" placeholder="${lang==='fr'?'Autre (précisez)':'Other (specify)'}"/>`:''}`);
+    }
+    case 'multi': {
+      const cur = v || { vals: [], other: '' };
+      return wrap(`${labelHtml(f)}<div class="flex flex-wrap gap-2">${f.opts.map(o=>`<span class="chip ${cur.vals.includes(o.en)?'on':''}" data-multi="${f.id}" data-val="${esc(o.en)}">${esc(L(o))}</span>`).join('')}</div>
+        ${f.other?`<input class="field mt-3" data-other="${f.id}" value="${esc(cur.other||'')}" placeholder="${lang==='fr'?'Autre (précisez)':'Other (specify)'}"/>`:''}`);
+    }
+    case 'services': {
+      const list = state.answers.services && state.answers.services.length ? state.answers.services : [{}];
+      return `<div data-field="services" class="space-y-4">${list.map((sv,i)=>`
+        <div class="border border-line rounded-2xl p-5 bg-ink/40 space-y-4" data-svc="${i}">
+          <div class="flex items-center justify-between"><h3 class="font-display font-bold text-accent">${t('service')} ${i+1}</h3>
+            ${list.length>1?`<button class="text-xs text-gray-500 hover:text-[#FF5C5C]" data-rmsvc="${i}">${t('remove')}</button>`:''}</div>
+          <input class="field" data-svcf="name" data-i="${i}" value="${esc(sv.name)}" placeholder="${lang==='fr'?'Nom du service / produit':'Service / product name'}"/>
+          <textarea class="field" rows="2" data-svcf="strengths" data-i="${i}" placeholder="${lang==='fr'?'Ses points forts':'Its strengths'}">${esc(sv.strengths)}</textarea>
+          <div><div class="text-xs text-gray-500 mb-2">${lang==='fr'?'Niveau de priorité':'Priority level'}</div>
+            <div class="flex gap-2">${[1,2,3].map(p=>`<span class="chip ${Number(sv.priority)===p?'on':''}" data-svcp="${i}" data-val="${p}">${p} – ${[lang==='fr'?'Haute':'High',lang==='fr'?'Moyenne':'Medium',lang==='fr'?'Basse':'Low'][p-1]}</span>`).join('')}</div></div>
+        </div>`).join('')}
+        <button class="btn btn-ghost w-full" id="addSvc">${t('addItem')}</button></div>`;
+    }
+    case 'files': {
+      return wrap(`${labelHtml(f)}
+        <label id="drop" class="dropzone block text-center p-8 cursor-pointer">
+          <input id="fileIn" type="file" multiple class="hidden"/>
+          <div class="text-gray-300 font-medium">${t('dropHere')}</div><div class="text-xs text-gray-500 mt-1">${t('dropHint')}</div>
+        </label>
+        <ul id="fileList" class="mt-3 space-y-1.5 text-sm">${state.files.map((n,i)=>`<li class="flex justify-between bg-ink border border-line rounded-lg px-3 py-2"><span class="truncate">${esc(n)}</span><button class="text-gray-500 hover:text-[#FF5C5C]" data-rmfile="${i}">✕</button></li>`).join('')}</ul>
+        <p class="text-xs text-gray-500 mt-2">${t('filesNote')}</p>`);
+    }
+  }
+  return '';
+}
+
+function bindForm() {
+  const A = state.answers, root = document.getElementById('app');
+  root.querySelectorAll('[data-id]').forEach(el => el.addEventListener('input', () => { A[el.dataset.id] = el.value; el.classList.remove('err'); save(); }));
+  root.querySelectorAll('[data-yn]').forEach(el => el.onclick = () => { A[el.dataset.yn] = el.dataset.val; save(); rerenderKeep(); });
+  root.querySelectorAll('[data-rate]').forEach(el => el.onclick = () => { A[el.dataset.rate] = Number(el.dataset.val); save(); rerenderKeep(); });
+  root.querySelectorAll('[data-choice]').forEach(el => el.onclick = () => { const id = el.dataset.choice; A[id] = { ...(A[id]||{}), val: el.dataset.val }; save(); rerenderKeep(); });
+  root.querySelectorAll('[data-multi]').forEach(el => el.onclick = () => {
+    const id = el.dataset.multi, c = A[id] || { vals: [], other: '' }, val = el.dataset.val;
+    c.vals = c.vals.includes(val) ? c.vals.filter(x=>x!==val) : [...c.vals, val]; A[id] = c; save(); rerenderKeep();
+  });
+  root.querySelectorAll('[data-other]').forEach(el => el.addEventListener('input', () => { const id = el.dataset.other; A[id] = { ...(A[id]||{ vals: [] }), other: el.value }; save(); }));
+  // services
+  root.querySelectorAll('[data-svcf]').forEach(el => el.addEventListener('input', () => { ensureSvc(); A.services[el.dataset.i][el.dataset.svcf] = el.value; save(); }));
+  root.querySelectorAll('[data-svcp]').forEach(el => el.onclick = () => { ensureSvc(); A.services[el.dataset.svcp].priority = Number(el.dataset.val); save(); rerenderKeep(); });
+  root.querySelectorAll('[data-rmsvc]').forEach(el => el.onclick = () => { A.services.splice(Number(el.dataset.rmsvc),1); save(); rerenderKeep(); });
+  const add = document.getElementById('addSvc'); if (add) add.onclick = () => { ensureSvc(); A.services.push({}); save(); rerenderKeep(); };
+  function ensureSvc() { if (!A.services || !A.services.length) A.services = [{}]; }
+  // files
+  const fin = document.getElementById('fileIn'), drop = document.getElementById('drop');
+  if (fin) {
+    const take = files => { [...files].forEach(f => state.files.push(f.name + ' (' + Math.round(f.size/1024) + ' KB)')); save(); rerenderKeep(); };
+    fin.onchange = () => take(fin.files);
+    ['dragover','dragenter'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('drag'); }));
+    ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('drag'); }));
+    drop.addEventListener('drop', e => take(e.dataTransfer.files));
+  }
+  root.querySelectorAll('[data-rmfile]').forEach(el => el.onclick = () => { state.files.splice(Number(el.dataset.rmfile),1); save(); rerenderKeep(); });
+  // nav
+  root.querySelectorAll('[data-jump]').forEach(el => el.onclick = () => { const j = Number(el.dataset.jump); if (j < state.step) { state.step = j; save(); render(); window.scrollTo(0,0); } });
+  document.getElementById('backBtn').onclick = () => { if (state.step === 0) { state.step = -1; } else state.step--; save(); render(); window.scrollTo(0,0); };
+  document.getElementById('nextBtn').onclick = onNext;
+}
+function rerenderKeep() { const y = window.scrollY; render(); window.scrollTo(0, y); }
+
+function validate() {
+  let ok = true;
+  document.querySelectorAll('.err-msg').forEach(e => e.classList.add('hidden'));
+  document.querySelectorAll('.field.err').forEach(e => e.classList.remove('err'));
+  SECTIONS[state.step].fields.forEach(f => {
+    const v = state.answers[f.id]; let msg = '';
+    if (f.req && (v === undefined || String(v).trim() === '')) msg = t('required');
+    else if (f.type === 'email' && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) msg = t('invalidEmail');
+    if (msg) {
+      ok = false;
+      const m = document.querySelector(`[data-err="${f.id}"]`); if (m) { m.textContent = msg; m.classList.remove('hidden'); }
+      const i = document.querySelector(`[data-id="${f.id}"]`); if (i) i.classList.add('err');
+    }
+  });
+  document.getElementById('formErr').classList.toggle('hidden', ok);
+  if (!ok) { const first = document.querySelector('.field.err'); if (first) first.scrollIntoView({ behavior:'smooth', block:'center' }); }
+  return ok;
+}
+
+async function onNext() {
+  if (!validate()) return;
+  if (state.step < SECTIONS.length - 1) { state.step++; save(); render(); window.scrollTo(0,0); return; }
+  await submitForm();
+}
+
+/* =====================================================================
+   PAYLOAD + SUBMISSION
+   ===================================================================== */
+function flat(f) {
+  const v = state.answers[f.id];
+  if (v === undefined || v === null || v === '') return '';
+  if (f.type === 'yesno') return v === 'yes' ? 'Yes / Oui' : 'No / Non';
+  if (f.type === 'rating') return v + ' / 5';
+  if (f.type === 'choice') return [v.val, v.other].filter(Boolean).join(' — ');
+  if (f.type === 'multi') return [...(v.vals||[]), v.other].filter(Boolean).join(', ');
+  return String(v);
+}
+function buildPayload() {
+  const a = state.answers, out = { submitted_at: new Date().toISOString(), form_language: lang, sections: {} };
+  SECTIONS.forEach(s => {
+    const sec = {};
+    s.fields.forEach(f => {
+      if (f.type === 'services') sec.services = (a.services||[]).filter(x => x.name || x.strengths).map(x => ({ name:x.name||'', strengths:x.strengths||'', priority:x.priority||'' }));
+      else if (f.type === 'files') sec.uploaded_file_names = state.files;
+      else sec[f.id] = { question: f.label.en + ' / ' + f.label.fr, answer: flat(f) };
+    });
+    out.sections[s.id] = sec;
+  });
+  return out;
+}
+function payloadToText(p) {
+  let txt = `NEW CLIENT ONBOARDING — ${p.sections.company.company_type.answer || ''}\nSubmitted: ${p.submitted_at} (form language: ${p.form_language})\n\n`;
+  SECTIONS.forEach(s => {
+    txt += `=== ${s.title.en.toUpperCase()} ===\n`;
+    const sec = p.sections[s.id];
+    Object.entries(sec).forEach(([k, v]) => {
+      if (k === 'services') (v.length ? v : []).forEach((x,i)=> txt += `Service ${i+1}: ${x.name} | Priority: ${x.priority} | Strengths: ${x.strengths}\n`);
+      else if (k === 'uploaded_file_names') txt += `Files: ${v.join('; ') || '—'}\n`;
+      else txt += `${v.question}\n  → ${v.answer || '—'}\n`;
+    });
+    txt += '\n';
+  });
+  return txt;
+}
+
+async function submitForm() {
+  const btn = document.getElementById('nextBtn'), errEl = document.getElementById('formErr');
+  btn.disabled = true; btn.textContent = t('sending'); btn.style.opacity = .7;
+  const payload = buildPayload(), message = payloadToText(payload);
+  const company = payload.sections.company;
+  const clientLabel = `${company.contact_name.answer} <${company.contact_email.answer}>`;
+  try {
+    if (CONFIG.EMAIL_PROVIDER === 'web3forms') {
+      if (!CONFIG.WEB3FORMS_KEY || CONFIG.WEB3FORMS_KEY.startsWith('YOUR_')) throw new Error('NOT_CONFIGURED');
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ access_key: CONFIG.WEB3FORMS_KEY, subject: `Onboarding questionnaire — ${company.contact_name.answer}`,
+          from_name: 'sss.marketing onboarding', replyto: company.contact_email.answer, client: clientLabel, message, payload_json: JSON.stringify(payload) })
+      });
+      const j = await res.json(); if (!j.success) throw new Error(j.message || 'SEND_FAILED');
+    } else {
+      const E = CONFIG.EMAILJS;
+      if (!E.PUBLIC_KEY || E.PUBLIC_KEY.startsWith('YOUR_')) throw new Error('NOT_CONFIGURED');
+      const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ service_id: E.SERVICE_ID, template_id: E.TEMPLATE_ID, user_id: E.PUBLIC_KEY,
+          template_params: { to_email: E.TO_EMAIL, subject: `Onboarding questionnaire — ${company.contact_name.answer}`, client: clientLabel, reply_to: company.contact_email.answer, message } })
+      });
+      if (!res.ok) throw new Error(await res.text());
+    }
+    localStorage.removeItem(CONFIG.STORAGE_KEY);
+    window.__lastPayload = payload; submitted = true; render(); window.scrollTo(0,0);
+  } catch (e) {
+    btn.disabled = false; btn.style.opacity = 1; btn.textContent = t('submit');
+    errEl.classList.remove('hidden');
+    errEl.innerHTML = `${t('sendFail')} ${e.message === 'NOT_CONFIGURED' ? t('notConfigured') : esc(e.message)}
+      <button id="dlJson" class="underline ml-2">${t('downloadJson')}</button>`;
+    document.getElementById('dlJson').onclick = () => download(payload);
+    console.error(e);
+  }
+}
+function download(p) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(p, null, 2)], { type: 'application/json' }));
+  a.download = 'sss-onboarding-answers.json'; a.click();
+}
+
+function thanksView() { return `
+  <div class="fade text-center max-w-lg mx-auto mt-16">
+    <div class="w-16 h-16 rounded-full bg-accent/10 border border-accent/40 grid place-items-center mx-auto mb-6">
+      <svg width="28" height="28" fill="none" stroke="#C6FF3D" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+    </div>
+    <h1 class="font-display text-4xl font-bold mb-3">${t('thanksTitle')}</h1>
+    <p class="text-gray-400 text-lg mb-8">${t('thanksSub')}</p>
+    <button id="restart" class="btn btn-ghost">${t('startOver')}</button>
+  </div>`; }
+function bindThanks() { document.getElementById('restart').onclick = () => { state = { step: -1, answers: { ...CONFIG.PREFILL }, files: [] }; submitted = false; render(); }; }
+
+/* INIT */
+document.documentElement.lang = lang;
+document.getElementById('yr').textContent = new Date().getFullYear();
+render();
+</script>
+</body>
+</html>
