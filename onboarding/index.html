@@ -71,8 +71,8 @@ const CONFIG = {
   // EmailJS alternative (https://www.emailjs.com). Template should use {{subject}}, {{client}}, {{message}}.
   EMAILJS: { PUBLIC_KEY: 'YOUR_EMAILJS_PUBLIC_KEY', SERVICE_ID: 'YOUR_SERVICE_ID', TEMPLATE_ID: 'YOUR_TEMPLATE_ID', TO_EMAIL: 'hello@sss.marketing' },
 
-  // Pre-filled values for this client (set to {} for a blank form). Clients can still edit them.
-  PREFILL: { website: 'https://www.prolifte.ca/', phone: '514-323-2533', comp1: 'https://www.techlift.ca/', dest_site: 'https://www.prolifte.ca/' },
+  // Optional pre-filled values, e.g. { website: 'https://client.com' }. Blank so the page works for any client.
+  PREFILL: {},
 
   STORAGE_KEY: 'sss_onboarding_v1',
   SESSION_KEY: 'sss_onboarding_auth'
