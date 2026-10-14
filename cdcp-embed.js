@@ -129,9 +129,27 @@
 
     root.innerHTML="";root.className="cdcp cq";
     root.setAttribute("role","group");root.setAttribute("aria-label",U.label);
-    var grid=node("div","cq-grid"),ctl=node("div","cq-ctl"),sStatus=node("div","cq-status"),sSum=node("div","cq-sum"),sBrk=node("div","cq-brk"),sRest=node("div","cq-rest");
+    var grid=node("div","cq-grid"),ctl=node("div","cq-ctl"),sStatus=node("div","cq-status"),sSum=node("div","cq-sum"),sBrk=node("div","cq-brk"),sDet=node("div","cq-det"),sRest=node("div","cq-rest");
     var sr=node("div","cq-sr");sr.setAttribute("role","status");
-    [ctl,sStatus,sSum,sBrk,sRest].forEach(function(n){grid.appendChild(n);});root.appendChild(grid);root.appendChild(sr);
+    [ctl,sStatus,sSum,sBrk,sDet,sRest].forEach(function(n){grid.appendChild(n);});root.appendChild(grid);root.appendChild(sr);
+
+
+    /* Clinic theming guard: if a brand colour pair is unreadable, fall back to a readable one. */
+    (function(){
+      ["--c-on","--c-ink","--c-good","--c-bad"].forEach(function(p){root.style.removeProperty(p);});
+      var cs=getComputedStyle(root);
+      function rgb(v){if(!v)return null;var e=document.createElement("i");e.style.color=v;root.appendChild(e);var c=getComputedStyle(e).color;root.removeChild(e);
+        var m=c.match(/\d+(\.\d+)?/g);return m&&m.length>=3?[+m[0],+m[1],+m[2]]:null;}
+      function lum(c){var a=c.map(function(v){v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);});return .2126*a[0]+.7152*a[1]+.0722*a[2];}
+      function ratio(a,b){var x=lum(a),y=lum(b),h=Math.max(x,y),l=Math.min(x,y);return (h+.05)/(l+.05);}
+      function best(bg){return ratio([255,255,255],bg)>=ratio([0,0,0],bg)?"#ffffff":"#111111";}
+      function fix(fg,bg,prop,fallback){var f=rgb(cs.getPropertyValue(fg)),b=rgb(cs.getPropertyValue(bg));
+        if(f&&b&&ratio(f,b)<4.5)root.style.setProperty(prop,fallback(b));}
+      fix("--c-on","--c-brand","--c-on",best);       // button text on brand
+      fix("--c-ink","--c-paper","--c-ink",best);     // body text on background
+      fix("--c-good","--c-paper","--c-good",function(){return "#2f6b35";});
+      fix("--c-bad","--c-paper","--c-bad",function(){return "#b3261e";});
+    })();
 
     var rows={};
     function legend(fs,label,infl){fs.appendChild(node("legend",null,'<span>'+esc(label)+'</span><span class="cq-infl">'+esc(infl)+'</span>'));}
@@ -257,13 +275,13 @@
       var key=[oc,A.inc,A.filed,A.appt].join("|");
       var tier=INCOME_TIER[A.inc];
       var title="",detail="",kind="neutral";
-      sRest.innerHTML="";sStatus.innerHTML="";sBrk.innerHTML="";
+      sRest.innerHTML="";sStatus.innerHTML="";sBrk.innerHTML="";sDet.innerHTML="";
       if(oc==="pending"){
         var rem=missing();
         sStatus.appendChild(statusBlock("neutral",U.pendH,DATA?"":U.remain+" "+rem.join(", ")+"."));
         if(DATA){renderSum(c,oc);}else{sSum.innerHTML="";sSum.hidden=true;}
         title=U.pendH;
-        if(DATA&&c&&!c.bad){var dp=node("div","cq-det");renderCostDetail(dp,c,oc);if(dp.childNodes.length)sRest.appendChild(dp);}
+        if(DATA&&c&&!c.bad)renderCostDetail(sDet,c,oc);
       }else if(oc==="insurance"){
         var R=L.results.branchInsurance;kind="good";title=R.headline;
         sStatus.appendChild(statusBlock("good",R.headline,R.microCopy));
@@ -277,8 +295,7 @@
         else{title=U.tierUnconfirmed.replace("{n}",Math.round(TIER_PCT[A.inc]*100));sStatus.appendChild(statusBlock("neutral",nb(title)));}
         if(DATA)renderSum(c,oc);else{sSum.innerHTML="";sSum.hidden=true;}
         if(DATA&&c&&!c.bad&&oc==="tax")sSum.appendChild(textNode("p","cq-sum-note",U.whenIssued));
-        var det=node("div","cq-det");renderCostDetail(det,c,oc);
-        if(det.childNodes.length)sRest.appendChild(det);
+        renderCostDetail(sDet,c,oc);
         // calls to action
         if(oc==="income"){
           var r4=ctaRow();r4.appendChild(ctaLink(withBookingParams(BOOK,{branch:"income",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sRest.appendChild(r4);
@@ -294,7 +311,7 @@
         if(oc==="qualified"){
           var R6=L.results.branchQualified,steps=node("div","cq-steps");
           function strip(x){return x.replace(/^[^—-]*[—-]\s*/,"");}
-          steps.appendChild(stepRow(1,strip(R6.step1Title),R6.step1Body,ctaLink(L.cdcpApplyUrl,R6.step1Cta,{external:true})));
+          steps.appendChild(stepRow(1,strip(R6.step1Title),R6.step1Body,ctaLink(L.cdcpApplyUrl,R6.step1Cta,{external:true,variant:"secondary"})));
           steps.appendChild(stepRow(2,strip(R6.step2Title),R6.step2MicroCopy,ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:tier,utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(7)}),R6.step2Cta)));
           sRest.appendChild(steps);
           var help=node("p","cq-help");help.appendChild(document.createTextNode(strip(R6.step3Title)+" "));
@@ -311,6 +328,7 @@
       var say=title+(c&&!c.bad&&c.known?". "+U.share+" "+nf.format(c.oop):"");
       if(key!==lastKey){sr.textContent=say;lastKey=key;}
       root.setAttribute("data-state",oc);
+      root.classList.toggle("cq-ledger",sBrk.childNodes.length>0);
     }
     update();
     return {state:A,outcome:outcome,cost:cost};

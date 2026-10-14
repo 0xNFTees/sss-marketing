@@ -40,11 +40,11 @@ Set any of these on the container, a parent element, or `:root`. Unset tokens us
 
 | Token | Used for | Default |
 |---|---|---|
-| `--cdcp-brand` | selected options, primary buttons, step numbers | `#1c1812` |
+| `--cdcp-brand` | selected-option ring, primary button | `#1c1812` |
 | `--cdcp-on-brand` | text on brand | `#ffffff` |
 | `--cdcp-ink` | text, strong borders | `#1c1812` |
 | `--cdcp-paper` | widget background | `#ffffff` |
-| `--cdcp-tint` | hover rows | `#f3f1ea` |
+| `--cdcp-tint` | control track, the statement panel | `#f3f1ea` |
 | `--cdcp-accent` | link underline, chevrons | `#b5835a` |
 | `--cdcp-line` | hairlines | `#d8d4c8` |
 | `--cdcp-good` | eligible, RCSD savings | `#2f6b35` |
@@ -54,7 +54,7 @@ Set any of these on the container, a parent element, or `:root`. Unset tokens us
 | `--cdcp-display` | headlines, large figures | inherits from the host |
 | `--cdcp-radius` | corner radius | `0` |
 
-Keep `--cdcp-brand` against `--cdcp-on-brand`, `--cdcp-ink` against `--cdcp-paper`, and `--cdcp-good` and `--cdcp-bad` against `--cdcp-paper`, at 4.5:1 contrast or better.
+The widget checks your colours when it mounts: if button text on `--cdcp-brand`, body text on `--cdcp-paper`, or `--cdcp-good` / `--cdcp-bad` on paper fall below 4.5:1 contrast, it substitutes a readable colour for that one token. Still choose accessible colours: keep `--cdcp-brand` against `--cdcp-on-brand`, `--cdcp-ink` against `--cdcp-paper`, and `--cdcp-good` and `--cdcp-bad` against `--cdcp-paper`, at 4.5:1 contrast or better.
 
 ## Host-page safety
 
