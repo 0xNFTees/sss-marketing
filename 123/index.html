@@ -168,6 +168,8 @@ footer .wrap{border-top:1px solid rgba(254,250,224,.18);padding-top:22px;display
 @media(max-width:480px){.journey{grid-template-columns:1fr}.rows li{flex-direction:column;gap:6px}.btn{width:100%;justify-content:center}}
 @media print{nav,.lang,.drawer{display:none !important}.fade{opacity:1;transform:none}.close{background:none;color:var(--ink)}.close h2,.close p{color:var(--ink)}}
 .dashline{margin-top:20px;padding:14px 18px;background:rgba(204,213,174,.35);border-left:3px solid var(--tan);font-size:15px}
+/* sss.marketing brand mapping for the embeddable calculator (see EMBED.md) */
+.cdcp{--cdcp-brand:var(--ink);--cdcp-on-brand:var(--paper);--cdcp-ink:var(--ink);--cdcp-paper:var(--paper);--cdcp-tint:var(--surface-a);--cdcp-accent:var(--tan);--cdcp-line:var(--rule);--cdcp-good:#4d7c4a;--cdcp-warn:#8a4f1c;--cdcp-font:var(--body);--cdcp-display:var(--display)}
 </style>
 <noscript><style>.fade{opacity:1;transform:none}.drawer{max-height:none}</style></noscript>
 </head>
@@ -392,7 +394,7 @@ footer .wrap{border-top:1px solid rgba(254,250,224,.18);padding-top:22px;display
 <script>
 (function(){
  var root=document.documentElement,open=false,T={fr:"SSS — Pilote 123Dentist",en:"SSS — 123Dentist pilot"};
- function mount(){var q=document.getElementById("quiz");if(q&&window.mountCdcpQuiz){q.innerHTML="";window.mountCdcpQuiz(q,root.lang||"fr");}
+ function mount(){var q=document.getElementById("quiz");if(q&&window.mountCdcpQuiz){q.innerHTML="";window.mountCdcpQuiz(q,root.lang||"fr",{demo:true});}
   var e=document.getElementById("estimator");if(e&&window.mountCdcpEstimator){window.mountCdcpEstimator(e,root.lang||"fr","QC");}}
  function setLang(l){root.setAttribute("data-lang",l);root.lang=l;document.title=T[l];
   document.querySelectorAll(".lang button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.l===l?"true":"false");});

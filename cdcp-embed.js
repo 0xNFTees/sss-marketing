@@ -9,7 +9,7 @@
  * to an explicit mountCdcpQuiz(root, lang) call so the same component can
  * be embedded inside a drawer on other pages.
  *
- * Usage: mountCdcpQuiz(rootEl, "en" | "fr") -- call once each time the
+ * Usage: mountCdcpQuiz(rootEl, "en" | "fr", opts) -- call once each time the
  * host page wants a fresh quiz mounted into an empty container element.
  * Calling it again on a fresh container (e.g. after a language switch)
  * starts the quiz over at step 1, same as the standalone pages' own
@@ -31,16 +31,16 @@
        return not filed  -> tax-filing branch
        else              -> qualified, tier from income band            */
   var UI = {
-    fr: {ins:"Assurance privée", yes:"Oui", no:"Non", inc:"Revenu familial net", incShort:["< 70 k","70–79 k","80–89 k","90 k +"],
+    fr: {label:"Admissibilité au RCSD", insurers:"Assureurs acceptés par la clinique :", ins:"Assurance privée", yes:"Oui", no:"Non", inc:"Revenu familial net", incShort:["< 70 k","70–79 k","80–89 k","90 k +"],
          filed:"Déclaration de revenus produite", notYet:"Pas encore", who:"Pour qui", pendH:"Indiquez votre revenu familial.",
          pendP:"Le résultat s’affiche dès que la tranche est choisie.", matrix:"Soins couverts, autorisation et exclusions"},
-    en: {ins:"Private insurance", yes:"Yes", no:"No", inc:"Net family income", incShort:["< 70k","70–79k","80–89k","90k+"],
+    en: {label:"CDCP eligibility", insurers:"Insurers accepted by the clinic:", ins:"Private insurance", yes:"Yes", no:"No", inc:"Net family income", incShort:["< 70k","70–79k","80–89k","90k+"],
          filed:"Tax return filed", notYet:"Not yet", who:"Who is it for", pendH:"Select your family income.",
          pendP:"The result appears as soon as a band is selected.", matrix:"Covered care, authorization and exclusions"}
   };
   var INCOME_KEYS = ["under70","band70","band80","over90"];
   var INCOME_TIER = {under70:"100",band70:"60",band80:"40"};
-  var TIER_RING_COLOR = {"100":"var(--good,#4d7c4a)","60":"var(--tan)","40":"var(--tan)"};
+  var TIER_RING_COLOR = {"100":"var(--c-good)","60":"var(--c-accent)","40":"var(--c-accent)"};
   var STATUS_KEYS = ["adult","senior","child","dtc"];
   var REDUCE_MOTION = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   var RING_MS = REDUCE_MOTION ? 1 : 450;
@@ -60,15 +60,15 @@
 
   function ctaLink(href,label,opts){
     opts=opts||{};
-    var a=node("a","cta-btn "+(opts.variant==="secondary"?"cta-btn-secondary":"cta-btn-primary"));
+    var a=node("a","cq-cta-btn "+(opts.variant==="secondary"?"cq-cta-btn-secondary":"cq-cta-btn-primary"));
     a.href=href;
     if(opts.external){a.target="_blank";a.rel="noopener noreferrer";}
-    a.innerHTML="<span>"+esc(label)+"</span>"+(opts.external?'<span class="cta-ext" aria-hidden="true">&#8599;</span>':"");
+    a.innerHTML="<span>"+esc(label)+"</span>"+(opts.external?'<span class="cq-cta-ext" aria-hidden="true">&#8599;</span>':"");
     return a;
   }
-  function ctaRow(){return node("div","cta-row");}
-  function headline(text){return textNode("h3","result-headline",text);}
-  function tone(text,t){return node("div","result-badge tone-"+t,'<span class="result-badge-text">'+esc(text)+"</span>");}
+  function ctaRow(){return node("div","cq-cta-row");}
+  function headline(text){return textNode("h3","cq-result-headline",text);}
+  function tone(text,t){return node("div","cq-result-badge cq-tone-"+t,'<span class="cq-result-badge-text">'+esc(text)+"</span>");}
 
   function animateNumber(from,to,duration,onUpdate){
     if(duration<=1){onUpdate(to);return;}
@@ -77,30 +77,30 @@
     requestAnimationFrame(tick);
   }
   function coverageRing(percent,color){
-    var wrap=node("div","ring-wrap"),C=2*Math.PI*26;
-    wrap.innerHTML='<svg width="56" height="56" viewBox="0 0 64 64" class="ring-svg" aria-hidden="true">'+
-      '<circle cx="32" cy="32" r="26" stroke-width="6" fill="none" class="ring-track"></circle>'+
-      '<circle cx="32" cy="32" r="26" stroke-width="6" fill="none" class="ring-fill" stroke="'+color+'" stroke-dasharray="'+C+'" stroke-dashoffset="'+C+'"></circle>'+
-      '</svg><span class="ring-label">0%</span>';
-    var f=wrap.querySelector(".ring-fill"),l=wrap.querySelector(".ring-label");
+    var wrap=node("div","cq-ring-wrap"),C=2*Math.PI*26;
+    wrap.innerHTML='<svg width="56" height="56" viewBox="0 0 64 64" class="cq-ring-svg" aria-hidden="true">'+
+      '<circle cx="32" cy="32" r="26" stroke-width="6" fill="none" class="cq-ring-track"></circle>'+
+      '<circle cx="32" cy="32" r="26" stroke-width="6" fill="none" class="cq-ring-fill" stroke="'+color+'" stroke-dasharray="'+C+'" stroke-dashoffset="'+C+'"></circle>'+
+      '</svg><span class="cq-ring-label">0%</span>';
+    var f=wrap.querySelector(".cq-ring-fill"),l=wrap.querySelector(".cq-ring-label");
     animateNumber(0,percent,RING_MS,function(v){l.textContent=Math.round(v)+"%";f.setAttribute("stroke-dashoffset",C-(v/100)*C);});
     return wrap;
   }
 
   function billingNotice(h,b){
-    return node("div","billing-notice",'<div class="billing-notice-heading">'+esc(h)+'</div><div class="billing-notice-body">'+esc(b)+"</div>");
+    return node("div","cq-billing-notice",'<div class="cq-billing-notice-heading">'+esc(h)+'</div><div class="cq-billing-notice-body">'+esc(b)+"</div>");
   }
   function matrixItem(t,icon,data,open){
-    var d=node("details","matrix-item tone-"+t);d.name="cq-matrix";if(open)d.open=true;
-    d.innerHTML='<summary><span class="matrix-item-icon" aria-hidden="true">'+icon+'</span><span class="matrix-item-head"><span class="matrix-item-title">'+esc(data.title)+
-      '</span><span class="matrix-item-subtitle">'+esc(data.subtitle)+'</span></span><span class="matrix-item-chevron" aria-hidden="true">+</span></summary>'+
-      '<div class="matrix-item-body"><ul>'+data.services.map(function(s){return "<li>"+esc(s)+"</li>";}).join("")+'</ul><p class="matrix-item-note">'+esc(data.note)+"</p></div>";
+    var d=node("details","cq-matrix-item cq-tone-"+t);d.name="matrix";if(open)d.open=true;
+    d.innerHTML='<summary><span class="cq-matrix-item-icon" aria-hidden="true">'+icon+'</span><span class="cq-matrix-item-head"><span class="cq-matrix-item-title">'+esc(data.title)+
+      '</span><span class="cq-matrix-item-subtitle">'+esc(data.subtitle)+'</span></span><span class="cq-matrix-item-chevron" aria-hidden="true">+</span></summary>'+
+      '<div class="cq-matrix-item-body"><ul>'+data.services.map(function(s){return "<li>"+esc(s)+"</li>";}).join("")+'</ul><p class="cq-matrix-item-note">'+esc(data.note)+"</p></div>";
     return d;
   }
   function coverageMatrix(m,label){
-    var wrap=node("details","matrix-all"),sum=node("summary",null,'<span>'+esc(label)+'</span><span class="matrix-item-chevron" aria-hidden="true">+</span>');
+    var wrap=node("details","cq-matrix-all"),sum=node("summary",null,'<span>'+esc(label)+'</span><span class="cq-matrix-item-chevron" aria-hidden="true">+</span>');
     wrap.appendChild(sum);
-    var inner=node("div","matrix");
+    var inner=node("div","cq-matrix");
     inner.appendChild(matrixItem("standard","&#10003;",m.standard,true));
     inner.appendChild(matrixItem("major","!",m.major,false));
     inner.appendChild(matrixItem("excluded","&#215;",m.excluded,false));
@@ -108,26 +108,29 @@
     return wrap;
   }
   function stepRow(n,title,body,cta){
-    var d=node("div","step-card");
-    d.appendChild(node("span","step-num",String(n)));
-    var c=node("div","step-main");
-    c.appendChild(textNode("div","step-title",title));
-    if(body)c.appendChild(textNode("p","step-text",body));
+    var d=node("div","cq-step-card");
+    d.appendChild(node("span","cq-step-num",String(n)));
+    var c=node("div","cq-step-main");
+    c.appendChild(textNode("div","cq-step-title",title));
+    if(body)c.appendChild(textNode("p","cq-step-text",body));
     if(cta)c.appendChild(cta);
     d.appendChild(c);
     return d;
   }
 
-  function mountCdcpQuiz(root,lang){
+  function mountCdcpQuiz(root,lang,opts){
     if(!root)return;
+    opts=opts||{};
     lang=lang==="fr"?"fr":"en";
     var L=CDCP_LABELS[lang],U=UI[lang],id=++uid;
+    var BOOK=opts.bookingUrl||L.bookingUrl;
     var A={ins:"no",inc:null,filed:"yes",who:"adult"};
 
-    root.innerHTML="";root.className="cq";
-    var ctl=node("div","cq-ctl"),out=node("div","cq-out");
+    root.innerHTML="";root.className="cdcp cq";
+    root.setAttribute("role","group");root.setAttribute("aria-label",U.label);
+    var grid=node("div","cq-grid"),ctl=node("div","cq-ctl"),out=node("div","cq-out");
     out.setAttribute("aria-live","polite");
-    root.appendChild(ctl);root.appendChild(out);
+    grid.appendChild(ctl);grid.appendChild(out);root.appendChild(grid);
 
     var rows={};
     function seg(key,label,options,aria){
@@ -150,7 +153,7 @@
     STATUS_KEYS.forEach(function(k){var o=document.createElement("option");o.value=k;o.textContent=L.step4[k];sel.appendChild(o);});
     sel.value=A.who;sel.addEventListener("change",function(){A.who=sel.value;update();});
     wr.appendChild(sel);ctl.appendChild(wr);rows.who=wr;
-    ctl.appendChild(node("p","cq-skip",esc(L.skipPrompt)+' <a href="'+L.bookingUrl+'">'+esc(L.skipBook)+"</a>"));
+    if(opts.demo)ctl.appendChild(node("p","cq-skip",esc(L.skipPrompt)+' <a href="'+esc(BOOK)+'">'+esc(L.skipBook)+"</a>"));
 
     function resolve(){
       if(A.ins==="yes")return {branch:"insurance"};
@@ -159,35 +162,36 @@
       if(A.filed==="no")return {branch:"tax-filing"};
       return {branch:"qualified",tier:INCOME_TIER[A.inc],status:A.who};
     }
-    function setDisabled(fs,off){fs.disabled=off;fs.classList.toggle("is-off",off);}
+    function setDisabled(fs,off){fs.disabled=off;fs.classList.toggle("cq-off",off);}
 
     function buildInsurance(t){
       var R=L.results.branchInsurance;
       t.appendChild(headline(R.headline));t.appendChild(tone(R.banner,"positive"));
-      t.appendChild(textNode("p","result-msg",R.microCopy));
-      var row=ctaRow();row.appendChild(ctaLink(withBookingParams(L.bookingUrl,{branch:"insurance",utm_source:"cdcp-calculator"}),R.primaryCta));t.appendChild(row);
-      if(R.insurers&&R.insurers.length){
-        t.appendChild(textNode("p","insurer-note",R.insurersNote));
-        var p=node("div","insurer-pills");R.insurers.forEach(function(n){p.appendChild(textNode("span","insurer-pill",n));});t.appendChild(p);
+      t.appendChild(textNode("p","cq-result-msg",R.microCopy));
+      var row=ctaRow();row.appendChild(ctaLink(withBookingParams(BOOK,{branch:"insurance",utm_source:"cdcp-calculator"}),R.primaryCta));t.appendChild(row);
+      var list=Array.isArray(opts.insurers)?opts.insurers:(opts.demo?R.insurers:null);
+      if(list&&list.length){
+        t.appendChild(textNode("p","cq-insurer-note",Array.isArray(opts.insurers)?U.insurers:R.insurersNote));
+        var p=node("div","cq-insurer-pills");list.forEach(function(n){p.appendChild(textNode("span","cq-insurer-pill",String(n)));});t.appendChild(p);
       }
     }
     function buildIncome(t){
       var R=L.results.branchIncome;
       t.appendChild(headline(R.headline));t.appendChild(tone(R.banner,"neutral"));
-      t.appendChild(textNode("p","result-msg",R.microCopy));
-      var row=ctaRow();row.appendChild(ctaLink(withBookingParams(L.bookingUrl,{branch:"income",utm_source:"cdcp-calculator"}),R.primaryCta));t.appendChild(row);
+      t.appendChild(textNode("p","cq-result-msg",R.microCopy));
+      var row=ctaRow();row.appendChild(ctaLink(withBookingParams(BOOK,{branch:"income",utm_source:"cdcp-calculator"}),R.primaryCta));t.appendChild(row);
     }
     function buildTax(t){
       var R=L.results.branchTaxFiling;
       t.appendChild(headline(R.headline));t.appendChild(tone(R.banner,"warning"));
-      t.appendChild(textNode("p","result-msg",R.microCopy));
+      t.appendChild(textNode("p","cq-result-msg",R.microCopy));
       var row=ctaRow();
       row.appendChild(ctaLink(L.craMyAccountUrl,R.primaryCta,{external:true}));
-      row.appendChild(ctaLink(withBookingParams(L.bookingUrl,{branch:"tax-filing",utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(4)}),R.secondaryCta,{variant:"secondary"}));
+      row.appendChild(ctaLink(withBookingParams(BOOK,{branch:"tax-filing",utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(4)}),R.secondaryCta,{variant:"secondary"}));
       t.appendChild(row);
     }
     function buildPending(t){
-      t.appendChild(headline(U.pendH));t.appendChild(textNode("p","result-msg",U.pendP));
+      t.appendChild(headline(U.pendH));t.appendChild(textNode("p","cq-result-msg",U.pendP));
     }
     function buildQualified(t,r){
       var R=L.results.branchQualified,pct=Number(r.tier);
@@ -196,17 +200,17 @@
       hero.appendChild(coverageRing(pct,TIER_RING_COLOR[r.tier]));
       hero.appendChild(node("div","cq-hero-t",'<div class="cq-hero-h">'+esc(L.results["tier"+r.tier+"Badge"].replace(/ %/g,"\u00a0%"))+'</div><div class="cq-hero-s">'+esc(L.results.tierRingCaption)+"</div>"));
       t.appendChild(hero);
-      if(r.status==="child"&&L.results.childRamqNote)t.appendChild(textNode("p","result-msg",L.results.childRamqNote));
+      if(r.status==="child"&&L.results.childRamqNote)t.appendChild(textNode("p","cq-result-msg",L.results.childRamqNote));
       t.appendChild(billingNotice(L.results.billingNoticeHeading,L.results.billingNoticeBody));
       var steps=node("div","cq-steps");
       steps.appendChild(stepRow(1,R.step1Title.replace(/^[^—-]*[—-]\s*/,""),R.step1Body,ctaLink(L.cdcpApplyUrl,R.step1Cta,{external:true})));
       steps.appendChild(stepRow(2,R.step2Title.replace(/^[^—-]*[—-]\s*/,""),R.step2MicroCopy,
-        ctaLink(withBookingParams(L.bookingUrl,{branch:"qualified",cdcpTier:r.tier,utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(7)}),R.step2Cta)));
+        ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:r.tier,utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(7)}),R.step2Cta)));
       steps.appendChild(stepRow(3,R.step3Title.replace(/^[^—-]*[—-]\s*/,""),null,
-        ctaLink(withBookingParams(L.bookingUrl,{branch:"qualified-help",utm_source:"cdcp-calculator"}),R.step3Cta,{variant:"secondary"})));
+        ctaLink(withBookingParams(BOOK,{branch:"qualified-help",utm_source:"cdcp-calculator"}),R.step3Cta,{variant:"secondary"})));
       t.appendChild(steps);
       t.appendChild(coverageMatrix(L.results.coverageMatrix,U.matrix));
-      t.appendChild(textNode("div","result-source",L.results.sourceNote));
+      t.appendChild(textNode("div","cq-result-source",L.results.sourceNote));
     }
 
     var lastKey=null;

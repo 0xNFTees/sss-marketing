@@ -1,47 +1,90 @@
 /*
- * cdcp-estimator.css -- single-panel out-of-pocket calculator.
- * Clinic branding: override these on the host (or on .est) -- nothing else needs to change.
- *   --est-accent  highlight / bar color      (default: host --tan)
- *   --est-tint    result panel background    (default: host --sage, softened)
- *   --est-ink     text color                 (default: host --ink)
- *   --est-paper   card background            (default: host --paper)
- *   --est-line    hairlines                  (default: host --rule)
- *   --est-font / --est-display  body / number font
+ * cdcp-estimator.css -- appointment out-of-pocket calculator.
+ * Mount with mountCdcpEstimator(el, "fr"|"en", "QC", opts). Theme with the
+ * --cdcp-* tokens below; the legacy --est-ink/-paper/-accent/-line/-font/
+ * -display names still work as fallbacks. See EMBED.md.
  */
-.est{--a:var(--est-accent,var(--tan,#d4a373));--t:var(--est-tint,rgba(204,213,174,.38));--i:var(--est-ink,var(--ink,#1c1812));--p:var(--est-paper,var(--paper,#fefae0));--l:var(--est-line,var(--rule,rgba(28,24,18,.15)));
- display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:var(--p);border:1px solid var(--l);color:var(--i);font-family:var(--est-font,var(--body,inherit));text-align:left}
-.est-ctl{padding:clamp(16px,3vw,28px);display:flex;flex-direction:column;gap:20px}
-.est-fs{border:0;margin:0;padding:0;min-width:0}
-.est-fs legend{font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.7;padding:0;margin-bottom:6px}
-.est-list{display:flex;flex-direction:column;border:1px solid var(--l)}
-.est-opt{position:relative;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 14px;min-height:44px;font-size:14px;cursor:pointer;border-bottom:1px solid var(--l);transition:background .15s}
-.est-opt:last-child{border-bottom:0}
-.est-opt input,.est-segopt input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
-.est-opt .f{opacity:.7;font-size:13px;white-space:nowrap}
-.est-opt:hover{background:var(--t)}
-.est-opt:has(input:checked){background:var(--i);color:var(--p)}
-.est-opt:has(input:checked) .f{opacity:.75}
-.est-seg{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--l)}
-.est-segopt{position:relative;display:flex;align-items:center;justify-content:center;min-height:44px;font-size:12.5px;word-spacing:-.06em;white-space:nowrap;border-right:1px solid var(--l);cursor:pointer;transition:background .15s;text-align:center;padding:0 4px}
-.est-segopt:last-child{border-right:0}
-.est-segopt:hover{background:var(--t)}
-.est-segopt:has(input:checked){background:var(--i);color:var(--p)}
-.est :has(>input:focus-visible){outline:0;box-shadow:inset 0 0 0 2px var(--p),inset 0 0 0 4px var(--i)}
-.est-err{padding:16px;border:1px solid var(--l);font-size:13px;line-height:1.5;color:#8a4f1c}
-.est-out{background:var(--t);padding:clamp(16px,3vw,28px);display:flex;flex-direction:column;gap:12px}
-.est-lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.7}
-.est-big{font-family:var(--est-display,var(--display,inherit));font-weight:500;font-size:clamp(40px,6vw,56px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:-4px}
-.est-bar{height:4px;background:rgba(28,24,18,.12);overflow:hidden}
-.est-bar i{display:block;height:100%;width:0;background:var(--a);transition:width .3s var(--ease,ease)}
-.est-dl{margin:0;font-size:13px}
-.est-dl div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;border-bottom:1px solid var(--l)}
-.est-dl dt{opacity:.8}.est-dl dd{margin:0;white-space:nowrap;text-align:right}
-.est-incl,.est-n,.est-why{font-size:12px;line-height:1.5;margin:0}
-.est-incl{opacity:.8}.est-incl b{font-weight:600}
-.est-n{color:#8a4f1c}.est-n[hidden]{display:none}
-.est-why{opacity:.72}
-.est-foot{margin-top:auto;display:flex;flex-direction:column;gap:8px;font-size:11px;opacity:.9}
-.est-foot span{opacity:.72;line-height:1.45}
-.est-foot a{align-self:flex-start;padding:12px 0;font-size:13px;text-decoration:underline;text-decoration-color:var(--a);text-decoration-thickness:1px;text-underline-offset:4px}
-@media(max-width:720px){.est{grid-template-columns:1fr}.est-ctl{gap:16px}}
-@media(prefers-reduced-motion:reduce){.est *{transition:none!important}}
+/* ---- shared base (identical in cdcp-embed.css and cdcp-estimator.css) ----
+   Public theme tokens. Set any of these on the container, a parent, or :root.
+   Unset tokens fall back to the neutral defaults on the right.
+     --cdcp-brand      selected states, primary buttons, step numbers   #1c1812
+     --cdcp-on-brand   text on brand                                    #ffffff
+     --cdcp-ink        text and strong borders                          #1c1812
+     --cdcp-paper      widget background                                #ffffff
+     --cdcp-tint       hover rows, result panel                         #f3f1ea
+     --cdcp-accent     coverage ring, savings bar, link underline       #b5835a
+     --cdcp-line       hairlines                                        #d8d4c8
+     --cdcp-good       positive tier / confirmation                     #3f6f3d
+     --cdcp-warn       notices and warning text                         #8a4f1c
+     --cdcp-font       body font                                        inherit
+     --cdcp-display    headline and large-number font                   inherit
+     --cdcp-radius     corner radius                                    0
+   All styles are scoped to .cdcp so host-page rules cannot restyle the
+   widget and its class names cannot leak into the host page. */
+.cdcp{
+  --c-brand:var(--cdcp-brand,var(--cdcp-ink,#1c1812));--c-on:var(--cdcp-on-brand,var(--cdcp-paper,#fff));
+  --c-ink:var(--cdcp-ink,var(--est-ink,#1c1812));--c-paper:var(--cdcp-paper,var(--est-paper,#fff));
+  --c-tint:var(--cdcp-tint,#f3f1ea);--c-accent:var(--cdcp-accent,var(--est-accent,#b5835a));
+  --c-line:var(--cdcp-line,var(--est-line,#d8d4c8));--c-good:var(--cdcp-good,#3f6f3d);--c-warn:var(--cdcp-warn,#8a4f1c);
+  --c-font:var(--cdcp-font,var(--est-font,inherit));--c-display:var(--cdcp-display,var(--est-display,inherit));--c-r:var(--cdcp-radius,0px);
+  display:block;box-sizing:border-box;width:100%;max-width:100%;min-width:0;container-type:inline-size;
+  background:var(--c-paper);color:var(--c-ink);border:1px solid var(--c-line);border-radius:var(--c-r);overflow:clip;
+  font-family:var(--c-font);font-size:14px;font-weight:400;font-style:normal;line-height:1.5;letter-spacing:normal;
+  text-align:left;text-transform:none;text-indent:0;word-spacing:normal;-webkit-text-size-adjust:100%;
+}
+.cdcp *,.cdcp *::before,.cdcp *::after{box-sizing:border-box}
+.cdcp :where(div,span,p,h3,ul,li,dl,dt,dd,fieldset,legend,label,details,summary,a,button,select,input){
+  margin:0;padding:0;font:inherit;letter-spacing:inherit;text-transform:none;text-align:inherit;color:inherit;float:none;
+  background:none;border:0;border-radius:0;box-shadow:none;text-shadow:none;max-width:none;min-width:0;position:static;
+}
+.cdcp :where(ul){list-style:none}
+.cdcp :where(a){text-decoration:none;cursor:pointer}
+.cdcp :where(button,select,input){-webkit-appearance:none;appearance:none}
+.cdcp :where(legend){float:none;width:auto}
+.cdcp :where(p,span,a,li,dd,dt,div){overflow-wrap:anywhere}
+
+.cdcp-est .est-grid{display:grid;grid-template-columns:minmax(0,1fr)}
+.cdcp-est .est-ctl{padding:16px;display:flex;flex-direction:column;gap:16px}
+.cdcp-est .est-out{padding:16px;display:flex;flex-direction:column;gap:12px;background:var(--c-tint);min-width:0}
+@container (min-width:560px){
+  .cdcp-est .est-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .cdcp-est .est-ctl,.cdcp-est .est-out{padding:24px}
+  .cdcp-est .est-ctl{gap:20px}
+}
+.cdcp-est .est-fs{display:block;min-width:0}
+.cdcp-est .est-fs legend{display:block;margin-bottom:6px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+.cdcp-est .est-list{display:flex;flex-direction:column;border:1px solid var(--c-line);border-radius:var(--c-r);overflow:clip}
+.cdcp-est .est-opt{position:relative;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 14px;min-height:44px;font-size:14px;cursor:pointer;border-bottom:1px solid var(--c-line);transition:background-color .15s}
+.cdcp-est .est-opt:last-child{border-bottom:0}
+.cdcp-est .est-opt .est-t{min-width:0}
+.cdcp-est .est-opt input,.cdcp-est .est-segopt input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.cdcp-est .est-opt .est-f{flex:none;opacity:.75;font-size:13px;white-space:nowrap}
+.cdcp-est .est-opt:hover{background:var(--c-tint)}
+.cdcp-est .est-opt:has(input:checked){background:var(--c-brand);color:var(--c-on)}
+.cdcp-est .est-opt:has(input:checked) .est-f{opacity:.85}
+.cdcp-est .est-seg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--c-ink);border-radius:var(--c-r);overflow:clip}
+.cdcp-est .est-segopt{position:relative;display:flex;align-items:center;justify-content:center;min-height:44px;padding:0 4px;font-size:12.5px;white-space:nowrap;border-right:1px solid var(--c-line);cursor:pointer;text-align:center;transition:background-color .15s}
+.cdcp-est .est-segopt:last-child{border-right:0}
+.cdcp-est .est-segopt:hover{background:var(--c-tint)}
+.cdcp-est .est-segopt:has(input:checked){background:var(--c-brand);color:var(--c-on)}
+.cdcp-est :has(>input:focus-visible){box-shadow:inset 0 0 0 2px var(--c-paper),inset 0 0 0 4px var(--c-ink)}
+.cdcp-est .est-lbl{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+.cdcp-est .est-big{margin-top:-4px;font-family:var(--c-display);font-weight:500;font-size:clamp(36px,10cqw,56px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;overflow-wrap:normal}
+.cdcp-est .est-bar{height:4px;background:color-mix(in srgb,var(--c-ink) 12%,transparent);overflow:hidden;border-radius:var(--c-r)}
+.cdcp-est .est-bar i{display:block;height:100%;width:0;background:var(--c-accent);transition:width .3s ease}
+.cdcp-est .est-dl{font-size:13px}
+.cdcp-est .est-dl>div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;border-bottom:1px solid var(--c-line)}
+.cdcp-est .est-dl dt{opacity:.85}
+.cdcp-est .est-dl dd{white-space:nowrap;text-align:right}
+.cdcp-est .est-incl,.cdcp-est .est-n,.cdcp-est .est-why{font-size:12px;line-height:1.5}
+.cdcp-est .est-incl{opacity:.88}
+.cdcp-est .est-incl b{font-weight:600}
+.cdcp-est .est-n{color:var(--c-warn)}
+.cdcp-est .est-n[hidden]{display:none}
+.cdcp-est .est-why{opacity:.78}
+.cdcp-est .est-foot{margin-top:auto;display:flex;flex-direction:column;gap:8px;font-size:11px}
+.cdcp-est .est-foot span{opacity:.78;line-height:1.45}
+.cdcp-est .est-foot a{align-self:flex-start;padding:12px 0;font-size:13px;font-weight:600;text-decoration:underline;text-decoration-color:var(--c-accent);text-decoration-thickness:1px;text-underline-offset:4px}
+.cdcp-est .est-foot a:focus-visible{outline:2px solid var(--c-ink);outline-offset:2px}
+.cdcp.est-err{padding:16px;font-size:13px;line-height:1.5;color:var(--c-warn)}
+@media(prefers-reduced-motion:reduce){.cdcp-est *{transition:none!important}}

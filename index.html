@@ -1082,6 +1082,8 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   .container{max-width:100%;padding:0 12pt}
   footer{padding:24pt 0 0 0;border-top:1pt solid #000}
 }
+/* sss.marketing brand mapping for the embeddable calculator (see EMBED.md) */
+.cdcp{--cdcp-brand:var(--ink);--cdcp-on-brand:var(--paper);--cdcp-ink:var(--ink);--cdcp-paper:var(--paper);--cdcp-tint:var(--surface-a);--cdcp-accent:var(--tan);--cdcp-line:var(--rule);--cdcp-good:#4d7c4a;--cdcp-warn:#8a4f1c;--cdcp-font:var(--body);--cdcp-display:var(--display)}
 </style>
 <link rel="stylesheet" href="/cdcp-embed.css">
 </head>
@@ -1688,7 +1690,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     detailEl.innerHTML=html;detailEl.classList.add("open");
     detailEl.classList.toggle("has-quiz",id==='s5');
     document.getElementById("svcDetailClose").addEventListener("click",closeSvc);
-    if(id==='s5'&&window.mountCdcpQuiz)window.mountCdcpQuiz(document.getElementById('cdcpQuizHome'),lang);
+    if(id==='s5'&&window.mountCdcpQuiz)window.mountCdcpQuiz(document.getElementById('cdcpQuizHome'),lang,{demo:true});
   }
   function closeSvc(){
     detailEl.classList.remove("open");

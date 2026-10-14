@@ -1,6 +1,6 @@
 /*
  * cdcp-estimator.js -- 3-step appointment estimator (CDCP / RCSD vs provincial fee guide).
- * Usage: mountCdcpEstimator(rootEl, "fr"|"en", "QC")
+ * Usage: mountCdcpEstimator(rootEl, "fr"|"en", "QC", {bookingUrl})
  * Data: window.CDCP_PROVINCES[code] = {label, guide, procedures:[...], packages:[...]}
 
  */
@@ -32,13 +32,13 @@ var PK=[
   en:["Complete denture","Standard complete denture, one arch"],
   nf:"Frais de laboratoire en sus.",ne:"Lab fees billed extra."}];
 var T={
- fr:{appt:"Rendez-vous",inc:"Revenu net du ménage",res:"Votre part estimée",std:"Tarif standard (ACDQ 2026)",cov:"Le RCSD couvre",incl:"Inclus",
+ fr:{label:"Estimation du coût du rendez-vous",appt:"Rendez-vous",inc:"Revenu net du ménage",res:"Votre part estimée",std:"Tarif standard (ACDQ 2026)",cov:"Le RCSD couvre",incl:"Inclus",
   why:"Pourquoi pas 0 $ ? La plupart des dentistes facturent selon le guide de l’ACDQ, alors que le RCSD verse des montants fixes. Vous payez la différence.",
   cvg:"Couverture RCSD",inel:"Non admissible au RCSD à ce revenu : tarif complet.",
   pre:"Préautorisation du RCSD requise.",lab:"Frais de laboratoire en sus.",excl:"Non couvert par le RCSD.",
   disc:"Estimation seulement. Chaque clinique fixe ses tarifs. Limites annuelles et frais de laboratoire non inclus.",cta:"Parler à la clinique",href:"/#contact",
   short:["< 70 k","70–79 k","80–89 k","90 k +"]},
- en:{appt:"Appointment",inc:"Net household income",res:"Your estimated share",std:"Standard fee (ACDQ 2026)",cov:"CDCP covers",incl:"Includes",
+ en:{label:"Appointment cost estimate",appt:"Appointment",inc:"Net household income",res:"Your estimated share",std:"Standard fee (ACDQ 2026)",cov:"CDCP covers",incl:"Includes",
   why:"Why not $0? Most dentists charge the ACDQ fee guide, while CDCP pays fixed amounts. You pay the difference.",
   cvg:"CDCP coverage",inel:"Not eligible for CDCP at this income: full fee.",
   pre:"CDCP pre-authorization required.",lab:"Lab fee billed extra.",excl:"Not covered by CDCP.",
@@ -46,18 +46,19 @@ var T={
   short:["< 70k","70–79k","80–89k","90k +"]}};
 function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
 var uid=0;
-window.mountCdcpEstimator=function(root,lang,prov){
- lang=lang==="en"?"en":"fr";var L=T[lang],P=(window.CDCP_PROVINCES||{})[prov||"QC"];if(!P){root.className="est-err";root.setAttribute("role","alert");root.textContent=lang==="en"?"Fee data is unavailable. Please contact the clinic for an estimate.":"Les tarifs sont indisponibles. Communiquez avec la clinique pour une estimation.";return}
+window.mountCdcpEstimator=function(root,lang,prov,opts){
+ if(!root)return;opts=opts||{};
+ lang=lang==="en"?"en":"fr";var L=T[lang],P=(window.CDCP_PROVINCES||{})[prov||"QC"];if(!P){root.className="cdcp cdcp-est est-err";root.setAttribute("role","alert");root.textContent=lang==="en"?"Fee data is unavailable. Please contact the clinic for an estimate.":"Les tarifs sont indisponibles. Communiquez avec la clinique pour une estimation.";return}
  var byCode={};P.procedures.forEach(function(p){byCode[p.code]=p});
  var nf=new Intl.NumberFormat(lang==="fr"?"fr-CA":"en-CA",{style:"currency",currency:"CAD",minimumFractionDigits:2});
  var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches;
  var st={pk:0,tier:0},id=++uid,shown=0;
- root.innerHTML="";root.className="est";
- var ctl=el("div","est-ctl"),out=el("div","est-out");root.appendChild(ctl);root.appendChild(out);
+ root.innerHTML="";root.className="cdcp cdcp-est";root.setAttribute("role","group");root.setAttribute("aria-label",L.label);
+ var grid=el("div","est-grid"),ctl=el("div","est-ctl"),out=el("div","est-out");grid.appendChild(ctl);grid.appendChild(out);root.appendChild(grid);
  // appointment radios
  var f1=el("fieldset","est-fs",'<legend>'+L.appt+'</legend>'),list=el("div","est-list");
  PK.forEach(function(p,i){var tot=0;p.items.forEach(function(it){tot+=byCode[it[0]].acdqFee2026*it[1]});
-  var lb=el("label","est-opt",'<input type="radio" name="ea'+id+'" '+(i===0?"checked":"")+'><span class="t">'+p[lang][0]+'</span><span class="f">'+nf.format(tot)+'</span>');
+  var lb=el("label","est-opt",'<input type="radio" name="ea'+id+'" '+(i===0?"checked":"")+'><span class="est-t">'+p[lang][0]+'</span><span class="est-f">'+nf.format(tot)+'</span>');
   lb.firstChild.addEventListener("change",function(){st.pk=i;update()});list.appendChild(lb)});
  f1.appendChild(list);ctl.appendChild(f1);
  // income segmented
@@ -67,9 +68,9 @@ window.mountCdcpEstimator=function(root,lang,prov){
  f2.appendChild(seg);ctl.appendChild(f2);
  // output
  out.innerHTML='<div class="est-lbl">'+L.res+'</div><div class="est-big" aria-live="polite"></div><div class="est-bar" aria-hidden="true"><i></i></div>'+
-  '<dl class="est-dl"><div><dt>'+L.std+'</dt><dd data-k="fee"></dd></div><div><dt>'+L.cov+' <span class="pct"></span></dt><dd data-k="cov"></dd></div></dl>'+
-  '<p class="est-incl"></p><p class="est-n"></p><p class="est-why">'+L.why+'</p><div class="est-foot"><span>'+L.disc+'</span><a href="'+L.href+'">'+L.cta+'</a></div>';
- var big=out.querySelector(".est-big"),barI=out.querySelector(".est-bar i"),kF=out.querySelector('[data-k=fee]'),kC=out.querySelector('[data-k=cov]'),pc=out.querySelector(".pct"),incl=out.querySelector(".est-incl"),nn=out.querySelector(".est-n");
+  '<dl class="est-dl"><div><dt>'+L.std+'</dt><dd data-k="fee"></dd></div><div><dt>'+L.cov+' <span class="est-pct"></span></dt><dd data-k="cov"></dd></div></dl>'+
+  '<p class="est-incl"></p><p class="est-n"></p><p class="est-why">'+L.why+'</p><div class="est-foot"><span>'+L.disc+'</span><a href="'+String(opts.bookingUrl||L.href).replace(/"/g,"&quot;")+'">'+L.cta+'</a></div>';
+ var big=out.querySelector(".est-big"),barI=out.querySelector(".est-bar i"),kF=out.querySelector('[data-k=fee]'),kC=out.querySelector('[data-k=cov]'),pc=out.querySelector(".est-pct"),incl=out.querySelector(".est-incl"),nn=out.querySelector(".est-n");
  function calc(){var pk=PK[st.pk],tp=TIERS[st.tier].pct,fee=0,cov=0,pre=false,labf=false,excl=false;
   pk.items.forEach(function(it){var p=byCode[it[0]];if(!p)return;var q=it[1];fee+=p.acdqFee2026*q;
    var c=p.isCoveredByCDCP?Math.min(p.cdcpGridFee2026*tp,p.acdqFee2026):0;cov+=c*q;
