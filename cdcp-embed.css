@@ -12,7 +12,7 @@
      --cdcp-ink        text and strong borders                          #1c1812
      --cdcp-paper      widget background                                #ffffff
      --cdcp-tint       hover rows, result panel                         #f3f1ea
-     --cdcp-accent     coverage ring, savings bar, link underline       #b5835a
+     --cdcp-accent     link underlines       #b5835a
      --cdcp-line       hairlines                                        #d8d4c8
      --cdcp-good       eligible, savings, confirmation                  #2f6b35
      --cdcp-bad        not eligible, extra costs, blockers              #b3261e
@@ -62,7 +62,7 @@
   .cdcp .cq-ctl{grid-row:1/4;grid-column:1;display:flex;flex-direction:column;gap:12px;border-bottom:0;padding:20px 24px;align-self:start;position:sticky;top:12px}
   .cdcp .cq-status{grid-column:2/4;grid-row:1;padding:20px 24px 0;border-left:1px solid var(--c-line)}
   .cdcp .cq-sum{grid-column:2;grid-row:2;position:static;margin:0;padding:14px 12px 4px 24px;border:0;border-left:1px solid var(--c-line)}
-  .cdcp .cq-brk{grid-column:3;grid-row:2;align-self:end;padding:0 24px 0 0}
+  .cdcp .cq-brk{grid-column:3;grid-row:2;align-self:end;padding:0 24px 0 10px}
   .cdcp .cq-rest{grid-column:2/4;grid-row:3;padding:4px 24px 20px;border-left:1px solid var(--c-line);min-height:90px}
   .cdcp .cq-big{font-size:clamp(28px,calc((100cqw - 320px) / 2 * .16),46px)}
   .cdcp .cq-skip{display:block}
@@ -71,9 +71,9 @@
 /* ---- controls ---- */
 .cdcp .cq-row{display:flex;flex-direction:column;min-width:0}
 .cdcp .cq-row>.cq-seg,.cdcp .cq-row>.cq-select{margin-top:auto}
-.cdcp .cq-row legend{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;column-gap:8px;width:100%;margin-bottom:6px}
+.cdcp .cq-row legend{display:flex;flex-direction:column;gap:1px;width:100%;margin-bottom:6px}
 .cdcp .cq-row legend>span:first-child{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
-.cdcp .cq-infl{font-size:11.5px;opacity:.75}
+.cdcp .cq-infl{font-size:12px;line-height:1.35;opacity:.75}
 .cdcp .cq-row.cq-off{opacity:.4}
 .cdcp .cq-seg{display:grid;border:1px solid var(--c-ink);border-radius:var(--c-r);overflow:clip}
 .cdcp .cq-seg-2{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -94,14 +94,13 @@
 .cdcp .cq-skip a{border-bottom:1px solid var(--c-accent)}
 
 /* ---- status: green = eligible / good news, red = not eligible / blocker ---- */
-.cdcp .cq-status-in{padding:0 0 0 12px;border-left:3px solid var(--c-line);animation:cdcpIn .14s ease-out}
+.cdcp .cq-status-in{padding:0 0 0 12px;border-left:3px solid var(--c-line);}
 .cdcp .cq-status-in.cq-good{border-left-color:var(--c-good)}
 .cdcp .cq-status-in.cq-bad{border-left-color:var(--c-bad)}
 .cdcp .cq-status-title{font-family:var(--c-display);font-weight:500;font-size:clamp(17px,4.4cqw,20px);line-height:1.3;letter-spacing:-.01em;text-wrap:balance}
 .cdcp .cq-status-in.cq-good .cq-status-title{color:var(--c-good)}
 .cdcp .cq-status-in.cq-bad .cq-status-title{color:var(--c-bad)}
 .cdcp .cq-status-detail{margin-top:6px;font-size:13px;line-height:1.55;opacity:.88}
-@keyframes cdcpIn{from{opacity:0}to{opacity:1}}
 .cdcp .cq-good-t{color:var(--c-good)}
 .cdcp .cq-bad-t{color:var(--c-bad)}
 .cdcp .cq-warn-t{color:var(--c-warn)}
@@ -109,9 +108,7 @@
 /* ---- the number ---- */
 .cdcp .cq-lbl{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
 .cdcp .cq-big{margin-top:2px;font-family:var(--c-display);font-weight:500;font-size:clamp(34px,10cqw,52px);line-height:1.05;letter-spacing:-.02em;font-variant-numeric:tabular-nums;overflow-wrap:normal}
-.cdcp .cq-big-empty{opacity:.35}
-.cdcp .cq-bar{margin-top:8px;height:4px;background:color-mix(in srgb,var(--c-ink) 12%,transparent);overflow:hidden;border-radius:var(--c-r)}
-.cdcp .cq-bar i{display:block;height:100%;width:0;background:var(--c-good);transition:width .25s ease}
+.cdcp .cq-big-empty{display:none}
 .cdcp .cq-sum-note{margin-top:6px;font-size:12.5px;opacity:.8}
 .cdcp .cq-dl{font-size:13px}
 .cdcp .cq-dl>div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:7px 0;border-bottom:1px solid var(--c-line)}
@@ -122,7 +119,7 @@
 .cdcp .cq-note{margin-top:8px;font-size:12px;line-height:1.5}
 .cdcp .cq-cta-row{margin-top:16px;display:flex;flex-wrap:wrap;gap:12px}
 .cdcp .cq-cta-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;max-width:100%;padding:10px 16px;border-radius:var(--c-r);
-  font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-align:center;line-height:1.3;transition:background-color .15s,color .15s,box-shadow .15s}
+  font-size:13px;font-weight:600;text-align:center;line-height:1.3}
 .cdcp .cq-cta-btn-primary{background:var(--c-brand);color:var(--c-on)}
 .cdcp .cq-cta-btn-primary:hover{background:var(--c-tint);color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-ink)}
 .cdcp .cq-cta-btn-secondary{border:1px solid var(--c-line)}
@@ -133,17 +130,20 @@
 .cdcp .cq-insurer-pills{margin-top:8px;display:flex;flex-wrap:wrap;gap:8px}
 .cdcp .cq-insurer-pill{padding:6px 12px;border:1px solid var(--c-line);border-radius:var(--c-r);font-size:12px}
 .cdcp .cq-billing-notice{margin-top:12px;padding-top:10px;border-top:1px solid var(--c-line);font-size:12px;line-height:1.5;opacity:.9}
-.cdcp .cq-billing-notice b{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.cdcp .cq-billing-notice b{font-weight:700}
 .cdcp .cq-steps{margin-top:12px;display:grid;grid-template-columns:minmax(0,1fr);border-top:1px solid var(--c-line)}
-.cdcp .cq-step-card{display:grid;grid-template-columns:20px minmax(0,1fr);gap:10px;padding:10px 0;border-bottom:1px solid var(--c-line)}
-.cdcp .cq-step-num{width:20px;height:20px;display:flex;align-items:center;justify-content:center;background:var(--c-brand);color:var(--c-on);border-radius:var(--c-r);font-size:11px;font-weight:700}
+.cdcp .cq-step-card{display:flex;flex-direction:column;padding:12px 0}
+.cdcp .cq-step-card+.cq-step-card{border-top:1px solid var(--c-line)}
+.cdcp .cq-step-main{display:flex;flex-direction:column;flex:1}
+.cdcp .cq-step-num{display:inline-block;min-width:18px;opacity:.55;font-variant-numeric:tabular-nums}
 .cdcp .cq-step-title{font-size:13.5px;font-weight:700}
-.cdcp .cq-step-text{margin-top:2px;font-size:12.5px;line-height:1.5;opacity:.88}
-.cdcp .cq-step-main .cq-cta-btn{margin-top:8px;min-height:44px;padding:8px 12px;font-size:11.5px}
+.cdcp .cq-step-text{margin:2px 0 10px 18px;font-size:12.5px;line-height:1.5;opacity:.88}
+.cdcp .cq-step-main .cq-cta-btn{margin-top:auto;width:100%;min-height:44px;padding:8px 12px}
 .cdcp .cq-help{margin-top:8px;font-size:12.5px}
-.cdcp .cq-help a{font-weight:600;text-decoration:underline;text-decoration-color:var(--c-accent);text-underline-offset:3px;padding:10px 0;display:inline-block}
+.cdcp .cq-help a{font-weight:600;text-decoration:underline;text-underline-offset:3px;padding:10px 0;display:inline-block}
 @container (min-width:680px){
   .cdcp .cq-steps{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:20px}
+  .cdcp .cq-step-card+.cq-step-card{border-top:0}
 }
 .cdcp .cq-matrix-all{margin-top:4px}
 .cdcp .cq-matrix-all>summary,.cdcp .cq-matrix-item>summary{list-style:none;cursor:pointer}
@@ -154,30 +154,27 @@
 .cdcp .cq-matrix{margin-top:8px;border-top:1px solid var(--c-line)}
 .cdcp .cq-matrix-item{border-bottom:1px solid var(--c-line)}
 .cdcp .cq-matrix-item>summary{display:flex;align-items:flex-start;gap:12px;padding:12px 4px}
-.cdcp .cq-matrix-item-icon{flex:none;width:16px;font-size:15px;font-weight:700}
-.cdcp .cq-matrix-item.cq-tone-standard .cq-matrix-item-icon{color:var(--c-good)}
-.cdcp .cq-matrix-item.cq-tone-major .cq-matrix-item-icon{color:var(--c-warn)}
-.cdcp .cq-matrix-item.cq-tone-excluded .cq-matrix-item-icon{color:var(--c-bad)}
+.cdcp .cq-matrix-item-icon{display:none}
+.cdcp .cq-matrix-item.cq-tone-standard .cq-matrix-item-subtitle{color:var(--c-good);opacity:1}
+.cdcp .cq-matrix-item.cq-tone-major .cq-matrix-item-subtitle{color:var(--c-warn);opacity:1}
+.cdcp .cq-matrix-item.cq-tone-excluded .cq-matrix-item-subtitle{color:var(--c-bad);opacity:1}
 .cdcp .cq-matrix-item-head{flex:1;min-width:0}
 .cdcp .cq-matrix-item-title,.cdcp .cq-matrix-item-subtitle{display:block}
 .cdcp .cq-matrix-item-title{font-size:13.5px;font-weight:700}
 .cdcp .cq-matrix-item-subtitle{margin-top:2px;font-size:12px;line-height:1.4;opacity:.78}
-.cdcp .cq-matrix-item-chevron{flex:none;font-size:16px;color:var(--c-accent);transition:transform .2s}
+.cdcp .cq-matrix-item-chevron{flex:none;font-size:16px;opacity:.6;transition:transform .2s}
 .cdcp .cq-matrix-item[open] .cq-matrix-item-chevron{transform:rotate(45deg)}
-.cdcp .cq-matrix-item-body{padding:0 4px 16px 32px}
+.cdcp .cq-matrix-item-body{padding:0 4px 16px}
 .cdcp .cq-matrix-item-body ul{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
 .cdcp .cq-matrix-item-body li{position:relative;padding-left:14px;font-size:13px;line-height:1.5;opacity:.88}
 .cdcp .cq-matrix-item-body li::before{content:'\2013';position:absolute;left:0;opacity:.5}
 .cdcp .cq-matrix-item-note{font-size:12px;line-height:1.6;opacity:.8;border-left:2px solid var(--c-line);padding-left:12px}
 .cdcp .cq-fine{margin-top:8px;font-size:11.5px;line-height:1.5;opacity:.75}
-@media(prefers-reduced-motion:reduce){.cdcp .cq-status-in{animation:none}.cdcp *{transition:none!important}}
+
 
 /* ---- sss.marketing demo wrappers only (not needed on a clinic site) ---- */
 .quiz-wrap{max-width:920px}
 .quiz-demo-tag{display:inline-flex;margin-bottom:20px;font-family:var(--body);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);opacity:.7}
 .quiz-card{background:none;border:0;padding:0}
 
-.cdcp .cq-dl .cq-dl-total{border-bottom:0;font-weight:700;font-size:14px}
 .cdcp .cq-dl .cq-dim{font-weight:400;opacity:.7;font-size:12px;white-space:normal}
-.cdcp .cq-row[data-done="1"]>legend>span:first-child::after{content:" \2713";color:var(--c-good);font-weight:700}
-.cdcp .cq-row.cq-off>legend>span:first-child::after{content:none}
