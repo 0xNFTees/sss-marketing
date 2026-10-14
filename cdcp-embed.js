@@ -32,11 +32,11 @@
        else              -> qualified, tier from income band            */
   var UI = {
     fr: {label:"Admissibilité au RCSD", insurers:"Assureurs acceptés par la clinique :", ins:"Assurance privée", yes:"Oui", no:"Non", inc:"Revenu familial net", incShort:["< 70 k","70–79 k","80–89 k","90 k +"],
-         filed:"Déclaration de revenus produite", notYet:"Pas encore", who:"Pour qui", pendH:"Indiquez votre revenu familial.",
-         pendP:"Le résultat s’affiche dès que la tranche est choisie.", matrix:"Soins couverts, autorisation et exclusions"},
+         filed:"Déclaration de revenus produite", notYet:"Pas encore", who:"Pour qui", pendH:"Choisissez votre revenu familial net.",
+         matrix:"Soins couverts, autorisation et exclusions"},
     en: {label:"CDCP eligibility", insurers:"Insurers accepted by the clinic:", ins:"Private insurance", yes:"Yes", no:"No", inc:"Net family income", incShort:["< 70k","70–79k","80–89k","90k+"],
-         filed:"Tax return filed", notYet:"Not yet", who:"Who is it for", pendH:"Select your family income.",
-         pendP:"The result appears as soon as a band is selected.", matrix:"Covered care, authorization and exclusions"}
+         filed:"Tax return filed", notYet:"Not yet", who:"Who is it for", pendH:"Select your net family income.",
+         matrix:"Covered care, authorization and exclusions"}
   };
   var INCOME_KEYS = ["under70","band70","band80","over90"];
   var INCOME_TIER = {under70:"100",band70:"60",band80:"40"};
@@ -191,14 +191,18 @@
       t.appendChild(row);
     }
     function buildPending(t){
-      t.appendChild(headline(U.pendH));t.appendChild(textNode("p","cq-result-msg",U.pendP));
+      t.appendChild(headline(U.pendH));
+      var tb=node("div","cq-bands");
+      INCOME_KEYS.forEach(function(k){
+        tb.appendChild(node("div","cq-band",'<span>'+esc(L.step2[k])+'</span><span>'+esc(L.step2[k+"Hint"].replace(/ %/g,"\u00a0%"))+'</span>'));
+      });
+      t.appendChild(tb);
     }
     function buildQualified(t,r){
       var R=L.results.branchQualified,pct=Number(r.tier);
-      t.appendChild(textNode("div","cq-kicker",R.headline));
       var hero=node("div","cq-hero");
       hero.appendChild(coverageRing(pct,TIER_RING_COLOR[r.tier]));
-      hero.appendChild(node("div","cq-hero-t",'<div class="cq-hero-h">'+esc(L.results["tier"+r.tier+"Badge"].replace(/ %/g,"\u00a0%"))+'</div><div class="cq-hero-s">'+esc(L.results.tierRingCaption)+"</div>"));
+      hero.appendChild(node("div","cq-hero-t",'<div class="cq-hero-h">'+esc(L.results["tier"+r.tier+"Badge"].replace(/ %/g,"\u00a0%"))+'</div>'));
       t.appendChild(hero);
       if(r.status==="child"&&L.results.childRamqNote)t.appendChild(textNode("p","cq-result-msg",L.results.childRamqNote));
       t.appendChild(billingNotice(L.results.billingNoticeHeading,L.results.billingNoticeBody));

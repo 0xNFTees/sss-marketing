@@ -45,11 +45,21 @@
 
 .cdcp-est .est-grid{display:grid;grid-template-columns:minmax(0,1fr)}
 .cdcp-est .est-ctl{padding:16px;display:flex;flex-direction:column;gap:16px}
-.cdcp-est .est-out{padding:16px;display:flex;flex-direction:column;gap:12px;background:var(--c-tint);min-width:0}
+.cdcp-est .est-sum,.cdcp-est .est-det{background:var(--c-tint);min-width:0;padding:0 16px}
+.cdcp-est .est-sum{display:flex;flex-direction:column;gap:8px;padding-top:12px;padding-bottom:12px;border-top:1px solid var(--c-line)}
+.cdcp-est .est-det{display:flex;flex-direction:column;gap:12px;padding-bottom:16px}
+.cdcp-est .est-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.cdcp-est .est-dl dt small{display:block;font-size:11.5px;opacity:.75;margin-top:1px}
+/* narrow: result bar stays pinned to the bottom of the viewport while the inputs are changed */
+.cdcp-est .est-sum{position:sticky;bottom:0;z-index:1;box-shadow:0 -1px 0 var(--c-line)}
+.cdcp-est .est-sum .est-big{font-size:clamp(30px,9cqw,40px);margin-top:-2px}
 @container (min-width:560px){
-  .cdcp-est .est-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-  .cdcp-est .est-ctl,.cdcp-est .est-out{padding:24px}
-  .cdcp-est .est-ctl{gap:20px}
+  .cdcp-est .est-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto 1fr}
+  .cdcp-est .est-ctl{grid-row:1/3;padding:24px;gap:20px}
+  .cdcp-est .est-sum,.cdcp-est .est-det{grid-column:2;padding-left:24px;padding-right:24px}
+  .cdcp-est .est-sum{position:static;box-shadow:none;border-top:0;padding-top:24px;padding-bottom:0;gap:12px}
+  .cdcp-est .est-det{padding-top:12px;padding-bottom:24px}
+  .cdcp-est .est-sum .est-big{font-size:clamp(36px,6cqw,56px);margin-top:-4px}
 }
 .cdcp-est .est-fs{display:block;min-width:0}
 .cdcp-est .est-fs legend{display:block;margin-bottom:6px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
@@ -69,7 +79,7 @@
 .cdcp-est .est-segopt:has(input:checked){background:var(--c-brand);color:var(--c-on)}
 .cdcp-est :has(>input:focus-visible){box-shadow:inset 0 0 0 2px var(--c-paper),inset 0 0 0 4px var(--c-ink)}
 .cdcp-est .est-lbl{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
-.cdcp-est .est-big{margin-top:-4px;font-family:var(--c-display);font-weight:500;font-size:clamp(36px,10cqw,56px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;overflow-wrap:normal}
+.cdcp-est .est-big{font-family:var(--c-display);font-weight:500;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;overflow-wrap:normal}
 .cdcp-est .est-bar{height:4px;background:color-mix(in srgb,var(--c-ink) 12%,transparent);overflow:hidden;border-radius:var(--c-r)}
 .cdcp-est .est-bar i{display:block;height:100%;width:0;background:var(--c-accent);transition:width .3s ease}
 .cdcp-est .est-dl{font-size:13px}
@@ -82,6 +92,7 @@
 .cdcp-est .est-n{color:var(--c-warn)}
 .cdcp-est .est-n[hidden]{display:none}
 .cdcp-est .est-why{opacity:.78}
+.cdcp-est .est-why[hidden]{display:none}
 .cdcp-est .est-foot{margin-top:auto;display:flex;flex-direction:column;gap:8px;font-size:11px}
 .cdcp-est .est-foot span{opacity:.78;line-height:1.45}
 .cdcp-est .est-foot a{align-self:flex-start;padding:12px 0;font-size:13px;font-weight:600;text-decoration:underline;text-decoration-color:var(--c-accent);text-decoration-thickness:1px;text-underline-offset:4px}
