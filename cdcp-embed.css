@@ -29,38 +29,13 @@
 /* Single continuous progress line (replaces the old 4-dot row) whose fill
    smoothly grows via a width transition -- same motion language as the
    dental-clinic-template React build's StepProgressBar. */
-.quiz-track{height:3px;border-radius:2px;background:var(--rule);overflow:hidden;margin-bottom:20px}
-.quiz-fill{height:100%;background:var(--tan);width:0%;transition:width .5s var(--ease)}
-.quiz-steplabel{font-family:var(--body);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink);opacity:0.5;margin-bottom:28px;display:flex;justify-content:space-between;align-items:center;min-height:44px}
-.quiz-back{display:inline-flex;align-items:center;background:none;border:none;font-family:var(--body);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink);opacity:0.5;cursor:pointer;min-height:44px;padding:4px 2px;animation:quizBackIn .25s var(--ease)}
-.quiz-back:hover{opacity:0.9}
-@keyframes quizBackIn{from{opacity:0;transform:translateX(6px)}to{opacity:0.5;transform:translateX(0)}}
 
 /* The step/result swap region. JS (transitionSwap) toggles height/position
    on this element directly -- it starts plain-flow so a JS-off or
    pre-hydration render never clips content. */
-.quiz-viewport{position:relative}
 
-.quiz-q{display:flex;align-items:flex-start;gap:14px;font-family:var(--display);font-weight:500;font-size:clamp(19px,2.2vw,23px);line-height:1.32;letter-spacing:-0.01em;color:var(--ink);margin-bottom:22px}
-.quiz-q-icon{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--surface-b);color:var(--tan);display:flex;align-items:center;justify-content:center;font-size:16px;margin-top:2px}
-.quiz-opts{display:flex;flex-direction:column;gap:10px}
 
-.opt-btn{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:48px;text-align:left;padding:15px 44px 15px 18px;border:1px solid var(--rule);background:var(--paper);font-family:var(--body);font-size:14.5px;color:var(--ink);transition:border-color .2s var(--ease),background .2s var(--ease),box-shadow .2s var(--ease),transform .2s var(--ease),opacity .2s var(--ease)}
-.opt-btn:hover:not(:disabled){border-color:var(--tan);background:var(--surface-b);transform:translateY(-2px);box-shadow:0 8px 18px -10px rgba(28,24,18,0.22)}
-.opt-btn:disabled{cursor:default}
-.opt-btn.dimmed{opacity:0.4}
-.opt-btn.selected{border-color:var(--ink);border-width:1.5px;background:var(--surface-b);box-shadow:0 0 0 3px rgba(28,24,18,0.08),0 10px 22px -12px rgba(28,24,18,0.4);animation:optPulse .22s var(--ease) forwards}
-@keyframes optPulse{0%{transform:scale(1)}45%{transform:scale(1.02)}100%{transform:scale(0.98)}}
-.opt-label-wrap{display:flex;flex-direction:column;gap:2px}
-.opt-hint{font-size:12px;opacity:0.55;font-weight:400}
-.opt-arrow{opacity:0.35;flex-shrink:0;transition:transform .2s var(--ease),opacity .2s var(--ease)}
-.opt-btn:hover:not(:disabled) .opt-arrow{transform:translateX(2px);opacity:0.7}
-.opt-btn.selected .opt-arrow{opacity:0}
-.opt-check{position:absolute;right:14px;top:50%;width:22px;height:22px;margin-top:-11px;border-radius:50%;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1;transform:scale(0);opacity:0;transition:transform .25s cubic-bezier(0.34,1.56,0.64,1),opacity .2s var(--ease)}
-.opt-btn.selected .opt-check{transform:scale(1);opacity:1}
 
-.quiz-skip{margin-top:18px;font-family:var(--body);font-size:12.5px;color:var(--ink);opacity:0.6}
-.quiz-skip a{color:var(--ink);opacity:1;border-bottom:1px solid var(--tan)}
 
 /* Headline every branch leads with -- the four branches previously had no
    heading at all above the badge; the CRO branching model gives each one
@@ -99,13 +74,6 @@
 .cta-ext{opacity:0.65;font-size:11px;margin-left:-2px}
 
 /* Qualified-branch 3-step funnel (apply -> book -> get help). */
-.step-card{margin-top:12px;border:1px solid var(--rule);background:rgba(255,255,255,0.4);padding:18px 20px}
-.step-card:first-of-type{margin-top:20px}
-.step-card-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.step-num{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
-.step-title{font-family:var(--body);font-weight:700;font-size:13.5px;color:var(--ink)}
-.step-body{font-family:var(--body);font-size:13px;line-height:1.6;color:var(--ink);opacity:0.85}
-.step-body .cta-row{margin-top:12px}
 
 /* Branch-A insurer pills -- text only, never logos (no licensed assets,
    and lifting real companies' marks without permission is a trademark
@@ -118,8 +86,6 @@
 /* Coverage ring + animated counter (JS-driven stroke-dashoffset/text via
    animateNumber -- see calculator_js). Rotated -90deg so the fill starts
    at 12 o'clock, same convention as the React build's CoverageRing. */
-.ring-row{margin-top:20px;display:flex;align-items:center;gap:18px;padding:16px 18px;border:1px solid var(--rule);background:var(--surface-a)}
-.ring-wrap{position:relative;width:64px;height:64px;flex-shrink:0}
 .ring-svg{transform:rotate(-90deg)}
 .ring-track{stroke:var(--rule)}
 .ring-fill{stroke-linecap:round}
@@ -143,9 +109,6 @@
    which has no equivalent here and would be a foreign color introduction
    against this site's own approved brand system (see Pillar 3 -- no blue,
    no colors outside paper/sage/tan/ink). */
-.billing-notice{margin-top:20px;padding:16px 18px;border:1px solid var(--rule);background:var(--surface-a)}
-.billing-notice-heading{font-family:var(--body);font-weight:700;font-size:13px;color:var(--ink)}
-.billing-notice-body{margin-top:5px;font-family:var(--body);font-size:12.5px;line-height:1.65;color:var(--ink);opacity:0.75}
 
 /* Coverage & Authorization Matrix -- replaces the old flat two-column
    covered/excluded list (.result-cols, above) with three clinical tiers,
@@ -158,7 +121,6 @@
    result. Icons are plain Unicode glyphs (check/warning/X), not an icon
    library -- none is loaded here, same doctrine as every other hand-rolled
    piece of this build. */
-.matrix{margin-top:24px;border-top:1px solid var(--rule)}
 .matrix-item{border-bottom:1px solid var(--rule)}
 .matrix-item summary{cursor:pointer;list-style:none;display:flex;align-items:flex-start;gap:14px;padding:16px 4px;font-family:var(--body)}
 .matrix-item summary::-webkit-details-marker{display:none}
@@ -171,13 +133,10 @@
 .matrix-item-subtitle{margin-top:2px;font-family:var(--body);font-size:12px;color:var(--ink);opacity:0.65}
 .matrix-item-chevron{flex-shrink:0;font-family:var(--body);font-size:16px;color:var(--tan);margin-top:1px;transition:transform .25s var(--ease)}
 .matrix-item[open] .matrix-item-chevron{transform:rotate(45deg)}
-.matrix-item-body{padding:0 4px 18px 40px}
 .matrix-item-body ul{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
 .matrix-item-body li{font-family:var(--body);font-size:13px;line-height:1.5;color:var(--ink);opacity:0.85;padding-left:14px;position:relative}
 .matrix-item-body li::before{content:'–';position:absolute;left:0;opacity:0.5}
 .matrix-item-note{font-family:var(--body);font-size:12px;line-height:1.6;color:var(--ink);opacity:0.75;border-left:2px solid var(--rule);padding-left:12px}
-.result-retake{margin-top:18px;display:inline-flex;align-items:center;gap:6px;background:none;border:none;font-family:var(--body);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink);opacity:0.55;cursor:pointer;min-height:44px}
-.result-retake:hover{opacity:0.9}
 
 /* ==========================================================================
    DESIGN SYSTEM v2 -- restrained clinical layer
@@ -189,20 +148,6 @@
 .quiz-card{--s2:8px;--s3:12px;--s4:16px;--s5:24px;padding:clamp(20px,3vw,28px)}
 .quiz-demo-tag,.quiz-steplabel,.quiz-back,.result-retake,.opt-hint,.result-col-label,.quiz-skip{opacity:.7}
 .quiz-demo-tag::before{display:none}
-.quiz-track{border-radius:0;margin-bottom:var(--s3)}
-.quiz-steplabel{margin-bottom:var(--s4);min-height:32px}
-.quiz-back{min-height:32px}
-.quiz-q{gap:0;font-size:clamp(18px,2vw,21px);line-height:1.3;margin-bottom:var(--s4)}
-.quiz-q-icon{display:none}
-.quiz-opts{gap:var(--s2)}
-.opt-btn{min-height:44px;padding:10px 40px 10px var(--s4);font-size:14px;transition:border-color .15s,background .15s}
-.opt-btn:hover:not(:disabled){transform:none;box-shadow:none;border-color:var(--ink);background:var(--surface-b)}
-.opt-btn.selected{border-width:1px;border-color:var(--ink);background:var(--ink);color:var(--paper);box-shadow:none;animation:none}
-.opt-btn.selected .opt-hint{opacity:.8}
-.opt-btn.dimmed{opacity:.5}
-.opt-arrow{opacity:.5}
-.opt-check{border-radius:0;background:var(--paper);color:var(--ink);width:18px;height:18px;margin-top:-9px}
-.quiz-skip{margin-top:var(--s4)}
 /* results */
 .result-headline{font-size:clamp(18px,2vw,21px);margin-bottom:var(--s3)}
 .result-badge{padding:var(--s3) var(--s4);gap:var(--s3);border-radius:0}
@@ -217,25 +162,13 @@
 .cta-btn{min-height:44px;padding:10px var(--s4);font-size:12px;letter-spacing:.08em}
 .cta-btn-primary:hover{transform:none;background:var(--surface-b);color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .cta-btn-secondary:hover{border-color:var(--ink)}
-.step-card{margin-top:var(--s3);padding:var(--s4);background:none}
-.step-card:first-of-type{margin-top:var(--s4)}
-.step-card-head{margin-bottom:6px}
-.step-num{border-radius:0;width:20px;height:20px;font-size:11px}
-.step-title{font-size:13.5px}
-.step-body,.insurer-note,.billing-notice-body,.matrix-item-note,.matrix-item-body li,.result-col li,.result-msg{opacity:.85}
 .insurer-pill{opacity:1}
-.ring-row{margin-top:var(--s4);padding:var(--s3) var(--s4);background:var(--surface-a);border-radius:0}
-.ring-wrap{width:56px;height:56px}
 .ring-fill{stroke-linecap:butt}
 .result-warn{margin-top:var(--s3);padding:var(--s3) var(--s4)}
-.billing-notice{margin-top:var(--s4);padding:var(--s3) var(--s4)}
 .result-source{opacity:.7;margin-top:var(--s4)}
-.matrix{margin-top:var(--s4)}
 .matrix-item summary{padding:var(--s3) 4px;gap:var(--s3)}
 .matrix-item-icon{width:auto;height:auto;border-radius:0;background:none !important;font-size:15px;font-weight:700;margin-top:0;width:16px;justify-content:flex-start}
 .matrix-item-subtitle{opacity:.75}
-.matrix-item-body{padding:0 4px var(--s4) 32px}
-.result-retake{margin-top:var(--s3);min-height:32px}
 /* estimator contrast + rhythm */
 .est-lbl,.est-fs legend{opacity:.7}
 .est-opt .f{opacity:.7}.est-opt:has(input:checked) .f{opacity:.85}
@@ -243,10 +176,68 @@
 .est-ctl,.est-out{padding:clamp(16px,2.5vw,24px)}
 .est-out{gap:var(--s3,12px)}
 /* fewer boxes: result stack reads as one sheet separated by hairlines */
-.ring-row{border:0;background:none;padding:var(--s3) 0 0;margin-top:var(--s3)}
-.billing-notice{border:0;border-top:1px solid var(--rule);background:none;padding:var(--s3) 0 0;margin-top:var(--s4)}
-.billing-notice-heading{font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.7}
 
 /* matrix: title above subtitle */
 .matrix-item-title,.matrix-item-subtitle{display:block}
 .matrix-item-subtitle{margin-top:2px;line-height:1.4}
+
+
+/* ==========================================================================
+   LIVE CALCULATOR LAYOUT (v3)
+   Controls and result sit side by side in a container wider than 640px and
+   stack below it. Result recalculates on every change; nothing animates
+   except the coverage ring.
+   ========================================================================== */
+.quiz-wrap{max-width:920px}
+.quiz-card{container-type:inline-size;padding:0;border:1px solid var(--rule);background:var(--paper)}
+.cq{display:grid;grid-template-columns:1fr}
+.cq-ctl{padding:var(--s4,16px);display:flex;flex-direction:column;gap:var(--s3,12px);border-bottom:1px solid var(--rule)}
+.cq-out{padding:var(--s4,16px);min-width:0}
+@container (min-width:640px){
+  .cq{grid-template-columns:minmax(260px,320px) 1fr}
+  .cq-ctl{border-bottom:0;padding:var(--s5,24px);align-self:start;position:sticky;top:12px}
+  .cq-out{padding:var(--s5,24px);border-left:1px solid var(--rule)}
+}
+.cq-row{border:0;padding:0;margin:0;min-width:0}
+.cq-row legend{padding:0;margin-bottom:6px;font-family:var(--body);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);opacity:.7}
+.cq-row.is-off{opacity:.38}
+.cq-row.is-off .cq-opt,.cq-row.is-off .cq-select{cursor:default}
+.cq-seg{display:grid;border:1px solid var(--ink)}
+.cq-seg-2{grid-template-columns:1fr 1fr}
+.cq-seg-4{grid-template-columns:repeat(4,1fr)}
+.cq-opt{position:relative;display:flex;align-items:center;justify-content:center;min-height:44px;padding:0 4px;cursor:pointer;font-family:var(--body);font-size:12.5px;white-space:nowrap;font-feature-settings:"tnum" 1;color:var(--ink);text-align:center;border-left:1px solid var(--rule)}
+.cq-opt:first-child{border-left:0}
+.cq-opt input{position:absolute;inset:0;opacity:0;margin:0;cursor:inherit}
+.cq-opt:has(input:checked){background:var(--ink);color:var(--paper)}
+.cq-opt:has(input:focus-visible){outline:2px solid var(--tan);outline-offset:-4px}
+.cq-opt:hover:not(:has(input:checked)):not(:has(input:disabled)){background:var(--surface-b)}
+.cq-hint{margin:6px 0 0;font-family:var(--body);font-size:12px;line-height:1.3;color:var(--ink);opacity:.75;min-height:1.3em}
+.cq-select{width:100%;min-height:44px;padding:0 12px;border:1px solid var(--ink);border-radius:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:13px}
+.cq-select:focus-visible{outline:2px solid var(--tan);outline-offset:2px}
+.cq-skip{margin:auto 0 0;padding-top:var(--s3,12px);font-family:var(--body);font-size:12px;line-height:1.5;color:var(--ink);opacity:.75}
+.cq-skip a{border-bottom:1px solid var(--tan)}
+@container (max-width:639px){.cq-skip{display:none}}
+/* result */
+.cq-kicker{font-family:var(--body);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);opacity:.7;margin-bottom:var(--s3,12px)}
+.cq-hero{display:flex;align-items:center;gap:var(--s4,16px)}
+.cq-hero-h{font-family:var(--display);font-weight:500;font-size:clamp(18px,2.4cqw,22px);line-height:1.25;letter-spacing:-.01em;color:var(--ink)}
+.cq-hero-s{margin-top:2px;font-family:var(--body);font-size:12px;color:var(--ink);opacity:.75}
+.ring-wrap{position:relative;width:56px;height:56px;flex-shrink:0}
+.ring-label{font-size:13px}
+.billing-notice{margin-top:var(--s4,16px);padding-top:var(--s3,12px);border-top:1px solid var(--rule)}
+.billing-notice-heading{font-family:var(--body);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);opacity:.7}
+.billing-notice-body{margin-top:4px;font-family:var(--body);font-size:12px;line-height:1.5;color:var(--ink);opacity:.85}
+.cq-steps{margin-top:var(--s4,16px);border-top:1px solid var(--rule)}
+.step-card{display:grid;grid-template-columns:20px 1fr;gap:var(--s3,12px);padding:10px 0;border-bottom:1px solid var(--rule)}
+.step-num{width:20px;height:20px;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;font-family:var(--body);font-size:11px;font-weight:700}
+.step-title{font-family:var(--body);font-weight:700;font-size:13.5px;color:var(--ink)}
+.step-text{margin:3px 0 0;font-family:var(--body);font-size:12.5px;line-height:1.55;color:var(--ink);opacity:.85}
+.step-main .cta-btn{margin-top:var(--s2,8px);min-height:36px;padding:6px 12px;font-size:11.5px}
+.matrix-all{margin-top:var(--s4,16px)}
+.matrix-all>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;min-height:36px;font-family:var(--body);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);opacity:.85}
+.matrix-all>summary::-webkit-details-marker{display:none}
+.matrix-all[open]>summary .matrix-item-chevron{transform:rotate(45deg)}
+.matrix{margin-top:var(--s2,8px);border-top:1px solid var(--rule)}
+.matrix-item-body{padding:0 4px var(--s4,16px) 32px}
+.cq-res .result-headline{margin-bottom:var(--s3,12px)}
+.cq-res .cta-row{margin-top:var(--s4,16px)}
