@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr" data-lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#fefae0">
 <meta name="robots" content="noindex, nofollow">
-<title>SSS — Pilot Proposal · Prepared for 123Dentist</title>
+<title>SSS — Pilote 123Dentist</title>
 <meta name="format-detection" content="telephone=no">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
@@ -13,1014 +13,341 @@
 <link rel="preload" as="image" href="/logo-nav.png">
 <link rel="preload" as="font" type="font/otf" href="/fonts/RhymesTextMedium.otf" crossorigin>
 <link rel="preload" as="font" type="font/otf" href="/fonts/ABCWalterAlte-Roentgentherapie.otf" crossorigin>
-<meta property="og:title" content="SSS — Pilot Proposal">
-<style>
-@font-face{font-family:'RhymesText';src:url('/fonts/RhymesTextMedium.otf') format('opentype');font-weight:500;font-style:normal;font-display:swap}
-@font-face{font-family:'ABCWalter';src:url('/fonts/ABCWalterAlte-Roentgentherapie.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
-
-:root{
-  --paper:#fefae0; --surface-a:#e9edc9; --surface-b:#faedcd; --sage:#ccd5ae; --tan:#d4a373; --ink:#1c1812;
-  --display:'RhymesText','Palatino Linotype',Georgia,serif;
-  --body:'ABCWalter',Helvetica,Arial,sans-serif;
-  --ease:cubic-bezier(0.16,1,0.3,1);
-  --nav-h:72px; --container:1240px; --gutter:40px;
-  --section-y:clamp(88px,10vw,140px);
-  --rule:rgba(28,24,18,0.15); --rule-soft:rgba(28,24,18,0.10); --rule-strong:rgba(28,24,18,0.25);
-  --tan-text:#6f4720;
-}
-
-*{margin:0;padding:0;box-sizing:border-box}
-.hero h1,.section-title,.team-title,.final-title,.clock-title,.brk-t,.faq-q,.criteria-value,.pf-t,.six-name,.pc-t,.process-step-title,.criteria-title{text-wrap:balance}
-.section-lede,.callout-b,.note,.statement,.dash-ansn,.dash-rolln,.clock-body,.layer-body,.sage-block p,.criteria-close,.pricing-close{text-wrap:pretty}
-html{scroll-behavior:smooth;font-size:16px;scroll-padding-top:96px}
-body{background:var(--paper);color:var(--ink);font-family:var(--body);font-weight:400;line-height:1.6;
-  letter-spacing:0.005em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
-a{color:inherit;text-decoration:none}
-button{font:inherit;background:none;border:none;cursor:pointer;color:inherit;padding:0}
-ul{list-style:none}
-::selection{background:var(--tan);color:var(--paper)}
-.container{max-width:var(--container);margin:0 auto;padding:0 var(--gutter)}
-
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(254,250,224,0.92);
-  backdrop-filter:saturate(1.1) blur(8px);-webkit-backdrop-filter:saturate(1.1) blur(8px);
-  border-bottom:1px solid transparent;padding:20px 0;
-  transition:padding .35s var(--ease),border-color .35s var(--ease),background .35s var(--ease)}
-nav.scrolled{padding:14px 0;border-bottom-color:var(--tan-text);background:rgba(254,250,224,0.96)}
-.nav-inner{max-width:var(--container);margin:0 auto;padding:0 var(--gutter);
-  display:flex;align-items:center;justify-content:space-between;gap:32px}
-.nav-logo{display:flex;align-items:center;height:30px;line-height:1;transition:opacity .25s var(--ease)}
-.nav-logo img{display:block;height:100%;width:auto}
-.nav-logo:hover{opacity:0.68}
-nav.scrolled .nav-logo{height:26px}
-.nav-tag{font-family:var(--body);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--tan-text)}
-.nav-right{display:flex;align-items:center;gap:22px}
-.lang-toggle{display:flex;align-items:center;gap:7px;font-family:var(--body);font-size:11px;
-  letter-spacing:0.16em;text-transform:uppercase;flex-shrink:0}
-.lang-toggle button{color:var(--tan-text);opacity:0.55;padding:2px 0;letter-spacing:inherit;
-  transition:opacity .2s var(--ease),color .2s var(--ease)}
-.lang-toggle button:hover{opacity:0.9}
-.lang-toggle button[aria-pressed="true"]{color:var(--ink);opacity:1}
-.lang-toggle .lsep{color:var(--tan-text);opacity:0.4}
-@media(max-width:600px){.nav-right{gap:14px}.nav-tag{display:none}}
-@media print{.lang-toggle{display:none !important}}
-
-.vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.skip-link{position:absolute;top:-100px;left:8px;z-index:200;background:var(--ink);color:var(--paper);
-  font-family:var(--body);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;padding:12px 18px;
-  transition:top .25s var(--ease)}
-.skip-link:focus{top:8px;outline:1px solid var(--tan);outline-offset:2px}
-
-/* HERO */
-.hero{position:relative;padding-top:calc(var(--nav-h) + 76px);padding-bottom:72px;background:var(--paper)}
-.hero-left{max-width:960px}
-.eyebrow{font-family:var(--body);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--tan-text);
-  margin-bottom:40px;display:flex;align-items:center;gap:14px}
-.eyebrow::before{content:'';width:32px;height:1px;background:var(--tan);display:inline-block;flex-shrink:0}
-.hero h1{font-family:var(--display);font-weight:500;font-size:clamp(40px,6.2vw,86px);line-height:1.03;
-  letter-spacing:-0.028em;color:var(--ink);margin-bottom:36px}
-.hero h1 em{font-style:normal;color:var(--tan-text)}
-.hero-sub{font-family:var(--body);font-size:18px;line-height:1.66;color:var(--ink);opacity:0.8;max-width:700px}
-
-/* TOC */
-.toc{padding-bottom:var(--section-y)}
-.toc-inner{border-top:1px solid var(--rule);padding-top:32px}
-.toc-head{display:flex;justify-content:space-between;align-items:baseline;gap:24px;margin-bottom:22px;
-  font-family:var(--body);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--tan-text)}
-.toc-note{color:var(--ink);opacity:0.5;letter-spacing:0.08em;text-transform:none;font-size:12px;text-align:right}
-.toc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0 36px}
-.toc-item{display:flex;gap:12px;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--rule-soft);
-  font-family:var(--body);font-size:14px;line-height:1.35;transition:opacity .2s var(--ease);min-height:56px}
-.toc-item:hover{opacity:0.55}
-.toc-item .n{font-size:10px;letter-spacing:0.18em;color:var(--tan-text);flex-shrink:0;font-feature-settings:"tnum" 1}
-
-/* SECTION SCAFFOLD */
-.section{position:relative;padding:var(--section-y) 0}
-.section--paper{background:var(--paper)}
-.section--surface-a{background:var(--surface-a)}
-.section--surface-b{background:var(--surface-b)}
-.section-rule{position:absolute;top:0;left:0;right:0;height:1px;background:var(--tan);opacity:0.55}
-.section-head{display:flex;align-items:baseline;gap:16px;margin-bottom:56px;font-family:var(--body);font-size:11px;
-  letter-spacing:0.22em;text-transform:uppercase;color:var(--ink);opacity:0.72}
-.section-head .num{color:var(--tan-text);font-feature-settings:"tnum" 1}
-.section-head .sep{width:24px;height:1px;background:var(--ink);opacity:0.25;display:inline-block}
-.section-title{font-family:var(--display);font-weight:500;font-size:clamp(32px,4.2vw,56px);line-height:1.06;
-  letter-spacing:-0.022em;color:var(--ink);max-width:760px;margin-bottom:28px}
-.section-lede{font-family:var(--body);font-size:16px;line-height:1.72;color:var(--ink);opacity:0.8;
-  max-width:660px;margin-bottom:52px}
-.section-lede--wide{max-width:840px}
-
-/* SHARED small bits */
-.statement{margin-top:64px;padding-top:36px;border-top:1px solid var(--rule);font-family:var(--display);
-  font-weight:500;font-style:italic;font-size:clamp(21px,2.6vw,30px);line-height:1.32;letter-spacing:-0.015em;
-  color:var(--ink);max-width:900px}
-.callout{border-left:2px solid var(--tan);padding:2px 0 2px 26px;margin-top:60px;max-width:840px}
-.callout-l{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan-text);
-  margin-bottom:16px}
-.callout-b{font-family:var(--body);font-size:16px;line-height:1.78;opacity:0.88}
-.note{font-family:var(--body);font-size:14px;line-height:1.7;opacity:0.7;max-width:760px;margin-top:40px}
-
-/* CONTEXT TILES */
-.ctx-l0{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan-text);
-  margin-top:64px}
-.ctx{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--rule);margin-top:18px}
-.ctx-cell{padding:28px 22px 30px 0;border-right:1px solid var(--rule-soft)}
-.ctx-cell:last-child{border-right:none}
-.ctx-cell:not(:first-child){padding-left:22px}
-.ctx-v{font-family:var(--display);font-weight:500;font-size:clamp(36px,4.6vw,58px);line-height:0.95;letter-spacing:-0.03em}
-.ctx-l{font-family:var(--body);font-size:12px;line-height:1.5;opacity:0.65;margin-top:12px}
-
-/* CLOCKS + ROADMAP rows */
-.clocks{border-top:1px solid var(--rule)}
-.clock{display:grid;grid-template-columns:210px 1fr;gap:40px;padding:46px 0;border-bottom:1px solid var(--rule)}
-.clock:last-child{border-bottom:none}
-.clock-label{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan-text);padding-top:8px}
-.clock-title{font-family:var(--display);font-weight:500;font-size:clamp(23px,2.7vw,33px);line-height:1.14;
-  letter-spacing:-0.02em;margin-bottom:18px;max-width:660px}
-.clock-body{font-family:var(--body);font-size:15px;line-height:1.76;opacity:0.83;max-width:680px}
-
-/* BREAKS */
-.breaks{border-top:1px solid var(--rule)}
-.brk{display:grid;grid-template-columns:110px 1fr;gap:32px;padding:38px 0;border-bottom:1px solid var(--rule-soft)}
-.brk-n{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan-text);padding-top:6px}
-.brk-t{font-family:var(--display);font-weight:500;font-size:clamp(19px,2.2vw,26px);line-height:1.18;
-  letter-spacing:-0.015em;margin-bottom:14px;max-width:720px}
-.brk-b{font-family:var(--body);font-size:15px;line-height:1.72;opacity:0.8;max-width:740px}
-
-/* SIX GRID */
-.six-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule)}
-.six{padding:34px 28px 38px 0;border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:11px}
-.six:not(:nth-child(3n)){border-right:1px solid var(--rule-soft);padding-right:36px}
-.six-num{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan-text)}
-.six-rule{height:1px;background:var(--tan);opacity:0.7;margin:6px 0 2px}
-.six-name{font-family:var(--display);font-weight:500;font-size:21px;line-height:1.2;letter-spacing:-0.01em}
-.six-desc{font-family:var(--body);font-size:13px;line-height:1.62;opacity:0.72;max-width:290px}
-.six-cta{align-self:flex-start;margin-top:2px;font-family:var(--body);font-size:12px;letter-spacing:0.04em;color:var(--ink);background:none;border:none;border-bottom:1px solid var(--tan);padding:0 0 2px;cursor:pointer;transition:opacity .2s var(--ease)}
-.six-cta:hover{opacity:0.65}
-.six-cta-arrow{display:inline-block;transition:transform .25s var(--ease)}
-.six-cta[aria-expanded="true"] .six-cta-arrow{transform:rotate(90deg)}
-
-/* CDCP live-demo drawer -- same max-height/opacity accordion idiom as the
-   homepage's .svc-detail (index.html), reused here since this page has no
-   pre-existing per-card disclosure mechanism of its own. */
-.cdcp123-drawer{max-height:0;overflow:hidden;transition:max-height .55s var(--ease),margin-top .35s var(--ease);margin-top:0}
-.cdcp123-drawer.open{max-height:2400px;margin-top:8px}
-.cdcp123-drawer-inner{padding:28px 0 8px}
-
-/* LAYERS */
-.layers{display:flex;flex-direction:column;border-top:1px solid var(--rule)}
-.layer{display:grid;grid-template-columns:120px 190px 1fr;gap:32px;padding:40px 0;
-  border-bottom:1px solid var(--rule);align-items:start}
-.layer-num{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan-text);padding-top:8px}
-.layer-owner{font-family:var(--display);font-weight:500;font-size:clamp(23px,2.5vw,30px);line-height:1.1;letter-spacing:-0.015em}
-.layer-body{font-family:var(--body);font-size:15px;line-height:1.7;opacity:0.83;max-width:600px}
-
-/* SAGE BLOCK */
-.sage-block{background:var(--sage);padding:clamp(36px,4.6vw,60px);margin-top:56px}
-.sage-block p{font-family:var(--body);font-size:15px;line-height:1.76;color:var(--ink);max-width:740px}
-.sage-block p + p{margin-top:18px}
-.sage-block .sage-lead{font-family:var(--display);font-weight:500;font-size:clamp(20px,2.2vw,26px);
-  line-height:1.3;letter-spacing:-0.01em;max-width:780px}
-.sage-block ul{margin-top:20px;display:flex;flex-direction:column;gap:14px}
-.sage-block li{font-family:var(--body);font-size:15px;line-height:1.7;padding-left:22px;position:relative;max-width:760px}
-.sage-block li::before{content:'';position:absolute;left:0;top:0.68em;width:11px;height:1px;background:var(--ink);opacity:0.5}
-
-/* DASHBOARD */
-.dash-wrap{margin-top:8px}
-.dash-cap{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:12px;
-  font-family:var(--body);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--tan-text)}
-.dash{background:var(--paper);border:1px solid var(--rule)}
-.dash-top{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:18px 24px;
-  border-bottom:1px solid var(--rule);font-family:var(--body);font-size:11px;letter-spacing:0.18em;text-transform:uppercase}
-.dash-brand{color:var(--tan-text)}
-.dash-kpis{display:grid;grid-template-columns:repeat(5,1fr)}
-.dash-k{padding:24px 20px 26px;border-right:1px solid var(--rule-soft);border-bottom:1px solid var(--rule)}
-.dash-k:last-child{border-right:none}
-.dash-k.k-hero{background:var(--surface-b)}
-.dash-kl{font-family:var(--body);font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--tan-text);line-height:1.5}
-.dash-kv{font-family:var(--display);font-weight:500;font-size:clamp(24px,2.9vw,38px);line-height:1;
-  letter-spacing:-0.025em;margin-top:14px}
-.dash-kn{font-family:var(--body);font-size:11px;opacity:0.6;margin-top:8px;line-height:1.45}
-.dash-sec{padding:24px;border-bottom:1px solid var(--rule)}
-.dash-sec:last-child{border-bottom:none}
-.dash-sl{font-family:var(--body);font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--tan-text);margin-bottom:16px}
-.dash-ans{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.dash-pct{font-family:var(--display);font-weight:500;font-size:30px;letter-spacing:-0.02em;line-height:1}
-.dash-bar{flex:1;min-width:180px;max-width:440px;height:8px;background:rgba(28,24,18,0.18);position:relative}
-.dash-bar i{position:absolute;left:0;top:0;bottom:0;background:var(--tan);display:block}
-.dash-ansn{font-family:var(--body);font-size:13px;line-height:1.65;opacity:0.78;margin-top:16px;max-width:720px}
-table.dash-t{width:100%;border-collapse:collapse;font-family:var(--body);font-size:13px}
-.dash-t th{text-align:left;font-weight:400;font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;
-  color:var(--tan-text);padding:0 0 11px;border-bottom:1px solid var(--rule)}
-.dash-t td{padding:10px 0;border-bottom:1px solid var(--rule-soft);opacity:0.86}
-.dash-t tr:last-child td{border-bottom:none}
-.dash-t .num{text-align:right;font-feature-settings:"tnum" 1;white-space:nowrap;padding-left:14px}
-.dash-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.roll{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:baseline;padding:9px 0;
-  border-bottom:1px solid var(--rule-soft);font-family:var(--body);font-size:13px}
-.roll b{font-weight:400;font-feature-settings:"tnum" 1}
-.roll .flag{color:var(--tan-text);font-size:11px;letter-spacing:0.06em;margin-left:10px}
-.roll .self{opacity:0.62;font-size:11px;letter-spacing:0.06em;margin-left:10px}
-.roll.avg{border-bottom:none;border-top:1px solid var(--rule);margin-top:8px;padding-top:14px}
-.roll.avg span:first-child{color:var(--tan-text);font-size:10px;letter-spacing:0.22em;text-transform:uppercase}
-
-.roll .cnt{font-family:var(--body);font-size:11px;letter-spacing:0.02em;opacity:0.62;margin-left:10px}
-.dash-t tr.tot td{border-top:1px solid var(--rule);border-bottom:none;opacity:1;padding-top:14px}
-.dash-t tr.tot td:first-child{font-variant-caps:all-small-caps;letter-spacing:0.08em}
-.dash-rolln{font-family:var(--body);font-size:13px;line-height:1.65;opacity:0.78;margin-top:16px;max-width:720px}
-
-/* PROCESS / CRITERIA */
-.process-steps{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule)}
-.process-step{padding:44px 36px 50px 0;border-right:1px solid var(--rule-soft);display:flex;flex-direction:column;gap:18px}
-.process-step:last-child{border-right:none;padding-right:0}
-.process-step:not(:first-child){padding-left:36px}
-.process-step-num{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan-text)}
-.process-step-anchor{font-family:var(--display);font-weight:500;font-size:clamp(42px,5.2vw,68px);line-height:0.95;
-  letter-spacing:-0.03em}
-.process-step-anchor small{font-size:0.3em;font-family:var(--body);letter-spacing:0.2em;text-transform:uppercase;
-  color:var(--tan-text);font-weight:400;margin-left:12px;vertical-align:0.85em}
-.process-step-title{font-family:var(--display);font-weight:500;font-size:21px;line-height:1.2;letter-spacing:-0.01em;margin-top:4px}
-.process-step-desc{font-family:var(--body);font-size:14px;line-height:1.62;opacity:0.78;margin-top:auto;padding-top:16px;max-width:310px}
-
-.criteria-title{font-family:var(--display);font-weight:500;font-size:clamp(24px,2.6vw,32px);line-height:1.1;
-  letter-spacing:-0.02em;margin:72px 0 28px}
-.criteria-grid{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--rule);border-left:1px solid var(--rule)}
-.criteria-cell{padding:34px 32px 38px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
-  display:flex;flex-direction:column;gap:14px}
-.criteria-cell.primary{background:var(--surface-b)}
-.criteria-label{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan-text)}
-.criteria-value{font-family:var(--display);font-weight:500;font-size:clamp(24px,2.8vw,34px);line-height:1.12;letter-spacing:-0.015em}
-.criteria-note{font-family:var(--body);font-size:14px;line-height:1.6;opacity:0.76;max-width:400px}
-.criteria-close{margin-top:44px;font-family:var(--body);font-size:15px;line-height:1.72;opacity:0.82;max-width:680px}
-
-/* TIMELINE */
-.tl{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--rule)}
-.tl-i{padding:32px 20px 36px 0;border-right:1px solid var(--rule-soft);display:flex;flex-direction:column;gap:11px}
-.tl-i:last-child{border-right:none;padding-right:0}
-.tl-i:not(:first-child){padding-left:20px}
-.tl-d{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan-text)}
-.tl-t{font-family:var(--display);font-weight:500;font-size:18px;line-height:1.18;letter-spacing:-0.01em}
-.tl-b{font-family:var(--body);font-size:13px;line-height:1.62;opacity:0.78}
-
-/* DEFINITION ROWS */
-.defs-l{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan-text);margin-top:72px}
-.defs{border-top:1px solid var(--rule);margin-top:18px}
-.def{display:grid;grid-template-columns:200px 1fr;gap:32px;padding:22px 0;border-bottom:1px solid var(--rule-soft)}
-.def-a{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan-text);padding-top:4px}
-.def-b{font-family:var(--body);font-size:15px;line-height:1.7;opacity:0.84;max-width:700px}
-
-/* TWO-COL LISTS */
-.ask-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--rule)}
-.ask-col{padding:42px 36px 48px 0;border-right:1px solid var(--rule-soft)}
-.ask-col:last-child{border-right:none;padding-left:36px;padding-right:0}
-.ask-col-label{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan-text);margin-bottom:26px}
-.ask-col ul{display:flex;flex-direction:column;gap:15px}
-.ask-col li{font-family:var(--body);font-size:15px;line-height:1.6;opacity:0.85;padding-left:20px;position:relative}
-.ask-col li::before{content:'';position:absolute;left:0;top:0.65em;width:10px;height:1px;background:var(--tan)}
-
-.nav-ask{font-family:var(--body);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
-  color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule-strong);padding-bottom:2px;opacity:0.85}
-.nav-ask:hover{opacity:1;border-bottom-color:var(--ink)}
-.mid-cta{margin-top:34px}
-.mid-cta a{font-family:var(--body);font-size:13px;letter-spacing:0.16em;text-transform:uppercase;
-  color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule-strong);padding-bottom:3px}
-.mid-cta a:hover{border-bottom-color:var(--ink)}
-.dash-tfoot{font-family:var(--body);font-size:12px;line-height:1.6;opacity:0.7;margin-top:12px}
-
-/* PRICING */
-.pricing-stage{display:grid;grid-template-columns:1fr;justify-items:center;padding:8px 0 48px;text-align:center}
-.pricing-numeral{font-family:var(--display);font-weight:500;font-size:clamp(130px,20vw,250px);line-height:0.86;
-  letter-spacing:-0.05em;display:inline-flex;align-items:flex-start}
-.pricing-numeral sup.pre,.pricing-fact-value sup.pre{margin-left:0;margin-right:0.12em}
-.pricing-numeral sup{font-size:0.32em;font-weight:500;color:var(--tan-text);margin-left:6px;margin-top:0.18em;letter-spacing:0}
-.pricing-mo{font-family:var(--body);font-size:12px;letter-spacing:0.26em;text-transform:uppercase;opacity:0.65;margin-top:18px}
-.pricing-facts{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--rule)}
-.pricing-fact{padding:32px 22px;border-right:1px solid var(--rule-soft);display:flex;flex-direction:column;gap:13px}
-.pricing-fact:last-child{border-right:none}
-.pricing-fact-label{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan-text)}
-.pricing-fact-value sup{font-size:0.5em;color:var(--tan-text);vertical-align:0.42em;font-weight:500}
-.pricing-fact-value{font-family:var(--display);font-weight:500;font-size:19px;line-height:1.18;letter-spacing:-0.01em}
-.pricing-fact-note{font-family:var(--body);font-size:12px;line-height:1.55;opacity:0.72}
-.pricing-close{margin-top:52px;text-align:center;font-family:var(--display);font-weight:500;font-style:italic;
-  font-size:clamp(20px,2.5vw,29px);line-height:1.32;letter-spacing:-0.015em;max-width:800px;margin-left:auto;margin-right:auto}
-
-/* SCHEDULE */
-.sched{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--rule);margin-top:18px}
-.sched-c{padding:34px 32px 40px 0;border-right:1px solid var(--rule-soft)}
-.sched-c:last-child{border-right:none;padding-left:32px;padding-right:0}
-.sched-a{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan-text)}
-.sched-b{font-family:var(--display);font-weight:500;font-size:clamp(42px,5.2vw,66px);line-height:1;
-  letter-spacing:-0.03em;margin:16px 0 12px}
-.sched-cc{font-family:var(--body);font-size:13px;line-height:1.62;opacity:0.76;max-width:340px}
-
-/* FAQ */
-.faq{border-top:1px solid var(--rule)}
-.faq-i{display:grid;grid-template-columns:1fr 1.4fr;gap:44px;padding:32px 0;border-bottom:1px solid var(--rule-soft)}
-.faq-q{font-family:var(--display);font-weight:500;font-size:clamp(18px,2vw,23px);line-height:1.22;
-  letter-spacing:-0.015em;max-width:400px}
-.faq-a{font-family:var(--body);font-size:15px;line-height:1.72;opacity:0.83}
-
-/* TEAM */
-.team-title{font-family:var(--display);font-weight:500;font-size:clamp(32px,4.2vw,56px);line-height:1.05;
-  letter-spacing:-0.02em;max-width:600px;margin-bottom:64px}
-.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:52px;border-top:1px solid var(--rule);padding-top:52px}
-.team-card{display:flex;flex-direction:column;position:relative;padding-left:30px}
-.team-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--tan);opacity:0.5}
-.team-meta{display:flex;flex-direction:column;gap:13px}
-.team-role{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan-text)}
-.team-name{font-family:var(--display);font-weight:500;font-size:clamp(29px,3vw,40px);line-height:1.05;letter-spacing:-0.02em}
-.team-bio{font-family:var(--body);font-size:14px;line-height:1.74;opacity:0.83;max-width:440px;margin-top:12px}
-
-/* CLOSE */
-.final{position:relative;background:var(--sage);padding:clamp(88px,11vw,136px) 0 clamp(72px,9vw,104px);text-align:center}
-.final-rule{position:absolute;top:0;left:0;right:0;height:1px;background:var(--ink);opacity:0.15}
-.final-title{font-family:var(--display);font-weight:500;font-size:clamp(34px,5vw,70px);line-height:1.05;
-  letter-spacing:-0.025em;max-width:900px;margin:0 auto 60px}
-.section-head--close{text-align:left;margin-bottom:44px}
-.final-asks{display:grid;grid-template-columns:repeat(3,1fr);max-width:940px;margin:0 auto 56px;text-align:left;
-  border-top:1px solid rgba(28,24,18,0.25)}
-.final-ask{padding:32px 26px 36px 0;border-right:1px solid rgba(28,24,18,0.15)}
-.final-ask:last-child{border-right:none;padding-right:0}
-.final-ask:not(:first-child){padding-left:26px}
-.final-ask-num{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;opacity:0.75;margin-bottom:14px}
-.final-ask-body{font-family:var(--display);font-weight:500;font-size:clamp(19px,2.1vw,25px);line-height:1.25;letter-spacing:-0.01em}
-.final-contact{font-family:var(--body);font-size:12px;letter-spacing:0.24em;text-transform:uppercase;opacity:0.78;line-height:2}
-.final-contact a{border-bottom:1px solid rgba(28,24,18,0.3);padding-bottom:2px;transition:border-color .25s var(--ease)}
-.final-contact a:hover{border-color:var(--ink)}
-
-/* FOOTER */
-footer{background:var(--paper);padding:72px 0 52px;position:relative}
-.footer-rule{position:absolute;top:0;left:0;right:0;height:1px;background:var(--tan);opacity:0.55}
-.footer-brand{padding-bottom:48px;border-bottom:1px solid var(--rule-soft)}
-.footer-brand-mark{display:block;height:58px;line-height:1;margin-bottom:16px}
-.footer-brand-mark img{display:block;height:100%;width:auto}
-.footer-brand-tag{font-family:var(--body);font-size:13px;line-height:1.65;opacity:0.7;max-width:340px}
-.footer-legal{margin-top:28px;display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap;
-  font-family:var(--body);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;opacity:0.62}
-.footer-private{color:var(--tan-text);opacity:1;text-align:right}
-.footer-src{margin-top:16px;font-family:var(--body);font-size:11px;letter-spacing:0.06em;text-transform:none;opacity:0.62;max-width:640px}
-
-/* FADE */
-.fade-in{opacity:0;transform:translateY(14px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
-.fade-in.visible{opacity:1;transform:translateY(0)}
-.fade-in.d1{transition-delay:.07s}.fade-in.d2{transition-delay:.15s}
-.fade-in.d3{transition-delay:.23s}.fade-in.d4{transition-delay:.31s}.fade-in.d5{transition-delay:.39s}
-
-/* RESPONSIVE */
-@media(max-width:1080px){
-  .dash-kpis{grid-template-columns:repeat(2,1fr)}
-  .dash-k.k-hero{grid-column:1/-1;border-right:none}
-  .tl-i:nth-child(odd){padding-left:0}
-  .tl-i:last-child{border-bottom:none}
-
-  .toc-grid{grid-template-columns:repeat(3,1fr)}
-  .dash-kpis{grid-template-columns:repeat(2,1fr)}
-  .dash-k:nth-child(3n){border-right:none}
-  .tl{grid-template-columns:repeat(2,1fr)}
-  .tl-i{border-right:1px solid var(--rule-soft);border-bottom:1px solid var(--rule-soft);padding:28px 20px 32px}
-  .tl-i:nth-child(2n){border-right:none}
-  .tl-i:first-child{padding-left:0}
-  .faq-i{grid-template-columns:1fr;gap:14px}
-  .sched{grid-template-columns:1fr}
-  .sched-c{border-right:none;border-bottom:1px solid var(--rule-soft);padding:30px 0 34px}
-  .sched-c:last-child{border-bottom:none;padding-left:0}
-}
-@media(max-width:1024px){
-  .pricing-facts{grid-template-columns:repeat(2,1fr)}
-  .pricing-fact{border-bottom:1px solid var(--rule-soft)}
-  .pricing-fact:nth-child(2n){border-right:none}
-  .pricing-fact:last-child{border-bottom:none}
-  .process-steps{grid-template-columns:1fr}
-  .process-step{border-right:none;border-bottom:1px solid var(--rule-soft);padding:36px 0}
-  .process-step:not(:first-child){padding-left:0}
-  .process-step:last-child{border-bottom:none}
-  .team-grid{grid-template-columns:repeat(2,1fr);gap:48px}
-  .six-grid{grid-template-columns:repeat(2,1fr)}
-  .six:not(:nth-child(3n)){border-right:none;padding-right:28px}
-  .six:not(:nth-child(2n)){border-right:1px solid var(--rule-soft);padding-right:36px}
-  .layer{grid-template-columns:90px 160px 1fr;gap:24px}
-  .clock{grid-template-columns:1fr;gap:14px;padding:38px 0}
-  .clock-label{padding-top:0}
-  .final-asks{grid-template-columns:1fr}
-  .final-ask{border-right:none;border-bottom:1px solid rgba(28,24,18,0.15);padding:28px 0 32px}
-  .final-ask:last-child{border-bottom:none}
-  .final-ask:not(:first-child){padding-left:0}
-}
-@media(max-width:960px){
-  .container,.nav-inner{padding:0 28px}
-  .hero{padding-top:calc(var(--nav-h) + 52px);padding-bottom:56px}
-  .hero-sub{font-size:16px}
-  .toc-grid{grid-template-columns:repeat(2,1fr)}
-  .criteria-grid{grid-template-columns:1fr}
-  .layer{grid-template-columns:1fr;gap:10px;padding:32px 0}
-  .layer-num{padding-top:0}
-  .ask-grid{grid-template-columns:1fr}
-  .ask-col{border-right:none;border-bottom:1px solid var(--rule-soft);padding:36px 0}
-  .ask-col:last-child{border-bottom:none;padding-left:0}
-  .brk{grid-template-columns:1fr;gap:10px}
-  .brk-n{padding-top:0}
-  .def{grid-template-columns:1fr;gap:8px}
-  .ctx{grid-template-columns:repeat(2,1fr)}
-  .ctx-cell:nth-child(2n){border-right:none}
-  .ctx-cell:nth-child(n+3){border-top:1px solid var(--rule-soft)}
-}
-@media(max-width:680px){
-  :root{--gutter:22px;--section-y:72px}
-  .nav-inner{gap:14px}
-  .nav-tag{font-size:9px;letter-spacing:0.16em;text-align:right}
-  .nav-logo{height:24px}
-  nav.scrolled .nav-logo{height:22px}
-  .eyebrow{margin-bottom:30px}
-  .hero h1{margin-bottom:26px}
-  .section-head{margin-bottom:42px}
-  .toc-grid{grid-template-columns:1fr}
-  .toc-head{flex-direction:column;gap:8px}
-  .toc-note{text-align:left}
-  .pricing-facts{grid-template-columns:1fr}
-  .pricing-fact{border-right:none;border-bottom:1px solid var(--rule-soft)}
-  .pricing-fact:last-child{border-bottom:none}
-  .team-grid{grid-template-columns:1fr;gap:44px}
-  .six-grid{grid-template-columns:1fr}
-  .six{border-right:none !important;padding-right:0 !important;padding:26px 0 30px}
-  .criteria-cell{padding:28px 22px 32px}
-  .sage-block{padding:30px 22px}
-  .tl{grid-template-columns:1fr}
-  .tl-i{border-right:none;padding:26px 0 30px}
-  .dash-kpis{grid-template-columns:1fr}
-  .dash-k{border-right:none}
-  .dash-t{font-size:12px}
-  .dash-t{min-width:460px}
-  .dash-t .num{padding-left:10px}
-  .dash-sec,.dash-top{padding:18px 16px}
-  .footer-legal{flex-direction:column;align-items:flex-start;gap:12px}
-  .footer-private{text-align:left}
-  .callout{padding-left:18px;margin-top:44px}
-}
-
-/* A11Y */
-@media (prefers-reduced-motion: reduce){
-  *,*::before,*::after{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important}
-  .fade-in{opacity:1;transform:none}
-  html{scroll-behavior:auto}
-}
-:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
-
-/* PRINT */
-@page{margin:14mm 12mm}
-/* ===== S10 · PHYSICAL TOUCHPOINTS ===== */
-.pf{margin-top:66px}
-.pf-media{overflow:hidden;border:1px solid var(--rule);background:var(--surface-b);line-height:0}
-.pf-media img{display:block;width:100%;height:auto;transform:scale(1.05);transition:transform 1.9s var(--ease)}
-.pf-hero.visible .pf-media img{transform:scale(1)}
-.pf-cap{display:grid;grid-template-columns:210px 1fr;gap:40px;
-  border-top:1px solid var(--rule);padding-top:30px;margin-top:30px}
-.pf-l{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;
-  color:var(--tan-text);padding-top:7px}
-.pf-t{font-family:var(--display);font-weight:500;font-size:clamp(23px,2.7vw,33px);line-height:1.14;
-  letter-spacing:-0.02em;margin-bottom:18px;max-width:660px}
-.pf-b{font-family:var(--body);font-size:15px;line-height:1.76;opacity:0.83;max-width:680px}
-.pf-n{font-family:var(--body);font-size:12px;line-height:1.6;letter-spacing:0.04em;opacity:0.6;margin-top:20px}
-
-.pg-l0{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;
-  color:var(--tan-text);margin-top:84px}
-.pg{display:grid;grid-template-columns:repeat(3,1fr);column-gap:52px;
-  border-top:1px solid var(--rule);margin-top:18px}
-.pc{padding:34px 0 38px;display:flex;flex-direction:column}
-.pc-media{overflow:hidden;border:1px solid var(--rule);background:var(--surface-b);
-  margin-bottom:24px;line-height:0}
-.pc-media img{display:block;width:100%;height:auto;transition:transform 1.2s var(--ease)}
-.pc:hover .pc-media img,.pc:focus-within .pc-media img{transform:scale(1.035)}
-.pc-n{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan-text)}
-.pc-rule{height:1px;background:var(--tan);opacity:0.7;margin:10px 0 2px}
-.pc-t{font-family:var(--display);font-weight:500;font-size:22px;line-height:1.2;
-  letter-spacing:-0.01em;margin-top:8px}
-.pc-b{font-family:var(--body);font-size:13.5px;line-height:1.68;opacity:0.76;margin-top:12px}
-.callout-b + .callout-b{margin-top:18px}
-
-@media(max-width:1024px){
-  .pf-cap{grid-template-columns:170px 1fr;gap:30px}
-}
-@media(max-width:960px){
-  .pf-cap{grid-template-columns:1fr;gap:16px}
-  .pf-l{padding-top:0}
-  .pg{grid-template-columns:1fr;column-gap:0}
-  .pc{border-bottom:1px solid var(--rule-soft);padding:34px 0 38px}
-  .pc:last-child{border-bottom:none}
-  .pc-media{max-width:560px}
-}
-@media(max-width:680px){
-  .pf{margin-top:48px}
-  .pg-l0{margin-top:60px}
-  .pf-media{margin-left:calc(-1 * var(--gutter));margin-right:calc(-1 * var(--gutter));
-    border-left:none;border-right:none}
-}
-@media print{
-  .pf,.pg{margin-top:16pt}
-  .pf-media,.pc-media,.pf-cap,.pg{border-color:#999 !important}
-  .pf-media img,.pc-media img{transform:none !important;max-width:100% !important}
-  .pf-hero,.pc{page-break-inside:avoid}
-  .pg{grid-template-columns:repeat(3,1fr);column-gap:18pt}
-  .pc{padding:10pt 0 10pt !important;border-bottom:none !important}
-  .pg-l0{margin-top:14pt;page-break-after:avoid}
-  .pf-cap{page-break-inside:avoid}
-}
-
-@media print{
-  *{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}
-  body{background:#fff !important;font-size:10.5pt;line-height:1.45}
-  nav,.skip-link,.toc{display:none !important}
-  .fade-in{opacity:1 !important;transform:none !important;transition:none !important}
-  .hero{min-height:auto;padding:0 0 18pt 0}
-  .hero h1{font-size:26pt}
-  .section{padding:16pt 0;page-break-inside:auto}
-  .section-rule,.final-rule,.footer-rule{display:none}
-  h1,h2,h3,.section-title,.clock-title,.brk-t,.faq-q{page-break-after:avoid}
-  .criteria-grid,.criteria-cell,.layer,.six,.pricing-fact,.process-step,.team-card,.sage-block,
-  .final-ask,.brk,.clock,.tl-i,.faq-i,.def,.sched-c,.callout,.dash,.ctx-cell{page-break-inside:avoid}
-  .dash{page-break-before:auto}
-  .criteria-grid,.criteria-cell,.six-grid,.six,.pricing-facts,.pricing-fact,.process-steps,.process-step,
-  .layers,.layer,.ask-grid,.ask-col,.breaks,.brk,.clocks,.clock,.tl,.tl-i,.defs,.def,.faq,.faq-i,
-  .sched,.sched-c,.dash,.dash-k,.dash-sec,.dash-top,.ctx,.ctx-cell{border-color:#999 !important}
-  .dash-bar{border:1pt solid #999}
-  .dash-bar i{background:#999 !important}
-  .callout{border-left:2pt solid #999 !important}
-  .pricing-numeral{font-size:54pt !important}
-  .sched-b{font-size:28pt !important}
-  .final{padding:20pt 0;page-break-inside:avoid}
-  a[href^="mailto:"]::after{content:" (" attr(href) ")";font-size:8.5pt;color:#666 !important}
-  .container{max-width:100%;padding:0}
-  footer{padding:18pt 0 0 0;border-top:1pt solid #000}
-}
-</style>
+<meta property="og:title" content="SSS — Pilote 123Dentist">
+<meta property="og:type" content="website">
 <link rel="stylesheet" href="/cdcp-embed.css">
-<noscript><style>.fade-in{opacity:1 !important;transform:none !important}</style></noscript>
+<style>
+@font-face{font-family:'RhymesText';src:url('/fonts/RhymesTextMedium.otf') format('opentype');font-weight:500;font-display:swap}
+@font-face{font-family:'ABCWalter';src:url('/fonts/ABCWalterAlte-Roentgentherapie.otf') format('opentype');font-weight:400;font-display:swap}
+:root{--paper:#fefae0;--surface-a:#e9edc9;--surface-b:#faedcd;--sage:#ccd5ae;--tan:#d4a373;--ink:#1c1812;--tan-text:#6f4720;
+ --display:'RhymesText','Palatino Linotype',Georgia,serif;--body:'ABCWalter',Helvetica,Arial,sans-serif;
+ --ease:cubic-bezier(.16,1,.3,1);--rule:rgba(28,24,18,.15);--rule-soft:rgba(28,24,18,.1);--container:1120px;--gutter:32px;--y:clamp(64px,8vw,104px)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;scroll-behavior:smooth;scroll-padding-top:84px}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}button{font:inherit;background:none;border:0;cursor:pointer;color:inherit;padding:0}ul,ol{list-style:none}
+::selection{background:var(--tan);color:var(--paper)}
+:focus-visible{outline:2px solid var(--tan-text);outline-offset:3px}
+.wrap{max-width:var(--container);margin:0 auto;padding:0 var(--gutter)}
+html[data-lang="fr"] .en,html[data-lang="en"] .fr{display:none}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance}
+p{text-wrap:pretty}
+.label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--tan-text);display:block;margin-bottom:22px}
+/* nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(254,250,224,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid transparent;transition:border-color .3s}
+nav.s{border-bottom-color:var(--rule)}
+.nav-in{max-width:var(--container);margin:0 auto;padding:14px var(--gutter);display:flex;align-items:center;justify-content:space-between;gap:20px}
+.nav-in img{height:26px;width:auto;display:block}
+.nav-r{display:flex;align-items:center;gap:26px}
+.nav-links{display:flex;gap:22px;font-size:13px}
+.nav-links a{opacity:.72;transition:opacity .2s}.nav-links a:hover{opacity:1}
+.lang{display:flex;gap:7px;font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+.lang button{opacity:.5;padding:4px 2px;color:var(--tan-text)}.lang button[aria-pressed="true"]{opacity:1;color:var(--ink)}
+.lang i{font-style:normal;opacity:.35;color:var(--tan-text);padding:4px 0}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--paper);font-size:14px;padding:14px 24px;transition:opacity .2s,transform .2s;min-height:48px}
+.btn:hover{opacity:.85}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--ink)}
+/* hero */
+.hero{padding:calc(60px + clamp(48px,8vw,96px)) 0 56px}
+.hero h1{font-size:clamp(38px,6vw,76px);line-height:1.04;letter-spacing:-.028em;max-width:920px;margin-bottom:28px}
+.hero h1 em{font-style:normal;color:var(--tan-text)}
+.lede{font-size:18px;line-height:1.65;max-width:680px;opacity:.82;margin-bottom:36px}
+.cta{display:flex;gap:14px;flex-wrap:wrap}
+.glance{margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--rule)}
+.glance div{padding:22px 20px 0 0}
+.glance b{display:block;font-family:var(--display);font-weight:500;font-size:clamp(24px,3vw,34px);letter-spacing:-.02em;line-height:1.1}
+.glance div>span{font-size:13px;opacity:.65;display:block;margin-top:6px;line-height:1.4}
+/* sections */
+section{padding:var(--y) 0;position:relative}
+section+section::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:var(--tan);opacity:.5}
+.a{background:var(--surface-a)}.b{background:var(--surface-b)}
+h2{font-size:clamp(28px,3.8vw,46px);line-height:1.08;letter-spacing:-.022em;max-width:760px;margin-bottom:40px}
+/* gets */
+.gets{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:var(--paper);border:1px solid var(--rule);padding:30px 28px;display:flex;flex-direction:column;gap:12px}
+.card .n{font-size:11px;letter-spacing:.2em;color:var(--tan-text)}
+.card h3{font-size:22px;line-height:1.2;letter-spacing:-.01em}
+.card p{font-size:15px;line-height:1.65;opacity:.84}
+.link{align-self:flex-start;margin-top:auto;padding-top:6px;font-size:14px;border-bottom:1px solid var(--tan);padding-bottom:2px}
+.link .ar{display:inline-block;transition:transform .25s}.link[aria-expanded="true"] .ar{transform:rotate(90deg)}
+.drawer{max-height:0;overflow:hidden;transition:max-height .55s var(--ease)}
+.drawer.open{max-height:2600px}
+.drawer-in{padding-top:28px}
+.demo-tag{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.6;margin-bottom:16px}
+/* journey */
+.journey{display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:j}
+.journey li{counter-increment:j;padding:0 24px 0 0;position:relative;font-family:var(--display);font-size:20px;line-height:1.25;letter-spacing:-.01em}
+.journey li::before{content:counter(j,decimal-leading-zero);display:block;font-family:var(--body);font-size:11px;letter-spacing:.2em;color:var(--tan-text);border-top:2px solid var(--tan);padding-top:14px;margin-bottom:12px}
+/* clinic */
+.clinic{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,64px);align-items:center}
+.clinic img{width:100%;height:auto;display:block;border:1px solid var(--rule)}
+.clinic h3{font-size:26px;line-height:1.15;margin-bottom:14px}
+.clinic p{font-size:16px;line-height:1.7;opacity:.85;margin-bottom:22px}
+.later{font-size:14px;border-left:2px solid var(--tan);padding-left:18px;opacity:.85;line-height:1.65}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.tags>span{font-size:12px;border:1px solid var(--rule);padding:5px 12px;background:var(--paper)}
+/* timeline */
+.tl li{display:grid;grid-template-columns:130px 1fr;gap:24px;padding:20px 0;border-top:1px solid var(--rule)}
+.tl li:last-child{border-bottom:1px solid var(--rule)}
+.tl b{font-family:var(--display);font-weight:500;font-size:20px}
+.tl li:last-child b{color:var(--tan-text)}
+.tl p{font-size:16px;line-height:1.6;opacity:.86;max-width:640px}
+.note{font-size:14px;opacity:.7;margin-top:22px;max-width:640px;line-height:1.65}
+/* pricing */
+.price-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(28px,5vw,64px);align-items:start}
+.rows li{display:flex;justify-content:space-between;gap:20px;padding:20px 0;border-top:1px solid var(--rule);align-items:baseline}
+.rows li:last-child{border-bottom:1px solid var(--rule)}
+.rows b{font-weight:400;font-size:17px;display:block}
+.rows small{display:block;font-size:13.5px;opacity:.68;margin-top:4px;line-height:1.5;max-width:420px}
+.rows .p{font-family:var(--display);font-size:24px;white-space:nowrap;letter-spacing:-.01em}
+.rows .p small{display:inline;font-family:var(--body);font-size:13px;opacity:.6}
+.rows li.main .p{color:var(--tan-text)}
+.no{background:var(--paper);border:1px solid var(--rule);padding:28px}
+.no h3{font-size:20px;margin-bottom:14px}
+.no li{padding:10px 0 10px 26px;position:relative;font-size:15px;line-height:1.55;border-top:1px solid var(--rule-soft)}
+.no li:first-of-type{border-top:0}
+.no li::before{content:"✓";position:absolute;left:0;color:var(--tan-text)}
+/* why */
+.why{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.why div{border-top:2px solid var(--tan);padding-top:18px}
+.why h3{font-size:20px;margin-bottom:8px;line-height:1.2}
+.why p{font-size:15px;line-height:1.65;opacity:.84}
+/* faq */
+.faq{max-width:780px}
+.faq details{border-top:1px solid var(--rule)}.faq details:last-child{border-bottom:1px solid var(--rule)}
+.faq summary{cursor:pointer;list-style:none;padding:20px 40px 20px 0;font-family:var(--display);font-size:20px;position:relative;line-height:1.25}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:4px;top:18px;font-size:26px;color:var(--tan-text);font-family:var(--body)}
+.faq details[open] summary::after{content:"–"}
+.faq details p{padding:0 40px 22px 0;font-size:16px;line-height:1.7;opacity:.85}
+/* close */
+.close{background:var(--ink);color:var(--paper)}
+.close::before{display:none}
+.close .label{color:var(--tan)}
+.close h2{color:var(--paper);margin-bottom:28px;font-size:clamp(32px,5vw,60px)}
+.close p{font-size:17px;line-height:1.65;opacity:.85;max-width:620px;margin-bottom:32px}
+.close .btn{background:var(--paper);color:var(--ink)}
+.close .who{margin-top:36px;font-size:14px;opacity:.75;line-height:1.7}
+footer{background:var(--ink);color:var(--paper);padding:0 0 36px;font-size:12px;opacity:.9}
+footer .wrap{border-top:1px solid rgba(254,250,224,.18);padding-top:22px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:rgba(254,250,224,.6)}
+.fade{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.fade.v{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.fade{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.drawer{transition:none}}
+@media(max-width:900px){
+ :root{--gutter:20px}
+ .nav-links{display:none}
+ .gets,.why{grid-template-columns:1fr}
+ .journey{grid-template-columns:1fr 1fr;gap:28px 0}
+ .clinic,.price-grid{grid-template-columns:1fr}
+ .glance{grid-template-columns:1fr 1fr}
+ .tl li{grid-template-columns:1fr;gap:6px}
+ .lede{font-size:17px}
+}
+@media(max-width:480px){.journey{grid-template-columns:1fr}.rows li{flex-direction:column;gap:6px}.btn{width:100%;justify-content:center}}
+@media print{nav,.lang,.drawer{display:none !important}.fade{opacity:1;transform:none}.close{background:none;color:var(--ink)}.close h2,.close p{color:var(--ink)}}
+</style>
+<noscript><style>.fade{opacity:1;transform:none}.drawer{max-height:none}</style></noscript>
 </head>
 <body>
 
-<a class="skip-link" href="#main-content" data-i="skip">Skip to content</a>
-
-<nav id="nav" aria-label="Document header">
-  <div class="nav-inner">
-    <a href="#top" class="nav-logo" aria-label="SSS">
-      <img src="/logo-nav.png" srcset="/logo-nav.png 1x, /logo-nav@2x.png 2x, /logo-nav@3x.png 3x"
-           alt="SSS" width="74" height="30" fetchpriority="high" loading="eager" decoding="async">
-    </a>
-    <div class="nav-right">
-      <span class="nav-tag" data-i="navTag">Prepared for 123Dentist</span>
-      <a class="nav-ask" href="#close" data-i="navAsk">The ask</a>
-      <div class="lang-toggle" role="group" aria-label="Language / Langue">
-        <button type="button" data-lang="en" aria-pressed="true">EN</button>
-        <span class="lsep" aria-hidden="true">/</span>
-        <button type="button" data-lang="fr" aria-pressed="false">FR</button>
-      </div>
-    </div>
+<nav id="nav" aria-label="Navigation">
+ <div class="nav-in">
+  <a href="#top" aria-label="SSS"><img src="/logo-nav.png" srcset="/logo-nav.png 1x,/logo-nav@2x.png 2x,/logo-nav@3x.png 3x" alt="SSS" width="64" height="26"></a>
+  <div class="nav-r">
+   <div class="nav-links">
+    <a href="#offre"><span class="fr">L’offre</span><span class="en">The offer</span></a>
+    <a href="#calendrier"><span class="fr">Calendrier</span><span class="en">Timeline</span></a>
+    <a href="#tarifs"><span class="fr">Tarifs</span><span class="en">Pricing</span></a>
+    <a href="#decision"><span class="fr">Décision</span><span class="en">Decision</span></a>
+   </div>
+   <div class="lang" role="group" aria-label="Langue / Language">
+    <button type="button" data-l="fr" aria-pressed="true">FR</button><i>/</i><button type="button" data-l="en" aria-pressed="false">EN</button>
+   </div>
   </div>
+ </div>
 </nav>
 
-<main id="main-content">
+<main>
 <header class="hero" id="top">
-  <div class="container">
-    <div class="hero-left">
-      <p class="eyebrow fade-in d1" data-i="heroEyebrow">Pilot proposal · Prepared for 123Dentist · August 2026</p>
-      <h1 class="fade-in d2" data-i="heroH1">You added twenty-seven clinics in a single transaction. <em>No two of them measure the same way.</em></h1>
-      <p class="hero-sub fade-in d3" data-i="heroSub">One clinic package. Six growth levers, one dashboard, one definition of a booked patient. Built the same way at every location, live fourteen days after we get account access. This is a proposal to prove it on six clinics before anyone talks about five hundred.</p>
-    </div>
+ <div class="wrap">
+  <span class="label fade"><span class="fr">Pilote 123Dentist · Octobre 2026</span><span class="en">123Dentist pilot · October 2026</span></span>
+  <h1 class="fade">
+   <span class="fr">Quelques cliniques. Un test court. <em>Que la meilleure approche gagne.</em></span>
+   <span class="en">A few clinics. A short test. <em>Let the best approach win.</em></span>
+  </h1>
+  <p class="lede fade">
+   <span class="fr">SSS gère Performance Max, place une calculatrice RCSD devant le patient avant qu’il appelle, et installe une présence physique dans la clinique. Les résultats sont comparés aux campagnes actuelles des cliniques du pilote.</span>
+   <span class="en">SSS runs Performance Max, puts a CDCP calculator in front of the patient before they call, and sets up a physical presence in the clinic. Results are compared with the pilot clinics’ current campaigns.</span>
+  </p>
+  <div class="cta fade">
+   <a class="btn" href="#decision"><span class="fr">Ce qu’on vous demande</span><span class="en">What we’re asking</span> <span aria-hidden="true">→</span></a>
+   <button class="btn ghost" type="button" id="tryHero"><span class="fr">Essayer la calculatrice</span><span class="en">Try the calculator</span></button>
   </div>
+  <div class="glance fade">
+   <div><b>30 <span class="fr">jours</span><span class="en">days</span></b><span><span class="fr">pour être en ligne, puis bilan à 90 jours</span><span class="en">to go live, joint review at 90 days</span></span></div>
+   <div><b>449 $<small style="font-size:.5em;opacity:.6"> /<span class="fr">mois</span><span class="en">mo</span></small></b><span><span class="fr">par clinique, mois par mois</span><span class="en">per clinic, month to month</span></span></div>
+   <div><b><span class="fr">0 accès</span><span class="en">0 access</span></b><span><span class="fr">au logiciel de gestion, aucune donnée patient</span><span class="en">to practice software, no patient data</span></span></div>
+   <div><b><span class="fr">0 exclusivité</span><span class="en">0 exclusivity</span></b><span><span class="fr">aucune agence à remplacer</span><span class="en">no agency to replace</span></span></div>
+  </div>
+ </div>
 </header>
 
-<section class="toc" aria-label="Contents">
-  <div class="container">
-    <div class="toc-inner fade-in">
-      <div class="toc-head"><span data-i="tocLabel">Contents</span><span class="toc-note" data-i="tocRead">Sixteen minutes to read. Built to be forwarded.</span></div>
-      <div class="toc-grid"><a class="toc-item" href="#why"><span class="n">01</span><span data-i="toc1">Why this quarter</span></a><a class="toc-item" href="#breaks"><span class="n">02</span><span data-i="toc2">What breaks at five hundred</span></a><a class="toc-item" href="#package"><span class="n">03</span><span data-i="toc3">The standard clinic package</span></a><a class="toc-item" href="#measure"><span class="n">04</span><span data-i="toc4">How a booked patient is measured</span></a><a class="toc-item" href="#dashboard"><span class="n">05</span><span data-i="toc5">The dashboard</span></a><a class="toc-item" href="#pilot"><span class="n">06</span><span data-i="toc6">The pilot, and the bar</span></a><a class="toc-item" href="#rollout"><span class="n">07</span><span data-i="toc7">The first four months</span></a><a class="toc-item" href="#fit"><span class="n">08</span><span data-i="toc8">Where we fit</span></a><a class="toc-item" href="#terms"><span class="n">09</span><span data-i="toc9">Commercial terms</span></a><a class="toc-item" href="#team"><span class="n">10</span><span data-i="toc11">Who runs it</span></a><a class="toc-item" href="#faq"><span class="n">11</span><span data-i="toc12">Questions you’ll be asked</span></a><a class="toc-item" href="#close"><span class="n">12</span><span data-i="toc13">The ask</span></a><a class="toc-item" href="#roadmap"><span class="n" data-i="tocApx">Apx</span><span data-i="toc10">What comes after Google</span></a></div>
-    </div>
+<section class="a" id="offre">
+ <div class="wrap">
+  <span class="label fade"><span class="fr">Ce que 123 obtient</span><span class="en">What 123 gets</span></span>
+  <h2 class="fade"><span class="fr">Trois choses, pour les cliniques que vous choisissez.</span><span class="en">Three things, for the clinics you choose.</span></h2>
+  <div class="gets">
+   <div class="card fade">
+    <span class="n">01</span>
+    <h3><span class="fr">Performance Max géré par SSS</span><span class="en">PMax run by SSS</span></h3>
+    <p><span class="fr">Votre équipe PPC l’a dit : PMax fonctionne, mais demande une gestion intensive. SSS prend cette charge sur les cliniques du pilote.</span><span class="en">Your PPC team said it: PMax works, but it takes intense management. SSS takes that load on for the pilot clinics.</span></p>
+   </div>
+   <div class="card fade">
+    <span class="n">02</span>
+    <h3><span class="fr">Calculatrice RCSD</span><span class="en">CDCP calculator</span></h3>
+    <p><span class="fr">Le patient répond à quelques questions, voit s’il est admissible et réserve. Déjà construite. Votre équipe web a confirmé qu’elle peut être mise en place pour un test.</span><span class="en">The patient answers a few questions, sees whether they qualify and books. Already built. Your web team confirmed it can be implemented for a test.</span></p>
+    <button class="link" type="button" id="tryCard" aria-expanded="false" aria-controls="drawer"><span class="fr">Essayer</span><span class="en">Try it</span> <span class="ar" aria-hidden="true">→</span></button>
+   </div>
+   <div class="card fade">
+    <span class="n">03</span>
+    <h3><span class="fr">Fourchettes de prix par clinique</span><span class="en">Per-clinic price ranges</span></h3>
+    <p><span class="fr">Prix approximatifs par clinique, à côté des guides tarifaires fédéral, provincial et 123. Issus d’un court questionnaire aux cliniques, mis à jour chaque 1<sup>er</sup> janvier.</span><span class="en">Approximate prices per clinic, shown against the federal, provincial and 123 fee guides. From a short clinic questionnaire, refreshed every January 1.</span></p>
+   </div>
   </div>
+  <div class="drawer" id="drawer">
+   <div class="drawer-in">
+    <span class="demo-tag"><span class="fr">Ce que le patient voit sur le site de la clinique</span><span class="en">What the patient sees on the clinic’s site</span></span>
+    <div class="quiz-wrap"><div class="quiz-card"><div id="quiz"></div></div></div>
+   </div>
+  </div>
+ </div>
 </section>
 
-<!-- 01 WHY NOW -->
-<section class="section section--surface-b" id="why" aria-labelledby="whyTitle">
-  <div class="section-rule"></div>
-  <div class="container">
-    <div class="section-head fade-in"><span class="num">01</span><span class="sep"></span><span data-i="s01head">Why this quarter</span></div>
-    <h2 class="section-title fade-in d1" id="whyTitle" data-i="s01title">Two clocks are running at once.</h2>
-    <p class="section-lede fade-in d2" data-i="s01lede">Neither is a marketing trend. One is federal policy. The other is your own acquisition schedule.</p>
-    <div class="clocks"><div class="clock fade-in d1"><div class="clock-label" data-i="clock1Label">Clock one · Coverage</div><div><h3 class="clock-title" data-i="clock1Title">Two point three million Canadians are covered, and still haven’t gone.</h3><p class="clock-body" data-i="clock1Body">Health Canada put the eligible population near nine million. As of March 2026, 6.5 million had enrolled and 4.2 million had actually received care. The difference is roughly 2.3 million people who are covered, know they are covered, and still haven’t picked a dentist. They will pick the way people pick a dentist in a hurry: search, scan the reviews, call whoever answers. That patient then comes back every six months for a decade. You built a CDCP hub and city locator pages, so none of this is news. The part worth saying out loud is that it only happens once. Each of those patients gets chosen by somebody.</p></div></div><div class="clock fade-in d2"><div class="clock-label" data-i="clock2Label">Clock two · Integration</div><div><h3 class="clock-title" data-i="clock2Title">Every clinic you buy arrives with someone else’s marketing.</h3><p class="clock-body" data-i="clock2Body">A different agency. A different Google Ads account, built by someone you’ll never meet. Different tracking, or none. A different idea of what counts as a new patient. Twenty-seven of them arrived in a single transaction last October. Every one of those clinics is a number your team can’t compare to the clinic beside it. Comparability is the whole reason a network is worth more than the sum of its practices.</p></div></div></div>
-    <div class="ctx-l0 fade-in" data-i="ctxLabel">Your network, as published</div>
-    <div class="ctx"><div class="ctx-cell fade-in d1"><div class="ctx-v" data-i="ctx1v">509</div><div class="ctx-l" data-i="ctx1l">partner clinics</div></div><div class="ctx-cell fade-in d2"><div class="ctx-v" data-i="ctx2v">27</div><div class="ctx-l" data-i="ctx2l">added with MCA Dental Group</div></div><div class="ctx-cell fade-in d3"><div class="ctx-v" data-i="ctx3v">10</div><div class="ctx-l" data-i="ctx3l">provinces</div></div><div class="ctx-cell fade-in d4"><div class="ctx-v" data-i="ctx4v">2M</div><div class="ctx-l" data-i="ctx4l">patients a year</div></div></div>
-  </div>
+<section id="parcours">
+ <div class="wrap">
+  <span class="label fade"><span class="fr">Parcours du patient</span><span class="en">Patient journey</span></span>
+  <h2 class="fade"><span class="fr">De l’annonce à la chaise, en quatre étapes.</span><span class="en">From ad to chair, in four steps.</span></h2>
+  <ol class="journey fade">
+   <li><span class="fr">Annonce Google ciblée</span><span class="en">Targeted Google ad</span></li>
+   <li><span class="fr">Page de la calculatrice</span><span class="en">Calculator page</span></li>
+   <li><span class="fr">Fourchette de prix de la clinique</span><span class="en">Clinic price range</span></li>
+   <li><span class="fr">Réservation, puis plaquette NFC à la sortie</span><span class="en">Booking, then NFC pad on the way out</span></li>
+  </ol>
+ </div>
 </section>
 
-<!-- 02 WHAT BREAKS -->
-<section class="section section--paper" id="breaks" aria-labelledby="breaksTitle">
-  <div class="section-rule"></div>
-  <div class="container">
-    <div class="section-head fade-in"><span class="num">02</span><span class="sep"></span><span data-i="s02head">What breaks at five hundred</span></div>
-    <h2 class="section-title fade-in d1" id="breaksTitle" data-i="s02title">Local marketing doesn’t fail at scale. It fragments.</h2>
-    <p class="section-lede section-lede--wide fade-in d2" data-i="s02lede">None of this is a criticism of how 123Dentist runs marketing. It’s the arithmetic of buying five hundred independent practices that each kept their own name, their own site and their own vendor.</p>
-    <div class="breaks"><div class="brk fade-in d1"><div class="brk-n" data-i="br1n">One</div><div><h3 class="brk-t" data-i="br1t">Five hundred definitions of a new patient.</h3><p class="brk-b" data-i="br1b">One agency counts form fills. Another counts phone calls, including the ones nobody picked up. A third counts anyone who clicked. Add those together and you get a network number nobody can defend line by line. That’s the only kind of number that survives a board.</p></div></div><div class="brk fade-in d2"><div class="brk-n" data-i="br2n">Two</div><div><h3 class="brk-t" data-i="br2t">The best clinic and the worst clinic look identical from head office.</h3><p class="brk-b" data-i="br2b">Without a common measure, a clinic with a marketing problem looks the same as a clinic with a front-desk problem, or a clinic in a slower market. So budget becomes a negotiation instead of a calculation. The loudest region wins.</p></div></div><div class="brk fade-in d3"><div class="brk-n" data-i="br3n">Three</div><div><h3 class="brk-t" data-i="br3t">Onboarding a clinic takes longer than buying it.</h3><p class="brk-b" data-i="br3b">The deal closes. Then someone has to track down the old agency, recover the ad account, find out who owns the Business Profile, discover tracking was never installed, and rebuild all of it. Thirty-five times a year. Meanwhile the campaigns either run unwatched or stop.</p></div></div><div class="brk fade-in d4"><div class="brk-n" data-i="br4n">Four</div><div><h3 class="brk-t" data-i="br4t">Vendor count grows faster than clinic count.</h3><p class="brk-b" data-i="br4b">Every acquisition can bring a contract, an invoice, a login and a quarterly call. You chose none of them. They all end up on your desk.</p></div></div></div>
-    <p class="statement fade-in" data-i="s02close">A better agency doesn’t fix this. A standard unit does: one package, built the same way every time, producing one number that means the same thing at every location. That’s the proposal.</p>
+<section class="b" id="clinique">
+ <div class="wrap">
+  <span class="label fade"><span class="fr">Présence en clinique</span><span class="en">In the clinic</span></span>
+  <div class="clinic">
+   <img class="fade" src="/123/img/p-nfc-800.webp" srcset="/123/img/p-nfc-800.webp 800w,/123/img/p-nfc-1600.webp 1600w" sizes="(max-width:900px) 100vw,540px" alt="" width="800" loading="lazy">
+   <div class="fade">
+    <h3><span class="fr">Plaquette NFC pour avis Google</span><span class="en">NFC Google review pad</span></h3>
+    <p><span class="fr">Posée à la réception. Le patient la touche en sortant, quand il est le plus satisfait, et laisse un avis Google en quelques secondes. Aux couleurs de la clinique, et de 123 si vous le souhaitez. Incluse dans la gestion Google.</span><span class="en">Sits at the front desk. The patient taps it on the way out, when they are happiest, and leaves a Google review in seconds. Carries the clinic’s mark, and 123’s if you want. Included with Google management.</span></p>
+    <div class="tags"><span><span class="fr">Fiche Google corrigée</span><span class="en">Google profile corrected</span></span><span><span class="fr">Un numéro suivi par clinique</span><span class="en">One tracked number per clinic</span></span><span><span class="fr">Rapport mensuel</span><span class="en">Monthly report</span></span></div>
+    <p class="later"><span class="fr"><b>Après le pilote, sur demande :</b> portail WiFi de la salle d’attente, station de recharge, lunettes de soleil au fauteuil. Concepts à définir avec votre équipe. Rien n’est inclus ni facturé dans le pilote.</span><span class="en"><b>After the pilot, on request:</b> waiting-room WiFi sign-in, charging station, sunglasses at the chair. Concepts to define with your team. Nothing is included or billed in the pilot.</span></p>
+   </div>
   </div>
+ </div>
 </section>
 
-<!-- 03 PACKAGE -->
-<section class="section section--surface-a" id="package" aria-labelledby="pkgTitle">
-  <div class="section-rule"></div>
-  <div class="container">
-    <div class="section-head fade-in"><span class="num">03</span><span class="sep"></span><span data-i="s03head">The standard clinic package</span></div>
-    <h2 class="section-title fade-in d1" id="pkgTitle" data-i="s03title">One package. Six components. No configuration meeting.</h2>
-    <p class="section-lede section-lede--wide fade-in d2" data-i="s03lede">Nothing here is selected, scoped or priced separately. Every pilot clinic gets all six, built to the same written spec. So does every clinic after it.</p>
-    <div class="six-grid"><div class="six fade-in d1"><div class="six-num" data-i="svc1Num">01 / Search</div><div class="six-rule"></div><h3 class="six-name" data-i="svc1Name">Google Ads — Search</h3><p class="six-desc" data-i="svc1Desc">The clinic, first, when someone in that city searches for a dentist.</p></div><div class="six fade-in d2"><div class="six-num" data-i="svc2Num">02 / Local</div><div class="six-rule"></div><h3 class="six-name" data-i="svc2Name">Google Business Profile</h3><p class="six-desc" data-i="svc2Desc">First on the map. Hours, services and photos correct. Reviews answered.</p></div><div class="six fade-in d3"><div class="six-num" data-i="svc3Num">03 / Measurement</div><div class="six-rule"></div><h3 class="six-name" data-i="svc3Name">Dashboard &amp; call tracking</h3><p class="six-desc" data-i="svc3Desc">One tracked number per clinic. Every dollar traced to the chair.</p></div><div class="six fade-in d1"><div class="six-num" data-i="svc4Num">04 / Display</div><div class="six-rule"></div><h3 class="six-name" data-i="svc4Name">Google Ads — Display</h3><p class="six-desc" data-i="svc4Desc">Banner placement in the clinic’s catchment, budgeted to support search.</p></div><div class="six fade-in d2"><div class="six-num" data-i="svc5Num">05 / CDCP</div><div class="six-rule"></div><h3 class="six-name" data-i="svc5Name">CDCP Interactive Conversion Engine</h3><p class="six-desc" data-i="svc5Desc">Qualified in 60 seconds. Booked instantly.</p><button type="button" class="six-cta" id="cdcp123Trigger" aria-expanded="false" aria-controls="cdcp123Drawer" data-i="svc5Cta">Try it <span class="six-cta-arrow" aria-hidden="true">&#8594;</span></button></div><div class="six fade-in d3"><div class="six-num" data-i="svc6Num">06 / Reviews</div><div class="six-rule"></div><h3 class="six-name" data-i="svc6Name">Google Reviews · NFC</h3><p class="six-desc" data-i="svc6Desc">A tap pad at the front desk. A Google review in seconds. More reviews lower the cost of the next patient.</p></div></div>
-    <p class="note fade-in" data-i="s03note">Six, because these are the six places a patient’s decision actually gets made. Nothing is billed separately. Anything we can’t defend on the dashboard isn’t in the package.</p>
-    <div id="cdcp123Drawer" class="cdcp123-drawer">
-      <div class="cdcp123-drawer-inner">
-        <span class="quiz-demo-tag" id="cdcp123Tag" data-i="cdcp123Tag">Patient-facing tool — this is what visitors on your site would see</span>
-        <div class="quiz-wrap">
-          <div class="quiz-card">
-            <div id="cdcpQuiz123"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<section id="calendrier">
+ <div class="wrap">
+  <span class="label fade"><span class="fr">Calendrier proposé</span><span class="en">Proposed timeline</span></span>
+  <h2 class="fade"><span class="fr">En ligne en deux semaines. Bilan à 90 jours.</span><span class="en">Live in two weeks. Review at 90 days.</span></h2>
+  <ol class="tl fade">
+   <li><b><span class="fr">Jour 0</span><span class="en">Day 0</span></b><p><span class="fr">123 nomme les cliniques. Une séance d’accès aux comptes (Google Ads, Analytics).</span><span class="en">123 names the clinics. One account-access session (Google Ads, Analytics).</span></p></li>
+   <li><b><span class="fr">Jours 1–7</span><span class="en">Days 1–7</span></b><p><span class="fr">Revue des campagnes actuelles, configuration de Performance Max, fiches Google corrigées.</span><span class="en">Review of current campaigns, Performance Max setup, Google profiles corrected.</span></p></li>
+   <li><b><span class="fr">Jours 8–14</span><span class="en">Days 8–14</span></b><p><span class="fr">Calculatrice (version standard) en ligne et reliée aux annonces. Plaquettes NFC livrées.</span><span class="en">Calculator (standard version) live and connected to the ads. NFC pads delivered.</span></p></li>
+   <li><b><span class="fr">Jours 15–30</span><span class="en">Days 15–30</span></b><p><span class="fr">Questionnaire envoyé aux cliniques. Fourchettes de prix ajoutées à mesure que les réponses arrivent.</span><span class="en">Questionnaire sent to clinics. Price ranges added as answers come in.</span></p></li>
+   <li><b><span class="fr">Jour 90</span><span class="en">Day 90</span></b><p><span class="fr">Bilan conjoint selon les critères fixés avant le lancement : prolonger, élargir ou arrêter.</span><span class="en">Joint review against criteria set before launch: extend, expand or stop.</span></p></li>
+  </ol>
+  <p class="note fade"><span class="fr">Critères établis avec 123 avant le lancement, à partir du rapport Google Ads de votre équipe PPC et des pistes RCSD générées par la calculatrice.</span><span class="en">Criteria set with 123 before launch, using your PPC team’s Google Ads report and the CDCP leads generated through the calculator.</span></p>
+ </div>
 </section>
 
-<!-- 04 MEASUREMENT -->
-<section class="section section--paper" id="measure" aria-labelledby="measTitle">
-  <div class="section-rule"></div>
-  <div class="container">
-    <div class="section-head fade-in"><span class="num">04</span><span class="sep"></span><span data-i="s04head">How a booked patient is measured</span></div>
-    <h2 class="section-title fade-in d1" id="measTitle" data-i="s04title">Three layers. Two are ours. One is yours.</h2>
-    <div class="layers"><div class="layer fade-in d1"><div class="layer-num" data-i="layer1Num">Layer one</div><div class="layer-owner" data-i="layer1Owner">Ours.</div><p class="layer-body" data-i="layer1Body">A tracked number per clinic, inserted dynamically on your existing site. Which call came from which keyword, at what hour, in which city. Your site. Your brand. Our tracking.</p></div><div class="layer fade-in d2"><div class="layer-num" data-i="layer2Num">Layer two</div><div class="layer-owner" data-i="layer2Owner">Ours.</div><p class="layer-body" data-i="layer2Body">The booking path on the site, tracked end to end, including where people drop out.</p></div><div class="layer fade-in d3"><div class="layer-num" data-i="layer3Num">Layer three</div><div class="layer-owner" data-i="layer3Owner">Yours.</div><p class="layer-body" data-i="layer3Body">Whether the call became an appointment, and whether the patient showed. That lives in your practice management system, and it stays there.</p></div></div>
-    <div class="sage-block fade-in">
-      <p class="sage-lead" data-i="sageLead">We do not integrate with Dentrix, Tracker, Cleardent, or any other practice management system. No integration. No IT project. No patient data leaves the clinic.</p>
-      <p data-i="sageP2">We need six columns in a shared sheet: date, tracked number, answered, booked, appointment date, showed. We fill the left half automatically. The front desk fills three columns. Two minutes a week.</p>
-      <p data-i="sageP3">Where a clinic can’t complete the reconciliation, that clinic’s dashboard reads “qualified calls,” not “booked patients.” We’d rather under-claim than get caught over-claiming.</p>
-    </div>
-    <div class="callout fade-in">
-      <p class="callout-b" data-i="s04why">The moment a marketing vendor asks for practice-management access, it stops being your decision. It becomes an IT decision, a privacy decision and a legal decision. That review takes months. It’s why most attribution projects inside dental groups are still unfinished. Six columns in a spreadsheet isn’t a compromise. It’s the version that ships in fourteen days.</p>
-    </div>
+<section class="a" id="tarifs">
+ <div class="wrap">
+  <span class="label fade"><span class="fr">Tarifs, par clinique</span><span class="en">Pricing, per clinic</span></span>
+  <h2 class="fade"><span class="fr">Quatre lignes. Rien de caché.</span><span class="en">Four lines. Nothing hidden.</span></h2>
+  <div class="price-grid">
+   <div class="fade">
+    <ul class="rows">
+     <li class="main"><div><b><span class="fr">Gestion Google</span><span class="en">Google management</span></b><small><span class="fr">Performance Max, fiche Google, suivi d’appels, rapport mensuel, plaquette NFC. Mois par mois, sans engagement.</span><span class="en">Performance Max, Google profile, call tracking, monthly report, NFC pad. Month to month, no commitment.</span></small></div><div class="p"><span class="fr">449 $ <small>/ mois</small></span><span class="en">$449 <small>/ mo</small></span></div></li>
+     <li><div><b><span class="fr">Calculatrice RCSD standard</span><span class="en">Standard CDCP calculator</span></b><small><span class="fr">Données publiques, sans personnalisation.</span><span class="en">Public data, no customization.</span></small></div><div class="p"><span class="fr">75 $ <small>/ mois</small></span><span class="en">$75 <small>/ mo</small></span></div></li>
+     <li><div><b><span class="fr">Calculatrice aux couleurs de la clinique</span><span class="en">Clinic-branded calculator</span></b><small><span class="fr">Sur son site, avec ses tarifs et sa spécialité.</span><span class="en">On its site, with its fees and specialty.</span></small></div><div class="p"><span class="fr">150 $ <small>/ mois</small></span><span class="en">$150 <small>/ mo</small></span></div></li>
+     <li><div><b><span class="fr">Mise en place</span><span class="en">Setup</span></b><small><span class="fr">Une seule fois.</span><span class="en">One time.</span></small></div><div class="p"><span class="fr">499 $</span><span class="en">$499</span></div></li>
+    </ul>
+    <p class="note"><span class="fr">Dollars canadiens. Le budget média est facturé directement par Google, sans majoration.</span><span class="en">Canadian dollars. Media spend is billed directly by Google, with no markup.</span></p>
+   </div>
+   <div class="no fade">
+    <h3><span class="fr">Ce dont nous n’avons pas besoin</span><span class="en">What we don’t need</span></h3>
+    <ul>
+     <li><span class="fr">Aucun accès au logiciel de gestion de la clinique. Aucune donnée patient.</span><span class="en">No access to the practice management software. No patient data.</span></li>
+     <li><span class="fr">Aucune exclusivité, aucune agence à remplacer.</span><span class="en">No exclusivity, no agency to replace.</span></li>
+     <li><span class="fr">Les comptes publicitaires restent au nom de 123.</span><span class="en">Ad accounts stay in 123’s name.</span></li>
+    </ul>
+   </div>
   </div>
+ </div>
 </section>
 
-<!-- 05 DASHBOARD -->
-<section class="section section--surface-b" id="dashboard" aria-labelledby="dashTitle">
-  <div class="section-rule"></div>
-  <div class="container">
-    <div class="section-head fade-in"><span class="num">05</span><span class="sep"></span><span data-i="s05head">The dashboard</span></div>
-    <h2 class="section-title fade-in d1" id="dashTitle" data-i="s05title">What arrives on the fifth of every month.</h2>
-    <p class="section-lede section-lede--wide fade-in d2" data-i="s05lede">One page per clinic, and one roll-up across the network. Same layout every month, same definitions. The only thing that changes between reports is the numbers.</p>
-
-    <div class="dash-wrap fade-in">
-      <div class="dash-cap"><span class="dash-brand" data-i="dashBrand">SSS · Monthly report</span><span data-i="dashSample">Sample layout. Numbers illustrative.</span></div>
-      <div class="dash">
-        <div class="dash-top"><span data-i="dashClinic">Sample clinic · Ontario</span><span data-i="dashMonth">Month 3</span></div>
-        <div class="dash-kpis">
-          <div class="dash-k"><div class="dash-kl" data-i="dashK1l">Media spend</div><div class="dash-kv" data-i="dashK1v">$2,050</div></div>
-          <div class="dash-k"><div class="dash-kl" data-i="dashK2l">SSS fee</div><div class="dash-kv" data-i="dashK2v">$449</div></div>
-          <div class="dash-k"><div class="dash-kl" data-i="dashK3l">Qualified new-patient calls</div><div class="dash-kv" data-i="dashK3v">41</div></div>
-          <div class="dash-k"><div class="dash-kl" data-i="dashK4l">Booked new patients</div><div class="dash-kv" data-i="dashK4v">11</div></div>
-          <div class="dash-k k-hero"><div class="dash-kl" data-i="dashK5l">Cost per booked patient</div><div class="dash-kv" data-i="dashK5v">$227</div><div class="dash-kn" data-i="dashK5n">All-in. Media plus fee.</div></div>
-        </div>
-        <div class="dash-sec">
-          <div class="dash-sl" data-i="dashAnsL">Answer rate</div>
-          <div class="dash-ans">
-            <span class="dash-pct" data-i="dashAnsV">80%</span>
-            <span class="dash-bar"><i style="width:80%"></i></span>
-          </div>
-          <p class="dash-ansn" data-i="dashAnsN">33 of 41 qualified calls answered. At this clinic’s own booking rate, the 8 missed calls are two to three patients. That one is yours to fix, and it costs nothing in media.</p>
-        </div>
-        <div class="dash-sec">
-          <div class="dash-sl" data-i="dashTermsL">Where the money went</div>
-          <div class="dash-scroll" tabindex="0" role="region" aria-label="Where the money went"><table class="dash-t">
-            <thead><tr>
-              <th data-i="dashTh1">Search term</th>
-              <th class="num" data-i="dashTh2">Spend</th>
-              <th class="num" data-i="dashTh3">Calls</th>
-              <th class="num" data-i="dashTh4">Booked</th>
-              <th class="num c5" data-i="dashTh5">Media / booked</th>
-            </tr></thead>
-            <tbody><tr><td data-i="dashR1">emergency dentist near me</td><td class="num" data-i="dashR1s">$486</td><td class="num" data-i="dashR1c">11</td><td class="num" data-i="dashR1b">4</td><td class="num c5" data-i="dashR1p">$122</td></tr><tr><td data-i="dashR2">dentist accepting new patients</td><td class="num" data-i="dashR2s">$391</td><td class="num" data-i="dashR2c">8</td><td class="num" data-i="dashR2b">3</td><td class="num c5" data-i="dashR2p">$130</td></tr><tr><td data-i="dashR3">dental cleaning · city</td><td class="num" data-i="dashR3s">$327</td><td class="num" data-i="dashR3c">7</td><td class="num" data-i="dashR3b">2</td><td class="num c5" data-i="dashR3p">$164</td></tr><tr><td data-i="dashR4">CDCP dentist near me</td><td class="num" data-i="dashR4s">$268</td><td class="num" data-i="dashR4c">6</td><td class="num" data-i="dashR4b">2</td><td class="num c5" data-i="dashR4p">$134</td></tr><tr><td data-i="dashR5">invisalign · city</td><td class="num" data-i="dashR5s">$310</td><td class="num" data-i="dashR5c">3</td><td class="num" data-i="dashR5b">0</td><td class="num c5" data-i="dashR5p">—</td></tr><tr><td data-i="dashR6">all other search terms</td><td class="num" data-i="dashR6s">$128</td><td class="num" data-i="dashR6c">4</td><td class="num" data-i="dashR6b">0</td><td class="num c5" data-i="dashR6p">—</td></tr><tr><td data-i="dashR7">Display · catchment</td><td class="num" data-i="dashR7s">$80</td><td class="num" data-i="dashR7c">1</td><td class="num" data-i="dashR7b">0</td><td class="num c5" data-i="dashR7p">—</td></tr><tr><td data-i="dashR8">Video · YouTube, clinic city</td><td class="num" data-i="dashR8s">$60</td><td class="num" data-i="dashR8c">1</td><td class="num" data-i="dashR8b">0</td><td class="num c5" data-i="dashR8p">—</td></tr><tr class="tot"><td data-i="dashRT">Total</td><td class="num" data-i="dashRTs">$2,050</td><td class="num" data-i="dashRTc">41</td><td class="num" data-i="dashRTb">11</td><td class="num c5" data-i="dashRTp">$186</td></tr></tbody>
-          </table></div>
-          <p class="dash-tfoot" data-i="dashTfoot">Columns tie to the panel above: $2,050 media, 41 qualified calls, 11 booked. All-in with the $449 fee, $227 per booked patient. Display and video are shown at cost and credited with no bookings of their own — they are budgeted to support search, and the pilot is where that either holds or gets cut.</p>
-        </div>
-        <div class="dash-sec">
-          <div class="dash-sl" data-i="dashRollL">Network roll-up · cost per booked patient</div>
-          <div class="dash-roll"><div class="roll"><span><span data-i="rollC01">Clinic 01</span><span class="cnt" data-i="rollN01">14 booked</span></span><b data-i="rollV01">$202</b></div><div class="roll"><span><span data-i="rollC02">Clinic 02</span><span class="self" data-i="dashSelf">the page above</span><span class="cnt" data-i="rollN02">11 booked</span></span><b data-i="rollV02">$227</b></div><div class="roll"><span><span data-i="rollC03">Clinic 03</span><span class="cnt" data-i="rollN03">10 booked</span></span><b data-i="rollV03">$240</b></div><div class="roll"><span><span data-i="rollC04">Clinic 04</span><span class="cnt" data-i="rollN04">10 booked</span></span><b data-i="rollV04">$265</b></div><div class="roll"><span><span data-i="rollC05">Clinic 05</span><span class="cnt" data-i="rollN05">10 booked</span></span><b data-i="rollV05">$305</b></div><div class="roll"><span><span data-i="rollC06">Clinic 06</span><span class="flag" data-i="dashFlag">answer rate 54%</span><span class="cnt" data-i="rollN06">7 booked</span></span><b data-i="rollV06">$393</b></div><div class="roll avg"><span data-i="dashAvg">Network · 62 booked patients</span><b data-i="dashAvgV">$261</b></div></div>
-          <p class="dash-rolln" data-i="dashRollN">Every clinic named and ranked, every month. The one at the bottom isn’t hidden or excused — its answer rate sits on the same page as its cost. The network figure is total cost divided by total booked patients, not an average of the six percentages: $16,174 across 62 patients.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="callout fade-in">
-      <div class="callout-l" data-i="s05shared">We can make the phone ring. We can’t answer it.</div>
-      <p class="callout-b" data-i="s05sharedBody">If a clinic answers half its calls, cost per patient doubles and the advertising looks like it failed. Answer rate is on the dashboard from day one. Ours to generate, yours to act on. We report it whether it flatters us or not.</p>
-    </div>
+<section id="sss">
+ <div class="wrap">
+  <span class="label fade"><span class="fr">Pourquoi SSS</span><span class="en">Why SSS</span></span>
+  <div class="why">
+   <div class="fade"><h3><span class="fr">On pratique encore</span><span class="en">We still practise</span></h3><p><span class="fr">Les trois fondateurs travaillent toujours en clinique et soumettent des demandes de prédétermination aux assureurs chaque jour. La logique de la calculatrice vient de cette pratique.</span><span class="en">All three founders still work in clinics and submit predetermination requests to insurers daily. The calculator’s logic comes from that practice.</span></p></div>
+   <div class="fade"><h3>Dr Shayan Araghi, DMD</h3><p><span class="fr">Université de Montréal. 14 ans de pratique clinique.</span><span class="en">Université de Montréal. 14 years of clinical practice.</span></p></div>
+   <div class="fade"><h3><span class="fr">Le produit existe</span><span class="en">The product exists</span></h3><p><span class="fr">La calculatrice est construite et fonctionne. Prête à mettre en place.</span><span class="en">The calculator is built and works. Ready to implement.</span></p></div>
   </div>
+ </div>
 </section>
 
-<!-- 06 PILOT -->
-<section class="section section--paper" id="pilot" aria-labelledby="pilotTitle">
-  <div class="section-rule"></div>
-  <div class="container">
-    <div class="section-head fade-in"><span class="num">06</span><span class="sep"></span><span data-i="s06head">The pilot, and the bar</span></div>
-    <h2 class="section-title fade-in d1" id="pilotTitle" data-i="s06title">Six clinics. Four months. The bar set before there’s data to argue about.</h2>
-
-    <div class="process-steps">
-      <div class="process-step fade-in d1">
-        <div class="process-step-num" data-i="scopeLabel">Scope</div>
-        <div class="process-step-anchor" data-i="scopeAnchor">6<small>clinics</small></div>
-        <h3 class="process-step-title" data-i="scopeTitle">Selected by 123Dentist.</h3><p class="process-step-desc" data-i="scopeDesc">Mixed on purpose. Urban and suburban, tough and easy markets, high and low treatment value, different open-chair capacity. An easy pilot picks easy clinics. Don’t.</p>
-      </div>
-      <div class="process-step fade-in d2">
-        <div class="process-step-num" data-i="timeLabel">Timeline</div>
-        <div class="process-step-anchor" data-i="timeAnchor">14<small>days</small></div>
-        <h3 class="process-step-title" data-i="timeTitle">Live after account access.</h3><p class="process-step-desc" data-i="timeDesc">Month one is learning and isn’t scored. Months two, three and four are the scorecard.</p>
-      </div>
-      <div class="process-step fade-in d3">
-        <div class="process-step-num" data-i="commitLabel">Commitment</div>
-        <div class="process-step-anchor" data-i="commitAnchor">449<small>/ clinic / mo</small></div>
-        <h3 class="process-step-title" data-i="commitTitle">Month to month.</h3><p class="process-step-desc" data-i="commitDesc">No term. No minimum. Any clinic can come out on its own, with thirty days’ notice.</p>
-      </div>
-    </div>
-
-    <h3 class="criteria-title fade-in" data-i="critTitle">What makes it a yes.</h3>
-    <div class="criteria-grid"><div class="criteria-cell primary fade-in d1"><div class="criteria-label" data-i="crit1Label">Target</div><div class="criteria-value" data-i="crit1Value">$275 CAD per booked new patient</div><p class="criteria-note" data-i="crit1Note">Media spend plus our monthly fee, divided by booked new patients. Measured across the six pilot clinics combined, in months two, three and four, with at least four of the six individually under $325 — so two strong clinics can’t carry four weak ones. A clinic that exits mid-pilot keeps its months to date in the denominator.</p></div><div class="criteria-cell fade-in d2"><div class="criteria-label" data-i="crit2Label">Walk-away</div><div class="criteria-value" data-i="crit2Value">$400 CAD per booked new patient</div><p class="criteria-note" data-i="crit2Note">Above this the pilot has failed and you should not extend it. Between the target and this bar, we report the number and make no case for renewal you haven’t already agreed. We write our own failure condition down before launch.</p></div><div class="criteria-cell fade-in d3"><div class="criteria-label" data-i="crit3Label">Floor</div><div class="criteria-value" data-i="crit3Value">8 booked new patients per clinic per month</div><p class="criteria-note" data-i="crit3Note">Minimum, by month three. A clinic under the floor is named on the roll-up with the reason beside it.</p></div><div class="criteria-cell fade-in d4"><div class="criteria-label" data-i="crit4Label">Diagnostic</div><div class="criteria-value" data-i="crit4Value">Call answer rate, reported monthly</div><p class="criteria-note" data-i="crit4Note">Reported, not scored. Ours to generate, yours to act on.</p></div></div>
-    <p class="criteria-close fade-in" data-i="critClose">These are our numbers, not yours. If two hundred and seventy-five is the wrong target for your economics, we use yours and write it down before launch. So that nothing hides inside the words “all-in”: the target is measured on media plus monthly fee across the three scored months. Counting every dollar — six onboarding fees, the unscored calibration month, and all four months of media — the same illustrated volumes come to roughly $67,700 and about $296 per booked patient. Both numbers are on the table before you sign anything.</p>
-
-    <div class="callout fade-in">
-      <div class="callout-l" data-i="honestLabel">Said plainly</div><p class="callout-b" data-i="honestBody">We have no dental case study at network scale. That’s why this asks for six clinics and not five hundred. It’s why the thresholds are published before launch instead of picked afterward, and why the fee cancels monthly with nothing to claw back. We’re not asking you to believe a claim. We’re offering the cheapest way to test one. If the number holds, the data is yours and it came from your clinics. If it doesn’t, you’re out four months of a cancelable fee and you know exactly where your Google funnel breaks. That’s worth knowing either way.</p>
-    </div>
-    <div class="callout fade-in">
-      <div class="callout-l" data-i="mathLabel">The arithmetic, stated once</div><p class="callout-b" data-i="mathBody">At the floor — eight booked new patients per clinic per month — six clinics produce 576 patients in a year. Five hundred produce roughly forty-eight thousand. We’re not promising forty-eight thousand patients. We’re showing the shape of the unit if it repeats. Before launch you give us one number per pilot clinic: its trailing twelve-month new-patient count. Everything we report then reads as lift against that line, not as raw volume we might simply be harvesting from demand you already had. What one new patient is worth to 123Dentist is a number you have and we don’t. We give you the cost side and fix both bars in advance. The multiplication is yours.</p>
-    </div>
+<section class="b" id="faq">
+ <div class="wrap">
+  <span class="label fade"><span class="fr">Questions probables</span><span class="en">Likely questions</span></span>
+  <div class="faq fade">
+   <details><summary><span class="fr">Et si ça ne fonctionne pas ?</span><span class="en">What if it doesn’t work?</span></summary><p><span class="fr">La gestion Google est mois par mois, sans engagement. Au jour 90, on décide ensemble selon les critères fixés avant le lancement : prolonger, élargir ou arrêter.</span><span class="en">Google management is month to month, no commitment. At day 90 we decide together against criteria set before launch: extend, expand or stop.</span></p></details>
+   <details><summary><span class="fr">Qu’est-ce que SSS touche, côté données ?</span><span class="en">What data does SSS touch?</span></summary><p><span class="fr">Les comptes Google Ads et Analytics des cliniques du pilote, à votre invitation. Jamais le logiciel de gestion, jamais de données patient. Les comptes restent au nom de 123.</span><span class="en">The pilot clinics’ Google Ads and Analytics accounts, by your invitation. Never the practice management software, never patient data. Accounts stay in 123’s name.</span></p></details>
+   <details><summary><span class="fr">Qui paie le budget publicitaire ?</span><span class="en">Who pays the ad budget?</span></summary><p><span class="fr">123. Le budget média est facturé directement par Google, sans majoration de SSS.</span><span class="en">123. Media spend is billed directly by Google, with no SSS markup.</span></p></details>
+   <details><summary><span class="fr">Combien de cliniques pour le pilote ?</span><span class="en">How many clinics in the pilot?</span></summary><p><span class="fr">Quelques-unes, choisies par 123. Assez pour comparer à leurs campagnes actuelles, peu pour garder le test simple.</span><span class="en">A few, chosen by 123. Enough to compare against their current campaigns, few enough to keep the test simple.</span></p></details>
   </div>
+ </div>
 </section>
 
-<!-- 07 ROLLOUT -->
-<section class="section section--surface-a" id="rollout" aria-labelledby="rollTitle">
-  <div class="section-rule"></div>
-  <div class="container">
-    <div class="section-head fade-in"><span class="num">07</span><span class="sep"></span><span data-i="s07head">The first four months</span></div>
-    <h2 class="section-title fade-in d1" id="rollTitle" data-i="s07title">Your team’s total time: one hour, then two minutes a week.</h2>
-    <p class="section-lede section-lede--wide fade-in d2" data-i="s07lede">Most vendor pilots don’t die on performance. They die when the client team realises it has quietly taken on a project. So here is every hour this costs you.</p>
-    <div class="tl"><div class="tl-i fade-in d1"><div class="tl-d" data-i="tl1d">Day 0</div><h3 class="tl-t" data-i="tl1t">One access session.</h3><p class="tl-b" data-i="tl1b">Sixty minutes, one call, all six clinics at once. Management access to Google Ads, Business Profile, Analytics and Tag Manager. Your team attends nothing else.</p></div><div class="tl-i fade-in d2"><div class="tl-d" data-i="tl2d">Days 1–13</div><h3 class="tl-t" data-i="tl2t">We build.</h3><p class="tl-b" data-i="tl2b">Accounts rebuilt to the standard spec. Tracking snippet deployed. One tracked number per clinic. Business Profiles corrected. Dashboards built. Nothing needed from you.</p></div><div class="tl-i fade-in d3"><div class="tl-d" data-i="tl3d">Day 14</div><h3 class="tl-t" data-i="tl3t">Live.</h3><p class="tl-b" data-i="tl3b">All six clinics running. Dashboards populated from the first click.</p></div><div class="tl-i fade-in d4"><div class="tl-d" data-i="tl4d">Day 45</div><h3 class="tl-t" data-i="tl4t">Month one review — calibration only.</h3><p class="tl-b" data-i="tl4b">Bids, negatives and geography settled against real data. Written, not scored. Any clinic can leave here at no cost.</p></div><div class="tl-i fade-in d5"><div class="tl-d" data-i="tl5d">Day 135</div><h3 class="tl-t" data-i="tl5t">The decision.</h3><p class="tl-b" data-i="tl5b">Three scored months against thresholds written down before launch. Extend, expand, or stop.</p></div></div>
-    <div class="defs-l fade-in" data-i="govLabel">Cadence and escalation</div>
-    <div class="defs"><div class="def fade-in"><div class="def-a" data-i="gov1a">Weekly</div><p class="def-b" data-i="gov1b">Two minutes per front desk. Three columns on a shared sheet. No meeting.</p></div><div class="def fade-in"><div class="def-a" data-i="gov2a">Monthly</div><p class="def-b" data-i="gov2b">Per-clinic dashboards and the network roll-up by the fifth. One thirty-minute review, optional after month two.</p></div><div class="def fade-in"><div class="def-a" data-i="gov3a">Quarterly</div><p class="def-b" data-i="gov3b">A written performance memo against the agreed thresholds, in a form you can forward without rewriting it.</p></div><div class="def fade-in"><div class="def-a" data-i="gov4a">Escalation</div><p class="def-b" data-i="gov4b">One named account owner for 123Dentist. Anything unresolved in twenty-four hours goes to the founder, same day.</p></div></div>
-  </div>
-</section>
-
-<!-- 08 WHERE WE FIT -->
-<section class="section section--paper" id="fit" aria-labelledby="fitTitle">
-  <div class="section-rule"></div>
-  <div class="container">
-    <div class="section-head fade-in"><span class="num">08</span><span class="sep"></span><span data-i="s08head">Where we fit</span></div>
-    <h2 class="section-title fade-in d1" id="fitTitle" data-i="s08title">This replaces nothing you already have.</h2>
-    <p class="section-lede section-lede--wide fade-in d2" data-i="s08lede">A proposal that quietly displaces an internal team or an existing vendor dies in a hallway. So here’s the boundary, drawn on purpose.</p>
-    <div class="ask-grid">
-      <div class="ask-col fade-in d1">
-        <div class="ask-col-label" data-i="fitRunL">We run</div>
-        <ul><li data-i="fitRun1">Google Search, Display and the CDCP/RCSD engine for each pilot clinic</li><li data-i="fitRun2">The Business Profile for each pilot clinic — accuracy, categories, photos, review replies</li><li data-i="fitRun3">Call tracking, conversion tracking and the per-clinic dashboard</li><li data-i="fitRun4">Review capture at the front desk</li></ul>
-      </div>
-      <div class="ask-col fade-in d2">
-        <div class="ask-col-label" data-i="fitNotL">We don’t touch</div>
-        <ul><li data-i="fitNot1">Your brand system, your creative standards or your national campaigns</li><li data-i="fitNot2">Your websites — one snippet and one number, nothing else changes</li><li data-i="fitNot3">Your practice management system, and no patient data at all</li><li data-i="fitNot4">Your internal marketing team’s remit — we report to it, not around it</li></ul>
-      </div>
-    </div>
-    <div class="callout fade-in"><div class="callout-l" data-i="fitPrismL">On call intelligence</div><p class="callout-b" data-i="fitPrismB">If you run Patient Prism or anything like it, keep it. Prism grades the conversation. We buy the conversation. Different jobs, and the two datasets reconcile. Audit our booked-patient number against Prism’s call outcomes. We’d rather you did. Judge us on your instrument, not ours.</p></div>
-    <div class="callout fade-in"><div class="callout-l" data-i="fitAgencyL">On incumbent agencies</div><p class="callout-b" data-i="fitAgencyB">Nothing needs cancelling to run this. Pick six clinics where the incumbent is underperforming, or six with no agency at all, or run both in one market and compare. We’re not asking you to break a relationship to test a hypothesis.</p></div>
-  </div>
-</section>
-
-<!-- 09 TERMS -->
-<section class="section section--surface-b" id="terms" aria-labelledby="termsTitle">
-  <div class="section-rule"></div>
-  <div class="container">
-    <div class="section-head fade-in"><span class="num">09</span><span class="sep"></span><span data-i="s09head">Commercial terms</span></div>
-    <h2 class="vh" id="termsTitle" data-i="s09head">Commercial terms</h2>
-
-    <div class="pricing-stage">
-      <div class="pricing-numeral fade-in d2" role="img" aria-label="449 dollars per month per clinic, Canadian dollars" data-i="priceNum"><sup class="pre">$</sup>449</div>
-      <div class="pricing-mo fade-in d3" data-i="pricingMo">per month · per clinic · CAD · month to month</div>
-    </div>
-
-    <div class="pricing-facts">
-      <div class="pricing-fact fade-in d1"><div class="pricing-fact-label" data-i="pf1Label">Included</div><div class="pricing-fact-value" data-i="pf1Value">All six components</div><div class="pricing-fact-note" data-i="pf1Note">One dashboard per clinic. One network roll-up.</div></div>
-      <div class="pricing-fact fade-in d2"><div class="pricing-fact-label" data-i="pf2Label">Onboarding</div><div class="pricing-fact-value">499<sup style="font-size:0.55em;color:var(--tan-text);vertical-align:0.45em">$</sup></div><div class="pricing-fact-note" data-i="pf2Note">One-time, per clinic. Six components configured, dashboard live.</div></div>
-      <div class="pricing-fact fade-in d3"><div class="pricing-fact-label" data-i="pf3Label">Media spend</div><div class="pricing-fact-value" data-i="pf3Value">Billed directly by Google</div><div class="pricing-fact-note" data-i="pf3Note">Your card, your account, your control. No markup, no rebate, no hidden fee.</div></div>
-      <div class="pricing-fact fade-in d4"><div class="pricing-fact-label" data-i="pf4Label">Budget guidance</div><div class="pricing-fact-value" data-i="pf4Value">$1,500–$7,000 per clinic per month</div><div class="pricing-fact-note" data-i="pf4Note">Set by measured open hygiene and doctor hours. Never by a percentage of revenue.</div></div>
-      <div class="pricing-fact fade-in d5"><div class="pricing-fact-label" data-i="pf5Label">Term</div><div class="pricing-fact-value" data-i="pf5Value">Month to month</div><div class="pricing-fact-note" data-i="pf5Note">No minimum, no exit fee. Clinics added or removed one at a time.</div></div>
-    </div>
-
-    <p class="pricing-close fade-in" data-i="pricingClose">A typical clinic runs roughly $2,500 all-in. More than four of every five dollars goes to Google, not to us.</p>
-      <p class="mid-cta"><a href="#close" data-i="midCta">What we’re asking for →</a></p>
-
-    <div class="defs-l fade-in" data-i="schedLabel">What it costs at scale</div>
-    <p class="note fade-in" data-i="schedIntro">Published, so you can model the estate without a negotiation.</p>
-    <div class="sched">
-      <div class="sched-c fade-in d1"><div class="sched-a" data-i="sched1a">Pilot — 6 clinics</div><div class="sched-b" data-i="sched1b">$449</div><p class="sched-cc" data-i="sched1c">per clinic, per month · month to month · $499 one-time per clinic</p></div>
-      <div class="sched-c fade-in d2"><div class="sched-a" data-i="sched2a">Network — 90 clinics or more</div><div class="sched-b" data-i="sched2b">$399</div><p class="sched-cc" data-i="sched2c">per clinic, per month · annual terms · onboarding unchanged</p></div>
-    </div>
-    <p class="note fade-in" data-i="schedNote">The network rate isn’t a discount for asking. It’s what the unit costs once volume and an annual term make the build schedule predictable, and part of it comes off our own supply side rather than out of the work. The package is identical at either price.</p>
-
-    <div class="defs-l fade-in" data-i="keepLabel">If it ends</div>
-    <p class="note fade-in" data-i="keepIntro">Everything we build sits inside accounts 123Dentist owns. There’s nothing to negotiate back.</p>
-    <div class="ask-grid" style="margin-top:24px">
-      <div class="ask-col fade-in d1"><ul><li data-i="keep1">Google Ads accounts sit in your manager account from day one. We hold access, not ownership.</li><li data-i="keep2">Business Profiles are yours and always were. We never claim a listing to ourselves.</li></ul></div>
-      <div class="ask-col fade-in d2"><ul><li data-i="keep3">Conversion history, call records and every dashboard month export on request, as files, not a portal login.</li><li data-i="keep4">Tracked numbers port to you on thirty days’ notice.</li><li data-i="keep5">No term, no minimum, no exit fee, no assets held.</li></ul></div>
-    </div>
-  </div>
-</section>
-
-<!-- 11 TEAM -->
-<section class="section section--surface-a" id="team" aria-labelledby="teamTitle">
-  <div class="section-rule"></div>
-  <div class="container">
-    <div class="section-head fade-in"><span class="num">10</span><span class="sep"></span><span data-i="s11head">Who runs it</span></div>
-    <h2 class="team-title fade-in d1" id="teamTitle" data-i="teamTitle">Every dollar has an operator.</h2>
-    <div class="team-grid">
-      <article class="team-card fade-in d1"><div class="team-meta"><div class="team-role" data-i="t1Role">Founder</div><h3 class="team-name">Hamza A.</h3><p class="team-bio" data-i="t1Bio">Ten years in marketing. Four years inside a clinic — phones, emergencies, treatment plans, schedules. Most agencies have never seen this from the inside.</p></div></article><article class="team-card fade-in d2"><div class="team-meta"><div class="team-role" data-i="t2Role">Partner · Clinical advisor</div><h3 class="team-name" data-i="t2Name">Dr. Shayan Araghi</h3><p class="team-bio" data-i="t2Bio">Fourteen years of clinical practice. Several clinics built from scratch. DMD, Université de Montréal. Investor and strategic partner.</p></div></article><article class="team-card fade-in d3"><div class="team-meta"><div class="team-role" data-i="t3Role">Partner · Operations advisor</div><h3 class="team-name">Ali K.</h3><p class="team-bio" data-i="t3Bio">Ten-plus years inside dental clinics. Daily operations, insurance, clinic accounting, patient experience. Has run multi-million-dollar clinics. Knows exactly what happens between the click and the chair.</p></div></article>
-    </div>
-    <div class="sage-block fade-in">
-      <div class="callout-l" data-i="opsLabel">How delivery scales</div>
-      <p class="sage-lead" data-i="opsLead">The fair question: how does a small team serve a network this size? Because the work is a specification, not a series of opinions.</p>
-      <ul><li data-i="ops1">Every clinic is built to the same written spec — account structure, campaign set, negatives, tracking, dashboard. No bespoke build, so no bespoke delay.</li><li data-i="ops2">Execution runs on fulfilment infrastructure already handling several hundred accounts, to our spec and our dental playbook. The fourteen days is the same at clinic six as at clinic sixty, because it is the same written spec each time. We have not run this at three hundred clinics and we are not claiming we have.</li><li data-i="ops3">Strategy, thresholds, reporting and the relationship stay with the people named above. One account owner for 123Dentist. Escalation to the founder, same day.</li></ul>
-    </div>
-  </div>
-</section>
-
-<!-- 12 FAQ -->
-<section class="section section--paper" id="faq" aria-labelledby="faqTitle">
-  <div class="section-rule"></div>
-  <div class="container">
-    <div class="section-head fade-in"><span class="num">11</span><span class="sep"></span><span data-i="s12head">Questions you’ll be asked</span></div>
-    <h2 class="section-title fade-in d1" id="faqTitle" data-i="s12title">Answered here, so you’re not defending them from memory.</h2>
-    <div class="faq"><div class="faq-i fade-in"><h3 class="faq-q" data-i="q1">What does this replace?</h3><p class="faq-a" data-i="a1">Nothing. Not your team, not your national campaigns, not your website vendor, not your call intelligence platform, not an agency you’d rather keep. It’s a per-clinic execution layer that sits underneath what you already run.</p></div><div class="faq-i fade-in"><h3 class="faq-q" data-i="q2">Who owns the accounts and the data?</h3><p class="faq-a" data-i="a2">123Dentist, from day one, without exception. Ads accounts live in your manager account, Business Profiles stay yours, and every month of data exports as files on request. We hold access, never ownership.</p></div><div class="faq-i fade-in"><h3 class="faq-q" data-i="q3">Do you need access to our practice management system?</h3><p class="faq-a" data-i="a3">No. No integration, no IT project, no patient data. The reconciliation is six columns in a shared sheet, three of them filled by the front desk, two minutes a week.</p></div><div class="faq-i fade-in"><h3 class="faq-q" data-i="q4">How do three people serve a network this size?</h3><p class="faq-a" data-i="a4">The build is a written spec, not a bespoke project, and execution runs on fulfilment infrastructure already handling several hundred accounts to that spec. Strategy, thresholds and accountability stay with the named partners. Build time doesn’t change with volume.</p></div><div class="faq-i fade-in"><h3 class="faq-q" data-i="q5">What happens when a clinic underperforms?</h3><p class="faq-a" data-i="a5">It appears by name on the roll-up, ranked last, with the reason on the same page. Usually answer rate, sometimes a genuinely thinner market. We tell you before you ask. Where a clinic can’t reconcile its bookings we report qualified calls and claim nothing further.</p></div><div class="faq-i fade-in"><h3 class="faq-q" data-i="q6">Why not give this to an agency we already use?</h3><p class="faq-a" data-i="a6">You can, and for one clinic it barely matters. We’re not claiming better campaigns. We’re claiming that five hundred clinics built to one spec produce one comparable number, and a roster of agencies inherited through acquisition never will.</p></div><div class="faq-i fade-in"><h3 class="faq-q" data-i="q7">What’s the real risk here?</h3><p class="faq-a" data-i="a7">That four months pass, the number lands above your threshold, and it cost you four months of a cancelable per-clinic fee plus a media budget you controlled throughout. No term, no exit fee, nothing to recover. What’s left is a precise read on where your Google funnel breaks, useful to whoever runs it next.</p></div><div class="faq-i fade-in"><h3 class="faq-q" data-i="q8">Why does this need to happen this quarter?</h3><p class="faq-a" data-i="a8">Millions of newly covered adults are picking a dentist right now, once. And every month of delay is another batch of acquired clinics onboarded onto measurement you’ll have to redo. Neither clock waits for a budget cycle.</p></div></div>
-  </div>
-</section>
-
-<!-- 13 CLOSE -->
-<section class="final" id="close" aria-labelledby="closeTitle">
-  <div class="final-rule"></div>
-  <div class="container">
-    <div class="section-head section-head--close fade-in">
-      <span class="num">12</span><span class="sep"></span><span data-i="s13head">The ask</span>
-    </div>
-    <h2 class="final-title fade-in d1" id="closeTitle" data-i="finalTitle">An empty chair costs more than a marketing plan. Multiply that by five hundred.</h2>
-    <div class="final-asks">
-      <div class="final-ask fade-in d2"><div class="final-ask-num" data-i="fa1Num">One</div><p class="final-ask-body" data-i="fa1Body">Six clinic names, selected by 123Dentist.</p></div>
-      <div class="final-ask fade-in d3"><div class="final-ask-num" data-i="fa2Num">Two</div><p class="final-ask-body" data-i="fa2Body">One sixty-minute access session.</p></div>
-      <div class="final-ask fade-in d4"><div class="final-ask-num" data-i="fa3Num">Three</div><p class="final-ask-body" data-i="fa3Body">A review of the data together, four months from launch.</p></div>
-    </div>
-    <p class="final-contact fade-in d5">
-      <span data-i="finalName">Hamza A. · Founder, SSS Marketing</span><br>
-      <a href="mailto:info@sss.marketing">info@sss.marketing</a>
-    </p>
-  </div>
-</section>
-
-<!-- 10 ROADMAP -->
-<section class="section section--paper" id="roadmap" data-appendix="1" aria-labelledby="rmTitle">
-  <div class="section-rule"></div>
-  <div class="container">
-    <div class="section-head fade-in"><span class="num" data-i="apxNum">Appendix</span><span class="sep"></span><span data-i="s10head">What comes after Google</span></div>
-    <h2 class="section-title fade-in d1" id="rmTitle" data-i="s10title">You stand behind five hundred clinics. Your patients have never heard of you.</h2>
-    <p class="section-lede section-lede--wide fade-in d2" data-i="s10lede">Your clinics kept their own names. 12th &amp; 8th Dental, 404 Dental, 7 Oaks. Right call for the practices, and it leaves the network invisible at the point of care. Thirty-five arrived last year carrying a name you didn’t choose and nothing of yours inside. Google stops at the front door. So does everything else in this document.</p>
-    <p class="statement fade-in" data-i="s10bridge">Three moments happen inside a clinic that no search ad can reach: the minute a patient is happiest, the twenty they spend waiting, and the hour they spend in the chair. Each one is an object. Each object can carry your name.</p>
-
-    <div class="pf">
-      <figure class="pf-hero fade-in">
-        <div class="pf-media">
-          <img src="/123/img/p-nfc-1600.webp"
-               srcset="/123/img/p-nfc-800.webp 800w, /123/img/p-nfc-1600.webp 1600w"
-               sizes="(max-width:960px) 92vw, 1160px"
-               width="1600" height="1067" loading="lazy" decoding="async"
-               alt="Co-branded NFC review pad on a clinic reception desk, carrying the 123Dentist mark beside the clinic’s own." data-i-alt="pfAlt">
-        </div>
-        <figcaption class="pf-cap">
-          <div class="pf-l" data-i="pfLabel">In the package today</div>
-          <div>
-            <h3 class="pf-t" data-i="pfTitle">The pad they tap when they are happiest.</h3>
-            <p class="pf-b" data-i="pfBody">The NFC review pad already ships with every clinic in the standard package. The network version carries two marks: the name on the door, and 123Dentist beside it. A patient taps it at checkout, when they are as pleased with you as they will ever be. The review does its work on that clinic’s cost per patient. The logo does its work on yours, in front of somebody who is in a good mood and paying attention. One object, two jobs.</p>
-            <p class="pf-n" data-i="pfNote">Already included. No additional cost in the pilot.</p>
-          </div>
-        </figcaption>
-      </figure>
-    </div>
-
-    <div class="pg-l0 fade-in" data-i="pgHead">In build · described here, priced nowhere</div>
-    <div class="pg">
-      <figure class="pc fade-in d1">
-        <div class="pc-media"><img src="/123/img/p-portal-760.webp" srcset="/123/img/p-portal-440.webp 440w, /123/img/p-portal-760.webp 760w" sizes="(max-width:960px) 88vw, 360px" width="760" height="570" loading="lazy" decoding="async" alt="Branded guest Wi-Fi sign-in screen carrying the 123Dentist wordmark." data-i-alt="pc1alt"></div>
-        <div class="pc-n" data-i="pc1n">01 / Waiting room</div>
-        <div class="pc-rule"></div>
-        <figcaption><h3 class="pc-t" data-i="pc1t">The guest network sign-in.</h3>
-        <p class="pc-b" data-i="pc1b">A branded screen on the clinic’s Wi-Fi. The first thing a patient reads while they wait, and contact details arrive with consent instead of on a clipboard.</p></figcaption>
-      </figure>
-      <figure class="pc fade-in d2">
-        <div class="pc-media"><img src="/123/img/p-dock-760.webp" srcset="/123/img/p-dock-440.webp 440w, /123/img/p-dock-760.webp 760w" sizes="(max-width:960px) 88vw, 360px" width="760" height="570" loading="lazy" decoding="async" alt="Tooth-shaped branded charging dock on a waiting room table." data-i-alt="pc2alt"></div>
-        <div class="pc-n" data-i="pc2n">02 / Waiting room</div>
-        <div class="pc-rule"></div>
-        <figcaption><h3 class="pc-t" data-i="pc2t">The charging station.</h3>
-        <p class="pc-b" data-i="pc2b">Power on the table where the magazines used to be. Patients sit closer to it, stay longer beside it, and read the name on it the whole time.</p></figcaption>
-      </figure>
-      <figure class="pc fade-in d3">
-        <div class="pc-media"><img src="/123/img/p-glasses-760.webp" srcset="/123/img/p-glasses-440.webp 440w, /123/img/p-glasses-760.webp 760w" sizes="(max-width:960px) 88vw, 360px" width="760" height="570" loading="lazy" decoding="async" alt="White branded sunglasses with the 123Dentist logo on the temple." data-i-alt="pc3alt"></div>
-        <div class="pc-n" data-i="pc3n">03 / Operatory</div>
-        <div class="pc-rule"></div>
-        <figcaption><h3 class="pc-t" data-i="pc3t">The shades at the chair.</h3>
-        <p class="pc-b" data-i="pc3b">Protection from the operatory light, handed over at the start of treatment. Patients keep them. Your name leaves the building on somebody’s face.</p></figcaption>
-      </figure>
-    </div>
-    <p class="note fade-in" data-i="pgNote">Concept renders. Finishes, materials and co-branding get set with your team, not by us.</p>
-
-    <div class="callout fade-in">
-      <p class="callout-b" data-i="rmSoft">There is a software layer behind these too. An AI recall agent working the list every clinic has and no front desk has time for: patients overdue for hygiene, treatment plans accepted and never booked. That list is already sitting in your network. Nobody is calling it.</p>
-      <p class="callout-b" data-i="rmNote">None of this is in the pilot, the fee, or the ask. It sits after the ask on purpose, because it shouldn’t compete with a four-month decision that stands on its own. Two boundaries from section 08 carry forward unchanged: the Wi-Fi sign-in collects contact details on the patient’s own consent and they stay with the clinic, and any recall work runs on a list the clinic exports and controls. Neither one adds a practice-management integration, and both get scoped with your privacy team before anything is built. It is here for one reason: five hundred clinics carrying one mark builds something with the people who work in them as well as the people who sit in them. When the Google number is proven, this is the conversation that follows it.</p>
-    </div>
-  </div>
+<section class="close" id="decision">
+ <div class="wrap">
+  <span class="label fade"><span class="fr">La décision</span><span class="en">The decision</span></span>
+  <h2 class="fade"><span class="fr">123 choisit les cliniques du pilote. SSS lance le compteur.</span><span class="en">123 picks the pilot clinics. SSS starts the clock.</span></h2>
+  <p class="fade"><span class="fr">Il suffit de nommer les cliniques et d’ouvrir une séance d’accès aux comptes. Le jour 0 commence là.</span><span class="en">All it takes is naming the clinics and opening one account-access session. Day 0 starts there.</span></p>
+  <a class="btn fade" href="mailto:info@sss.marketing?subject=Pilote%20123Dentist"><span class="fr">Écrire à SSS</span><span class="en">Write to SSS</span> <span aria-hidden="true">→</span></a>
+  <div class="who fade"><b>Hamza A.</b> · <span class="fr">Fondateur, SSS Marketing</span><span class="en">Founder, SSS Marketing</span><br>info@sss.marketing</div>
+ </div>
 </section>
 </main>
 
-<footer>
-  <div class="footer-rule"></div>
-  <div class="container">
-    <div class="footer-brand">
-      <div class="footer-brand-mark">
-        <img src="/logo-mark.png" srcset="/logo-mark.png 1x, /logo-mark@2x.png 2x, /logo-mark@3x.png 3x"
-             alt="SSS" width="148" height="61" loading="lazy" decoding="async">
-      </div>
-      <p class="footer-brand-tag" data-i="footerTag">Dental marketing. Built on Google search.</p>
-    </div>
-    <div class="footer-legal">
-      <span>&copy; 2026 SSS Marketing.</span>
-      <span class="footer-private" data-i="footerPrivate">Private document. Prepared for 123Dentist. Not for distribution.</span>
-    </div>
-    <p class="footer-src" data-i="footerSrc">Clinic count from the 123Dentist partner directory, July 2026. Patient volume as published by 123Dentist. CDCP enrolment and utilisation from Health Canada, data to 31 March 2026.</p>
-  </div>
-</footer>
-
+<footer><div class="wrap"><span>© 2026 SSS Marketing</span><span><span class="fr">Document confidentiel préparé pour 123Dentist.</span><span class="en">Confidential document prepared for 123Dentist.</span></span></div></footer>
 
 <script src="/cdcp-embed.js"></script>
 <script>
 (function(){
-  var nav=document.getElementById("nav"),ticking=false;
-  window.addEventListener("scroll",function(){
-    if(!ticking){window.requestAnimationFrame(function(){
-      if(window.scrollY>24)nav.classList.add("scrolled");else nav.classList.remove("scrolled");
-      ticking=false;});ticking=true;}
-  },{passive:true});
-  var io=new IntersectionObserver(function(es){
-    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("visible");io.unobserve(e.target);}});
-  },{threshold:0.08,rootMargin:"0px 0px -40px 0px"});
-  document.querySelectorAll(".fade-in").forEach(function(el){io.observe(el);});
+ var root=document.documentElement,open=false,T={fr:"SSS — Pilote 123Dentist",en:"SSS — 123Dentist pilot"};
+ function mount(){var q=document.getElementById("quiz");if(q&&window.mountCdcpQuiz){q.innerHTML="";window.mountCdcpQuiz(q,root.lang||"fr");}}
+ function setLang(l){root.setAttribute("data-lang",l);root.lang=l;document.title=T[l];
+  document.querySelectorAll(".lang button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.l===l?"true":"false");});
+  try{localStorage.setItem("sss123lang",l)}catch(e){} if(open)mount();}
+ var s=null;try{s=localStorage.getItem("sss123lang")}catch(e){}
+ setLang(s==="en"?"en":"fr");
+ document.querySelectorAll(".lang button").forEach(function(b){b.addEventListener("click",function(){setLang(b.dataset.l)})});
+ var d=document.getElementById("drawer"),c=document.getElementById("tryCard");
+ function toggle(force){open=force===undefined?!open:force;d.classList.toggle("open",open);c.setAttribute("aria-expanded",open);if(open)mount();}
+ c.addEventListener("click",function(){toggle()});
+ document.getElementById("tryHero").addEventListener("click",function(){toggle(true);setTimeout(function(){d.scrollIntoView({behavior:"smooth",block:"center"})},120)});
+ var nav=document.getElementById("nav");
+ addEventListener("scroll",function(){nav.classList.toggle("s",scrollY>20)},{passive:true});
+ var els=document.querySelectorAll(".fade");
+ if("IntersectionObserver" in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("v");io.unobserve(e.target)}})},{threshold:.06,rootMargin:"0px 0px -30px 0px"});els.forEach(function(e){io.observe(e)})}else els.forEach(function(e){e.classList.add("v")});
 })();
 </script>
-<script>
-(function(){
-  var TITLE={"en": "SSS — Pilot Proposal · Prepared for 123Dentist", "fr": "SSS — Proposition pilote · Préparé pour 123Dentist"};
-  var DICT={"en": {"skip": "Skip to content", "navTag": "Prepared for 123Dentist", "heroEyebrow": "Pilot proposal · Prepared for 123Dentist · August 2026", "heroH1": "You added twenty-seven clinics in a single transaction. <em>No two of them measure the same way.</em>", "heroSub": "One clinic package. Six growth levers, one dashboard, one definition of a booked patient. Built the same way at every location, live fourteen days after we get account access. This is a proposal to prove it on six clinics before anyone talks about five hundred.", "tocLabel": "Contents", "tocRead": "Sixteen minutes to read. Built to be forwarded.", "toc1": "Why this quarter", "toc2": "What breaks at five hundred", "toc3": "The standard clinic package", "toc4": "How a booked patient is measured", "toc5": "The dashboard", "toc6": "The pilot, and the bar", "toc7": "The first four months", "toc8": "Where we fit", "toc9": "Commercial terms", "toc10": "What comes after Google", "toc11": "Who runs it", "toc12": "Questions you’ll be asked", "toc13": "The ask", "s01head": "Why this quarter", "s01title": "Two clocks are running at once.", "s01lede": "Neither is a marketing trend. One is federal policy. The other is your own acquisition schedule.", "clock1Label": "Clock one · Coverage", "clock1Title": "Two point three million Canadians are covered, and still haven’t gone.", "clock1Body": "Health Canada put the eligible population near nine million. As of March 2026, 6.5 million had enrolled and 4.2 million had actually received care. The difference is roughly 2.3 million people who are covered, know they are covered, and still haven’t picked a dentist. They will pick the way people pick a dentist in a hurry: search, scan the reviews, call whoever answers. That patient then comes back every six months for a decade. You built a CDCP hub and city locator pages, so none of this is news. The part worth saying out loud is that it only happens once. Each of those patients gets chosen by somebody.", "clock2Label": "Clock two · Integration", "clock2Title": "Every clinic you buy arrives with someone else’s marketing.", "clock2Body": "A different agency. A different Google Ads account, built by someone you’ll never meet. Different tracking, or none. A different idea of what counts as a new patient. Twenty-seven of them arrived in a single transaction last October. Every one of those clinics is a number your team can’t compare to the clinic beside it. Comparability is the whole reason a network is worth more than the sum of its practices.", "ctxLabel": "Your network, as published", "ctx1v": "509", "ctx1l": "partner clinics", "ctx2v": "27", "ctx2l": "added with MCA Dental Group", "ctx3v": "10", "ctx3l": "provinces", "ctx4v": "2M", "ctx4l": "patients a year", "s02head": "What breaks at five hundred", "s02title": "Local marketing doesn’t fail at scale. It fragments.", "s02lede": "None of this is a criticism of how 123Dentist runs marketing. It’s the arithmetic of buying five hundred independent practices that each kept their own name, their own site and their own vendor.", "br1n": "One", "br1t": "Five hundred definitions of a new patient.", "br1b": "One agency counts form fills. Another counts phone calls, including the ones nobody picked up. A third counts anyone who clicked. Add those together and you get a network number nobody can defend line by line. That’s the only kind of number that survives a board.", "br2n": "Two", "br2t": "The best clinic and the worst clinic look identical from head office.", "br2b": "Without a common measure, a clinic with a marketing problem looks the same as a clinic with a front-desk problem, or a clinic in a slower market. So budget becomes a negotiation instead of a calculation. The loudest region wins.", "br3n": "Three", "br3t": "Onboarding a clinic takes longer than buying it.", "br3b": "The deal closes. Then someone has to track down the old agency, recover the ad account, find out who owns the Business Profile, discover tracking was never installed, and rebuild all of it. Thirty-five times a year. Meanwhile the campaigns either run unwatched or stop.", "br4n": "Four", "br4t": "Vendor count grows faster than clinic count.", "br4b": "Every acquisition can bring a contract, an invoice, a login and a quarterly call. You chose none of them. They all end up on your desk.", "s02close": "A better agency doesn’t fix this. A standard unit does: one package, built the same way every time, producing one number that means the same thing at every location. That’s the proposal.", "s03head": "The standard clinic package", "s03title": "One package. Six components. No configuration meeting.", "s03lede": "Nothing here is selected, scoped or priced separately. Every pilot clinic gets all six, built to the same written spec. So does every clinic after it.", "svc1Num": "01 / Search", "svc1Name": "Google Ads — Search", "svc1Desc": "The clinic, first, when someone in that city searches for a dentist.", "svc2Num": "02 / Local", "svc2Name": "Google Business Profile", "svc2Desc": "First on the map. Hours, services and photos correct. Reviews answered.", "svc3Num": "03 / Measurement", "svc3Name": "Dashboard &amp; call tracking", "svc3Desc": "One tracked number per clinic. Every dollar traced to the chair.", "svc4Num": "04 / Display", "svc4Name": "Google Ads — Display", "svc4Desc": "Banner placement in the clinic’s catchment, budgeted to support search.", "svc5Num": "05 / CDCP", "svc5Name": "CDCP Interactive Conversion Engine", "svc5Desc": "Qualified in 60 seconds. Booked instantly.", "svc6Num": "06 / Reviews", "svc6Name": "Google Reviews · NFC", "svc6Desc": "A tap pad at the front desk. A Google review in seconds. More reviews lower the cost of the next patient.", "s03note": "Six, because these are the six places a patient’s decision actually gets made. Nothing is billed separately. Anything we can’t defend on the dashboard isn’t in the package.", "s04head": "How a booked patient is measured", "s04title": "Three layers. Two are ours. One is yours.", "layer1Num": "Layer one", "layer1Owner": "Ours.", "layer1Body": "A tracked number per clinic, inserted dynamically on your existing site. Which call came from which keyword, at what hour, in which city. Your site. Your brand. Our tracking.", "layer2Num": "Layer two", "layer2Owner": "Ours.", "layer2Body": "The booking path on the site, tracked end to end, including where people drop out.", "layer3Num": "Layer three", "layer3Owner": "Yours.", "layer3Body": "Whether the call became an appointment, and whether the patient showed. That lives in your practice management system, and it stays there.", "sageLead": "We do not integrate with Dentrix, Tracker, Cleardent, or any other practice management system. No integration. No IT project. No patient data leaves the clinic.", "sageP2": "We need six columns in a shared sheet: date, tracked number, answered, booked, appointment date, showed. We fill the left half automatically. The front desk fills three columns. Two minutes a week.", "sageP3": "Where a clinic can’t complete the reconciliation, that clinic’s dashboard reads “qualified calls,” not “booked patients.” We’d rather under-claim than get caught over-claiming.", "s04why": "The moment a marketing vendor asks for practice-management access, it stops being your decision. It becomes an IT decision, a privacy decision and a legal decision. That review takes months. It’s why most attribution projects inside dental groups are still unfinished. Six columns in a spreadsheet isn’t a compromise. It’s the version that ships in fourteen days.", "s05head": "The dashboard", "s05title": "What arrives on the fifth of every month.", "s05lede": "One page per clinic, and one roll-up across the network. Same layout every month, same definitions. The only thing that changes between reports is the numbers.", "dashSample": "Sample layout. Numbers illustrative.", "dashClinic": "Sample clinic · Ontario", "dashMonth": "Month 3", "dashK1l": "Media spend", "dashK2l": "SSS fee", "dashK3l": "Qualified new-patient calls", "dashK4l": "Booked new patients", "dashK5l": "Cost per booked patient", "dashK5n": "All-in. Media plus fee.", "dashAnsL": "Answer rate", "dashAnsN": "33 of 41 qualified calls answered. At this clinic’s own booking rate, the 8 missed calls are two to three patients. That one is yours to fix, and it costs nothing in media.", "dashTermsL": "Where the money went", "dashTh1": "Search term", "dashTh2": "Spend", "dashTh3": "Calls", "dashTh4": "Booked", "dashTh5": "Media / booked", "dashR1": "emergency dentist near me", "dashR2": "dentist accepting new patients", "dashR3": "dental cleaning · city", "dashR4": "CDCP dentist near me", "dashR5": "invisalign · city", "dashR6": "all other search terms", "dashRollL": "Network roll-up · cost per booked patient", "dashRollN": "Every clinic named and ranked, every month. The one at the bottom isn’t hidden or excused — its answer rate sits on the same page as its cost. The network figure is total cost divided by total booked patients, not an average of the six percentages: $16,174 across 62 patients.", "dashFlag": "answer rate 54%", "dashAvg": "Network · 62 booked patients", "s05shared": "We can make the phone ring. We can’t answer it.", "s05sharedBody": "If a clinic answers half its calls, cost per patient doubles and the advertising looks like it failed. Answer rate is on the dashboard from day one. Ours to generate, yours to act on. We report it whether it flatters us or not.", "s06head": "The pilot, and the bar", "s06title": "Six clinics. Four months. The bar set before there’s data to argue about.", "scopeLabel": "Scope", "scopeAnchor": "6<small>clinics</small>", "scopeTitle": "Selected by 123Dentist.", "scopeDesc": "Mixed on purpose. Urban and suburban, tough and easy markets, high and low treatment value, different open-chair capacity. An easy pilot picks easy clinics. Don’t.", "timeLabel": "Timeline", "timeAnchor": "14<small>days</small>", "timeTitle": "Live after account access.", "timeDesc": "Month one is learning and isn’t scored. Months two, three and four are the scorecard.", "commitLabel": "Commitment", "commitAnchor": "449<small>/ clinic / mo</small>", "commitTitle": "Month to month.", "commitDesc": "No term. No minimum. Any clinic can come out on its own, with thirty days’ notice.", "critTitle": "What makes it a yes.", "crit1Label": "Target", "crit1Value": "$275 CAD per booked new patient", "crit1Note": "Media spend plus our monthly fee, divided by booked new patients. Measured across the six pilot clinics combined, in months two, three and four, with at least four of the six individually under $325 — so two strong clinics can’t carry four weak ones. A clinic that exits mid-pilot keeps its months to date in the denominator.", "crit2Label": "Walk-away", "crit2Value": "$400 CAD per booked new patient", "crit2Note": "Above this the pilot has failed and you should not extend it. Between the target and this bar, we report the number and make no case for renewal you haven’t already agreed. We write our own failure condition down before launch.", "crit3Label": "Floor", "crit3Value": "8 booked new patients per clinic per month", "crit3Note": "Minimum, by month three. A clinic under the floor is named on the roll-up with the reason beside it.", "crit4Label": "Diagnostic", "crit4Value": "Call answer rate, reported monthly", "crit4Note": "Reported, not scored. Ours to generate, yours to act on.", "critClose": "These are our numbers, not yours. If two hundred and seventy-five is the wrong target for your economics, we use yours and write it down before launch. So that nothing hides inside the words “all-in”: the target is measured on media plus monthly fee across the three scored months. Counting every dollar — six onboarding fees, the unscored calibration month, and all four months of media — the same illustrated volumes come to roughly $67,700 and about $296 per booked patient. Both numbers are on the table before you sign anything.", "honestLabel": "Said plainly", "honestBody": "We have no dental case study at network scale. That’s why this asks for six clinics and not five hundred. It’s why the thresholds are published before launch instead of picked afterward, and why the fee cancels monthly with nothing to claw back. We’re not asking you to believe a claim. We’re offering the cheapest way to test one. If the number holds, the data is yours and it came from your clinics. If it doesn’t, you’re out four months of a cancelable fee and you know exactly where your Google funnel breaks. That’s worth knowing either way.", "mathLabel": "The arithmetic, stated once", "mathBody": "At the floor — eight booked new patients per clinic per month — six clinics produce 576 patients in a year. Five hundred produce roughly forty-eight thousand. We’re not promising forty-eight thousand patients. We’re showing the shape of the unit if it repeats. Before launch you give us one number per pilot clinic: its trailing twelve-month new-patient count. Everything we report then reads as lift against that line, not as raw volume we might simply be harvesting from demand you already had. What one new patient is worth to 123Dentist is a number you have and we don’t. We give you the cost side and fix both bars in advance. The multiplication is yours.", "s07head": "The first four months", "s07title": "Your team’s total time: one hour, then two minutes a week.", "s07lede": "Most vendor pilots don’t die on performance. They die when the client team realises it has quietly taken on a project. So here is every hour this costs you.", "tl1d": "Day 0", "tl1t": "One access session.", "tl1b": "Sixty minutes, one call, all six clinics at once. Management access to Google Ads, Business Profile, Analytics and Tag Manager. Your team attends nothing else.", "tl2d": "Days 1–13", "tl2t": "We build.", "tl2b": "Accounts rebuilt to the standard spec. Tracking snippet deployed. One tracked number per clinic. Business Profiles corrected. Dashboards built. Nothing needed from you.", "tl3d": "Day 14", "tl3t": "Live.", "tl3b": "All six clinics running. Dashboards populated from the first click.", "tl4d": "Day 45", "tl4t": "Month one review — calibration only.", "tl4b": "Bids, negatives and geography settled against real data. Written, not scored. Any clinic can leave here at no cost.", "tl5d": "Day 135", "tl5t": "The decision.", "tl5b": "Three scored months against thresholds written down before launch. Extend, expand, or stop.", "govLabel": "Cadence and escalation", "gov1a": "Weekly", "gov1b": "Two minutes per front desk. Three columns on a shared sheet. No meeting.", "gov2a": "Monthly", "gov2b": "Per-clinic dashboards and the network roll-up by the fifth. One thirty-minute review, optional after month two.", "gov3a": "Quarterly", "gov3b": "A written performance memo against the agreed thresholds, in a form you can forward without rewriting it.", "gov4a": "Escalation", "gov4b": "One named account owner for 123Dentist. Anything unresolved in twenty-four hours goes to the founder, same day.", "s08head": "Where we fit", "s08title": "This replaces nothing you already have.", "s08lede": "A proposal that quietly displaces an internal team or an existing vendor dies in a hallway. So here’s the boundary, drawn on purpose.", "fitRunL": "We run", "fitRun1": "Google Search, Display and the CDCP/RCSD engine for each pilot clinic", "fitRun2": "The Business Profile for each pilot clinic — accuracy, categories, photos, review replies", "fitRun3": "Call tracking, conversion tracking and the per-clinic dashboard", "fitRun4": "Review capture at the front desk", "fitNotL": "We don’t touch", "fitNot1": "Your brand system, your creative standards or your national campaigns", "fitNot2": "Your websites — one snippet and one number, nothing else changes", "fitNot3": "Your practice management system, and no patient data at all", "fitNot4": "Your internal marketing team’s remit — we report to it, not around it", "fitPrismL": "On call intelligence", "fitPrismB": "If you run Patient Prism or anything like it, keep it. Prism grades the conversation. We buy the conversation. Different jobs, and the two datasets reconcile. Audit our booked-patient number against Prism’s call outcomes. We’d rather you did. Judge us on your instrument, not ours.", "fitAgencyL": "On incumbent agencies", "fitAgencyB": "Nothing needs cancelling to run this. Pick six clinics where the incumbent is underperforming, or six with no agency at all, or run both in one market and compare. We’re not asking you to break a relationship to test a hypothesis.", "s09head": "Commercial terms", "pricingMo": "per month · per clinic · CAD · month to month", "pf1Label": "Included", "pf1Value": "All six components", "pf1Note": "One dashboard per clinic. One network roll-up.", "pf2Label": "Onboarding", "pf2Note": "One-time, per clinic. Six components configured, dashboard live.", "pf3Label": "Media spend", "pf3Value": "Billed directly by Google", "pf3Note": "Your card, your account, your control. No markup, no rebate, no hidden fee.", "pf4Label": "Budget guidance", "pf4Value": "$1,500–$7,000 per clinic per month", "pf4Note": "Set by measured open hygiene and doctor hours. Never by a percentage of revenue.", "pf5Label": "Term", "pf5Value": "Month to month", "pf5Note": "No minimum, no exit fee. Clinics added or removed one at a time.", "pricingClose": "A typical clinic runs roughly $2,500 all-in. More than four of every five dollars goes to Google, not to us.", "schedLabel": "What it costs at scale", "schedIntro": "Published, so you can model the estate without a negotiation.", "sched1a": "Pilot — 6 clinics", "sched1b": "$449", "sched1c": "per clinic, per month · month to month · $499 one-time per clinic", "sched2a": "Network — 90 clinics or more", "sched2b": "$399", "sched2c": "per clinic, per month · annual terms · onboarding unchanged", "schedNote": "The network rate isn’t a discount for asking. It’s what the unit costs once volume and an annual term make the build schedule predictable, and part of it comes off our own supply side rather than out of the work. The package is identical at either price.", "keepLabel": "If it ends", "keepIntro": "Everything we build sits inside accounts 123Dentist owns. There’s nothing to negotiate back.", "keep1": "Google Ads accounts sit in your manager account from day one. We hold access, not ownership.", "keep2": "Business Profiles are yours and always were. We never claim a listing to ourselves.", "keep3": "Conversion history, call records and every dashboard month export on request, as files, not a portal login.", "keep4": "Tracked numbers port to you on thirty days’ notice.", "keep5": "No term, no minimum, no exit fee, no assets held.", "s10head": "What comes after Google", "s10title": "You stand behind five hundred clinics. Your patients have never heard of you.", "s10lede": "Your clinics kept their own names. 12th &amp; 8th Dental, 404 Dental, 7 Oaks. Right call for the practices, and it leaves the network invisible at the point of care. Thirty-five arrived last year carrying a name you didn’t choose and nothing of yours inside. Google stops at the front door. So does everything else in this document.", "rmNote": "None of this is in the pilot, the fee, or the ask. It sits after the ask on purpose, because it shouldn’t compete with a four-month decision that stands on its own. Two boundaries from section 08 carry forward unchanged: the Wi-Fi sign-in collects contact details on the patient’s own consent and they stay with the clinic, and any recall work runs on a list the clinic exports and controls. Neither one adds a practice-management integration, and both get scoped with your privacy team before anything is built. It is here for one reason: five hundred clinics carrying one mark builds something with the people who work in them as well as the people who sit in them. When the Google number is proven, this is the conversation that follows it.", "s11head": "Who runs it", "teamTitle": "Every dollar has an operator.", "t1Role": "Founder", "t1Bio": "Ten years in marketing. Four years inside a clinic — phones, emergencies, treatment plans, schedules. Most agencies have never seen this from the inside.", "t2Role": "Partner · Clinical advisor", "t2Name": "Dr. Shayan Araghi", "t2Bio": "Fourteen years of clinical practice. Several clinics built from scratch. DMD, Université de Montréal. Investor and strategic partner.", "t3Role": "Partner · Operations advisor", "t3Bio": "Ten-plus years inside dental clinics. Daily operations, insurance, clinic accounting, patient experience. Has run multi-million-dollar clinics. Knows exactly what happens between the click and the chair.", "opsLabel": "How delivery scales", "opsLead": "The fair question: how does a small team serve a network this size? Because the work is a specification, not a series of opinions.", "ops1": "Every clinic is built to the same written spec — account structure, campaign set, negatives, tracking, dashboard. No bespoke build, so no bespoke delay.", "ops2": "Execution runs on fulfilment infrastructure already handling several hundred accounts, to our spec and our dental playbook. The fourteen days is the same at clinic six as at clinic sixty, because it is the same written spec each time. We have not run this at three hundred clinics and we are not claiming we have.", "ops3": "Strategy, thresholds, reporting and the relationship stay with the people named above. One account owner for 123Dentist. Escalation to the founder, same day.", "s12head": "Questions you’ll be asked", "s12title": "Answered here, so you’re not defending them from memory.", "q1": "What does this replace?", "a1": "Nothing. Not your team, not your national campaigns, not your website vendor, not your call intelligence platform, not an agency you’d rather keep. It’s a per-clinic execution layer that sits underneath what you already run.", "q2": "Who owns the accounts and the data?", "a2": "123Dentist, from day one, without exception. Ads accounts live in your manager account, Business Profiles stay yours, and every month of data exports as files on request. We hold access, never ownership.", "q3": "Do you need access to our practice management system?", "a3": "No. No integration, no IT project, no patient data. The reconciliation is six columns in a shared sheet, three of them filled by the front desk, two minutes a week.", "q4": "How do three people serve a network this size?", "a4": "The build is a written spec, not a bespoke project, and execution runs on fulfilment infrastructure already handling several hundred accounts to that spec. Strategy, thresholds and accountability stay with the named partners. Build time doesn’t change with volume.", "q5": "What happens when a clinic underperforms?", "a5": "It appears by name on the roll-up, ranked last, with the reason on the same page. Usually answer rate, sometimes a genuinely thinner market. We tell you before you ask. Where a clinic can’t reconcile its bookings we report qualified calls and claim nothing further.", "q6": "Why not give this to an agency we already use?", "a6": "You can, and for one clinic it barely matters. We’re not claiming better campaigns. We’re claiming that five hundred clinics built to one spec produce one comparable number, and a roster of agencies inherited through acquisition never will.", "q7": "What’s the real risk here?", "a7": "That four months pass, the number lands above your threshold, and it cost you four months of a cancelable per-clinic fee plus a media budget you controlled throughout. No term, no exit fee, nothing to recover. What’s left is a precise read on where your Google funnel breaks, useful to whoever runs it next.", "q8": "Why does this need to happen this quarter?", "a8": "Millions of newly covered adults are picking a dentist right now, once. And every month of delay is another batch of acquired clinics onboarded onto measurement you’ll have to redo. Neither clock waits for a budget cycle.", "s13head": "The ask", "finalTitle": "An empty chair costs more than a marketing plan. Multiply that by five hundred.", "fa1Num": "One", "fa1Body": "Six clinic names, selected by 123Dentist.", "fa2Num": "Two", "fa2Body": "One sixty-minute access session.", "fa3Num": "Three", "fa3Body": "A review of the data together, four months from launch.", "finalName": "Hamza A. · Founder, SSS Marketing", "footerTag": "Dental marketing. Built on Google search.", "footerPrivate": "Private document. Prepared for 123Dentist. Not for distribution.", "footerSrc": "Clinic count from the 123Dentist partner directory, July 2026. Patient volume as published by 123Dentist. CDCP enrolment and utilisation from Health Canada, data to 31 March 2026.", "dashK1v": "$2,050", "dashK2v": "$449", "dashK3v": "41", "dashK4v": "11", "dashK5v": "$227", "dashAnsV": "80%", "dashAvgV": "$261", "dashSelf": "the page above", "dashR1s": "$486", "dashR1c": "11", "dashR1b": "4", "dashR1p": "$122", "dashR2s": "$391", "dashR2c": "8", "dashR2b": "3", "dashR2p": "$130", "dashR3s": "$327", "dashR3c": "7", "dashR3b": "2", "dashR3p": "$164", "dashR4s": "$268", "dashR4c": "6", "dashR4b": "2", "dashR4p": "$134", "dashR5s": "$310", "dashR5c": "3", "dashR5b": "0", "dashR5p": "—", "dashR6s": "$128", "dashR6c": "4", "dashR6b": "0", "dashR6p": "—", "rollC01": "Clinic 01", "rollV01": "$202", "rollC02": "Clinic 02", "rollV02": "$227", "rollC03": "Clinic 03", "rollV03": "$240", "rollC04": "Clinic 04", "rollV04": "$265", "rollC05": "Clinic 05", "rollV05": "$305", "rollC06": "Clinic 06", "rollV06": "$393", "s10bridge": "Three moments happen inside a clinic that no search ad can reach: the minute a patient is happiest, the twenty they spend waiting, and the hour they spend in the chair. Each one is an object. Each object can carry your name.", "pfLabel": "In the package today", "pfTitle": "The pad they tap when they are happiest.", "pfBody": "The NFC review pad already ships with every clinic in the standard package. The network version carries two marks: the name on the door, and 123Dentist beside it. A patient taps it at checkout, when they are as pleased with you as they will ever be. The review does its work on that clinic’s cost per patient. The logo does its work on yours, in front of somebody who is in a good mood and paying attention. One object, two jobs.", "pfNote": "Already included. No additional cost in the pilot.", "pfAlt": "Co-branded NFC review pad on a clinic reception desk, carrying the 123Dentist mark beside the clinic’s own.", "pgHead": "In build · described here, priced nowhere", "pc1n": "01 / Waiting room", "pc1t": "The guest network sign-in.", "pc1b": "A branded screen on the clinic’s Wi-Fi. The first thing a patient reads while they wait, and contact details arrive with consent instead of on a clipboard.", "pc1alt": "Branded guest Wi-Fi sign-in screen carrying the 123Dentist wordmark.", "pc2n": "02 / Waiting room", "pc2t": "The charging station.", "pc2b": "Power on the table where the magazines used to be. Patients sit closer to it, stay longer beside it, and read the name on it the whole time.", "pc2alt": "Tooth-shaped branded charging dock on a waiting room table.", "pc3n": "03 / Operatory", "pc3t": "The shades at the chair.", "pc3b": "Protection from the operatory light, handed over at the start of treatment. Patients keep them. Your name leaves the building on somebody’s face.", "pc3alt": "White branded sunglasses with the 123Dentist logo on the temple.", "pgNote": "Concept renders. Finishes, materials and co-branding get set with your team, not by us.", "rmSoft": "There is a software layer behind these too. An AI recall agent working the list every clinic has and no front desk has time for: patients overdue for hygiene, treatment plans accepted and never booked. That list is already sitting in your network. Nobody is calling it.", "rollN01": "14 booked", "rollN02": "11 booked", "rollN03": "10 booked", "rollN04": "10 booked", "rollN05": "10 booked", "rollN06": "7 booked", "dashBrand": "SSS · Monthly report", "dashRT": "Total", "dashRTs": "$2,050", "dashRTc": "41", "dashRTb": "11", "dashRTp": "$186", "dashTfoot": "Columns tie to the panel above: $2,050 media, 41 qualified calls, 11 booked. All-in with the $449 fee, $227 per booked patient. Display and video are shown at cost and credited with no bookings of their own — they are budgeted to support search, and the pilot is where that either holds or gets cut.", "apxNum": "Appendix", "tocApx": "Apx", "navAsk": "The ask", "midCta": "What we’re asking for →", "priceNum": "<sup class=\"pre\">$</sup>449", "pf2Value": "<sup class=\"pre\">$</sup>499", "dashR7": "Display · catchment", "dashR7s": "$80", "dashR7c": "1", "dashR7b": "0", "dashR7p": "—", "dashR8": "Video · YouTube, clinic city", "dashR8s": "$60", "dashR8c": "1", "dashR8b": "0", "dashR8p": "—", "svc5Cta": "Try it <span class=\"six-cta-arrow\" aria-hidden=\"true\">→</span>", "cdcp123Tag": "Patient-facing tool — this is what visitors on your site would see"}, "fr": {"skip": "Aller au contenu", "navTag": "Préparé pour 123Dentist", "heroEyebrow": "Proposition pilote · Préparé pour 123Dentist · Août 2026", "heroH1": "Vous avez ajouté vingt-sept cliniques en une seule transaction. <em>Aucune ne se mesure de la même façon.</em>", "heroSub": "Un seul forfait clinique. Six leviers de croissance, un tableau de bord, une seule définition d’un patient réservé. Bâti de la même façon à chaque emplacement, en ligne quatorze jours après l’accès aux comptes. Voici une proposition pour le prouver sur six cliniques avant de parler de cinq cents.", "tocLabel": "Sommaire", "tocRead": "Seize minutes de lecture. Conçu pour être transféré.", "toc1": "Pourquoi ce trimestre", "toc2": "Ce qui casse à cinq cents", "toc3": "Le forfait clinique standard", "toc4": "Comment un patient réservé est mesuré", "toc5": "Le tableau de bord", "toc6": "Le pilote et la barre", "toc7": "Les quatre premiers mois", "toc8": "Où nous nous insérons", "toc9": "Modalités commerciales", "toc10": "Ce qui vient après Google", "toc11": "Qui le pilote", "toc12": "Les questions qu’on vous posera", "toc13": "La demande", "s01head": "Pourquoi ce trimestre", "s01title": "Deux horloges tournent en même temps.", "s01lede": "Ni l’une ni l’autre n’est une tendance marketing. L’une est une politique fédérale. L’autre est votre propre calendrier d’acquisitions.", "clock1Label": "Horloge un · Couverture", "clock1Title": "Deux virgule trois millions de Canadiens sont couverts et n’y sont toujours pas allés.", "clock1Body": "Santé Canada estime la population admissible à près de neuf millions. En mars 2026, 6,5 millions s’étaient inscrits et 4,2 millions avaient réellement reçu des soins. L’écart, c’est environ 2,3 millions de personnes qui sont couvertes, qui le savent, et qui n’ont toujours pas choisi de dentiste. Elles choisiront comme on choisit un dentiste quand ça presse : elles cherchent, elles survolent les avis, elles appellent celui qui répond. Ce patient revient ensuite tous les six mois pendant dix ans. Vous avez bâti un centre RCSD et des pages de localisation par ville, alors rien de tout ça n’est nouveau. Ce qui mérite d’être dit tout haut, c’est que ça n’arrive qu’une fois. Chacun de ces patients sera choisi par quelqu’un.", "clock2Label": "Horloge deux · Intégration", "clock2Title": "Chaque clinique que vous achetez arrive avec le marketing de quelqu’un d’autre.", "clock2Body": "Une agence différente. Un compte Google Ads différent, monté par quelqu’un que vous ne rencontrerez jamais. Un suivi différent, ou aucun. Une idée différente de ce qui compte comme nouveau patient. Vingt-sept d’entre elles sont arrivées en une seule transaction en octobre dernier. Chacune de ces cliniques est un chiffre que votre équipe ne peut pas comparer à celui de la clinique d’à côté. La comparabilité, c’est toute la raison pour laquelle un réseau vaut plus que la somme de ses cabinets.", "ctxLabel": "Votre réseau, tel que publié", "ctx1v": "509", "ctx1l": "cliniques partenaires", "ctx2v": "27", "ctx2l": "ajoutées avec MCA Dental Group", "ctx3v": "10", "ctx3l": "provinces", "ctx4v": "2 M", "ctx4l": "patients par année", "s02head": "Ce qui casse à cinq cents", "s02title": "Le marketing local n’échoue pas à grande échelle. Il se fragmente.", "s02lede": "Rien de tout ça n’est une critique de la façon dont 123Dentist fait son marketing. C’est l’arithmétique de l’achat de cinq cents cabinets indépendants qui ont chacun gardé leur nom, leur site et leur fournisseur.", "br1n": "Un", "br1t": "Cinq cents définitions d’un nouveau patient.", "br1b": "Une agence compte les formulaires remplis. Une autre compte les appels, y compris ceux auxquels personne n’a répondu. Une troisième compte quiconque a cliqué. Additionnez tout ça et vous obtenez un chiffre de réseau que personne ne peut défendre ligne par ligne. C’est le seul genre de chiffre qui survit à un conseil.", "br2n": "Deux", "br2t": "La meilleure et la pire clinique sont identiques vues du siège social.", "br2b": "Sans mesure commune, une clinique qui a un problème de marketing ressemble à une clinique qui a un problème de réception, ou à une clinique dans un marché plus lent. Le budget devient donc une négociation plutôt qu’un calcul. C’est la région la plus insistante qui gagne.", "br3n": "Trois", "br3t": "Intégrer une clinique prend plus de temps que l’acheter.", "br3b": "La transaction se conclut. Puis quelqu’un doit retrouver l’ancienne agence, récupérer le compte publicitaire, découvrir qui détient la fiche d’établissement, constater que le suivi n’a jamais été installé, et tout reconstruire. Trente-cinq fois par année. Pendant ce temps, les campagnes tournent sans surveillance ou s’arrêtent.", "br4n": "Quatre", "br4t": "Le nombre de fournisseurs croît plus vite que le nombre de cliniques.", "br4b": "Chaque acquisition peut apporter un contrat, une facture, un identifiant et un appel trimestriel. Vous n’en avez choisi aucun. Ils atterrissent tous sur votre bureau.", "s02close": "Une meilleure agence ne règle pas ça. Une unité standard, oui : un forfait, bâti de la même façon chaque fois, qui produit un seul chiffre voulant dire la même chose à chaque emplacement. C’est la proposition.", "s03head": "Le forfait clinique standard", "s03title": "Un forfait. Six composantes. Aucune réunion de configuration.", "s03lede": "Rien ici n’est sélectionné, cadré ou tarifé séparément. Chaque clinique du pilote reçoit les six, bâties selon la même spécification écrite. Chaque clinique suivante aussi.", "svc1Num": "01 / Recherche", "svc1Name": "Google Ads — Recherche", "svc1Desc": "La clinique, en premier, quand quelqu’un de cette ville cherche un dentiste.", "svc2Num": "02 / Local", "svc2Name": "Fiche d’établissement Google", "svc2Desc": "Premier sur la carte. Heures, services et photos exacts. Avis répondus.", "svc3Num": "03 / Mesure", "svc3Name": "Tableau de bord et suivi d’appels", "svc3Desc": "Un numéro suivi par clinique. Chaque dollar retracé jusqu’au fauteuil.", "svc4Num": "04 / Display", "svc4Name": "Google Ads — Display", "svc4Desc": "Bannières dans le bassin de la clinique, budgétées pour appuyer la recherche.", "svc5Num": "05 / RCSD", "svc5Name": "RCSD — Moteur de conversion interactif", "svc5Desc": "Admissible en 60 secondes. Réservé aussitôt.", "svc6Num": "06 / Avis", "svc6Name": "Avis Google · NFC", "svc6Desc": "Une pastille à toucher à la réception. Un avis Google en quelques secondes. Plus d’avis fait baisser le coût du patient suivant.", "s03note": "Six, parce que ce sont les six endroits où la décision du patient se prend vraiment. Rien n’est facturé séparément. Ce qu’on ne peut pas défendre sur le tableau de bord n’est pas dans le forfait.", "s04head": "Comment un patient réservé est mesuré", "s04title": "Trois couches. Deux sont à nous. Une est à vous.", "layer1Num": "Couche un", "layer1Owner": "À nous.", "layer1Body": "Un numéro suivi par clinique, inséré dynamiquement sur votre site existant. Quel appel vient de quel mot-clé, à quelle heure, dans quelle ville. Votre site. Votre marque. Notre suivi.", "layer2Num": "Couche deux", "layer2Owner": "À nous.", "layer2Body": "Le parcours de réservation sur le site, suivi de bout en bout, y compris là où les gens décrochent.", "layer3Num": "Couche trois", "layer3Owner": "À vous.", "layer3Body": "Si l’appel est devenu un rendez-vous, et si le patient s’est présenté. Ça vit dans votre logiciel de gestion de clinique, et ça y reste.", "sageLead": "Nous ne nous intégrons pas à Dentrix, Tracker, Cleardent, ni à aucun autre logiciel de gestion de clinique. Aucune intégration. Aucun projet TI. Aucune donnée de patient ne quitte la clinique.", "sageP2": "Il nous faut six colonnes dans un tableau partagé : date, numéro suivi, répondu, réservé, date du rendez-vous, présenté. Nous remplissons la moitié gauche automatiquement. La réception remplit trois colonnes. Deux minutes par semaine.", "sageP3": "Là où une clinique ne peut pas compléter le rapprochement, son tableau de bord affiche « appels qualifiés », pas « patients réservés ». On préfère sous-estimer que de se faire prendre à surestimer.", "s04why": "Dès qu’un fournisseur marketing demande l’accès au logiciel de gestion, ce n’est plus votre décision. Ça devient une décision TI, une décision de vie privée et une décision juridique. Cette révision prend des mois. C’est pour ça que la plupart des projets d’attribution dans les groupes dentaires ne sont toujours pas terminés. Six colonnes dans un tableur, ce n’est pas un compromis. C’est la version qui se livre en quatorze jours.", "s05head": "Le tableau de bord", "s05title": "Ce qui arrive le cinq de chaque mois.", "s05lede": "Une page par clinique, et une consolidation pour le réseau. Même mise en page chaque mois, mêmes définitions. La seule chose qui change d’un rapport à l’autre, ce sont les chiffres.", "dashSample": "Exemple de mise en page. Chiffres illustratifs.", "dashClinic": "Clinique exemple · Ontario", "dashMonth": "Mois 3", "dashK1l": "Budget média", "dashK2l": "Honoraires SSS", "dashK3l": "Appels qualifiés nouveaux patients", "dashK4l": "Nouveaux patients réservés", "dashK5l": "Coût par patient réservé", "dashK5n": "Tout compris. Média plus honoraires.", "dashAnsL": "Taux de réponse", "dashAnsN": "33 appels qualifiés sur 41 ont eu une réponse. Au taux de réservation de cette clinique, les 8 appels manqués valent deux à trois patients. Celui-là vous revient, et il ne coûte rien en média.", "dashTermsL": "Où l’argent est allé", "dashTh1": "Terme de recherche", "dashTh2": "Dépense", "dashTh3": "Appels", "dashTh4": "Réservés", "dashTh5": "Média / réservé", "dashR1": "dentiste d’urgence près de moi", "dashR2": "dentiste qui accepte de nouveaux patients", "dashR3": "nettoyage dentaire · ville", "dashR4": "dentiste RCSD près de moi", "dashR5": "invisalign · ville", "dashR6": "tous les autres termes de recherche", "dashRollL": "Consolidation réseau · coût par patient réservé", "dashRollN": "Chaque clinique nommée et classée, chaque mois. Celle du bas n’est ni cachée ni excusée — son taux de réponse figure sur la même page que son coût. Le chiffre du réseau correspond au coût total divisé par le total des patients réservés, et non à une moyenne des six pourcentages : 16 174 $ pour 62 patients.", "dashFlag": "taux de réponse 54 %", "dashAvg": "Réseau · 62 patients réservés", "s05shared": "Nous pouvons faire sonner le téléphone. Nous ne pouvons pas y répondre.", "s05sharedBody": "Si une clinique répond à la moitié de ses appels, le coût par patient double et on dirait que la publicité a échoué. Le taux de réponse est au tableau de bord dès le premier jour. À nous de le générer, à vous d’agir. On le rapporte qu’il nous avantage ou non.", "s06head": "Le pilote et la barre", "s06title": "Six cliniques. Quatre mois. La barre fixée avant qu’il y ait des données à débattre.", "scopeLabel": "Portée", "scopeAnchor": "6<small>cliniques</small>", "scopeTitle": "Choisies par 123Dentist.", "scopeDesc": "Volontairement variées. Urbaines et de banlieue, marchés durs et faciles, valeur de traitement élevée et faible, capacité de fauteuils différente. Un pilote facile choisit des cliniques faciles. Ne le faites pas.", "timeLabel": "Échéancier", "timeAnchor": "14<small>jours</small>", "timeTitle": "En ligne dès l’accès aux comptes.", "timeDesc": "Le premier mois sert à apprendre et n’est pas comptabilisé. Les mois deux, trois et quatre sont l’évaluation.", "commitLabel": "Engagement", "commitAnchor": "449<small>/ clinique / mois</small>", "commitTitle": "De mois en mois.", "commitDesc": "Aucune durée. Aucun minimum. Toute clinique peut sortir seule, avec un préavis de trente jours.", "critTitle": "Ce qui en fait un oui.", "crit1Label": "Cible", "crit1Value": "275 $ CA par nouveau patient réservé", "crit1Note": "Budget média plus nos honoraires mensuels, divisé par les nouveaux patients réservés. Mesuré sur les six cliniques pilotes combinées, aux mois deux, trois et quatre, avec au moins quatre des six individuellement sous 325 $ — pour que deux bonnes cliniques n’en portent pas quatre faibles. Une clinique qui se retire en cours de pilote conserve ses mois écoulés au dénominateur.", "crit2Label": "Seuil d’échec", "crit2Value": "400 $ CA par nouveau patient réservé", "crit2Note": "Au-delà, le pilote a échoué et vous ne devriez pas le prolonger. Entre la cible et cette barre, nous rapportons le chiffre sans plaider un renouvellement que vous n’avez pas déjà accepté. Nous écrivons notre propre condition d’échec avant le lancement.", "crit3Label": "Plancher", "crit3Value": "8 nouveaux patients réservés par clinique par mois", "crit3Note": "Au minimum, dès le mois trois. Une clinique sous le plancher est nommée dans la consolidation, avec la raison à côté.", "crit4Label": "Diagnostic", "crit4Value": "Taux de réponse aux appels, rapporté chaque mois", "crit4Note": "Rapporté, non comptabilisé. À nous de le générer, à vous d’agir.", "critClose": "Ce sont nos chiffres, pas les vôtres. Si deux cent soixante-quinze n’est pas la bonne cible pour votre modèle, on utilise la vôtre et on l’écrit avant le lancement. Pour que rien ne se cache derrière « tout compris » : la cible est mesurée sur le média plus les honoraires mensuels, sur les trois mois comptabilisés. En comptant chaque dollar — six frais de mise en route, le mois d’étalonnage non comptabilisé et les quatre mois de média — les mêmes volumes illustrés donnent environ 67 700 $ et à peu près 296 $ par patient réservé. Les deux chiffres sont sur la table avant toute signature.", "honestLabel": "Dit franchement", "honestBody": "Nous n’avons pas d’étude de cas dentaire à l’échelle d’un réseau. C’est pour ça qu’on demande six cliniques et non cinq cents. C’est pour ça que les seuils sont publiés avant le lancement plutôt que choisis après, et que les honoraires s’annulent au mois sans rien à récupérer. On ne vous demande pas de croire une affirmation. On offre la façon la moins chère d’en tester une. Si le chiffre tient, les données sont à vous et viennent de vos cliniques. Sinon, vous en êtes quitte pour quatre mois d’honoraires annulables et vous savez exactement où votre entonnoir Google se brise. Ça vaut la peine d’être su dans les deux cas.", "mathLabel": "L’arithmétique, dite une fois", "mathBody": "Au plancher — huit nouveaux patients réservés par clinique par mois — six cliniques produisent 576 patients en un an. Cinq cents en produisent environ quarante-huit mille. On ne promet pas quarante-huit mille patients. On montre la forme de l’unité si elle se répète. Avant le lancement, vous nous donnez un chiffre par clinique pilote : son nombre de nouveaux patients sur les douze mois précédents. Tout ce que nous rapportons se lit ensuite comme une hausse par rapport à cette ligne, et non comme un volume brut que nous récolterions sur une demande que vous aviez déjà. Ce que vaut un nouveau patient pour 123Dentist est un chiffre que vous avez et que nous n’avons pas. On vous donne le côté coût et on fixe les deux barres d’avance. La multiplication vous appartient.", "s07head": "Les quatre premiers mois", "s07title": "Le temps total de votre équipe : une heure, puis deux minutes par semaine.", "s07lede": "La plupart des pilotes fournisseurs ne meurent pas sur la performance. Ils meurent quand l’équipe cliente réalise qu’elle a discrètement hérité d’un projet. Voici donc chaque heure que ça vous coûte.", "tl1d": "Jour 0", "tl1t": "Une seule séance d’accès.", "tl1b": "Soixante minutes, un seul appel, les six cliniques d’un coup. Accès de gestion à Google Ads, Fiche d’établissement, Analytics et Tag Manager. Votre équipe n’assiste à rien d’autre.", "tl2d": "Jours 1 à 13", "tl2t": "Nous bâtissons.", "tl2b": "Comptes reconstruits selon la spécification standard. Extrait de suivi déployé. Un numéro suivi par clinique. Fiches d’établissement corrigées. Tableaux de bord bâtis. Rien n’est requis de votre part.", "tl3d": "Jour 14", "tl3t": "En ligne.", "tl3b": "Les six cliniques en fonction. Tableaux de bord alimentés dès le premier clic.", "tl4d": "Jour 45", "tl4t": "Revue du mois un — calibration seulement.", "tl4b": "Enchères, exclusions et géographie ajustées à partir de données réelles. Documenté, non comptabilisé. Toute clinique peut se retirer ici sans frais.", "tl5d": "Jour 135", "tl5t": "La décision.", "tl5b": "Trois mois comptabilisés contre des seuils écrits avant le lancement. Poursuivre, étendre, ou arrêter.", "govLabel": "Cadence et escalade", "gov1a": "Chaque semaine", "gov1b": "Deux minutes par réception. Trois colonnes sur une feuille partagée. Aucune réunion.", "gov2a": "Chaque mois", "gov2b": "Tableaux de bord par clinique et consolidation réseau au plus tard le cinq. Une revue de trente minutes, facultative après le mois deux.", "gov3a": "Chaque trimestre", "gov3b": "Une note de performance écrite, mesurée contre les seuils convenus, dans un format que vous pouvez transférer sans le réécrire.", "gov4a": "Escalade", "gov4b": "Un responsable de compte nommé pour 123Dentist. Tout ce qui n’est pas réglé en vingt-quatre heures monte au fondateur, le jour même.", "s08head": "Où nous nous insérons", "s08title": "Ceci ne remplace rien de ce que vous avez déjà.", "s08lede": "Une proposition qui déplace discrètement une équipe interne ou un fournisseur en place meurt dans un corridor. Voici donc la frontière, tracée exprès.", "fitRunL": "Nous opérons", "fitRun1": "Google Recherche, Display et le moteur RCSD pour chaque clinique du pilote", "fitRun2": "La fiche d’établissement de chaque clinique du pilote — exactitude, catégories, photos, réponses aux avis", "fitRun3": "Le suivi d’appels, le suivi des conversions et le tableau de bord par clinique", "fitRun4": "La captation d’avis à la réception", "fitNotL": "Nous ne touchons pas à", "fitNot1": "Votre système de marque, vos normes créatives ou vos campagnes nationales", "fitNot2": "Vos sites web — un extrait et un numéro, rien d’autre ne change", "fitNot3": "Votre logiciel de gestion de clinique, ni aucune donnée de patient", "fitNot4": "Le mandat de votre équipe marketing interne — nous lui rendons des comptes, pas à côté d’elle", "fitPrismL": "Sur l’intelligence d’appels", "fitPrismB": "Si vous utilisez Patient Prism ou l’équivalent, gardez-le. Prism évalue la conversation. Nous achetons la conversation. Deux tâches différentes, et les deux jeux de données se rapprochent. Vérifiez notre chiffre de patients réservés contre les résultats d’appels de Prism. On préfère que vous le fassiez. Jugez-nous avec votre instrument, pas le nôtre.", "fitAgencyL": "Sur les agences en place", "fitAgencyB": "Rien n’a besoin d’être annulé pour faire ça. Choisissez six cliniques où le fournisseur actuel sous-performe, ou six sans agence du tout, ou faites tourner les deux dans un marché et comparez. On ne vous demande pas de briser une relation pour tester une hypothèse.", "s09head": "Modalités commerciales", "pricingMo": "par mois · par clinique · CAD · de mois en mois", "pf1Label": "Inclus", "pf1Value": "Les six composantes", "pf1Note": "Un tableau de bord par clinique. Une consolidation réseau.", "pf2Label": "Mise en route", "pf2Note": "Frais uniques, par clinique. Six composantes configurées, tableau de bord en ligne.", "pf3Label": "Budget média", "pf3Value": "Facturé directement par Google", "pf3Note": "Votre carte, votre compte, votre contrôle. Aucune majoration, aucun rabais, aucuns frais cachés.", "pf4Label": "Budget recommandé", "pf4Value": "1 500 $ à 7 000 $ par clinique par mois", "pf4Note": "Fixé selon les heures libres mesurées d’hygiène et de dentiste. Jamais selon un pourcentage du chiffre d’affaires.", "pf5Label": "Durée", "pf5Value": "De mois en mois", "pf5Note": "Aucun minimum, aucuns frais de sortie. Cliniques ajoutées ou retirées une à une.", "pricingClose": "Une clinique type dépense environ 2 500 $ tout compris. Plus de quatre dollars sur cinq vont à Google, pas à nous.", "schedLabel": "Ce que ça coûte à grande échelle", "schedIntro": "Publié, pour que vous puissiez modéliser le parc sans négociation.", "sched1a": "Pilote — 6 cliniques", "sched1b": "449 $", "sched1c": "par clinique, par mois · de mois en mois · 499 $ une seule fois par clinique", "sched2a": "Réseau — 90 cliniques ou plus", "sched2b": "399 $", "sched2c": "par clinique, par mois · entente annuelle · mise en route inchangée", "schedNote": "Le tarif réseau n’est pas un rabais pour avoir demandé. C’est ce que l’unité coûte une fois que le volume et une entente annuelle rendent le calendrier prévisible, et une partie vient de notre propre chaîne d’approvisionnement plutôt que du travail. Le forfait est identique à l’un ou l’autre prix.", "keepLabel": "Si ça se termine", "keepIntro": "Tout ce que nous bâtissons se trouve dans des comptes que 123Dentist détient. Il n’y a rien à récupérer.", "keep1": "Les comptes Google Ads résident dans votre compte administrateur dès le premier jour. Nous détenons l’accès, pas la propriété.", "keep2": "Les fiches d’établissement sont à vous et l’ont toujours été. Nous ne revendiquons jamais une fiche à notre nom.", "keep3": "L’historique des conversions, les registres d’appels et chaque mois de tableau de bord s’exportent sur demande, en fichiers, pas en accès à un portail.", "keep4": "Les numéros suivis vous sont transférés sur préavis de trente jours.", "keep5": "Aucune durée, aucun minimum, aucuns frais de sortie, aucun actif retenu.", "s10head": "Ce qui vient après Google", "s10title": "Vous êtes derrière cinq cents cliniques. Vos patients n’ont jamais entendu parler de vous.", "s10lede": "Vos cliniques ont gardé leur nom. 12th &amp; 8th Dental, 404 Dental, 7 Oaks. Le bon choix pour les cliniques, et le réseau reste invisible au point de service. Trente-cinq sont arrivées l’an dernier avec un nom que vous n’avez pas choisi et rien de vous à l’intérieur. Google s’arrête à la porte d’entrée. Tout le reste de ce document aussi.", "rmNote": "Rien de tout cela n’est dans le pilote, les honoraires ou la demande. C’est placé après la demande à dessein, pour ne pas concurrencer une décision de quatre mois qui tient d’elle-même. Deux limites de la section 08 demeurent inchangées : l’inscription au Wi-Fi recueille les coordonnées avec le consentement du patient et elles restent à la clinique, et tout travail de rappel s’appuie sur une liste que la clinique exporte et contrôle. Ni l’un ni l’autre n’ajoute d’intégration au logiciel de gestion, et les deux seront cadrés avec votre équipe de confidentialité avant toute construction. C’est ici pour une seule raison : cinq cents cliniques portant une même marque bâtissent quelque chose avec les gens qui y travaillent autant qu’avec ceux qui s’y assoient. Une fois le chiffre Google prouvé, c’est la conversation qui suit.", "s11head": "Qui le pilote", "teamTitle": "Chaque dollar a un responsable.", "t1Role": "Fondateur", "t1Bio": "Dix ans en marketing. Quatre ans à l’intérieur d’une clinique — appels, urgences, plans de traitement, horaires. La plupart des agences n’ont jamais vu ça de l’intérieur.", "t2Role": "Associé · Conseiller clinique", "t2Name": "Dr Shayan Araghi", "t2Bio": "Quatorze ans de pratique clinique. Plusieurs cliniques bâties à partir de zéro. DMD, Université de Montréal. Investisseur et associé stratégique.", "t3Role": "Associé · Conseiller aux opérations", "t3Bio": "Plus de dix ans à l’intérieur de cliniques dentaires. Opérations quotidiennes, assurances, comptabilité de clinique, expérience patient. A dirigé des cliniques de plusieurs millions de dollars. Sait exactement ce qui se passe entre le clic et le fauteuil.", "opsLabel": "Comment la livraison suit", "opsLead": "La question légitime : comment une petite équipe sert-elle un réseau de cette taille ? Parce que le travail est une spécification, pas une suite d’opinions.", "ops1": "Chaque clinique est bâtie selon la même spécification écrite — structure de compte, ensemble de campagnes, exclusions, suivi, tableau de bord. Aucune construction sur mesure, donc aucun délai sur mesure.", "ops2": "L’exécution repose sur une infrastructure de production qui gère déjà plusieurs centaines de comptes, selon notre spécification et notre méthode dentaire. Les quatorze jours sont les mêmes à la clinique six qu’à la clinique soixante, parce que c’est chaque fois la même spécification écrite. Nous n’avons pas fait ça sur trois cents cliniques et nous ne prétendons pas le contraire.", "ops3": "La stratégie, les seuils, la reddition de comptes et la relation restent avec les personnes nommées ci-dessus. Un responsable de compte pour 123Dentist. Escalade au fondateur, le jour même.", "s12head": "Les questions qu’on vous posera", "s12title": "Répondues ici, pour que vous n’ayez pas à les défendre de mémoire.", "q1": "Qu’est-ce que ça remplace ?", "a1": "Rien. Ni votre équipe, ni vos campagnes nationales, ni votre fournisseur de site web, ni votre plateforme d’intelligence d’appels, ni une agence que vous préférez garder. C’est une couche d’exécution par clinique qui se place sous ce que vous opérez déjà.", "q2": "Qui détient les comptes et les données ?", "a2": "123Dentist, dès le premier jour, sans exception. Les comptes publicitaires résident dans votre compte administrateur, les fiches d’établissement restent les vôtres, et chaque mois de données s’exporte en fichiers sur demande. Nous détenons l’accès, jamais la propriété.", "q3": "Avez-vous besoin d’un accès à notre logiciel de gestion ?", "a3": "Non. Aucune intégration, aucun projet TI, aucune donnée de patient. Le rapprochement, c’est six colonnes dans un tableau partagé, dont trois remplies par la réception, deux minutes par semaine.", "q4": "Comment trois personnes servent-elles un réseau de cette taille ?", "a4": "La construction est une spécification écrite, pas un projet sur mesure, et l’exécution s’appuie sur une infrastructure de livraison qui gère déjà plusieurs centaines de comptes selon cette spécification. La stratégie, les seuils et l’imputabilité restent avec les associés nommés. Le délai de construction ne change pas avec le volume.", "q5": "Que se passe-t-il quand une clinique sous-performe ?", "a5": "Elle apparaît nommément dans la consolidation, en dernier, avec la raison sur la même page. Habituellement le taux de réponse, parfois un marché réellement plus mince. On vous le dit avant que vous le demandiez. Là où une clinique ne peut pas rapprocher ses réservations, on rapporte les appels qualifiés et on ne revendique rien de plus.", "q6": "Pourquoi ne pas confier ça à une agence qu’on utilise déjà ?", "a6": "Vous pouvez, et pour une seule clinique ça change peu. On ne prétend pas faire de meilleures campagnes. On prétend que cinq cents cliniques bâties selon une seule spécification produisent un chiffre comparable, et qu’un ensemble d’agences hérité d’acquisitions n’y arrivera jamais.", "q7": "Quel est le vrai risque ?", "a7": "Que quatre mois passent, que le chiffre dépasse votre seuil, et que ça vous ait coûté quatre mois d’honoraires annulables par clinique plus un budget média que vous avez contrôlé tout du long. Aucune durée, aucuns frais de sortie, rien à récupérer. Il vous reste une lecture précise de l’endroit où votre entonnoir Google se brise, utile à quiconque le gérera ensuite.", "q8": "Pourquoi est-ce que ça doit se faire ce trimestre ?", "a8": "Des millions d’adultes nouvellement couverts choisissent un dentiste en ce moment, une seule fois. Et chaque mois de délai, c’est un autre lot de cliniques acquises intégrées sur une mesure qu’il faudra refaire. Aucune des deux horloges n’attend un cycle budgétaire.", "s13head": "La demande", "finalTitle": "Un fauteuil vide coûte plus cher qu’un plan marketing. Multipliez ça par cinq cents.", "fa1Num": "Un", "fa1Body": "Six noms de cliniques, choisies par 123Dentist.", "fa2Num": "Deux", "fa2Body": "Une séance d’accès de soixante minutes.", "fa3Num": "Trois", "fa3Body": "Une revue des données ensemble, quatre mois après le lancement.", "finalName": "Hamza A. · Fondateur, SSS Marketing", "footerTag": "Marketing dentaire. Bâti sur la recherche Google.", "footerPrivate": "Document privé. Préparé pour 123Dentist. Ne pas distribuer.", "footerSrc": "Nombre de cliniques selon le répertoire des partenaires 123Dentist, juillet 2026. Volume de patients tel que publié par 123Dentist. Inscriptions et utilisation du RCSD selon Santé Canada, données au 31 mars 2026.", "dashK1v": "2 050 $", "dashK2v": "449 $", "dashK3v": "41", "dashK4v": "11", "dashK5v": "227 $", "dashAnsV": "80 %", "dashAvgV": "261 $", "dashSelf": "la page ci-dessus", "dashR1s": "486 $", "dashR1c": "11", "dashR1b": "4", "dashR1p": "122 $", "dashR2s": "391 $", "dashR2c": "8", "dashR2b": "3", "dashR2p": "130 $", "dashR3s": "327 $", "dashR3c": "7", "dashR3b": "2", "dashR3p": "164 $", "dashR4s": "268 $", "dashR4c": "6", "dashR4b": "2", "dashR4p": "134 $", "dashR5s": "310 $", "dashR5c": "3", "dashR5b": "0", "dashR5p": "—", "dashR6s": "128 $", "dashR6c": "4", "dashR6b": "0", "dashR6p": "—", "rollC01": "Clinique 01", "rollV01": "202 $", "rollC02": "Clinique 02", "rollV02": "227 $", "rollC03": "Clinique 03", "rollV03": "240 $", "rollC04": "Clinique 04", "rollV04": "265 $", "rollC05": "Clinique 05", "rollV05": "305 $", "rollC06": "Clinique 06", "rollV06": "393 $", "s10bridge": "Trois moments se vivent dans une clinique qu’aucune annonce ne peut atteindre : la minute où le patient est le plus content, les vingt minutes d’attente, et l’heure passée dans la chaise. Chacun est un objet. Chaque objet peut porter votre nom.", "pfLabel": "Déjà dans le forfait", "pfTitle": "La plaque qu’ils touchent au meilleur moment.", "pfBody": "La plaque d’avis NFC est déjà livrée avec chaque clinique du forfait standard. La version réseau porte deux marques : le nom sur la porte, et 123Dentist à côté. Le patient la touche au comptoir, au moment où il est le plus content de vous qu’il ne le sera jamais. L’avis travaille sur le coût par patient de cette clinique. Le logo travaille sur le vôtre, devant quelqu’un de bonne humeur et attentif. Un seul objet, deux métiers.", "pfNote": "Déjà inclus. Aucun coût supplémentaire dans le pilote.", "pfAlt": "Plaque d’avis NFC co-marquée sur un comptoir de clinique, portant la marque 123Dentist à côté de celle de la clinique.", "pgHead": "En développement · décrit ici, chiffré nulle part", "pc1n": "01 / Salle d’attente", "pc1t": "La page de connexion Wi-Fi.", "pc1b": "Un écran à la marque sur le Wi-Fi de la clinique. La première chose qu’un patient lit en attendant, et les coordonnées arrivent avec consentement plutôt que sur une feuille au comptoir.", "pc1alt": "Écran de connexion Wi-Fi invité à la marque, portant le logotype 123Dentist.", "pc2n": "02 / Salle d’attente", "pc2t": "La borne de recharge.", "pc2b": "De l’électricité sur la table où traînaient les revues. Les patients s’assoient plus près, restent plus longtemps à côté, et lisent le nom dessus pendant tout ce temps.", "pc2alt": "Borne de recharge à la marque, en forme de dent, sur une table de salle d’attente.", "pc3n": "03 / Salle de soins", "pc3t": "Les lunettes à la chaise.", "pc3b": "Une protection contre la lampe opératoire, remise au début du traitement. Les patients les gardent. Votre nom sort de la clinique sur le visage de quelqu’un.", "pc3alt": "Lunettes de soleil blanches à la marque, logo 123Dentist sur la branche.", "pgNote": "Rendus conceptuels. Les finis, les matériaux et le co-marquage se décident avec votre équipe, pas par nous.", "rmSoft": "Il y a aussi une couche logicielle derrière tout ça. Un agent de rappel IA qui travaille la liste que chaque clinique possède et qu’aucune réception n’a le temps d’appeler : les patients en retard d’hygiène, les plans de traitement acceptés et jamais pris. Cette liste dort déjà dans votre réseau. Personne ne l’appelle.", "rollN01": "14 réservés", "rollN02": "11 réservés", "rollN03": "10 réservés", "rollN04": "10 réservés", "rollN05": "10 réservés", "rollN06": "7 réservés", "dashBrand": "SSS · Rapport mensuel", "dashRT": "Total", "dashRTs": "2 050 $", "dashRTc": "41", "dashRTb": "11", "dashRTp": "186 $", "dashTfoot": "Les colonnes correspondent au panneau ci-dessus : 2 050 $ de média, 41 appels qualifiés, 11 réservations. Tout compris avec les honoraires de 449 $, 227 $ par patient réservé. Le display et la vidéo sont présentés à leur coût, sans réservation portée à leur crédit — ils servent à soutenir la recherche, et c’est le pilote qui le confirmera ou les fera couper.", "apxNum": "Annexe", "tocApx": "Anx", "navAsk": "La demande", "midCta": "Ce que nous demandons →", "priceNum": "449<sup>$</sup>", "pf2Value": "499<sup>$</sup>", "dashR7": "Display · zone de desserte", "dashR7s": "80 $", "dashR7c": "1", "dashR7b": "0", "dashR7p": "—", "dashR8": "Vidéo · YouTube, ville de la clinique", "dashR8s": "60 $", "dashR8c": "1", "dashR8b": "0", "dashR8p": "—", "svc5Cta": "Essayez-le <span class=\"six-cta-arrow\" aria-hidden=\"true\">→</span>", "cdcp123Tag": "Outil patient — ce que verrait un visiteur sur votre site"}};
-  var cdcp123Open=false;
-  function applyLang(lang){
-    if(!DICT[lang]) lang="en";
-    var map=DICT[lang];
-    document.documentElement.lang=lang;
-    if(TITLE[lang]) document.title=TITLE[lang];
-    document.querySelectorAll("[data-i-alt]").forEach(function(el){
-      var a=map[el.getAttribute("data-i-alt")]; if(a!=null) el.setAttribute("alt",a);
-    });
-    document.querySelectorAll("[data-i]").forEach(function(el){
-      var k=el.getAttribute("data-i");
-      if(map[k]!=null) el.innerHTML=map[k];
-    });
-    document.querySelectorAll(".lang-toggle button").forEach(function(b){
-      b.setAttribute("aria-pressed", b.getAttribute("data-lang")===lang ? "true":"false");
-    });
-    try{ localStorage.setItem("sss123lang", lang); }catch(e){}
-    if(cdcp123Open && window.mountCdcpQuiz){
-      var cq=document.getElementById("cdcpQuiz123");
-      if(cq){ cq.innerHTML=""; window.mountCdcpQuiz(cq, lang); }
-    }
-  }
-  var saved=null; try{ saved=localStorage.getItem("sss123lang"); }catch(e){}
-  applyLang(saved==="fr" ? "fr" : "en");
-  document.querySelectorAll(".lang-toggle button").forEach(function(b){
-    b.addEventListener("click",function(){ applyLang(b.getAttribute("data-lang")); });
-  });
-
-  var cdcp123Trigger=document.getElementById("cdcp123Trigger"),cdcp123Drawer=document.getElementById("cdcp123Drawer");
-  if(cdcp123Trigger && cdcp123Drawer){
-    cdcp123Trigger.addEventListener("click",function(){
-      cdcp123Open=!cdcp123Open;
-      cdcp123Trigger.setAttribute("aria-expanded", cdcp123Open ? "true" : "false");
-      cdcp123Drawer.classList.toggle("open", cdcp123Open);
-      if(cdcp123Open && window.mountCdcpQuiz){
-        var cq=document.getElementById("cdcpQuiz123");
-        if(cq){ cq.innerHTML=""; window.mountCdcpQuiz(cq, document.documentElement.lang||"en"); }
-      }
-    });
-  }
-})();
-</script>
-
 </body>
 </html>
