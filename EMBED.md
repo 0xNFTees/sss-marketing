@@ -1,32 +1,38 @@
-# Embedding the CDCP / RCSD calculators
+# Embedding the CDCP / RCSD calculator
 
-Two independent widgets. Each needs its own CSS and JS; the cost estimator also needs its fee data file.
+One widget: the patient answers four questions and gets eligibility and an estimated out-of-pocket cost together. Nothing is pre-selected.
 
 ```html
 <link rel="stylesheet" href="/cdcp-embed.css">
-<link rel="stylesheet" href="/cdcp-estimator.css">
 
-<div id="eligibility"></div>
-<div id="cost"></div>
+<div id="calculator"></div>
 
+<script src="/cdcp-estimator-data.js"></script>   <!-- fee data; omit for an eligibility-only version -->
 <script src="/cdcp-embed.js"></script>
-<script src="/cdcp-estimator-data.js"></script>
-<script src="/cdcp-estimator.js"></script>
 <script>
-  mountCdcpQuiz(document.getElementById("eligibility"), "fr", {
+  mountCdcpQuiz(document.getElementById("calculator"), "fr", {
     bookingUrl: "https://your-clinic.ca/rendez-vous",   // required for a real clinic
     insurers: ["Sun Life", "Manuvie", "Croix Bleue"]    // optional; shown on the private-insurance result
-  });
-  mountCdcpEstimator(document.getElementById("cost"), "fr", "QC", {
-    bookingUrl: "https://your-clinic.ca/rendez-vous"
   });
 </script>
 ```
 
-- `lang` is `"fr"` or `"en"`. To switch language, call the mount function again on the same element; it replaces its contents.
-- `bookingUrl` defaults to `/#contact`, which is only right on sss.marketing. The quiz appends `branch`, `utm_source` and, where relevant, `suggestedDate` to it.
+- `lang` is `"fr"` or `"en"`. Calling the function again on the same element (for example after a language switch) re-renders in place and keeps the patient's answers.
+- `bookingUrl` defaults to `/#contact`, which is only right on sss.marketing. The widget appends `branch`, `utm_source` and, where relevant, `suggestedDate`.
+- `province` defaults to `"QC"` and selects the fee data in `cdcp-estimator-data.js`. If that file is not loaded, the appointment question and cost estimate are left out and the tool becomes eligibility-only.
 - Without `insurers` and `demo`, the insurer list and the sss.marketing audit link are not shown. `demo: true` is used only on sss.marketing.
-- Fee figures live in `cdcp-estimator-data.js` and must be verified by the clinic before launch.
+- Fee figures live in `cdcp-estimator-data.js` and must be verified by the clinic before launch. If a fee needed for an appointment is missing from the data, the widget shows "estimate unavailable" for that appointment rather than a partial total.
+
+## How it decides
+
+| Answer | Result |
+|---|---|
+| Private insurance: yes | Private plan applies; no estimate |
+| Income 90 k+ | Not eligible; estimate is the full standard fee |
+| Tax return not filed | Must file first; estimate is what the patient would pay once the card is issued |
+| Otherwise | Eligible; estimate = standard fee minus the RCSD amount for the income band |
+
+Per line, the RCSD amount is the lesser of the RCSD grid fee times the band percentage (100, 60, 40, 0) and the standard fee, and is zero for services the RCSD does not cover.
 
 ## Theming
 
@@ -38,20 +44,21 @@ Set any of these on the container, a parent element, or `:root`. Unset tokens us
 | `--cdcp-on-brand` | text on brand | `#ffffff` |
 | `--cdcp-ink` | text, strong borders | `#1c1812` |
 | `--cdcp-paper` | widget background | `#ffffff` |
-| `--cdcp-tint` | hover rows, result panel | `#f3f1ea` |
-| `--cdcp-accent` | coverage ring, savings bar, link underline | `#b5835a` |
+| `--cdcp-tint` | hover rows | `#f3f1ea` |
+| `--cdcp-accent` | link underline, chevrons | `#b5835a` |
 | `--cdcp-line` | hairlines | `#d8d4c8` |
-| `--cdcp-good` | positive tier | `#3f6f3d` |
-| `--cdcp-warn` | notices | `#8a4f1c` |
+| `--cdcp-good` | eligible, RCSD savings | `#2f6b35` |
+| `--cdcp-bad` | not eligible, extra costs, blockers | `#b3261e` |
+| `--cdcp-warn` | cautions (pre-authorization) | `#8a4f1c` |
 | `--cdcp-font` | body font | inherits from the host |
 | `--cdcp-display` | headlines, large figures | inherits from the host |
 | `--cdcp-radius` | corner radius | `0` |
 
-Keep `--cdcp-brand` against `--cdcp-on-brand`, and `--cdcp-ink` against `--cdcp-paper`, at 4.5:1 contrast or better.
+Keep `--cdcp-brand` against `--cdcp-on-brand`, `--cdcp-ink` against `--cdcp-paper`, and `--cdcp-good` and `--cdcp-bad` against `--cdcp-paper`, at 4.5:1 contrast or better.
 
 ## Host-page safety
 
 - Every rule is scoped under `.cdcp`, with a zero-specificity reset for buttons, inputs, fieldsets, links, headings and lists, so site-wide element styles do not restyle the widget.
-- Widget class names are prefixed (`cq-`, `est-`), so the host's own `.btn`, `.card` or `.matrix` rules do not apply.
-- Layout follows the width of the container, not the viewport: the quiz goes two-column at 640px and the estimator at 560px. Both fit a 320px column without horizontal scroll.
-- Browser support: current evergreen browsers (uses `:has()`, container queries and `overflow: clip`). Older browsers get the stacked single-column layout where container queries are missing.
+- Widget class names are prefixed (`cq-`), so the host's own `.btn`, `.card` or `.matrix` rules do not apply.
+- Layout follows the width of the container, not the viewport: two columns from 680px, stacked below. It fits a 320px column without horizontal scroll. When stacked, the estimated-share bar stays pinned to the bottom of the viewport while the patient changes answers.
+- Browser support: current evergreen browsers (uses `:has()`, container queries and `overflow: clip`). Older browsers get the stacked layout where container queries are missing. Sticky positioning does not work inside a host ancestor that has `overflow: hidden` or `auto`; use `overflow: clip` there.

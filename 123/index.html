@@ -16,7 +16,6 @@
 <meta property="og:title" content="SSS — Pilote 123Dentist">
 <meta property="og:type" content="website">
 <link rel="stylesheet" href="/cdcp-embed.css">
-<link rel="stylesheet" href="/cdcp-estimator.css">
 <style>
 @font-face{font-family:'RhymesText';src:url('/fonts/RhymesTextMedium.otf') format('opentype');font-weight:500;font-display:swap}
 @font-face{font-family:'ABCWalter';src:url('/fonts/ABCWalterAlte-Roentgentherapie.otf') format('opentype');font-weight:400;font-display:swap}
@@ -90,8 +89,7 @@ h2{font-size:clamp(28px,3.8vw,46px);line-height:1.08;letter-spacing:-.022em;max-
 @keyframes flash{0%{outline:2px solid var(--tan);outline-offset:4px}100%{outline:2px solid transparent;outline-offset:4px}}
 .btn:hover{transform:scale(1.02)}.btn:active{transform:scale(.98)}
 #drawer{scroll-margin-top:90px}
-.drawer-in{display:flex;flex-direction:column;align-items:center}.drawer-in .quiz-wrap{width:100%;max-width:920px;margin:0 auto}.pane{width:100%}.pane[hidden]{display:none}.est-wrap{width:100%;max-width:920px;margin:0 auto}
-.tabs{scroll-margin-top:72px;display:flex;gap:0;margin:0 auto 16px;border:1px solid var(--rule)}.tabs button{padding:0 18px;min-height:44px;font-size:13px;cursor:pointer;transition:background .15s,color .15s}.tabs button+button{border-left:1px solid var(--rule)}.tabs button[aria-selected="true"]{background:var(--ink);color:var(--paper)}.tabs button:hover:not([aria-selected="true"]){background:rgba(204,213,174,.4)}.demo-tag{text-align:center}
+.drawer-in{display:flex;flex-direction:column;align-items:center}.drawer-in .quiz-wrap{width:100%;max-width:920px;margin:0 auto}.pane{width:100%}.pane[hidden]{display:none}
 .drawer{max-height:0;overflow:clip;transition:max-height .55s var(--ease)}
 .drawer.open{max-height:6000px}
 .drawer-in{padding-top:28px}
@@ -169,7 +167,7 @@ footer .wrap{border-top:1px solid rgba(254,250,224,.18);padding-top:22px;display
 @media print{nav,.lang,.drawer{display:none !important}.fade{opacity:1;transform:none}.close{background:none;color:var(--ink)}.close h2,.close p{color:var(--ink)}}
 .dashline{margin-top:20px;padding:14px 18px;background:rgba(204,213,174,.35);border-left:3px solid var(--tan);font-size:15px}
 /* sss.marketing brand mapping for the embeddable calculator (see EMBED.md) */
-.cdcp{--cdcp-brand:var(--ink);--cdcp-on-brand:var(--paper);--cdcp-ink:var(--ink);--cdcp-paper:var(--paper);--cdcp-tint:var(--surface-a);--cdcp-accent:var(--tan);--cdcp-line:var(--rule);--cdcp-good:#4d7c4a;--cdcp-warn:#8a4f1c;--cdcp-font:var(--body);--cdcp-display:var(--display)}
+.cdcp{--cdcp-brand:var(--ink);--cdcp-on-brand:var(--paper);--cdcp-ink:var(--ink);--cdcp-paper:var(--paper);--cdcp-tint:var(--surface-a);--cdcp-accent:var(--tan);--cdcp-line:var(--rule);--cdcp-good:#2f6b35;--cdcp-bad:#b3261e;--cdcp-warn:#8a4f1c;--cdcp-font:var(--body);--cdcp-display:var(--display)}
 </style>
 <noscript><style>.fade{opacity:1;transform:none}.drawer{max-height:none}</style></noscript>
 </head>
@@ -241,7 +239,7 @@ footer .wrap{border-top:1px solid rgba(254,250,224,.18);padding-top:22px;display
    </div>
    <div class="lever">
     <button type="button" class="lever-h" id="lh4" aria-expanded="false" aria-controls="lp4"><span><span class="fr">Calculatrice RCSD</span><span class="en">CDCP calculator</span></span><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></button>
-    <div class="lever-p" id="lp4" role="region" aria-labelledby="lh4"><div><p><span class="fr">Le patient répond à quelques questions, voit s’il est admissible et réserve.</span><span class="en">The patient answers a few questions, sees whether they qualify and books.</span></p><button class="link" type="button" data-try><span class="fr">Essayer la calculatrice</span><span class="en">Try the calculator</span> <span class="ar" aria-hidden="true">→</span></button></div></div>
+    <div class="lever-p" id="lp4" role="region" aria-labelledby="lh4"><div><p><span class="fr">Le patient répond à quelques questions, voit s’il est admissible, estime sa part du coût et réserve.</span><span class="en">The patient answers a few questions, sees whether they qualify, estimates their share of the cost and books.</span></p><button class="link" type="button" data-try><span class="fr">Essayer la calculatrice</span><span class="en">Try the calculator</span> <span class="ar" aria-hidden="true">→</span></button></div></div>
    </div>
    <div class="lever">
     <button type="button" class="lever-h" id="lh5" aria-expanded="false" aria-controls="lp5"><span><span class="fr">Avis NFC</span><span class="en">NFC reviews</span></span><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></button>
@@ -257,7 +255,7 @@ footer .wrap{border-top:1px solid rgba(254,250,224,.18);padding-top:22px;display
    <div class="card fade">
     <span class="n">02</span>
     <h3><span class="fr">Calculatrice RCSD</span><span class="en">CDCP calculator</span></h3>
-    <p><span class="fr">Le patient répond à quelques questions, voit s’il est admissible et réserve. Déjà construite. Votre équipe web a confirmé qu’elle peut être mise en place pour un test.</span><span class="en">The patient answers a few questions, sees whether they qualify and books. Already built. Your web team confirmed it can be implemented for a test.</span></p>
+    <p><span class="fr">Le patient répond à quelques questions, voit s’il est admissible, estime sa part du coût et réserve. Déjà construite. Votre équipe web a confirmé qu’elle peut être mise en place pour un test.</span><span class="en">The patient answers a few questions, sees whether they qualify, estimates their share of the cost and books. Already built. Your web team confirmed it can be implemented for a test.</span></p>
     <button class="link" type="button" id="tryCard" aria-expanded="false" aria-controls="drawer"><span class="fr">Essayer</span><span class="en">Try it</span> <span class="ar" aria-hidden="true">→</span></button>
    </div>
    <div class="card fade">
@@ -270,12 +268,7 @@ footer .wrap{border-top:1px solid rgba(254,250,224,.18);padding-top:22px;display
   <div class="drawer" id="drawer">
    <div class="drawer-in">
     <span class="demo-tag"><span class="fr">Ce que le patient voit sur le site de la clinique</span><span class="en">What the patient sees on the clinic’s site</span></span>
-    <div class="tabs" role="tablist">
-     <button type="button" role="tab" id="tab-q" aria-selected="true" aria-controls="pane-q"><span class="fr">Admissibilité</span><span class="en">Eligibility</span></button>
-     <button type="button" role="tab" id="tab-e" aria-selected="false" aria-controls="pane-e" tabindex="-1"><span class="fr">Coût du rendez-vous</span><span class="en">Appointment cost</span></button>
-    </div>
-    <div id="pane-q" role="tabpanel" aria-labelledby="tab-q" class="pane"><div class="quiz-wrap"><div class="quiz-card"><div id="quiz"></div></div></div></div>
-    <div id="pane-e" role="tabpanel" aria-labelledby="tab-e" class="pane" hidden><div class="est-wrap"><div id="estimator"></div></div></div>
+    <div id="pane-q" class="pane"><div class="quiz-wrap"><div class="quiz-card"><div id="quiz"></div></div></div></div>
    </div>
   </div>
  </div>
@@ -390,12 +383,11 @@ footer .wrap{border-top:1px solid rgba(254,250,224,.18);padding-top:22px;display
 
 <script src="/cdcp-embed.js"></script>
 <script src="/cdcp-estimator-data.js"></script>
-<script src="/cdcp-estimator.js"></script>
 <script>
 (function(){
  var root=document.documentElement,open=false,T={fr:"SSS — Pilote 123Dentist",en:"SSS — 123Dentist pilot"};
  function mount(){var q=document.getElementById("quiz");if(q&&window.mountCdcpQuiz){q.innerHTML="";window.mountCdcpQuiz(q,root.lang||"fr",{demo:true});}
-  var e=document.getElementById("estimator");if(e&&window.mountCdcpEstimator){window.mountCdcpEstimator(e,root.lang||"fr","QC");}}
+}
  function setLang(l){root.setAttribute("data-lang",l);root.lang=l;document.title=T[l];
   document.querySelectorAll(".lang button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.l===l?"true":"false");});
   try{localStorage.setItem("sss123lang",l)}catch(e){} if(open)mount();}
@@ -407,9 +399,6 @@ footer .wrap{border-top:1px solid rgba(254,250,224,.18);padding-top:22px;display
  function goCalc(){toggle(true);var reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
   setTimeout(function(){d.scrollIntoView({behavior:reduce?"auto":"smooth",block:"start"});},80);
   setTimeout(function(){d.classList.remove("flash");void d.offsetWidth;d.classList.add("flash");},reduce?200:700);}
- var tabs=[].slice.call(document.querySelectorAll(".tabs [role=tab]"));
- function pick(t){tabs.forEach(function(x){var on=x===t;x.setAttribute("aria-selected",on);x.tabIndex=on?0:-1;document.getElementById(x.getAttribute("aria-controls")).hidden=!on});t.focus({preventScroll:true});if(innerWidth<720)t.scrollIntoView({behavior:"smooth",block:"start"})}
- tabs.forEach(function(t,i){t.addEventListener("click",function(){pick(t)});t.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key==="ArrowLeft"){e.preventDefault();pick(tabs[(i+(e.key==="ArrowRight"?1:tabs.length-1))%tabs.length])}})});
  c.addEventListener("click",function(){ if(open){toggle(false)}else{goCalc()} });
  document.getElementById("tryHero").addEventListener("click",goCalc);
  document.querySelectorAll("[data-try]").forEach(function(b){b.addEventListener("click",goCalc)});
