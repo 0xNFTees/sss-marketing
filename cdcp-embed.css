@@ -176,3 +176,8 @@
 .quiz-wrap{max-width:920px}
 .quiz-demo-tag{display:inline-flex;margin-bottom:20px;font-family:var(--body);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);opacity:.7}
 .quiz-card{background:none;border:0;padding:0}
+
+.cdcp .cq-dl .cq-dl-total{border-bottom:0;font-weight:700;font-size:14px}
+.cdcp .cq-dl .cq-dim{font-weight:400;opacity:.7;font-size:12px;white-space:normal}
+.cdcp .cq-row[data-done="1"]>legend>span:first-child::after{content:" \2713";color:var(--c-good);font-weight:700}
+.cdcp .cq-row.cq-off>legend>span:first-child::after{content:none}

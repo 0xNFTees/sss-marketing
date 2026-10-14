@@ -36,7 +36,7 @@
       filed:"Déclaration produite", filedI:"requise pour demander", notYet:"Pas encore",
       appt:"Rendez-vous", apptI:"détermine le tarif", pick:"Choisir…",
       remain:"Il reste à indiquer :", pendH:"Répondez pour voir votre estimation.",
-      share:"Votre part estimée", std:"Tarif standard (ACDQ 2026)", paid:"Versé par le RCSD", grid:"{n} % de la grille du RCSD", noelig:"Non admissible",
+      share:"Votre part estimée", std:"Guide tarifaire ACDQ 2026", paid:"Versé par le RCSD", you:"Votre part", byAnswers:"selon vos réponses", grid:"{n} % de la grille du RCSD", noelig:"Non admissible",
       incl:"Inclus", nopick:"Choisissez un rendez-vous pour voir votre part.", unavailable:"Estimation indisponible pour ce rendez-vous. Communiquez avec la clinique.",
       tierUnconfirmed:"Palier RCSD : jusqu’à {n} %. Confirmez votre déclaration de revenus.", whenIssued:"Montant estimé une fois la carte RCSD reçue.",
       pre:"Préautorisation du RCSD requise.", lab:"Frais de laboratoire en sus.", excl:"Non couvert par le RCSD.",
@@ -51,7 +51,7 @@
       filed:"Tax return filed", filedI:"needed to apply", notYet:"Not yet",
       appt:"Appointment", apptI:"sets the fee", pick:"Choose…",
       remain:"Still to answer:", pendH:"Answer to see your estimate.",
-      share:"Your estimated share", std:"Standard fee (ACDQ 2026)", paid:"Paid by CDCP", grid:"{n}% of the CDCP fee schedule", noelig:"Not eligible",
+      share:"Your estimated share", std:"ACDQ price guide 2026", paid:"Paid by CDCP", you:"Your share", byAnswers:"depends on your answers", grid:"{n}% of the CDCP fee schedule", noelig:"Not eligible",
       incl:"Includes", nopick:"Choose an appointment to see your share.", unavailable:"Estimate unavailable for this appointment. Please contact the clinic.",
       tierUnconfirmed:"CDCP tier: up to {n}%. Confirm your tax filing.", whenIssued:"Estimated amount once your CDCP card is issued.",
       pre:"CDCP pre-authorization required.", lab:"Lab fee billed extra.", excl:"Not covered by CDCP.",
@@ -166,16 +166,16 @@
     function cost(){
       var p=null;PK.forEach(function(x){if(x.id===A.appt)p=x;});
       if(!p||!DATA)return null;
-      var fee=0,cov=0,pre=false,lab=false,excl=false,tp=TIER_PCT[A.inc]||0;
+      var fee=0,cov=0,pre=false,lab=false,excl=false,known=(A.ins==="no"&&!!A.inc),tp=known?(TIER_PCT[A.inc]||0):null;
       for(var i=0;i<p.items.length;i++){
         var c=byCode[p.items[i][0]],q=p.items[i][1];
         if(!c||typeof c.acdqFee2026!=="number"||typeof c.cdcpGridFee2026!=="number")return {pk:p,bad:true};   // never under-state a bill from missing data
         fee+=c.acdqFee2026*q;
-        var x=c.isCoveredByCDCP?Math.min(c.cdcpGridFee2026*tp,c.acdqFee2026):0;x=Math.round(x*100)/100;cov+=x*q;
+        var x=(known&&c.isCoveredByCDCP)?Math.min(c.cdcpGridFee2026*tp,c.acdqFee2026):0;x=Math.round(x*100)/100;cov+=x*q;
         if(c.preAuthRequired)pre=true;if(c.hasLabFee)lab=true;if(!c.isCoveredByCDCP)excl=true;
       }
       fee=Math.round(fee*100)/100;cov=Math.round(cov*100)/100;
-      return {pk:p,fee:fee,cov:cov,oop:Math.round((fee-cov)*100)/100,pre:pre,lab:lab,excl:excl,tp:tp};
+      return {pk:p,fee:fee,cov:cov,known:known,oop:Math.round((fee-cov)*100)/100,pre:pre,lab:lab,excl:excl,tp:tp};
     }
     function missing(){
       var m=[];
@@ -221,34 +221,38 @@
       sSum.hidden=false;
       var lbl=textNode("div","cq-lbl",U.share);sSum.appendChild(lbl);
       bigEl=node("div","cq-big");bigEl.setAttribute("aria-hidden","true");sSum.appendChild(bigEl);
-      if(c&&!c.bad){
+      if(c&&!c.bad&&c.known){
         roll(c.oop);
         var bar=node("div","cq-bar",'<i></i>');bar.setAttribute("aria-hidden","true");bar.firstChild.style.width=(c.fee?c.cov/c.fee*100:0)+"%";sSum.appendChild(bar);
       }else{
         bigEl.textContent="—";bigEl.classList.add("cq-big-empty");shown=0;
-        sSum.appendChild(textNode("p","cq-sum-note",c&&c.bad?U.unavailable:U.nopick));
+        var rem=missing();sSum.appendChild(textNode("p","cq-sum-note",c&&c.bad?U.unavailable:(rem.length?U.remain+" "+rem.join(", ")+".":U.nopick)));
       }
     }
     function renderCostDetail(t,c,o){
       if(!c||c.bad)return;
-      var tierTxt=c.tp?U.grid.replace("{n}",Math.round(c.tp*100)):U.noelig;
-      var dl=node("dl","cq-dl",'<div><dt>'+esc(U.std)+'</dt><dd>'+esc(nf.format(c.fee))+'</dd></div>'+
-        '<div><dt>'+esc(U.paid)+'<small class="'+(c.tp?"cq-good-t":"cq-bad-t")+'">'+esc(nb(tierTxt))+'</small></dt><dd class="'+(c.cov?"cq-good-t":"")+'">'+(c.cov?"− ":"")+esc(nf.format(c.cov))+'</dd></div>');
-      sBrk.appendChild(dl);
+      var rowsH='<div><dt>'+esc(U.std)+'</dt><dd>'+esc(nf.format(c.fee))+'</dd></div>';
+      if(c.known){
+        var tierTxt=c.tp?U.grid.replace("{n}",Math.round(c.tp*100)):U.noelig;
+        rowsH+='<div><dt>'+esc(U.paid)+'<small class="'+(c.tp?"cq-good-t":"cq-bad-t")+'">'+esc(nb(tierTxt))+'</small></dt><dd class="'+(c.cov?"cq-good-t":"")+'">'+(c.cov?"− ":"")+esc(nf.format(c.cov))+'</dd></div>'+
+          '<div class="cq-dl-total"><dt>'+esc(U.you)+'</dt><dd>'+esc(nf.format(c.oop))+'</dd></div>';
+      }else rowsH+='<div><dt>'+esc(U.paid)+'</dt><dd class="cq-dim">'+esc(U.byAnswers)+'</dd></div>';
+      sBrk.appendChild(node("dl","cq-dl",rowsH));
       t.appendChild(node("p","cq-incl","<b>"+esc(U.incl)+"</b> : "+esc(U.pk[c.pk.id][1])));
       var notes=[];
       var x=U.pk[c.pk.id][2];if(x)notes.push(["bad",x]);
-      if(c.pre&&c.cov)notes.push(["warn",U.pre]);
+      if(c.known&&c.pre&&c.cov)notes.push(["warn",U.pre]);
       if(c.lab&&c.pk.id!=="major")notes.push(["bad",U.lab]);
       if(c.excl)notes.push(["bad",U.excl]);
       notes.forEach(function(n){t.appendChild(textNode("p","cq-note cq-"+n[0]+"-t",n[1]));});
     }
     var lastKey=null;
     function update(){
-      var oc=outcome(),c=(oc==="pending"||oc==="insurance")?null:cost();
+      var oc=outcome(),c=(oc==="insurance")?null:cost();
       // disable what no longer matters (kept, not hidden, so the layout never jumps)
       function off(fs,v){if(!fs)return;fs.disabled=v;fs.classList.toggle("cq-off",v);}
       off(rows.inc,A.ins==="yes");off(rows.filed,A.ins==="yes"||A.inc==="over90");off(rows.appt,A.ins==="yes");
+      Object.keys(rows).forEach(function(k){rows[k].setAttribute("data-done",A[k]?"1":"0");});
       if(SAVED)SAVED.set(root,A);
 
       var key=[oc,A.inc,A.filed,A.appt].join("|");
@@ -258,8 +262,9 @@
       if(oc==="pending"){
         var rem=missing();
         sStatus.appendChild(statusBlock("neutral",U.pendH,DATA?"":U.remain+" "+rem.join(", ")+"."));
-        if(DATA){renderSum(null,oc);sSum.lastChild.textContent=U.remain+" "+rem.join(", ")+".";}else{sSum.innerHTML="";sSum.hidden=true;}
+        if(DATA){renderSum(c,oc);}else{sSum.innerHTML="";sSum.hidden=true;}
         title=U.pendH;
+        if(DATA&&c&&!c.bad){var dp=node("div","cq-det");renderCostDetail(dp,c,oc);if(dp.childNodes.length)sRest.appendChild(dp);}
       }else if(oc==="insurance"){
         var R=L.results.branchInsurance;kind="good";title=R.headline;
         sStatus.appendChild(statusBlock("good",R.headline,R.microCopy));
@@ -304,7 +309,7 @@
         if(fine.length)sRest.appendChild(textNode("p","cq-fine",fine.join(" ")));
       }
       // one concise announcement per change (the animated number is aria-hidden)
-      var say=title+(c&&!c.bad?". "+U.share+" "+nf.format(c.oop):"");
+      var say=title+(c&&!c.bad&&c.known?". "+U.share+" "+nf.format(c.oop):"");
       if(key!==lastKey){sr.textContent=say;lastKey=key;}
       root.setAttribute("data-state",oc);
     }
