@@ -178,3 +178,75 @@
 .matrix-item-note{font-family:var(--body);font-size:12px;line-height:1.6;color:var(--ink);opacity:0.75;border-left:2px solid var(--rule);padding-left:12px}
 .result-retake{margin-top:18px;display:inline-flex;align-items:center;gap:6px;background:none;border:none;font-family:var(--body);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink);opacity:0.55;cursor:pointer;min-height:44px}
 .result-retake:hover{opacity:0.9}
+
+/* ==========================================================================
+   DESIGN SYSTEM v2 -- restrained clinical layer
+   Principles: flat surfaces, 1px hairlines, square corners, one accent (--tan),
+   spacing scale 4/8/12/16/24, text never below 68% ink (WCAG AA on --paper),
+   no icons-as-decoration, no lift/shadow/pulse effects. State is shown with
+   border + fill, not motion.
+   ========================================================================== */
+.quiz-card{--s2:8px;--s3:12px;--s4:16px;--s5:24px;padding:clamp(20px,3vw,28px)}
+.quiz-demo-tag,.quiz-steplabel,.quiz-back,.result-retake,.opt-hint,.result-col-label,.quiz-skip{opacity:.7}
+.quiz-demo-tag::before{display:none}
+.quiz-track{border-radius:0;margin-bottom:var(--s3)}
+.quiz-steplabel{margin-bottom:var(--s4);min-height:32px}
+.quiz-back{min-height:32px}
+.quiz-q{gap:0;font-size:clamp(18px,2vw,21px);line-height:1.3;margin-bottom:var(--s4)}
+.quiz-q-icon{display:none}
+.quiz-opts{gap:var(--s2)}
+.opt-btn{min-height:44px;padding:10px 40px 10px var(--s4);font-size:14px;transition:border-color .15s,background .15s}
+.opt-btn:hover:not(:disabled){transform:none;box-shadow:none;border-color:var(--ink);background:var(--surface-b)}
+.opt-btn.selected{border-width:1px;border-color:var(--ink);background:var(--ink);color:var(--paper);box-shadow:none;animation:none}
+.opt-btn.selected .opt-hint{opacity:.8}
+.opt-btn.dimmed{opacity:.5}
+.opt-arrow{opacity:.5}
+.opt-check{border-radius:0;background:var(--paper);color:var(--ink);width:18px;height:18px;margin-top:-9px}
+.quiz-skip{margin-top:var(--s4)}
+/* results */
+.result-headline{font-size:clamp(18px,2vw,21px);margin-bottom:var(--s3)}
+.result-badge{padding:var(--s3) var(--s4);gap:var(--s3);border-radius:0}
+.result-badge.pulsing{animation:none}
+.result-badge-icon:empty,.cta-btn-icon:empty{display:none}
+.result-badge-text{font-size:16px}
+.result-badge.tier100,.result-badge.tone-positive{background:var(--surface-a);border-color:var(--ink)}
+.result-badge.tier60,.result-badge.tier40,.result-badge.tone-neutral,.result-badge.tone-warning{background:var(--paper);border-color:var(--ink)}
+.result-badge.tone-warning{border-color:var(--warn,#a3672c)}
+.result-msg{margin-top:var(--s3);opacity:.85}
+.cta-row{margin-top:var(--s5);gap:var(--s3)}
+.cta-btn{min-height:44px;padding:10px var(--s4);font-size:12px;letter-spacing:.08em}
+.cta-btn-primary:hover{transform:none;background:var(--surface-b);color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.cta-btn-secondary:hover{border-color:var(--ink)}
+.step-card{margin-top:var(--s3);padding:var(--s4);background:none}
+.step-card:first-of-type{margin-top:var(--s4)}
+.step-card-head{margin-bottom:6px}
+.step-num{border-radius:0;width:20px;height:20px;font-size:11px}
+.step-title{font-size:13.5px}
+.step-body,.insurer-note,.billing-notice-body,.matrix-item-note,.matrix-item-body li,.result-col li,.result-msg{opacity:.85}
+.insurer-pill{opacity:1}
+.ring-row{margin-top:var(--s4);padding:var(--s3) var(--s4);background:var(--surface-a);border-radius:0}
+.ring-wrap{width:56px;height:56px}
+.ring-fill{stroke-linecap:butt}
+.result-warn{margin-top:var(--s3);padding:var(--s3) var(--s4)}
+.billing-notice{margin-top:var(--s4);padding:var(--s3) var(--s4)}
+.result-source{opacity:.7;margin-top:var(--s4)}
+.matrix{margin-top:var(--s4)}
+.matrix-item summary{padding:var(--s3) 4px;gap:var(--s3)}
+.matrix-item-icon{width:auto;height:auto;border-radius:0;background:none !important;font-size:15px;font-weight:700;margin-top:0;width:16px;justify-content:flex-start}
+.matrix-item-subtitle{opacity:.75}
+.matrix-item-body{padding:0 4px var(--s4) 32px}
+.result-retake{margin-top:var(--s3);min-height:32px}
+/* estimator contrast + rhythm */
+.est-lbl,.est-fs legend{opacity:.7}
+.est-opt .f{opacity:.7}.est-opt:has(input:checked) .f{opacity:.85}
+.est-why,.est-foot span{opacity:.72}
+.est-ctl,.est-out{padding:clamp(16px,2.5vw,24px)}
+.est-out{gap:var(--s3,12px)}
+/* fewer boxes: result stack reads as one sheet separated by hairlines */
+.ring-row{border:0;background:none;padding:var(--s3) 0 0;margin-top:var(--s3)}
+.billing-notice{border:0;border-top:1px solid var(--rule);background:none;padding:var(--s3) 0 0;margin-top:var(--s4)}
+.billing-notice-heading{font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+
+/* matrix: title above subtitle */
+.matrix-item-title,.matrix-item-subtitle{display:block}
+.matrix-item-subtitle{margin-top:2px;line-height:1.4}

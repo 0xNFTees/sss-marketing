@@ -87,7 +87,7 @@ h2{font-size:clamp(28px,3.8vw,46px);line-height:1.08;letter-spacing:-.022em;max-
 .lever.open{border-color:var(--tan-text)}
 @media(max-width:860px){.levers{grid-template-columns:1fr}}
 .flash .quiz-card{animation:flash 1.6s var(--ease)}
-@keyframes flash{0%{box-shadow:0 0 0 0 rgba(212,163,115,.9)}40%{box-shadow:0 0 0 8px rgba(212,163,115,.55)}100%{box-shadow:0 0 0 18px rgba(212,163,115,0)}}
+@keyframes flash{0%{outline:2px solid var(--tan);outline-offset:4px}100%{outline:2px solid transparent;outline-offset:4px}}
 .btn:hover{transform:scale(1.02)}.btn:active{transform:scale(.98)}
 #drawer{scroll-margin-top:90px}
 .drawer-in{display:flex;flex-direction:column;align-items:center}.drawer-in .quiz-wrap{width:100%;max-width:720px;margin:0 auto}.pane{width:100%}.pane[hidden]{display:none}.est-wrap{width:100%;max-width:820px;margin:0 auto}
