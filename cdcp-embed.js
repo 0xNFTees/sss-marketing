@@ -153,7 +153,7 @@
       var fs=node("fieldset","cq-row cq-row-wide");legend(fs,U.appt,U.apptI);
       var sel=node("select","cq-select");sel.setAttribute("autocomplete","off");sel.setAttribute("aria-label",U.appt);
       sel.appendChild(new Option(U.pick,""));
-      PK.forEach(function(p,i){var f=pkFee(p);var o=new Option(U.pk[p.id][0]+(f===null?"":"  —  "+nf.format(f)),p.id);sel.appendChild(o);});
+      PK.forEach(function(p,i){var f=pkFee(p);var o=new Option(U.pk[p.id][0],p.id);sel.appendChild(o);});
       sel.value=A.appt||"";
       sel.addEventListener("change",function(){A.appt=sel.value||null;update();});
       fs.appendChild(sel);ctl.appendChild(fs);rows.appt=fs;

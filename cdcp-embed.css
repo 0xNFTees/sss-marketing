@@ -85,7 +85,7 @@
 .cdcp .cq-opt input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:inherit}
 .cdcp .cq-opt:has(input:checked){background:var(--c-brand);color:var(--c-on)}
 .cdcp .cq-opt:has(input:focus-visible){box-shadow:inset 0 0 0 2px var(--c-paper),inset 0 0 0 4px var(--c-ink)}
-.cdcp .cq-opt:hover:not(:has(input:checked)):not(:has(input:disabled)){background:var(--c-tint)}
+@media (hover:hover){.cdcp .cq-opt:hover:not(:has(input:checked)):not(:has(input:disabled)){background:var(--c-tint)}}
 .cdcp .cq-select{display:block;width:100%;min-height:44px;padding:0 36px 0 12px;border:1px solid var(--c-ink);border-radius:var(--c-r);
   background:var(--c-paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23666' stroke-width='1.4'/%3E%3C/svg%3E") no-repeat right 14px center;
   font-size:13px;cursor:pointer;text-overflow:ellipsis}
@@ -121,9 +121,9 @@
 .cdcp .cq-cta-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;max-width:100%;padding:10px 16px;border-radius:var(--c-r);
   font-size:13px;font-weight:600;text-align:center;line-height:1.3}
 .cdcp .cq-cta-btn-primary{background:var(--c-brand);color:var(--c-on)}
-.cdcp .cq-cta-btn-primary:hover{background:var(--c-tint);color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-ink)}
+@media (hover:hover){.cdcp .cq-cta-btn-primary:hover{background:var(--c-tint);color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-ink)}}
 .cdcp .cq-cta-btn-secondary{border:1px solid var(--c-line)}
-.cdcp .cq-cta-btn-secondary:hover{border-color:var(--c-ink)}
+@media (hover:hover){.cdcp .cq-cta-btn-secondary:hover{border-color:var(--c-ink)}}
 .cdcp .cq-cta-btn:focus-visible{outline:2px solid var(--c-ink);outline-offset:2px}
 .cdcp .cq-cta-ext{opacity:.7;font-size:11px}
 .cdcp .cq-insurer-note{margin-top:16px;font-size:12.5px;line-height:1.6;opacity:.8}
@@ -140,7 +140,7 @@
 .cdcp .cq-step-text{margin:2px 0 10px 18px;font-size:12.5px;line-height:1.5;opacity:.88}
 .cdcp .cq-step-main .cq-cta-btn{margin-top:auto;width:100%;min-height:44px;padding:8px 12px}
 .cdcp .cq-help{margin-top:8px;font-size:12.5px}
-.cdcp .cq-help a{font-weight:600;text-decoration:underline;text-underline-offset:3px;padding:10px 0;display:inline-block}
+.cdcp .cq-help a{font-weight:600;text-decoration:underline;text-underline-offset:3px;display:inline-flex;align-items:center;min-height:44px}
 @container (min-width:680px){
   .cdcp .cq-steps{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:20px}
   .cdcp .cq-step-card+.cq-step-card{border-top:0}
@@ -148,7 +148,7 @@
 .cdcp .cq-matrix-all{margin-top:4px}
 .cdcp .cq-matrix-all>summary,.cdcp .cq-matrix-item>summary{list-style:none;cursor:pointer}
 .cdcp summary::-webkit-details-marker{display:none}
-.cdcp .cq-matrix-all>summary{display:flex;justify-content:space-between;align-items:center;min-height:36px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.cdcp .cq-matrix-all>summary{display:flex;justify-content:space-between;align-items:center;min-height:44px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
 .cdcp .cq-matrix-all[open]>summary .cq-matrix-item-chevron{transform:rotate(45deg)}
 .cdcp summary:focus-visible{outline:2px solid var(--c-ink);outline-offset:2px}
 .cdcp .cq-matrix{margin-top:8px;border-top:1px solid var(--c-line)}
@@ -178,3 +178,13 @@
 .quiz-card{background:none;border:0;padding:0}
 
 .cdcp .cq-dl .cq-dim{font-weight:400;opacity:.7;font-size:12px;white-space:normal}
+
+/* ---- phones: 16px select text stops iOS zooming the page on focus ---- */
+@container (max-width:679px){.cdcp .cq-select{font-size:16px}}
+@media (pointer:coarse){.cdcp .cq-select{font-size:16px}}
+/* ---- short viewports (phone landscape): keep the pinned result to one compact row ---- */
+@media (max-height:500px){
+  .cdcp .cq-sum{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:12px;padding-top:6px;padding-bottom:6px}
+  .cdcp .cq-sum .cq-big{font-size:26px;margin-top:0}
+  .cdcp .cq-sum .cq-sum-note{flex-basis:100%;margin-top:2px}
+}
