@@ -47,7 +47,7 @@ var T={
 function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
 var uid=0;
 window.mountCdcpEstimator=function(root,lang,prov){
- lang=lang==="en"?"en":"fr";var L=T[lang],P=(window.CDCP_PROVINCES||{})[prov||"QC"];if(!P){root.textContent="";return}
+ lang=lang==="en"?"en":"fr";var L=T[lang],P=(window.CDCP_PROVINCES||{})[prov||"QC"];if(!P){root.className="est-err";root.setAttribute("role","alert");root.textContent=lang==="en"?"Fee data is unavailable. Please contact the clinic for an estimate.":"Les tarifs sont indisponibles. Communiquez avec la clinique pour une estimation.";return}
  var byCode={};P.procedures.forEach(function(p){byCode[p.code]=p});
  var nf=new Intl.NumberFormat(lang==="fr"?"fr-CA":"en-CA",{style:"currency",currency:"CAD",minimumFractionDigits:2});
  var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches;
@@ -57,7 +57,7 @@ window.mountCdcpEstimator=function(root,lang,prov){
  // appointment radios
  var f1=el("fieldset","est-fs",'<legend>'+L.appt+'</legend>'),list=el("div","est-list");
  PK.forEach(function(p,i){var tot=0;p.items.forEach(function(it){tot+=byCode[it[0]].acdqFee2026*it[1]});
-  var lb=el("label","est-opt",'<input type="radio" name="ea'+id+'" '+(i===0?"checked":"")+'><span class="t">'+p[lang][0]+'</span><span class="f">'+nf.format(tot).replace(",00","")+'</span>');
+  var lb=el("label","est-opt",'<input type="radio" name="ea'+id+'" '+(i===0?"checked":"")+'><span class="t">'+p[lang][0]+'</span><span class="f">'+nf.format(tot)+'</span>');
   lb.firstChild.addEventListener("change",function(){st.pk=i;update()});list.appendChild(lb)});
  f1.appendChild(list);ctl.appendChild(f1);
  // income segmented
@@ -78,7 +78,7 @@ window.mountCdcpEstimator=function(root,lang,prov){
  function roll(to){if(reduce){big.textContent=nf.format(to);shown=to;return}
   var from=shown,t0=performance.now();(function f(t){var k=Math.min(1,(t-t0)/280),e=1-Math.pow(1-k,3);big.textContent=nf.format(from+(to-from)*e);if(k<1)requestAnimationFrame(f);else shown=to})(t0)}
  function update(){var r=calc(),pk=PK[st.pk],t=TIERS[st.tier];
-  roll(r.oop);kF.textContent=nf.format(r.fee);kC.textContent="− "+nf.format(r.cov);pc.textContent=t.pct?"("+Math.round(t.pct*100)+" %)":"";
+  roll(r.oop);kF.textContent=nf.format(r.fee);kC.textContent="\u2212\u00a0"+nf.format(r.cov);pc.textContent=t.pct?"("+Math.round(t.pct*100)+"\u00a0%)":"";
   barI.style.width=(r.fee?r.cov/r.fee*100:0)+"%";
   incl.innerHTML="<b>"+L.incl+"</b> : "+pk[lang][1];
   var n=[];if(t.pct===0)n.push(L.inel);var x=pk[lang==="fr"?"nf":"ne"];if(x)n.push(x);if(r.pre)n.push(L.pre);if(r.lab&&pk.id!=="major")n.push(L.lab);if(r.excl)n.push(L.excl);

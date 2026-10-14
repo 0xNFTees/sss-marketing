@@ -194,7 +194,7 @@
       t.appendChild(textNode("div","cq-kicker",R.headline));
       var hero=node("div","cq-hero");
       hero.appendChild(coverageRing(pct,TIER_RING_COLOR[r.tier]));
-      hero.appendChild(node("div","cq-hero-t",'<div class="cq-hero-h">'+esc(L.results["tier"+r.tier+"Badge"])+'</div><div class="cq-hero-s">'+esc(L.results.tierRingCaption)+"</div>"));
+      hero.appendChild(node("div","cq-hero-t",'<div class="cq-hero-h">'+esc(L.results["tier"+r.tier+"Badge"].replace(/ %/g,"\u00a0%"))+'</div><div class="cq-hero-s">'+esc(L.results.tierRingCaption)+"</div>"));
       t.appendChild(hero);
       if(r.status==="child"&&L.results.childRamqNote)t.appendChild(textNode("p","result-msg",L.results.childRamqNote));
       t.appendChild(billingNotice(L.results.billingNoticeHeading,L.results.billingNoticeBody));
