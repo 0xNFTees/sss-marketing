@@ -161,14 +161,15 @@
     if(opts.demo)ctl.appendChild(node("p","cq-skip",esc(L.skipPrompt)+' <a href="'+esc(BOOK)+'">'+esc(L.skipBook)+"</a>"));
 
     /* ---- model ---- */
-    function pkFee(p){var t=0;for(var i=0;i<p.items.length;i++){var c=byCode[p.items[i][0]];if(!c||typeof c.acdqFee2026!=="number"||!isFinite(c.acdqFee2026))return null;t+=c.acdqFee2026*p.items[i][1];}return t;}
+    function validFee(v){return typeof v==="number"&&isFinite(v)&&v>=0;}   // reject NaN, Infinity and negatives from bad data
+    function pkFee(p){var t=0;for(var i=0;i<p.items.length;i++){var c=byCode[p.items[i][0]];if(!c||!validFee(c.acdqFee2026))return null;t+=c.acdqFee2026*p.items[i][1];}return t;}
     function cost(){
       var p=null;PK.forEach(function(x){if(x.id===A.appt)p=x;});
       if(!p||!DATA)return null;
       var fee=0,cov=0,pre=false,lab=false,excl=false,known=(A.ins==="no"&&!!A.inc),tp=known?(TIER_PCT[A.inc]||0):null;
       for(var i=0;i<p.items.length;i++){
         var c=byCode[p.items[i][0]],q=p.items[i][1];
-        if(!c||typeof c.acdqFee2026!=="number"||typeof c.cdcpGridFee2026!=="number")return {pk:p,bad:true};   // never under-state a bill from missing data
+        if(!c||!validFee(c.acdqFee2026)||!validFee(c.cdcpGridFee2026))return {pk:p,bad:true};   // never under-state a bill from missing data
         fee+=c.acdqFee2026*q;
         var x=(known&&c.isCoveredByCDCP)?Math.min(c.cdcpGridFee2026*tp,c.acdqFee2026):0;x=Math.round(x*100)/100;cov+=x*q;
         if(c.preAuthRequired)pre=true;if(c.hasLabFee)lab=true;if(!c.isCoveredByCDCP)excl=true;
