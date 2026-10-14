@@ -90,7 +90,8 @@ h2{font-size:clamp(28px,3.8vw,46px);line-height:1.08;letter-spacing:-.022em;max-
 @keyframes flash{0%{box-shadow:0 0 0 0 rgba(212,163,115,.9)}40%{box-shadow:0 0 0 8px rgba(212,163,115,.55)}100%{box-shadow:0 0 0 18px rgba(212,163,115,0)}}
 .btn:hover{transform:scale(1.02)}.btn:active{transform:scale(.98)}
 #drawer{scroll-margin-top:90px}
-.drawer-in{display:flex;flex-direction:column;align-items:center}.drawer-in .quiz-wrap{width:100%;max-width:720px;margin:0 auto}.est-wrap{margin-top:28px !important}.demo-tag{text-align:center}
+.drawer-in{display:flex;flex-direction:column;align-items:center}.drawer-in .quiz-wrap{width:100%;max-width:720px;margin:0 auto}.pane{width:100%}.pane[hidden]{display:none}.est-wrap{width:100%;max-width:820px;margin:0 auto}
+.tabs{scroll-margin-top:72px;display:flex;gap:0;margin:0 auto 16px;border:1px solid var(--rule)}.tabs button{padding:0 18px;min-height:44px;font-size:13px;cursor:pointer;transition:background .15s,color .15s}.tabs button+button{border-left:1px solid var(--rule)}.tabs button[aria-selected="true"]{background:var(--ink);color:var(--paper)}.tabs button:hover:not([aria-selected="true"]){background:rgba(204,213,174,.4)}.demo-tag{text-align:center}
 .drawer{max-height:0;overflow:hidden;transition:max-height .55s var(--ease)}
 .drawer.open{max-height:6000px}
 .drawer-in{padding-top:28px}
@@ -267,8 +268,12 @@ footer .wrap{border-top:1px solid rgba(254,250,224,.18);padding-top:22px;display
   <div class="drawer" id="drawer">
    <div class="drawer-in">
     <span class="demo-tag"><span class="fr">Ce que le patient voit sur le site de la clinique</span><span class="en">What the patient sees on the clinic’s site</span></span>
-    <div class="quiz-wrap"><div class="quiz-card"><div id="quiz"></div></div></div>
-    <div class="quiz-wrap est-wrap"><div id="estimator"></div></div>
+    <div class="tabs" role="tablist">
+     <button type="button" role="tab" id="tab-q" aria-selected="true" aria-controls="pane-q"><span class="fr">Admissibilité</span><span class="en">Eligibility</span></button>
+     <button type="button" role="tab" id="tab-e" aria-selected="false" aria-controls="pane-e" tabindex="-1"><span class="fr">Coût du rendez-vous</span><span class="en">Appointment cost</span></button>
+    </div>
+    <div id="pane-q" role="tabpanel" aria-labelledby="tab-q" class="pane"><div class="quiz-wrap"><div class="quiz-card"><div id="quiz"></div></div></div></div>
+    <div id="pane-e" role="tabpanel" aria-labelledby="tab-e" class="pane" hidden><div class="est-wrap"><div id="estimator"></div></div></div>
    </div>
   </div>
  </div>
@@ -400,6 +405,9 @@ footer .wrap{border-top:1px solid rgba(254,250,224,.18);padding-top:22px;display
  function goCalc(){toggle(true);var reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
   setTimeout(function(){d.scrollIntoView({behavior:reduce?"auto":"smooth",block:"start"});},80);
   setTimeout(function(){d.classList.remove("flash");void d.offsetWidth;d.classList.add("flash");var q=document.getElementById("quiz");q&&q.querySelector("button,a,input")&&q.querySelector("button,a,input").focus({preventScroll:true});},reduce?200:700);}
+ var tabs=[].slice.call(document.querySelectorAll(".tabs [role=tab]"));
+ function pick(t){tabs.forEach(function(x){var on=x===t;x.setAttribute("aria-selected",on);x.tabIndex=on?0:-1;document.getElementById(x.getAttribute("aria-controls")).hidden=!on});t.focus({preventScroll:true});if(innerWidth<720)t.scrollIntoView({behavior:"smooth",block:"start"})}
+ tabs.forEach(function(t,i){t.addEventListener("click",function(){pick(t)});t.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key==="ArrowLeft"){e.preventDefault();pick(tabs[(i+(e.key==="ArrowRight"?1:tabs.length-1))%tabs.length])}})});
  c.addEventListener("click",function(){ if(open){toggle(false)}else{goCalc()} });
  document.getElementById("tryHero").addEventListener("click",goCalc);
  document.querySelectorAll("[data-try]").forEach(function(b){b.addEventListener("click",goCalc)});
