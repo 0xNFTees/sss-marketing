@@ -16,6 +16,7 @@
 <meta property="og:title" content="SSS — Pilote 123Dentist">
 <meta property="og:type" content="website">
 <link rel="stylesheet" href="/cdcp-embed.css">
+<link rel="stylesheet" href="/cdcp-estimator.css">
 <style>
 @font-face{font-family:'RhymesText';src:url('/fonts/RhymesTextMedium.otf') format('opentype');font-weight:500;font-display:swap}
 @font-face{font-family:'ABCWalter';src:url('/fonts/ABCWalterAlte-Roentgentherapie.otf') format('opentype');font-weight:400;font-display:swap}
@@ -89,9 +90,9 @@ h2{font-size:clamp(28px,3.8vw,46px);line-height:1.08;letter-spacing:-.022em;max-
 @keyframes flash{0%{box-shadow:0 0 0 0 rgba(212,163,115,.9)}40%{box-shadow:0 0 0 8px rgba(212,163,115,.55)}100%{box-shadow:0 0 0 18px rgba(212,163,115,0)}}
 .btn:hover{transform:scale(1.02)}.btn:active{transform:scale(.98)}
 #drawer{scroll-margin-top:90px}
-.drawer-in{display:flex;flex-direction:column;align-items:center}.drawer-in .quiz-wrap{width:100%;max-width:720px;margin:0 auto}.demo-tag{text-align:center}
+.drawer-in{display:flex;flex-direction:column;align-items:center}.drawer-in .quiz-wrap{width:100%;max-width:720px;margin:0 auto}.est-wrap{margin-top:28px !important}.demo-tag{text-align:center}
 .drawer{max-height:0;overflow:hidden;transition:max-height .55s var(--ease)}
-.drawer.open{max-height:2600px}
+.drawer.open{max-height:6000px}
 .drawer-in{padding-top:28px}
 .demo-tag{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.6;margin-bottom:16px}
 /* journey */
@@ -267,6 +268,7 @@ footer .wrap{border-top:1px solid rgba(254,250,224,.18);padding-top:22px;display
    <div class="drawer-in">
     <span class="demo-tag"><span class="fr">Ce que le patient voit sur le site de la clinique</span><span class="en">What the patient sees on the clinic’s site</span></span>
     <div class="quiz-wrap"><div class="quiz-card"><div id="quiz"></div></div></div>
+    <div class="quiz-wrap est-wrap"><div id="estimator"></div></div>
    </div>
   </div>
  </div>
@@ -380,10 +382,13 @@ footer .wrap{border-top:1px solid rgba(254,250,224,.18);padding-top:22px;display
 <footer><div class="wrap"><span>© 2026 SSS Marketing</span><span><span class="fr">Document confidentiel préparé pour 123Dentist. Calculatrice RCSD, plateforme de référencement et concepts décrits : propriété intellectuelle de SSS, non divulgables sans autorisation écrite.</span><span class="en">Confidential document prepared for 123Dentist. The CDCP calculator, the referral hub and the concepts described are SSS’s intellectual property. Do not copy or disclose without written permission.</span></span></div></footer>
 
 <script src="/cdcp-embed.js"></script>
+<script src="/cdcp-estimator-data.js"></script>
+<script src="/cdcp-estimator.js"></script>
 <script>
 (function(){
  var root=document.documentElement,open=false,T={fr:"SSS — Pilote 123Dentist",en:"SSS — 123Dentist pilot"};
- function mount(){var q=document.getElementById("quiz");if(q&&window.mountCdcpQuiz){q.innerHTML="";window.mountCdcpQuiz(q,root.lang||"fr");}}
+ function mount(){var q=document.getElementById("quiz");if(q&&window.mountCdcpQuiz){q.innerHTML="";window.mountCdcpQuiz(q,root.lang||"fr");}
+  var e=document.getElementById("estimator");if(e&&window.mountCdcpEstimator){window.mountCdcpEstimator(e,root.lang||"fr","QC");}}
  function setLang(l){root.setAttribute("data-lang",l);root.lang=l;document.title=T[l];
   document.querySelectorAll(".lang button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.l===l?"true":"false");});
   try{localStorage.setItem("sss123lang",l)}catch(e){} if(open)mount();}
