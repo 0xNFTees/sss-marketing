@@ -954,8 +954,8 @@ export function CdcpSingleBoxWidget({
         <div className="space-y-3">
           <div>
             <p className="text-[13px] font-semibold">{U.share}</p>
-            <p aria-hidden className="mt-1 font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-6xl font-black leading-none tracking-tight"><motion.span className="inline-block" initial={{ opacity: 0, y: reduce ? 0 : 10 }} animate={{ opacity: 1, y: 0 }}
-                transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 20 }}>
+            <p aria-hidden className="mt-1 font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-6xl font-black leading-none tracking-tight"><motion.span className="inline-block origin-left" initial={{ opacity: 0, y: reduce ? 0 : 10, scale: reduce ? 1 : 0.85 }} animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 20, delay: 0.1 }}>
                 <CountUp value={est.patient} lang={lang} reduce={reduce} />
               </motion.span></p>
           </div>
