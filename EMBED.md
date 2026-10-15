@@ -62,3 +62,11 @@ The widget checks your colours when it mounts: if button text on `--cdcp-brand`,
 - Widget class names are prefixed (`cq-`), so the host's own `.btn`, `.card` or `.matrix` rules do not apply.
 - Layout follows the width of the container, not the viewport: two columns from 680px, stacked below. It fits a 320px column without horizontal scroll. When stacked, the estimated-share bar stays pinned to the bottom of the viewport while the patient changes answers.
 - Browser support: current evergreen browsers (uses `:has()`, container queries and `overflow: clip`). Older browsers get the stacked layout where container queries are missing. Sticky positioning does not work inside a host ancestor that has `overflow: hidden` or `auto`; use `overflow: clip` there.
+
+## Interaction model (stage, then result)
+
+The widget asks one question at a time in the left stage (insurance, income, tax return, appointment type) while the statement on the right builds from the answers so far. A click answers and advances; keyboard arrows choose without advancing and **Continuer** moves on. **Retour** goes back. Once everything required is answered (or private insurance ends the calculation) the stage becomes **Vos réponses**: each answer has **Modifier**, and the appointment-type list stays in place so the patient can compare visit types. Changing an answer never clears the others; **Effacer les réponses** is the only reset.
+
+- `mountCdcpQuiz(...)` returns `{state, outcome, cost, view, set}`. `set({ins, inc, filed, appt})` sets several answers and re-renders (useful for deep links and tests); `view()` is the current question key or `null` for the summary.
+- `data-view` on the root is the current question key or `result`; `data-state` is the outcome.
+- `--cdcp-sticky-top` (default 16px): offset for the pinned answers column on wide layouts, set it to your fixed header height.

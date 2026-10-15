@@ -58,9 +58,7 @@ def run(pg,procs,answers): return pg.evaluate(JS,[procs,answers])
 JSUI = """([procs,ans])=>{
   window.CDCP_PROVINCES={QC:{procedures:procs}};
   const el=document.createElement('div');document.body.appendChild(el);
-  window.mountCdcpQuiz(el,'en',{});
-  for(const k of ['ins','inc','filed']) if(ans[k]) el.querySelector('input[name$="'+k+'"][value="'+ans[k]+'"]').click();
-  const sel=el.querySelector('select');sel.value=ans.appt;sel.dispatchEvent(new Event('change',{bubbles:true}));
+  const m=window.mountCdcpQuiz(el,'en',{});m.set(ans);
   return {text:el.innerText};
 }"""
 def run_ui(pg,procs,answers): return pg.evaluate(JSUI,[procs,answers])
@@ -137,43 +135,60 @@ with sync_playwright() as p:
                 r=run(pg,procs,{"ins":"no","inc":"under70","filed":"yes","appt":"filling"})
             ok(f"invalid {field}={label} -> flagged, not computed",bool(r["c"] and r["c"].get("bad")),str(r["c"]))
     # 10. rendered text must never contain NaN / undefined / Infinity across the real UI states
-    pg.goto(BASE+"/123/");pg.wait_for_timeout(300);pg.click("#tryCard");pg.wait_for_timeout(200)
+    pg.goto(BASE+"/123/");pg.wait_for_timeout(300)
+    MOUNT="""(a)=>{const el=document.createElement('div');document.body.appendChild(el);const m=window.mountCdcpQuiz(el,'en',{});m.set(a);const t=el.innerText;el.remove();return t}"""
     for ins in ("yes","no"):
         for inc in ("under70","band70","band80","over90"):
             for fl in ("yes","no"):
-                for pk in range(1,6):
-                    pg.dispatch_event('#quiz input[name$="ins"][value="no"]',"click")
-                    pg.select_option("#quiz select",index=pk)
-                    for k,v in (("ins",ins),("inc",inc),("filed",fl)):
-                        pg.dispatch_event(f'#quiz input[name$="{k}"][value="{v}"]',"click")
-                    t=pg.inner_text(".cq")
+                for pk in ("new","recall","emerg","filling","major"):
+                    t=pg.evaluate(MOUNT,{"ins":ins,"inc":inc,"filed":fl,"appt":pk})
                     ok(f"no NaN text {ins}/{inc}/{fl}/{pk}",not any(w in t for w in("NaN","undefined","Infinity","null")),t[:120])
-    # 10b. input behaviour: selections survive branch changes, incomplete input shows no figure, clear resets
-    pg.goto(BASE+"/123/");pg.wait_for_timeout(300);pg.click("#tryCard");pg.wait_for_timeout(200)
+    # 10b. the stage: one question at a time, answers survive every route, reset is explicit
+    pg.goto(BASE+"/123/");pg.wait_for_timeout(300);pg.click("#tryCard");pg.wait_for_timeout(300)
+    def ans(k,v):
+        if pg.locator(f'#quiz input[name$="{k}"]').count()==0:
+            pg.locator(f'#quiz button[data-k="{k}"]').first.click();pg.wait_for_timeout(120)
+        pg.locator(f'#quiz input[name$="{k}"][value="{v}"]').click(force=True);pg.wait_for_timeout(300)
     def snap():
-        return pg.evaluate("""()=>{const r=document.querySelector('#quiz');const q=k=>{const e=r.querySelector('input[name$='+k+']:checked');return e?e.value:null};
-          return {st:r.dataset.state,ins:q('ins'),inc:q('inc'),filed:q('filed'),appt:r.querySelector('select').value,big:r.querySelector('.cq-big')?.textContent||null,clear:!r.querySelector('.cq-clear').hidden}}""")
-    s_big=lambda:pg.evaluate("(document.querySelector('#quiz .cq-big')||{}).textContent||null")
-    clk=lambda k,v: pg.dispatch_event(f'#quiz input[name$="{k}"][value="{v}"]',"click")
-    s0=snap(); ok("behaviour: starts empty, nothing preselected",s0["ins"] is None and s0["inc"] is None and s0["filed"] is None and s0["appt"]=="" and not s0["clear"])
-    pg.select_option("#quiz select",index=2); s1=snap(); ok("behaviour: appointment alone shows no share figure",s1["st"]=="pending" and (s1["big"] is None or s1["big"].replace("\xa0","").replace("$","").strip()=="—") and s1["clear"],str(s1))
-    clk("ins","no");clk("inc","band70");s2=snap(); ok("behaviour: unconfirmed filing still labelled, not final",s2["st"]=="unconfirmed",str(s2))
-    clk("filed","yes");s3=snap()
-    clk("ins","yes");clk("ins","no");s4=snap(); ok("behaviour: answers survive insurance toggle",{k:s4[k] for k in("ins","inc","filed","appt","big")}=={k:s3[k] for k in("ins","inc","filed","appt","big")},str((s3,s4)))
-    clk("inc","over90");clk("inc","band70");s5=snap(); ok("behaviour: filed answer survives income round-trip",s5["filed"]=="yes" and s5["big"]==s3["big"],str(s5))
-    pg.click("#quiz .cq-clear");pg.wait_for_timeout(100);s6=snap(); ok("behaviour: clear resets every answer and hides itself",s6["ins"] is None and s6["inc"] is None and s6["filed"] is None and s6["appt"]=="" and s6["st"]=="pending" and not s6["clear"],str(s6))
-    ok("behaviour: clear keeps keyboard focus in the controls",pg.evaluate("document.activeElement.closest('.cq-ctl')!==null"))
+        return pg.evaluate("""()=>{const r=document.querySelector('#quiz');
+          return {view:r.dataset.view,st:r.dataset.state,fs:r.querySelectorAll('.cq-ctl fieldset').length,sel:r.querySelectorAll('select').length,
+            checked:[...r.querySelectorAll('.cq-ctl input:checked')].map(i=>i.value).join(','),
+            sum:[...r.querySelectorAll('.cq-sumrow')].map(b=>b.dataset.k+'='+b.querySelector('.cq-sr-a').textContent).join('|'),
+            big:(r.querySelector('.cq-big:not(.cq-big-empty)')||{}).textContent||null,clear:!r.querySelector('.cq-clear').hidden,
+            pill:(r.querySelector('.cq-pill')||{}).textContent}}""")
+    nbs=lambda x:(x or "").replace("\xa0","").replace(" ","")
+    s0=snap(); ok("stage: starts on question 1, nothing preselected, one question shown, no dropdown",s0["view"]=="ins" and s0["checked"]=="" and s0["fs"]==1 and s0["sel"]==0 and not s0["clear"],str(s0))
+    ans("ins","no");s1=snap(); ok("stage: a click answers and advances",s1["view"]=="inc" and s1["st"]=="pending" and s1["big"] is None,str(s1))
+    ans("inc","band70");s2=snap(); ok("stage: income answered -> tax return asked, eligibility still to confirm",s2["view"]=="filed" and s2["st"]=="unconfirmed" and s2["big"] is None,str(s2))
+    ans("filed","yes");s3=snap(); ok("stage: tax return answered -> visit asked, still no figure",s3["view"]=="appt" and s3["st"]=="qualified" and s3["big"] is None,str(s3))
+    pg.click("#quiz .cq-back");pg.wait_for_timeout(200);s3b=snap(); ok("stage: Back returns to the previous question with its answer",s3b["view"]=="filed" and s3b["checked"]=="yes",str(s3b))
+    pg.click("#quiz .cq-next");pg.wait_for_timeout(200);ok("stage: Continue goes to the first unanswered question",snap()["view"]=="appt")
+    ans("appt","new");s4=snap(); ok("stage: all answered -> result with figure and editable answers",s4["view"]=="result" and s4["big"] is not None and s4["sum"].count("|")==2 and s4["sum"].startswith("ins=") and s4["checked"]=="new",str(s4))
+    fig=s4["big"]
+    ans("appt","recall");s5=snap(); ok("result: switching the visit changes the figure and nothing else",s5["view"]=="result" and s5["big"]!=fig and s5["sum"]==s4["sum"],str((s5,fig)))
+    ans("appt","new")
+    ans("inc","band80");s6=snap(); ok("edit: changing income returns straight to the result, other answers kept",s6["view"]=="result" and s6["big"]!=fig and s6["sum"].split("|")[0::2]==s4["sum"].split("|")[0::2] and s6["checked"]=="new",str(s6))
+    ans("inc","band70");ok("edit: restoring the answer restores the figure",snap()["big"]==fig)
+    ans("ins","yes");s7=snap(); ok("branch: private insurance ends the calculation, answers kept behind it",s7["st"]=="insurance" and s7["view"]=="result",str(s7))
+    ans("ins","no");s8=snap(); ok("branch: undoing it restores the whole result",s8["view"]=="result" and s8["big"]==fig and s8["sum"]==s4["sum"],str(s8))
+    ans("inc","over90");s9=snap(); ok("branch: 90k+ is ineligible, tax-return row not applicable, full cost shown",s9["st"]=="income" and "filed" not in s9["sum"] and s9["big"] is not None and "Not eligible" in (s9["pill"] or "") or "Non admissible" in (s9["pill"] or ""),str(s9))
+    ans("inc","band70");ok("branch: leaving 90k+ brings the tax-return answer back",snap()["sum"]==s4["sum"] and snap()["big"]==fig)
+    # keyboard: arrows choose without jumping ahead; Continue moves on
+    pg.click("#quiz .cq-clear");pg.wait_for_timeout(200)
+    s10=snap(); ok("reset: explicit, clears every answer, returns to question 1",s10["view"]=="ins" and s10["checked"]=="" and not s10["clear"] and pg.evaluate("document.activeElement.closest('.cq-ctl')!==null"),str(s10))
+    pg.focus('#quiz input[name$="ins"][value="yes"]');pg.keyboard.press("ArrowRight");pg.wait_for_timeout(350)
+    s11=snap(); ok("keyboard: arrow selects but does not advance",s11["view"]=="ins" and s11["checked"]=="no",str(s11))
+    pg.focus("#quiz .cq-next");pg.keyboard.press("Enter");pg.wait_for_timeout(200)
+    ok("keyboard: Continue advances and focus stays in the controls",snap()["view"]=="inc" and pg.evaluate("document.activeElement.closest('.cq-ctl')!==null"))
 
     # 10c. result states mirror the answers: none -> some -> complete, without an unsupported figure
+    pg.click("#quiz .cq-clear");pg.wait_for_timeout(200)
     tr=lambda:pg.evaluate("[...document.querySelectorAll('#quiz .cq-tr')].map(x=>x.dataset.k+':'+x.dataset.done).join(',')")
     pill=lambda:pg.evaluate("document.querySelector('#quiz .cq-pill')?.textContent")
     ok("states: no answers -> every row to answer, own label",tr()=="ins:0,inc:0,filed:0,appt:0" and pill() in("Aucune réponse","No answers yet"),tr()+str(pill()))
-    clk("ins","no");ok("states: some answers -> row marked, still incomplete",tr().startswith("ins:1,inc:0") and pill() in("Incomplet","Incomplete"),tr()+str(pill()))
-    clk("inc","over90");ok("states: over90 drops the tax-return row (not applicable), ineligible label",tr()=="ins:1,inc:1,appt:0" and pill() in("Non admissible","Not eligible"),tr()+str(pill()))
-    clk("inc","band80");clk("filed","yes");ok("states: all but appointment -> no figure yet",s_big() is None or "—" in (s_big() or ""),str(s_big()))
-    pg.evaluate("document.querySelector('#quiz .cq-tr[data-k=appt]').click()");ok("states: a result row jumps to its control",pg.evaluate("document.activeElement.tagName")=="SELECT")
-    pg.select_option("#quiz select",index=1);ok("states: complete -> figure present, row list gone",pg.evaluate("!!document.querySelector('#quiz .cq-big:not(.cq-big-empty)')&&!document.querySelector('#quiz .cq-tr')"))
-    ok("states: complete answers kept after every change",snap()["inc"]=="band80" and snap()["filed"]=="yes")
+    ans("ins","no");ok("states: some answers -> row marked, still incomplete",tr().startswith("ins:1,inc:0") and pill() in("Incomplet","Incomplete"),tr()+str(pill()))
+    ans("inc","over90");ok("states: 90k+ drops the tax-return row (not applicable), ineligible label",tr()=="ins:1,inc:1,appt:0" and pill() in("Non admissible","Not eligible"),tr()+str(pill()))
+    pg.locator("#quiz .cq-tr[data-k=ins]").click();pg.wait_for_timeout(200);ok("states: a result row jumps to its question",snap()["view"]=="ins")
 
     # 11. shipped data sanity
     data=pg.evaluate("window.CDCP_PROVINCES.QC.procedures")
