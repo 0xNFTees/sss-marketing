@@ -385,14 +385,14 @@ export function EmbeddableDentalCalculator({
             <div aria-hidden className="flex h-2.5 overflow-hidden rounded-full bg-[var(--onpanel)]/90">
               <motion.div className="h-full bg-[var(--good-on-panel)]" initial={false} animate={{ width: `${coveredPct}%` }} transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 140, damping: 24 }} />
             </div>
-            {ctaNode}
-            <details className="group/d border-y border-white/15">
-              <summary className={`flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 text-[13px] font-semibold marker:hidden [&::-webkit-details-marker]:hidden ${FOCUS}`}>
-                <span className="flex-1">{U.sec.calc}</span>
-                <span className="font-normal tabular-nums opacity-80">{plain(est.fee, lang)} → {plain(est.patient, lang)}</span>
+            <details className="group/d">
+              <summary className={`flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 text-xs marker:hidden [&::-webkit-details-marker]:hidden ${FOCUS}`}>
+                <span className="flex-1 opacity-85">{U.estNote}</span>
+                <span className="font-semibold underline decoration-[var(--a)] decoration-2 underline-offset-4">{U.viewCalc}</span>
                 <ChevronDown className="size-4 shrink-0 transition-transform duration-200 group-open/d:rotate-180 motion-reduce:transition-none" aria-hidden />
               </summary>
-            <dl className="divide-y divide-white/15 text-[13px]">
+              <div className="border-t border-white/15 text-[13px]">
+                <dl className="divide-y divide-white/15 text-[13px]">
               <div className="flex items-baseline justify-between gap-3 py-2"><dt>{U.cost}<small className="block text-xs opacity-70">{U.std}</small></dt><dd className="font-semibold tabular-nums">{plain(est.fee, lang)}</dd></div>
               <div className="flex items-baseline justify-between gap-3 py-2">
                 <dt className="flex-1"><span className="mr-2 inline-block size-2 bg-[var(--good-on-panel)] align-baseline" aria-hidden />{U.paid}
@@ -401,8 +401,9 @@ export function EmbeddableDentalCalculator({
               </div>
               <div className="flex items-baseline justify-between gap-3 py-2"><dt><span className="mr-2 inline-block size-2 bg-[var(--onpanel)] align-baseline" aria-hidden />{U.you}</dt><dd className="font-semibold tabular-nums">{plain(est.patient, lang)}</dd></div>
             </dl>
+              </div>
             </details>
-            <p className="text-xs leading-snug opacity-80">{U.estNote}</p>
+            {ctaNode}
             {oc === "tax" && <p className="text-xs opacity-80">{U.whenIssued}</p>}
             {oc === "unconfirmed" && <p className="text-xs opacity-80">{U.ifQualify}</p>}
             {est.fee > 0 && est.patient === 0 && <p className="text-xs opacity-80">{U.full}</p>}

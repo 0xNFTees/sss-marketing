@@ -312,10 +312,10 @@
   .cdcp[data-view="result"] :is(.cq-ctl,.cq-ctl-in){display:contents}
   .cdcp[data-view="result"] .cq-status{order:1}
   .cdcp[data-view="result"] .cq-sum{order:2;bottom:auto;top:var(--cdcp-sticky-top,0px)}
-  .cdcp[data-view="result"] .cq-act{order:3}
-  .cdcp[data-view="result"] .cq-row-appt{order:4;--well:var(--c-paper);--sel:var(--c-tint);padding:var(--s4);background:var(--c-tint);border-block:1px solid var(--c-line)}
+  .cdcp[data-view="result"] .cq-brk{order:3}
+  .cdcp[data-view="result"] .cq-row-appt{order:5;--well:var(--c-paper);--sel:var(--c-tint);padding:var(--s4);background:var(--c-tint);border-block:1px solid var(--c-line)}
   .cdcp[data-view="result"] .cq-row-appt>legend{float:left;width:100%}
-  .cdcp[data-view="result"] .cq-brk{order:5}
+  .cdcp[data-view="result"] .cq-act{order:4}
   .cdcp[data-view="result"] .cq-det{order:6}
   .cdcp[data-view="result"] .cq-rest{order:7}
   .cdcp[data-view="result"] .cq-ctl-in>:is(.cq-sec,.cq-ans,.cq-clear,.cq-skip){order:8;margin-inline:var(--s4)}
@@ -325,16 +325,15 @@
 /* wide (container >= 680): a tinted answer rail beside one statement column.
    The statement reads top to bottom: state, the figure, the split behind it, what it assumes, what to do next. */
 @container (min-width:680px){
-  .cdcp .cq-grid{grid-template-columns:minmax(320px,380px) minmax(0,1fr);grid-template-rows:repeat(4,auto) 1fr auto}
-  .cdcp .cq-ctl{grid-column:1;grid-row:1/-2;display:flex;flex-direction:column;--well:var(--c-paper);--sel:var(--c-tint);padding:var(--s5);border-bottom:0;border-right:1px solid var(--c-line);background:var(--c-tint)}
+  .cdcp .cq-grid{grid-template-columns:minmax(320px,380px) minmax(0,1fr);grid-template-rows:repeat(5,auto) 1fr}
+  .cdcp .cq-ctl{grid-column:1;grid-row:1/-1;display:flex;flex-direction:column;--well:var(--c-paper);--sel:var(--c-tint);padding:var(--s5);border-bottom:0;border-right:1px solid var(--c-line);background:var(--c-tint)}
   .cdcp :is(.cq-status,.cq-sum,.cq-act,.cq-brk,.cq-det,.cq-rest){grid-column:2;padding-inline:var(--s5)}
   .cdcp .cq-status{grid-row:1;min-height:8rem;padding-top:var(--s5);padding-bottom:var(--s2)}   /* a steady height keeps the figure in place as the state changes */
   .cdcp .cq-sum,.cdcp.cq-ledger .cq-sum{grid-row:2;position:static;display:block;margin:0;padding-top:var(--s2);padding-bottom:var(--s4);border:0;background:none}
-  .cdcp .cq-act{grid-row:3;padding-top:var(--s2);padding-bottom:var(--s3)}
-  .cdcp .cq-brk{grid-row:4;padding-top:var(--s2)}
+  .cdcp .cq-brk{grid-row:3;padding-top:0}
+  .cdcp .cq-act{grid-row:4;padding-top:var(--s1);padding-bottom:var(--s3)}
   .cdcp .cq-det{grid-row:5;padding-top:var(--s1);padding-bottom:var(--s4)}
-  .cdcp .cq-rest{grid-column:1/-1;grid-row:6;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:var(--s5);align-items:start;margin:0;padding:var(--s3) var(--s5) var(--s4);border-top:1px solid var(--c-line)}
-  .cdcp .cq-rest>:not(details){grid-column:1/-1}
+  .cdcp .cq-rest{grid-column:2;grid-row:6;align-self:end;margin:0;padding:var(--s3) var(--s5) var(--s4);border-top:1px solid var(--c-line)}
   .cdcp .cq-rest:empty{display:none}
   .cdcp .cq-ctl-in{flex:1;display:flex;flex-direction:column}
   .cdcp:not([data-view="result"]) .cq-seg-2 .cq-opt{min-height:76px}   /* roomier choices while answering */
@@ -354,8 +353,10 @@
 .cdcp .cq-acc>summary{gap:var(--s3)}
 .cdcp .cq-acc>summary>span:first-child{flex:1;min-width:0}
 .cdcp .cq-acc-meta{font-size:var(--t-s);font-weight:400;font-variant-numeric:tabular-nums;white-space:nowrap;opacity:.8}
-.cdcp .cq-calc{border-top:1px solid var(--c-line)}
-.cdcp .cq-calc+.cq-estnote{margin-top:var(--s2)}
+.cdcp .cq-calc{border-bottom:0}
+.cdcp .cq-calc>summary{font-size:var(--t-s);font-weight:400;line-height:1.4}
+.cdcp .cq-calc>summary .cq-acc-meta{font-weight:600;font-size:var(--t-s);opacity:1;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--c-accent);text-decoration-thickness:2px}
+.cdcp .cq-calc .cq-acc-body{border-top:1px solid var(--c-line)}
 .cdcp .cq-acc-body{padding:0 0 var(--s3)}
 .cdcp .cq-acc-body .cq-billing-notice{margin-top:0}
 

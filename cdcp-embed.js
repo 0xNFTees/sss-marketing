@@ -37,7 +37,7 @@
       filed:"Déclaration d’impôts produite", filedI:"Vous et votre conjoint(e), le cas échéant, pour l’année précédente.", notYet:"Pas encore",
       appt:"Type de rendez-vous", apptI:"", pick:"Choisir…",
       remain:"Il reste à indiquer :", pickVisit:"Choisissez un type de rendez-vous pour estimer votre part.", pendH:"Estimez votre part d’une visite.", pendS:"L’estimation tient compte du Régime canadien de soins dentaires (RCSD) et du guide tarifaire des dentistes du Québec (ACDQ).", prog:"Réponses : {n} sur {t}", estNote:"Estimation selon le guide tarifaire, pas une soumission.",
-      share:"Votre part estimée", total:"Coût total", cost:"Coût du traitement", std:"Guide tarifaire 2026 des dentistes du Québec (ACDQ)", paid:"Versé par le RCSD", noCover:"Service non couvert par le RCSD", full:"Entièrement couvert au tarif du guide.", ifQualify:"Si votre admissibilité est confirmée.", you:"Votre part", byAnswers:"selon vos réponses", grid:"{n} % de la grille du Régime canadien de soins dentaires", noelig:"Non admissible",
+      share:"Votre part estimée", total:"Coût total", viewCalc:"Voir le calcul", cost:"Coût du traitement", std:"Guide tarifaire 2026 des dentistes du Québec (ACDQ)", paid:"Versé par le RCSD", noCover:"Service non couvert par le RCSD", full:"Entièrement couvert au tarif du guide.", ifQualify:"Si votre admissibilité est confirmée.", you:"Votre part", byAnswers:"selon vos réponses", grid:"{n} % de la grille du Régime canadien de soins dentaires", noelig:"Non admissible",
       incl:"Inclus", nopick:"Choisissez un rendez-vous pour voir votre part.", unavailable:"Estimation indisponible pour ce rendez-vous. Communiquez avec la clinique.",
       tierUnconfirmed:"Palier RCSD : jusqu’à {n} %. Confirmez votre déclaration d’impôts.", whenIssued:"Montant estimé une fois la carte RCSD reçue.",
       pre:"Préautorisation du RCSD requise.", lab:"Frais de laboratoire en sus.", excl:"Non couvert par le RCSD.",
@@ -52,7 +52,7 @@
       filed:"Tax return filed", filedI:"You and your spouse or partner, if applicable, for the previous year.", notYet:"Not yet",
       appt:"Appointment type", apptI:"", pick:"Choose…",
       remain:"Still to answer:", pickVisit:"Choose an appointment type to estimate your share.", pendH:"Estimate your share of a visit.", pendS:"The estimate factors in the Canadian Dental Care Plan (CDCP) and the Quebec dentists' fee guide (ACDQ).", prog:"{n} of {t} answered", estNote:"Estimate from the fee guide, not a quote.",
-      share:"Your estimated share", total:"Total cost", cost:"Treatment cost", std:"Quebec dentists' 2026 fee guide (ACDQ)", paid:"Paid by CDCP", noCover:"Not a CDCP-covered service", full:"Fully covered at the guide price.", ifQualify:"If your eligibility is confirmed.", you:"Your share", byAnswers:"depends on your answers", grid:"{n}% of the Canadian Dental Care Plan fee schedule", noelig:"Not eligible",
+      share:"Your estimated share", total:"Total cost", viewCalc:"See the calculation", cost:"Treatment cost", std:"Quebec dentists' 2026 fee guide (ACDQ)", paid:"Paid by CDCP", noCover:"Not a CDCP-covered service", full:"Fully covered at the guide price.", ifQualify:"If your eligibility is confirmed.", you:"Your share", byAnswers:"depends on your answers", grid:"{n}% of the Canadian Dental Care Plan fee schedule", noelig:"Not eligible",
       incl:"Includes", nopick:"Choose an appointment to see your share.", unavailable:"Estimate unavailable for this appointment. Please contact the clinic.",
       tierUnconfirmed:"CDCP tier: up to {n}%. Confirm your tax filing.", whenIssued:"Estimated amount once your CDCP card is issued.",
       pre:"CDCP pre-authorization required.", lab:"Lab fee billed extra.", excl:"Not covered by CDCP.",
@@ -370,9 +370,9 @@
         var covers=c.tp&&(c.cov>0||!c.excl),tierTxt=covers?U.grid.replace("{n}",Math.round(c.tp*100)):(c.tp?U.noCover:U.noelig);
         rowsH+='<div><dt><i class="cq-sw" aria-hidden="true"></i>'+esc(U.paid)+'<small class="'+(covers?"cq-good-t":"cq-bad-t")+'">'+esc(nb(tierTxt))+'</small></dt><dd class="'+(c.cov?"cq-good-t":"")+(tc?" cq-tick":"")+'">'+(c.cov?"− ":"")+esc(nf.format(c.cov))+'</dd></div>';
       }else rowsH+='<div><dt>'+esc(U.paid)+'</dt><dd class="cq-dim">'+esc(U.byAnswers)+'</dd></div>';
-      var calc=accordion(U.sec.calc,[node("dl","cq-dl",rowsH)],nf.format(c.fee)+(c.known?" \u2192 "+nf.format(c.oop):""));
+      // one line under the figure: the estimate caveat on the left, the way to open the arithmetic on the right
+      var calc=accordion(c.known?U.estNote:U.sec.calc,[node("dl","cq-dl",rowsH)],U.viewCalc);
       calc.className+=" cq-calc";sBrk.appendChild(calc);
-      if(c.known)sBrk.appendChild(textNode("p","cq-estnote",U.estNote));
       t.appendChild(secLabel("limits"));
       t.appendChild(node("p","cq-incl","<b>"+esc(U.incl)+"</b>"+(lang==="fr"?" : ":": ")+esc(U.pk[c.pk.id][1])));
       var notes=[];

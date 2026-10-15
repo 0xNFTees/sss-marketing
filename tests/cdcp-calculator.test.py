@@ -262,8 +262,8 @@ with sync_playwright() as p:
     ok("layout: the two fine-print drawers exist and start closed",[d[0] for d in r["dr"]]==["Avis de transparence tarifaire","Soins couverts, autorisation et exclusions"] and not any(d[1] for d in r["dr"]),str(r["dr"]))
     ok("layout: the billing notice lives in its drawer",r["noticeInDrawer"] and not r["noticeOutside"])
     ok("dock: hidden while the actions are on screen",r["dockHidden"])
-    c=pg.evaluate("""()=>{const d=document.getElementById('dsx').querySelector('details.cq-calc');return {open:d.open,sum:d.querySelector('summary').innerText.replace(/\\s+/g,' '),note:!!document.getElementById('dsx').querySelector('.cq-calc+.cq-estnote')}}""")
-    ok("layout: the estimate calculation is a closed drawer that still shows cost and share",not c["open"] and "344,00" in c["sum"] and "76,00" in c["sum"] and c["note"],str(c))
+    c=pg.evaluate("""()=>{const d=document.getElementById('dsx').querySelector('details.cq-calc');return {open:d.open,sum:d.querySelector('summary').innerText.replace(/\\s+/g,' '),body:d.textContent,sibling:!!document.getElementById('dsx').querySelector('.cq-estnote')}}""")
+    ok("layout: the arithmetic is one closed line under the figure (caveat + 'Voir le calcul'), with the ledger inside",not c["open"] and "pas une soumission" in c["sum"] and "Voir le calcul" in c["sum"] and "344,00" in c["body"] and "268,00" in c["body"] and not c["sibling"],str(c))
     pg.evaluate("window.scrollBy({top:document.getElementById('dsx').querySelector('.cq-act').getBoundingClientRect().bottom+120,behavior:'instant'})");pg.wait_for_timeout(700)
     d=pg.evaluate("""()=>{const k=document.getElementById('dsx').querySelector('.cq-dock'),r=k.getBoundingClientRect();
       return {hidden:k.hidden,t:k.innerText.replace(/\\s+/g,' '),href:(k.querySelector('a')||{}).href||'',bottom:r.bottom,vh:innerHeight}}""")
@@ -277,7 +277,7 @@ with sync_playwright() as p:
     pg.evaluate(MNT,[390,full]);pg.wait_for_timeout(400)
     r=pg.evaluate("""()=>{const e=document.getElementById('dsx'),y=s=>e.querySelector(s).getBoundingClientRect().top;
       return {act:y('.cq-act'),appt:y('.cq-row-appt'),brk:y('.cq-brk'),sum:y('.cq-sum')}}""")
-    ok("layout: narrow, the actions come right after the figure and before the visit list and ledger",r["sum"]<r["act"]<r["appt"]<r["brk"],str(r))
+    ok("layout: narrow, the calculation line and the actions follow the figure, before the visit list",r["sum"]<r["brk"]<r["act"]<r["appt"],str(r))
     pg.set_viewport_size({"width":1280,"height":720})
 
     # 11. shipped data sanity
