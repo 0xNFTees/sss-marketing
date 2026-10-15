@@ -190,6 +190,60 @@ with sync_playwright() as p:
     ans("inc","over90");ok("states: 90k+ drops the tax-return row (not applicable), ineligible label",tr()=="ins:1,inc:1,appt:0" and pill() in("Non admissible","Not eligible"),tr()+str(pill()))
     pg.locator("#quiz button.cq-sumrow[data-k=ins]").click();pg.wait_for_timeout(200);ok("states: an answer row jumps to its question",snap()["view"]=="ins")
 
+    # 10d. design-system conformance: the rules written at the top of cdcp-embed.css, enforced
+    import re
+    css=open("cdcp-embed.css",encoding="utf-8").read()
+    body=re.sub(r"/\*.*?\*/","",css,flags=re.S)
+    t0=body.index("/* ")if False else 0
+    sec_tokens_end=body.index(".cdcp *,.cdcp *::before")          # everything before the reset is the token layer
+    host_start=body.index(".quiz-wrap{")
+    rules=body[sec_tokens_end:host_start]
+    ok("ds: no colour literals outside the token layer (except #000 mixed into hover/press)",not re.findall(r"#[0-9a-fA-F]{3,8}\b(?<!#000)|rgba?\(",re.sub(r"color-mix\([^;]*#000\)","",rules)),str(re.findall(r"#[0-9a-fA-F]{3,8}\b|rgba?\(",rules))[:200])
+    ok("ds: no px font sizes outside the token layer",not re.findall(r"font-size:\s*\d+px",rules),str(re.findall(r"font-size:\s*\d+px",rules)))
+    rm=rules[rules.index("@media (prefers-reduced-motion"):rules.index(".quiz-wrap") if False else len(rules)]
+    ok("ds: !important only in the reduced-motion switch",rules.count("!important")==rm.count("!important")>0)
+    # one definition per selector in the same (top-level) context
+    depth=0;top=[];buf=""
+    for ch in rules:
+        if ch=="{":
+            if depth==0: top.append(buf.strip())
+            depth+=1;buf=""
+        elif ch=="}":
+            depth-=1;buf=""
+        elif depth==0: buf+=ch
+    dup=sorted({x for x in top if top.count(x)>1 and not x.startswith("@")})
+    ok("ds: no top-level selector defined twice",not dup,str(dup))
+    ok("ds: only three breakpoints (container 339 / 679-680 / 900) and no viewport width queries",set(re.findall(r"@container \((?:min|max)-width:(\d+)px\)",css))<={"339","679","680","900"} and not re.findall(r"@media[^{]*(?:min|max)-width",css))
+    # runtime: type scale, targets, selection and focus ring across states and container widths
+    pg.evaluate("""()=>{const e=document.createElement('div');e.id='dsx';document.body.appendChild(e);}""")
+    DS_STATES=[{},{"ins":"no"},{"ins":"no","inc":"band70"},{"ins":"no","inc":"band70","filed":"yes"},{"ins":"no","inc":"band70","filed":"yes","appt":"major"},{"ins":"no","inc":"over90","appt":"new"},{"ins":"no","inc":"under70","filed":"no","appt":"filling"},{"ins":"yes"}]
+    sizes=set();small=[];noring=[];nosel=[]
+    for width in (360,1000):
+        for st in DS_STATES:
+            r=pg.evaluate("""([w,st])=>{const e=document.getElementById('dsx');e.innerHTML='';e.style.width=w+'px';const m=mountCdcpQuiz(e,'fr',{demo:true});m.set(st);
+              const out={sizes:[],small:[],nosel:[]};
+              e.querySelectorAll('*').forEach(el=>{const cs=getComputedStyle(el),r=el.getBoundingClientRect();if(!r.width||!r.height||cs.visibility==='hidden')return;
+                const own=[...el.childNodes].some(n=>n.nodeType===3&&n.textContent.trim());
+                if(own&&!el.closest('.cq-big')){const f=parseFloat(cs.fontSize);if(f<17)out.sizes.push(f);}
+                if(el.matches('button,summary,.cq-opt')&&r.height<43&&!el.closest('.cq-sr'))out.small.push(el.className+':'+Math.round(r.height));});
+              e.querySelectorAll('.cq-opt:has(input:checked)').forEach(l=>{if(getComputedStyle(l).boxShadow==='none')out.nosel.push(l.textContent)});
+              return out}""",[width,st])
+            sizes|=set(r["sizes"]);small+=r["small"];nosel+=r["nosel"]
+    ok("ds: small text uses only the three UI sizes (12 / 13 / 14)",sizes<={12.0,13.0,14.0},str(sorted(sizes)))
+    ok("ds: every button, summary and choice is at least 44px tall",not small,str(small[:5]))
+    ok("ds: a selected choice always shows the selection ring",not nosel,str(nosel))
+    for st in ({"ins":"no","inc":"band70"},{"ins":"no","inc":"band70","filed":"yes","appt":"major"}):
+        pg.evaluate("""(st)=>{const e=document.getElementById('dsx');e.innerHTML='';e.style.width='1000px';const m=mountCdcpQuiz(e,'fr',{demo:true});m.set(st)}""",st)
+        pg.evaluate("document.getElementById('dsx').scrollIntoView();document.activeElement&&document.activeElement.blur()")
+        pg.keyboard.press("Tab")
+        for _ in range(14):
+            has=pg.evaluate("""()=>{const a=document.activeElement;if(!a||!a.closest||!a.closest('#dsx'))return null;
+              const hit=[a,a.closest('.cq-opt'),a.closest('.cq-seg')].filter(Boolean).some(x=>{const o=getComputedStyle(x);return o.outlineStyle!=='none'&&parseFloat(o.outlineWidth)>=2});
+              return [hit,a.tagName+'.'+a.className+(a.value?'='+a.value:'')]}""")
+            if has and not has[0]: noring.append(has[1])
+            pg.keyboard.press("Tab")
+    ok("ds: every focusable control shows the focus ring",not noring,str(noring[:5]))
+
     # 11. shipped data sanity
     data=pg.evaluate("window.CDCP_PROVINCES.QC.procedures")
     dm={x["code"]:x for x in data}

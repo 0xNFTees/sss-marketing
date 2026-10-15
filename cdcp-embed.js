@@ -96,7 +96,7 @@
   function billingNotice(h,b){return node("p","cq-billing-notice",'<b>'+esc(h)+'.</b> '+esc(b));}
   function matrixItem(t,icon,data,open){
     var d=node("details","cq-matrix-item cq-tone-"+t);d.name="cq-matrix";if(open)d.open=true;
-    d.innerHTML='<summary><span class="cq-matrix-item-icon" aria-hidden="true">'+icon+'</span><span class="cq-matrix-item-head"><span class="cq-matrix-item-title">'+esc(data.title)+
+    d.innerHTML='<summary><span class="cq-matrix-item-head"><span class="cq-matrix-item-title">'+esc(data.title)+
       '</span><span class="cq-matrix-item-subtitle">'+esc(data.subtitle)+'</span></span><span class="cq-matrix-item-chevron" aria-hidden="true"></span></summary>'+
       '<div class="cq-matrix-item-body"><ul>'+data.services.map(function(s){return "<li>"+esc(s)+"</li>";}).join("")+'</ul><p class="cq-matrix-item-note">'+esc(data.note)+"</p></div>";
     return d;
@@ -153,7 +153,7 @@
     })();
 
     /* ---- answers: one stage that asks a question at a time, then becomes the summary ---- */
-    var rows={},ORDER=["ins","inc","filed","appt"],cur=null,shownKey=null,ptr=false,kbd=false,advT=0;
+    var ORDER=["ins","inc","filed","appt"],cur=null,shownKey=null,ptr=false,kbd=false,advT=0;
     root.addEventListener("pointerdown",function(){ptr=true;kbd=false;},true);
     root.addEventListener("keydown",function(){ptr=false;kbd=true;},true);
     var srS=node("div","cq-sr");srS.setAttribute("role","status");root.appendChild(srS);
@@ -188,7 +188,6 @@
     }
     var nextBtn=null;
     function refreshNext(){if(nextBtn)nextBtn.disabled=!A[shownKey];}
-    function focusStage(){var f=cin.querySelector("input:checked")||cin.querySelector("input");if(f)f.focus();}
     function goStep(k,focus){cur=k;renderCtl(focus!==false);}
     var clearBtn=node("button","cq-clear",esc(U.clear));clearBtn.type="button";clearBtn.hidden=true;
     clearBtn.addEventListener("click",function(){
@@ -196,7 +195,7 @@
       update();renderCtl("force");
     });
     function renderCtl(focus){
-      clearTimeout(advT);cin.innerHTML="";rows={};
+      clearTimeout(advT);cin.innerHTML="";
       var v=view(),first;shownKey=v;nextBtn=null;
       if(v!==null){
         var r=required(),n=r.indexOf(v)+1,t=totalQ(),h=node("div","cq-stg-h"),ticks="";
@@ -204,7 +203,7 @@
         if(n>1){var bk=node("button","cq-back",'<span aria-hidden="true">←</span> '+esc(L.back));bk.type="button";bk.addEventListener("click",function(){goStep(r[n-2],true);});h.appendChild(bk);}
         h.appendChild(node("span","cq-stg-n","<b>"+esc(U.qn.replace("{n}",n).replace("{t}",t))+'</b><span class="cq-ticks" aria-hidden="true">'+ticks+"</span>"));
         cin.appendChild(h);
-        first=fieldset(v);rows[v]=first;cin.appendChild(first);
+        first=fieldset(v);cin.appendChild(first);
         var ft=node("div","cq-stg-f");nextBtn=node("button","cq-next",esc(U.cont)+' <span aria-hidden="true">→</span>');nextBtn.type="button";nextBtn.disabled=!A[v];
         nextBtn.addEventListener("click",function(){cur=null;renderCtl(true);});ft.appendChild(nextBtn);cin.appendChild(ft);
         srS.textContent=U.qn.replace("{n}",n).replace("{t}",t)+" : "+optionsFor(v).label;
@@ -219,7 +218,7 @@
           b.addEventListener("click",function(){goStep(k,true);});li.appendChild(b);ul.appendChild(li);
         });
         cin.appendChild(ul);
-        if(A.ins==="no"&&DATA){first=fieldset("appt");rows.appt=first;cin.appendChild(first);}
+        if(A.ins==="no"&&DATA){first=fieldset("appt");cin.appendChild(first);}
         srS.textContent="";
       }
       cin.appendChild(clearBtn);
@@ -240,7 +239,6 @@
 
     /* ---- model ---- */
     function validFee(v){return typeof v==="number"&&isFinite(v)&&v>=0;}   // reject NaN, Infinity and negatives from bad data
-    function pkFee(p){var t=0;for(var i=0;i<p.items.length;i++){var c=byCode[p.items[i][0]];if(!c||!validFee(c.acdqFee2026))return null;t+=c.acdqFee2026*p.items[i][1];}return t;}
     function cost(){
       var p=null;PK.forEach(function(x){if(x.id===A.appt)p=x;});
       if(!p||!DATA)return null;

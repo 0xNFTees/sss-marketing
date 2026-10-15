@@ -1,233 +1,380 @@
 /*
  * cdcp-embed.css -- styles for the embeddable CDCP/RCSD calculator.
- * Mount with mountCdcpQuiz(el, "fr"|"en", opts); the script adds class "cdcp"
- * to el, and every rule below is scoped to it. Theme through the --cdcp-*
- * tokens documented in the shared base. See EMBED.md.
+ * Mount with mountCdcpQuiz(el, "fr"|"en", opts); the script adds class "cdcp" to el and every rule below
+ * is scoped to it (host-page rules cannot restyle the widget, its classes cannot leak). See EMBED.md.
+ *
+ * HOW THIS FILE IS ORGANISED (add to the right layer; do not append "passes" at the end)
+ *   1 tokens        every colour, size, space, motion and ring decision lives here
+ *   2 reset         the widget stands alone on any host page
+ *   3 layout        narrow first; one wide layout from a 680px container; narrow "result" reorder
+ *   4 text roles    label / caption / fine print / heading / link
+ *   5 components    choice groups, buttons, status, figure, ledger, next steps, disclosures, stage
+ *   6 states        one focus ring, one set of hover / press / disabled / invalid rules
+ *   7 motion        one duration scale, one easing, reduced-motion off-switch
+ *   8 host          sss.marketing demo wrappers (not needed on a clinic site)
+ *
+ * DESIGN RULES
+ *   Colour     brand = the one action colour. good = eligible / money the plan pays. bad = not eligible / extra
+ *              cost / invalid. warn = caution. State is never colour alone: it always has a word and a shape.
+ *   Type       three UI sizes (--t-s caption, --t-m body, --t-l emphasis), two display sizes (--t-h question,
+ *              --t-h2 step), then the status headline and the figure. Weight carries hierarchy: 600 label, 500
+ *              display, 400 body. Selection never changes weight, so a label never reflows when chosen.
+ *   Space      4 / 8 / 12 / 16 / 24 (--s1..--s5). Nothing in between.
+ *   Surfaces   paper = reading surface; tint = control rail and wells. A control well is the inverse of the surface
+ *              it sits on (--well / --sel), so the same control works on paper and on tint.
+ *   Controls   44px minimum target (--h); 56px rows (--h-row) when a row holds two lines. Selected = ring in
+ *              --c-brand + selected surface. Hover = --c-hover. Press = darker surface / 1px dip.
+ *   Focus      one ring (--ring). Outside the element by default; inside (--ring-in) for rows in a bordered list;
+ *              a segmented control rings the whole group. Never removed.
+ *   Money      tabular figures, never wrapped, dollars large and cents/unit small; the plan's share is --c-good,
+ *              the patient's share is --c-ink; a figure that cannot be produced is shown as unavailable.
+ *   Motion     --dur-press .1s / --dur-state .16s / --dur-value .26s, one --ease; surfaces ease, nothing moves
+ *              sideways; reduced-motion removes all of it.
+ *   Responsive container queries (the widget follows its column, not the viewport): <680 narrow, >=680 two
+ *              columns, >=900 wider rail. Those are the only breakpoints.
+ *
+ * Public theme tokens (set on the container, a parent, or :root; unset ones use the defaults on the right):
+ *   --cdcp-brand #1c1812   --cdcp-on-brand #fff   --cdcp-ink #1c1812   --cdcp-paper #fff   --cdcp-tint #f3f1ea
+ *   --cdcp-accent #b5835a  --cdcp-line #d8d4c8    --cdcp-good #2f6b35  --cdcp-bad #b3261e  --cdcp-warn #8a4f1c
+ *   --cdcp-font inherit    --cdcp-display inherit --cdcp-radius 0      --cdcp-sticky-top (height of a fixed host header)
  */
-/* ---- base ----
-   Public theme tokens. Set any of these on the container, a parent, or :root.
-   Unset tokens fall back to the neutral defaults on the right.
-     --cdcp-brand      selected states, primary buttons, step numbers   #1c1812
-     --cdcp-on-brand   text on brand                                    #ffffff
-     --cdcp-ink        text and strong borders                          #1c1812
-     --cdcp-paper      widget background                                #ffffff
-     --cdcp-tint       hover rows, result panel                         #f3f1ea
-     --cdcp-accent     link underlines       #b5835a
-     --cdcp-line       hairlines                                        #d8d4c8
-     --cdcp-good       eligible, savings, confirmation                  #2f6b35
-     --cdcp-bad        not eligible, extra costs, blockers              #b3261e
-     --cdcp-warn       cautions (e.g. pre-authorization)                #8a4f1c
-     --cdcp-font       body font                                        inherit
-     --cdcp-display    headline and large-number font                   inherit
-     --cdcp-radius     corner radius                                    0
-   All styles are scoped to .cdcp so host-page rules cannot restyle the
-   widget and its class names cannot leak into the host page. */
+
+/* ============ 1 tokens ============ */
+@property --cov{syntax:"<percentage>";inherits:true;initial-value:0%}
 .cdcp{
+  /* colour */
   --c-brand:var(--cdcp-brand,var(--cdcp-ink,#1c1812));--c-on:var(--cdcp-on-brand,var(--cdcp-paper,#fff));
   --c-ink:var(--cdcp-ink,var(--est-ink,#1c1812));--c-paper:var(--cdcp-paper,var(--est-paper,#fff));
   --c-tint:var(--cdcp-tint,#f3f1ea);--c-accent:var(--cdcp-accent,var(--est-accent,#b5835a));
   --c-line:var(--cdcp-line,var(--est-line,#d8d4c8));--c-good:var(--cdcp-good,#2f6b35);--c-bad:var(--cdcp-bad,#b3261e);--c-warn:var(--cdcp-warn,#8a4f1c);
-  --c-edge:color-mix(in srgb,var(--c-ink) 48%,var(--c-paper));--c-hover:color-mix(in srgb,var(--c-ink) 7%,var(--c-tint));--h:44px;--t-s:12px;--t-m:13px;--t-l:14px;--s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;
-  --c-font:var(--cdcp-font,var(--est-font,inherit));--c-display:var(--cdcp-display,var(--est-display,inherit));--c-r:var(--cdcp-radius,0px);
+  --c-edge:color-mix(in srgb,var(--c-ink) 48%,var(--c-paper));--c-hover:color-mix(in srgb,var(--c-ink) 7%,var(--c-tint));
+  /* control wells: inverse of the surface they sit on (overridden where the surface is tint) */
+  --well:var(--c-tint);--sel:var(--c-paper);
+  /* type */
+  --c-font:var(--cdcp-font,var(--est-font,inherit));--c-display:var(--cdcp-display,var(--est-display,inherit));
+  --t-s:12px;--t-m:13px;--t-l:14px;--t-h:20px;--t-h2:18px;
+  --t-status:clamp(17px,4.4cqw,20px);--t-fig:30px;--t-cents:.55em;
+  /* space, size, shape */
+  --s0:2px;--s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;
+  --h:44px;--h-row:56px;--mark:8px;--radio:14px;--c-r:var(--cdcp-radius,0px);
+  /* focus */
+  --ring:2px solid var(--c-ink);--ring-out:2px;--ring-in:-2px;
+  /* motion */
+  --dur-press:.1s;--dur-state:.16s;--dur-value:.26s;--ease:cubic-bezier(.2,.7,.2,1);
+  --tr-surface:background-color var(--dur-state) var(--ease),border-color var(--dur-state) var(--ease),box-shadow var(--dur-state) var(--ease),opacity var(--dur-state) var(--ease);
+  transition:--cov .38s var(--ease);
   display:block;box-sizing:border-box;width:100%;max-width:100%;min-width:0;container-type:inline-size;
   background:var(--c-paper);color:var(--c-ink);border:1px solid var(--c-line);border-radius:var(--c-r);overflow:clip;
   font-family:var(--c-font);font-size:var(--t-l);font-weight:400;font-style:normal;line-height:1.5;letter-spacing:normal;
   text-align:left;text-transform:none;text-indent:0;word-spacing:normal;-webkit-text-size-adjust:100%;
 }
+
+/* ============ 2 reset ============ */
 .cdcp *,.cdcp *::before,.cdcp *::after{box-sizing:border-box}
-.cdcp :where(div,span,p,h3,ul,li,dl,dt,dd,fieldset,legend,label,details,summary,a,button,select,input){
+.cdcp :where(div,span,p,h3,ul,ol,li,dl,dt,dd,fieldset,legend,label,details,summary,a,button,input){
   margin:0;padding:0;font:inherit;letter-spacing:inherit;text-transform:none;text-align:inherit;color:inherit;float:none;
   background:none;border:0;border-radius:0;box-shadow:none;text-shadow:none;max-width:none;min-width:0;position:static;
 }
-.cdcp :where(ul){list-style:none}
+.cdcp :where(ul,ol){list-style:none}
 .cdcp :where(a){text-decoration:none;cursor:pointer}
-.cdcp :where(button,select,input){-webkit-appearance:none;appearance:none}
+.cdcp :where(button,input){-webkit-appearance:none;appearance:none}
+.cdcp :where(button){cursor:pointer}
 .cdcp :where(legend){float:none;width:auto}
 .cdcp :where(p,span,a,li,dd,dt,div){overflow-wrap:anywhere}
+.cdcp summary::-webkit-details-marker{display:none}
+.cdcp .cq-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
-/* ---- layout: container-driven, so it follows the host column, not the viewport ---- */
+/* ============ 3 layout ============ */
+/* narrow (container < 680): controls, status, pinned figure, ledger, details, next steps */
 .cdcp .cq-grid{display:grid;grid-template-columns:minmax(0,1fr)}
-.cdcp .cq-ctl{padding:16px;border-bottom:1px solid var(--c-line)}
-.cdcp .cq-ctl-in{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s4) 14px}
-.cdcp .cq-ctl-in>.cq-skip{grid-column:1/-1}
-.cdcp .cq-status,.cdcp .cq-sum,.cdcp .cq-brk,.cdcp .cq-det,.cdcp .cq-rest{min-width:0;padding:0 var(--s4)}
-.cdcp .cq-status{padding-top:16px}
+.cdcp .cq-ctl{padding:var(--s4);border-bottom:1px solid var(--c-line)}
+.cdcp .cq-ctl-in{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s4)}
+.cdcp :is(.cq-status,.cq-sum,.cq-brk,.cq-det,.cq-rest){min-width:0;padding:0 var(--s4)}
+.cdcp .cq-status{padding-top:var(--s4)}
+.cdcp :is(.cq-brk,.cq-det){padding-top:var(--s1)}
 .cdcp .cq-rest{padding-top:var(--s3);padding-bottom:var(--s4)}
-.cdcp .cq-brk:empty,.cdcp .cq-det:empty{display:none}
-.cdcp .cq-sum{background-color:var(--c-paper);padding-top:12px;padding-bottom:10px;position:sticky;bottom:0;z-index:1;border-bottom:1px solid var(--c-line);margin:12px 0 0;background-repeat:no-repeat;background-size:100% 3px;background-position:0 0;background-image:linear-gradient(var(--c-line),var(--c-line))}
+.cdcp :is(.cq-brk,.cq-det):empty{display:none}
+.cdcp :is(.cq-rest,.cq-det)>:first-child{margin-top:0}
+.cdcp .cq-sum{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;column-gap:var(--s3);
+  position:sticky;bottom:0;z-index:1;margin:var(--s3) 0 0;padding-top:var(--s3);padding-bottom:var(--s3);border-bottom:1px solid var(--c-line);
+  background:var(--c-paper) linear-gradient(var(--c-line),var(--c-line)) 0 0/100% 3px no-repeat}
 .cdcp.cq-ledger .cq-sum{background-image:linear-gradient(90deg,var(--c-good) var(--cov,0%),var(--c-ink) var(--cov,0%))}
 .cdcp .cq-sum[hidden]{display:none}
-.cdcp .cq-brk{padding-top:var(--s1)}
-.cdcp .cq-det{padding-top:var(--s1)}
-.cdcp .cq-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-/* ---- controls ---- */
+/* the pinned figure must never cover the control that has keyboard focus */
+@container (max-width:679px){.cdcp :is(input,a,button,summary){scroll-margin-bottom:calc(var(--bar-h,0px) + var(--s3))}}
+@media (max-height:500px){.cdcp .cq-sum{padding-top:var(--s2);padding-bottom:var(--s2)}.cdcp{--t-fig:24px}}
+@container (max-width:339px){.cdcp .cq-grid{--t-fig:26px}}
+
+/* ============ 4 text roles ============ */
+.cdcp .cq-sec,.cdcp .cq-step-lbl{font-size:var(--t-s);font-weight:600;letter-spacing:.04em;opacity:.62}        /* section label: quiet */
+.cdcp .cq-sec{margin:0 0 var(--s2)}
+.cdcp :is(.cq-incl,.cq-note,.cq-billing-notice,.cq-insurer-note,.cq-sum-note,.cq-help){font-size:var(--t-m);line-height:1.5}   /* body */
+.cdcp :is(.cq-estnote,.cq-fine,.cq-skip){font-size:var(--t-s);line-height:1.5}
+.cdcp .cq-skip{display:none;margin-top:auto;padding-top:var(--s3);opacity:.8}                                  /* fine print */
+.cdcp .cq-estnote{margin:var(--s2) 0 var(--s3);opacity:.72}
+.cdcp .cq-fine{margin-top:var(--s3);max-width:72ch;opacity:.75}
+.cdcp .cq-good-t{color:var(--c-good)}.cdcp .cq-bad-t{color:var(--c-bad)}
+/* quiet text control (links, Back, Clear, Edit): underlined, thicker underline on hover */
+.cdcp :is(.cq-skip a,.cq-help a,.cq-back,.cq-clear,.cq-sr-e){text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.cdcp :is(.cq-help a,.cq-clear,.cq-back){font-weight:600}
+
+/* ============ 5 components ============ */
+/* ---- choice groups: .cq-seg (2-up, and 2x2 when narrow), .cq-seg-4 and .cq-visit (lists) ---- */
 .cdcp .cq-row{display:flex;flex-direction:column;min-width:0}
-.cdcp .cq-row>.cq-seg,.cdcp .cq-row>.cq-select{margin-top:auto}
-.cdcp .cq-row legend{display:flex;flex-direction:column;gap:1px;width:100%;margin-bottom:var(--s2)}
-.cdcp .cq-row legend>span:first-child{font-size:var(--t-m);font-weight:600;line-height:1.3}
-.cdcp .cq-infl{font-size:var(--t-s);line-height:1.35;opacity:.72}
-.cdcp .cq-row.cq-off{opacity:.45}
-.cdcp .cq-row.cq-off :is(.cq-opt,.cq-select){cursor:not-allowed}
-.cdcp .cq-seg{display:grid;border:1px solid var(--c-edge);background:var(--c-tint);border-radius:var(--c-r);overflow:clip}
+.cdcp .cq-row>.cq-seg{margin-top:auto}
+.cdcp .cq-row legend{display:flex;flex-direction:column;gap:1px;width:100%;margin-bottom:var(--s3)}
+.cdcp .cq-row legend>span:first-child{font-family:var(--c-display);font-size:var(--t-h);font-weight:500;line-height:1.25;letter-spacing:-.005em}
+.cdcp .cq-infl{font-size:var(--t-m);line-height:1.35;opacity:.8}
+.cdcp .cq-seg,.cdcp .cq-visit{display:grid;border:1px solid var(--c-edge);background:var(--well);border-radius:var(--c-r);overflow:clip}
 .cdcp .cq-seg-2{grid-template-columns:repeat(2,minmax(0,1fr))}
-.cdcp .cq-seg-4{grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--c-edge)}
-.cdcp .cq-seg-4 .cq-opt{background:var(--c-tint);border-left:0;min-height:52px;padding:6px 8px}
-.cdcp .cq-seg-4 .cq-opt:has(input:checked){background:var(--c-paper)}
-.cdcp .cq-opt{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:var(--h);padding:4px;cursor:pointer;
+.cdcp .cq-seg-2 .cq-opt{min-height:var(--h-row);font-size:var(--t-l)}
+.cdcp .cq-opt{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:var(--h);padding:var(--s1);cursor:pointer;
   font-size:var(--t-m);line-height:1.25;text-align:center;border-left:1px solid var(--c-line)}
-.cdcp .cq-opt small{font-size:var(--t-s);opacity:.78}
 .cdcp .cq-opt:first-child{border-left:0}
+.cdcp .cq-opt small{font-size:var(--t-s);opacity:.78}
 .cdcp .cq-opt input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:inherit}
-.cdcp .cq-opt:has(input:checked){background:var(--c-paper);box-shadow:inset 0 0 0 2px var(--c-brand);z-index:1}
-@media (hover:hover){.cdcp .cq-opt:hover:not(:has(input:checked)):not(:has(input:disabled)){background:var(--c-hover)}
-  .cdcp .cq-select:hover:not(:disabled){border-color:var(--c-ink)}}
-.cdcp .cq-select{display:block;width:100%;min-height:var(--h);padding:0 36px 0 12px;border:1px solid var(--c-edge);border-radius:var(--c-r);
-  background-color:var(--c-tint);
-  background-image:linear-gradient(45deg,transparent 50%,var(--c-ink) 50%),linear-gradient(135deg,var(--c-ink) 50%,transparent 50%);
-  background-position:calc(100% - 19px) 50%,calc(100% - 14px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;
-  font-size:var(--t-m);cursor:pointer;text-overflow:ellipsis}
-.cdcp .cq-skip{display:none;margin-top:auto;padding-top:12px;font-size:var(--t-s);line-height:1.5;opacity:.8}
-.cdcp .cq-skip a{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.cdcp .cq-opt:has(input:checked){background:var(--sel);box-shadow:inset 0 0 0 2px var(--c-brand);z-index:1}
+/* lists: the visit types (always) and the income bands (wide). One radio mark, one row rhythm. */
+.cdcp .cq-seg-4,.cdcp .cq-visit{display:flex;flex-direction:column}
+.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt{align-items:flex-start;gap:var(--s0);padding:var(--s2) var(--s3) var(--s2) calc(var(--s3) * 2 + var(--radio));text-align:left;
+  border-left:0;border-top:1px solid var(--c-line);background:var(--well)}
+.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt:first-child{border-top:0}
+.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt>span{font-weight:600}
+.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt>small{line-height:1.4}
+.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt::before{content:"";position:absolute;left:var(--s3);top:50%;width:var(--radio);height:var(--radio);margin-top:calc(var(--radio) / -2);
+  border:1.5px solid var(--c-edge);border-radius:50%}
+.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt:has(input:checked){background:var(--sel)}
+.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt:has(input:checked)::before{background:var(--c-ink);border-color:var(--c-ink);box-shadow:inset 0 0 0 3px var(--sel)}
+.cdcp[data-bad="1"] .cq-visit .cq-opt:has(input:checked){box-shadow:inset 0 0 0 2px var(--c-bad)}   /* invalid: no estimate can be produced for this choice */
+/* narrow: the four income bands sit in a 2x2 grid */
+@container (max-width:679px){
+  .cdcp .cq-seg-4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--c-edge)}
+  .cdcp .cq-seg-4 .cq-opt{align-items:center;min-height:var(--h-row);padding:var(--s2);text-align:center;border-top:0;background:var(--well)}
+  .cdcp .cq-seg-4 .cq-opt::before{display:none}
+  .cdcp .cq-seg-4 .cq-opt>span{font-weight:400}
+  .cdcp .cq-seg-4 .cq-opt:has(input:checked){background:var(--sel);box-shadow:inset 0 0 0 2px var(--c-brand)}
+}
 
-/* ---- status: green = eligible / good news, red = not eligible / blocker ---- */
-.cdcp .cq-status-in{padding:0}
-.cdcp .cq-status-title{font-family:var(--c-display);font-weight:500;font-size:clamp(17px,4.4cqw,20px);line-height:1.3;letter-spacing:-.01em;text-wrap:balance}
-.cdcp .cq-status-in.cq-good .cq-status-title{color:var(--c-good)}
-.cdcp .cq-status-in.cq-bad .cq-status-title{color:var(--c-bad)}
-.cdcp .cq-status-detail{margin-top:6px;font-size:var(--t-m);line-height:1.55;opacity:.88}
-.cdcp .cq-good-t{color:var(--c-good)}
-.cdcp .cq-bad-t{color:var(--c-bad)}
-.cdcp .cq-warn-t{color:var(--c-warn)}
+/* ---- buttons ---- */
+.cdcp .cq-cta-row{margin-top:var(--s4);display:flex;flex-wrap:wrap;gap:var(--s3)}
+.cdcp .cq-cta-btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:var(--h);max-width:100%;padding:var(--s3) var(--s4);border-radius:var(--c-r);
+  font-size:var(--t-m);font-weight:600;text-align:center;line-height:1.3;transition:var(--tr-surface),transform var(--dur-press) var(--ease)}
+.cdcp .cq-cta-btn-primary{background:var(--c-brand);color:var(--c-on)}
+.cdcp .cq-cta-btn-secondary{border:1px solid var(--c-line)}
+.cdcp .cq-cta-ext{opacity:.7;font-size:var(--t-s)}
+.cdcp .cq-next{display:inline-flex;align-items:center;gap:var(--s2);min-height:var(--h);padding:0 var(--s4);border:1px solid var(--c-ink);border-radius:var(--c-r);background:var(--c-paper);
+  font-size:var(--t-m);font-weight:600}
+.cdcp .cq-next:disabled{visibility:hidden}
+.cdcp .cq-clear{justify-self:start;min-height:var(--h);margin-top:calc(var(--s2) * -1);font-size:var(--t-m);opacity:.8}
+.cdcp .cq-clear[hidden]{display:none}
 
-/* ---- the number ---- */
-.cdcp .cq-sum{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;column-gap:var(--s3)}
+/* ---- status: green = eligible, red = not eligible, amber = to confirm ---- */
+.cdcp .cq-pill{display:inline-flex;align-items:center;gap:var(--s2);margin-bottom:var(--s2);font-size:var(--t-s);font-weight:600;letter-spacing:.02em;line-height:1.3}
+.cdcp .cq-pill::before{content:"";flex:none;width:9px;height:9px;border:1.5px solid currentColor;border-radius:50%}
+.cdcp .cq-status-title{font-family:var(--c-display);font-weight:500;font-size:var(--t-status);line-height:1.3;letter-spacing:-.01em;text-wrap:balance}
+.cdcp .cq-status-detail{margin-top:var(--s2);max-width:52ch;font-size:var(--t-m);line-height:1.55;opacity:.88}
+.cdcp .cq-good :is(.cq-status-title,.cq-pill){color:var(--c-good)}
+.cdcp .cq-bad :is(.cq-status-title,.cq-pill){color:var(--c-bad)}
+.cdcp .cq-warn .cq-pill{color:var(--c-warn)}
+.cdcp .cq-good .cq-pill::before{background:currentColor}
+.cdcp .cq-bad .cq-pill::before{background:currentColor;border-radius:0}
+.cdcp .cq-warn .cq-pill::before{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+.cdcp .cq-neutral .cq-pill{opacity:.75}
+
+/* ---- the figure (financial values: tabular, never wrapped, dollars large and cents / unit small) ---- */
+.cdcp :is(.cq-big,.cq-dl dd,.cq-tr-n){font-variant-numeric:tabular-nums}
 .cdcp .cq-lbl{font-size:var(--t-m);font-weight:600}
-.cdcp .cq-big{font-family:var(--c-display);font-weight:500;font-size:30px;line-height:1.1;letter-spacing:-.01em;font-variant-numeric:tabular-nums;overflow-wrap:normal;white-space:nowrap}
+.cdcp .cq-big{font-family:var(--c-display);font-weight:500;font-size:var(--t-fig);line-height:1.1;letter-spacing:-.01em;overflow-wrap:normal;white-space:nowrap}
 .cdcp .cq-big-empty{display:none}
-.cdcp .cq-cents{font-size:.55em;letter-spacing:0;margin-left:.03em}
-.cdcp .cq-sum-note{flex-basis:100%;margin-top:var(--s1);font-size:var(--t-m);opacity:.8}
+.cdcp .cq-cents{font-size:var(--t-cents);letter-spacing:0;margin-left:.03em}
+.cdcp .cq-sum-note{flex-basis:100%;margin-top:var(--s1);opacity:.8}
+.cdcp .cq-basis,.cdcp .cq-bar,.cdcp .cq-trace,.cdcp .cq-pg{display:none}
+@container (min-width:680px){
+  .cdcp .cq-lbl{display:flex;align-items:center;justify-content:space-between;width:100%}
+  .cdcp .cq-lbl>span:first-child{display:inline-flex;align-items:center}
+  .cdcp .cq-lbl>span:first-child::before{content:"";width:var(--mark);height:var(--mark);margin-right:var(--s2);background:var(--c-ink)}
+  .cdcp .cq-pg{display:inline-flex;align-items:center;gap:var(--s1);font-size:var(--t-s);opacity:.8}
+  .cdcp .cq-pg i{width:14px;height:3px;background:var(--c-line)}
+  .cdcp .cq-pg i.on{background:var(--c-ink)}
+  .cdcp .cq-pg b{margin-left:var(--s2);font-weight:400}
+  .cdcp .cq-sum .cq-big{display:block;margin-top:var(--s1);line-height:1;letter-spacing:-.02em}
+  .cdcp .cq-sum .cq-big.cq-big-empty{display:block;opacity:.22}
+  .cdcp .cq-sum .cq-cents{margin-left:0}
+  .cdcp .cq-sum :is(.cq-cur,.cq-sp){font-size:.42em;letter-spacing:0}
+  .cdcp .cq-sum .cq-cur-lead{vertical-align:.95em;margin-right:.08em}
+  .cdcp .cq-sum .cq-basis{display:block;margin-top:var(--s3);font-size:var(--t-m);font-weight:600}
+  .cdcp .cq-sum .cq-sum-note{flex-basis:auto;margin-top:var(--s2)}
+  /* the split: green is what the plan pays, ink is what you pay */
+  .cdcp .cq-sum .cq-bar{display:block;position:relative;height:10px;margin-top:var(--s3);background:var(--c-ink);border-radius:var(--c-r);overflow:clip}
+  .cdcp .cq-sum .cq-bar i{position:absolute;inset:0 auto 0 0;width:var(--cov,0%);background:var(--c-good)}
+  /* while answering: the answers so far, each one jumps back to its question */
+  .cdcp .cq-sum:has(.cq-trace) .cq-sum-note{display:none}
+  .cdcp .cq-sum .cq-trace{display:block;margin-top:var(--s3);border-top:1px solid var(--c-line)}
+  .cdcp[data-view="result"] .cq-sum .cq-trace{display:none}
+  .cdcp[data-view="result"] .cq-sum:has(.cq-trace) .cq-sum-note{display:block}
+  .cdcp .cq-trace li+li{border-top:1px solid var(--c-line)}
+  .cdcp .cq-tr{display:grid;grid-template-columns:20px minmax(0,1fr) auto;align-items:center;column-gap:var(--s2);width:100%;min-height:var(--h);padding:var(--s2) var(--s1);text-align:left;font-size:var(--t-m)}
+  .cdcp .cq-tr-n{display:inline-grid;place-items:center;width:20px;height:20px;border:1px solid var(--c-edge);border-radius:50%;font-size:var(--t-s);font-weight:600;line-height:1}
+  .cdcp .cq-tr[data-done="1"] .cq-tr-n{background:var(--c-ink);border-color:var(--c-ink);color:var(--c-paper)}
+  .cdcp .cq-tr-q{opacity:.8}
+  .cdcp .cq-tr-a{font-weight:600;text-align:right}
+  .cdcp .cq-tr[data-done="0"] .cq-tr-a{font-weight:400;opacity:.6}
+  .cdcp .cq-tr.cq-on{background:var(--c-tint)}
+}
+
+/* ---- ledger, limits, next steps ---- */
 .cdcp .cq-dl{font-size:var(--t-m)}
-.cdcp .cq-estnote{margin:var(--s2) 0 var(--s3);font-size:var(--t-s);opacity:.72}
 .cdcp .cq-dl>div{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s3);padding:var(--s2) 0}
 .cdcp .cq-dl>div+div{border-top:1px solid var(--c-line)}
-.cdcp .cq-dl dt small{display:block;margin-top:1px;font-size:var(--t-s)}
-.cdcp .cq-dl dt,.cdcp .cq-dl dd{margin:0}
 .cdcp .cq-dl dt{min-width:0}
+.cdcp .cq-dl dt small{display:block;margin-top:1px;font-size:var(--t-s)}
+.cdcp .cq-dl dt small.cq-mute{opacity:.72}
 .cdcp .cq-dl dd{flex:none;white-space:nowrap;text-align:right;font-weight:600}
-.cdcp .cq-incl{margin-top:8px;font-size:var(--t-s);line-height:1.5;opacity:.9}
+.cdcp .cq-dl dd.cq-dim{font-weight:400;opacity:.7;font-size:var(--t-s);white-space:normal}
+.cdcp .cq-sw{display:inline-block;width:var(--mark);height:var(--mark);margin-right:var(--s2);background:var(--c-good)}
+.cdcp .cq-incl{margin-top:var(--s2);opacity:.9}
 .cdcp .cq-incl b{font-weight:600}
-.cdcp .cq-note{margin-top:8px;font-size:var(--t-s);line-height:1.5}
-.cdcp .cq-cta-row{margin-top:16px;display:flex;flex-wrap:wrap;gap:12px}
-.cdcp .cq-cta-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:var(--h);max-width:100%;padding:10px 16px;border-radius:var(--c-r);
-  font-size:var(--t-m);font-weight:600;text-align:center;line-height:1.3}
-.cdcp .cq-cta-btn-primary{background:var(--c-brand);color:var(--c-on)}
-@media (hover:hover){.cdcp .cq-cta-btn-primary:hover{background:color-mix(in srgb,var(--c-brand) 86%,#000)}}
-.cdcp .cq-cta-btn-primary:active{background:color-mix(in srgb,var(--c-brand) 74%,#000)}
-.cdcp .cq-cta-btn-secondary{border:1px solid var(--c-line)}
-@media (hover:hover){.cdcp .cq-cta-btn-secondary:hover{border-color:var(--c-ink);background:var(--c-tint)}}
-.cdcp .cq-cta-btn-secondary:active{background:var(--c-hover)}
-.cdcp .cq-cta-ext{opacity:.7;font-size:var(--t-s)}
-.cdcp .cq-insurer-note{margin-top:16px;font-size:var(--t-m);line-height:1.6;opacity:.8}
-.cdcp .cq-insurer-pills{margin-top:8px;display:flex;flex-wrap:wrap;gap:8px}
-.cdcp .cq-insurer-pill{padding:6px 12px;border:1px solid var(--c-line);border-radius:var(--c-r);font-size:var(--t-s)}
-.cdcp .cq-billing-notice{margin-top:var(--s4);font-size:var(--t-s);line-height:1.5;opacity:.9}
+.cdcp .cq-note{margin-top:var(--s2)}
+.cdcp .cq-billing-notice{margin-top:var(--s4);padding:var(--s1) 0 var(--s1) var(--s3);border-left:2px solid var(--c-accent);line-height:1.55}
 .cdcp .cq-billing-notice b{font-weight:600}
+.cdcp .cq-insurer-note{margin-top:var(--s4);line-height:1.6;opacity:.8}
+.cdcp .cq-insurer-pills{margin-top:var(--s2);display:flex;flex-wrap:wrap;gap:var(--s2)}
+.cdcp .cq-insurer-pill{padding:var(--s2) var(--s3);border:1px solid var(--c-line);border-radius:var(--c-r);font-size:var(--t-s)}
+.cdcp .cq-rest>.cq-sec{margin-bottom:0}
+.cdcp .cq-rest>.cq-sec+:is(.cq-cta-row,.cq-steps){margin-top:var(--s2)}
+.cdcp .cq-det .cq-sec{margin-top:var(--s1)}
 .cdcp .cq-steps{margin-top:var(--s4);display:grid;grid-template-columns:minmax(0,1fr)}
-.cdcp .cq-step-card{display:flex;flex-direction:column;padding:12px 0}
+.cdcp .cq-step-card{display:flex;flex-direction:column;padding:var(--s3) 0}
 .cdcp .cq-step-card+.cq-step-card{padding-top:var(--s2)}
 .cdcp .cq-step-main{display:flex;flex-direction:column;flex:1}
-.cdcp .cq-step-num{display:inline-block;min-width:18px;opacity:.55;font-variant-numeric:tabular-nums}
+.cdcp .cq-step-lbl{margin-bottom:var(--s0)}
 .cdcp .cq-step-title{font-size:var(--t-l);font-weight:600}
-.cdcp .cq-step-text{margin:2px 0 10px 0;font-size:var(--t-m);line-height:1.5;opacity:.88}
-.cdcp .cq-step-main .cq-cta-btn{margin-top:auto;width:100%;min-height:44px;padding:8px 12px}
-.cdcp .cq-help{margin-top:var(--s1);font-size:var(--t-m)}
-.cdcp .cq-help a{font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;display:inline-flex;align-items:center;min-height:44px}
+.cdcp .cq-step-text{margin:var(--s0) 0 var(--s3);font-size:var(--t-m);line-height:1.5;opacity:.88}
+.cdcp .cq-step-main .cq-cta-btn{margin-top:auto;width:100%;padding:var(--s2) var(--s3)}
+.cdcp .cq-help{margin-top:var(--s1)}
+.cdcp .cq-help a{display:inline-flex;align-items:center;min-height:var(--h)}
 @container (min-width:680px){
-  .cdcp .cq-steps{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:20px}
-  .cdcp .cq-step-card+.cq-step-card{border-top:0;padding-top:var(--s3)}
+  .cdcp .cq-steps{margin-top:var(--s2);grid-template-columns:repeat(2,minmax(0,1fr));column-gap:var(--s3)}
+  .cdcp .cq-step-card,.cdcp .cq-step-card+.cq-step-card{padding:var(--s3) 0 0;border-top:2px solid var(--c-ink)}   /* a strong rule on each stage */
+  .cdcp .cq-step-title{font-family:var(--c-display);font-size:var(--t-h2);font-weight:500;line-height:1.3;letter-spacing:-.005em}
+  .cdcp .cq-det>.cq-incl{margin-top:0}
 }
-.cdcp .cq-matrix-all{margin-top:4px}
-.cdcp .cq-matrix-all>summary,.cdcp .cq-matrix-item>summary{list-style:none;cursor:pointer}
-.cdcp summary::-webkit-details-marker{display:none}
-.cdcp .cq-matrix-all>summary{display:flex;justify-content:space-between;align-items:center;min-height:44px;font-size:var(--t-m);font-weight:600}
-/* one focus ring everywhere; a segmented control shows it around the whole group */
-.cdcp :is(select,a,summary):focus-visible,.cdcp .cq-seg:has(input:focus-visible){outline:2px solid var(--c-ink);outline-offset:2px}
-.cdcp .cq-matrix{margin-top:8px;border-top:1px solid var(--c-line)}
+
+/* ---- disclosures ---- */
+.cdcp .cq-matrix-all{margin-top:var(--s1)}
+.cdcp :is(.cq-matrix-all,.cq-matrix-item)>summary{list-style:none;cursor:pointer}
+.cdcp .cq-matrix-all>summary{display:flex;justify-content:space-between;align-items:center;min-height:var(--h);font-size:var(--t-m);font-weight:600}
+.cdcp .cq-matrix{margin-top:var(--s2);border-top:1px solid var(--c-line)}
 .cdcp .cq-matrix-item{border-bottom:1px solid var(--c-line)}
-.cdcp .cq-matrix-item>summary{display:flex;align-items:flex-start;gap:12px;padding:12px 4px}
-.cdcp .cq-matrix-item-icon{display:none}
-.cdcp .cq-matrix-item.cq-tone-standard .cq-matrix-item-subtitle{color:var(--c-good);opacity:1}
-.cdcp .cq-matrix-item.cq-tone-major .cq-matrix-item-subtitle{color:var(--c-warn);opacity:1}
-.cdcp .cq-matrix-item.cq-tone-excluded .cq-matrix-item-subtitle{color:var(--c-bad);opacity:1}
+.cdcp .cq-matrix-item>summary{display:flex;align-items:flex-start;gap:var(--s3);padding:var(--s3) var(--s1)}
 .cdcp .cq-matrix-item-head{flex:1;min-width:0}
-.cdcp .cq-matrix-item-title,.cdcp .cq-matrix-item-subtitle{display:block}
+.cdcp :is(.cq-matrix-item-title,.cq-matrix-item-subtitle){display:block}
 .cdcp .cq-matrix-item-title{font-size:var(--t-m);font-weight:600}
-.cdcp .cq-matrix-item-subtitle{margin-top:2px;font-size:var(--t-s);line-height:1.4;opacity:.78}
+.cdcp .cq-matrix-item-subtitle{margin-top:var(--s0);font-size:var(--t-s);line-height:1.4;opacity:.78}
+.cdcp .cq-tone-standard .cq-matrix-item-subtitle{color:var(--c-good);opacity:1}
+.cdcp .cq-tone-major .cq-matrix-item-subtitle{color:var(--c-warn);opacity:1}
+.cdcp .cq-tone-excluded .cq-matrix-item-subtitle{color:var(--c-bad);opacity:1}
 .cdcp .cq-matrix-item-chevron{flex:none;width:16px;text-align:center;opacity:.6;line-height:1}
 .cdcp .cq-matrix-item-chevron::before{content:"+"}
 .cdcp details[open]>summary .cq-matrix-item-chevron::before{content:"\2212"}
-.cdcp .cq-matrix-item-body{padding:0 4px 16px}
-.cdcp .cq-matrix-item-body ul{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.cdcp .cq-matrix-item-body{padding:0 var(--s1) var(--s4)}
+.cdcp .cq-matrix-item-body ul{display:flex;flex-direction:column;gap:var(--s2);margin-bottom:var(--s3)}
 .cdcp .cq-matrix-item-body li{position:relative;padding-left:14px;font-size:var(--t-m);line-height:1.5;opacity:.88}
 .cdcp .cq-matrix-item-body li::before{content:'\2013';position:absolute;left:0;opacity:.5}
-.cdcp .cq-matrix-item-note{font-size:var(--t-s);line-height:1.6;opacity:.8;border-left:2px solid var(--c-line);padding-left:12px}
-.cdcp .cq-fine{margin-top:var(--s3);font-size:var(--t-s);line-height:1.5;opacity:.75}
+.cdcp .cq-matrix-item-note{font-size:var(--t-s);line-height:1.6;opacity:.8;border-left:2px solid var(--c-line);padding-left:var(--s3)}
 
+/* ---- stage: one question at a time, then the answers ---- */
+.cdcp .cq-stg-h{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:var(--s5);margin-bottom:var(--s3)}
+.cdcp .cq-stg-n{display:inline-flex;align-items:center;gap:var(--s3);margin-left:auto;font-size:var(--t-s)}
+.cdcp .cq-stg-n b{font-weight:600}
+.cdcp .cq-back{display:inline-flex;align-items:center;gap:var(--s2);min-height:var(--h);font-size:var(--t-m);opacity:.85}
+.cdcp .cq-ticks{display:inline-flex;gap:var(--s1)}
+.cdcp .cq-ticks i{width:16px;height:3px;background:var(--c-line);transition:background-color var(--dur-state) var(--ease)}
+.cdcp .cq-ticks i.on{background:var(--c-ink)}
+.cdcp .cq-ticks i.cur{background:var(--c-edge)}
+.cdcp .cq-stg-f{display:flex;justify-content:flex-end;margin-top:var(--s3)}
+.cdcp .cq-stg-f:has(.cq-next:disabled){display:none}
+.cdcp .cq-ans{margin:0 0 var(--s4);border:1px solid var(--c-edge);background:var(--c-paper);border-radius:var(--c-r)}
+.cdcp .cq-ans li+li{border-top:1px solid var(--c-line)}
+.cdcp .cq-sumrow{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:var(--s3);align-items:center;width:100%;min-height:var(--h-row);padding:var(--s2) var(--s3);text-align:left}
+.cdcp .cq-sr-q{grid-column:1;font-size:var(--t-s);opacity:.7}
+.cdcp .cq-sr-a{grid-column:1;font-size:var(--t-m);font-weight:600}
+.cdcp .cq-sr-e{grid-column:2;grid-row:1/3;font-size:var(--t-s);font-weight:600}
+.cdcp .cq-ctl-in>.cq-sec{margin:0 0 var(--s2)}
 
-/* ---- sss.marketing demo wrappers only (not needed on a clinic site) ---- */
-.quiz-wrap{max-width:920px}
-.quiz-demo-tag{display:inline-flex;margin-bottom:20px;font-family:var(--body);font-size:var(--t-s);letter-spacing:.16em;text-transform:uppercase;color:var(--ink);opacity:.7}
-.quiz-card{background:none;border:0;padding:0}
-
-.cdcp .cq-dl .cq-dim{font-weight:400;opacity:.7;font-size:var(--t-s);white-space:normal}
-
-/* ---- phones: 16px select text stops iOS zooming the page on focus ---- */
-@container (max-width:679px){.cdcp .cq-select{font-size:16px}}
-@media (pointer:coarse){.cdcp .cq-select{font-size:16px}}
-/* ---- short viewports (phone landscape): tighter pinned bar ---- */
-@media (max-height:500px){
-  .cdcp .cq-sum{padding-top:6px;padding-bottom:6px}
-  .cdcp .cq-sum .cq-big{font-size:24px}
+/* ============ responsive layout: after the components so it can place and re-space them ============ */
+/* narrow, assessment complete: status, figure (pinned to the top), visit list, ledger, details, next steps, answers */
+@container (max-width:679px){
+  .cdcp[data-view="result"] :is(.cq-ctl,.cq-ctl-in){display:contents}
+  .cdcp[data-view="result"] .cq-status{order:1}
+  .cdcp[data-view="result"] .cq-sum{order:2;bottom:auto;top:var(--cdcp-sticky-top,0px)}
+  .cdcp[data-view="result"] .cq-row-appt{order:3;--well:var(--c-paper);--sel:var(--c-tint);padding:var(--s4);background:var(--c-tint);border-block:1px solid var(--c-line)}
+  .cdcp[data-view="result"] .cq-row-appt>legend{float:left;width:100%}
+  .cdcp[data-view="result"] .cq-brk{order:4}
+  .cdcp[data-view="result"] .cq-det{order:5}
+  .cdcp[data-view="result"] .cq-rest{order:6}
+  .cdcp[data-view="result"] .cq-ctl-in>:is(.cq-sec,.cq-ans,.cq-clear,.cq-skip){order:7;margin-inline:var(--s4)}
+  .cdcp[data-view="result"] .cq-ctl-in>.cq-sec{margin-top:var(--s5)}
 }
 
-.cdcp .cq-rest>:first-child{margin-top:0}
-@container (max-width:339px){.cdcp .cq-big{font-size:26px}}
-.cdcp .cq-det>:first-child{margin-top:0}
-.cdcp .cq-fine{max-width:72ch}
-.cdcp .cq-dl dt small.cq-mute{opacity:.72}
+/* wide (container >= 680): a tinted answer rail beside one statement column.
+   The statement reads top to bottom: state, the figure, the split behind it, what it assumes, what to do next. */
+@container (min-width:680px){
+  .cdcp .cq-grid{grid-template-columns:minmax(320px,380px) minmax(0,1fr);grid-template-rows:repeat(5,auto) 1fr}
+  .cdcp .cq-ctl{grid-column:1;grid-row:1/-1;--well:var(--c-paper);--sel:var(--c-tint);padding:var(--s5);border-bottom:0;border-right:1px solid var(--c-line);background:var(--c-tint)}
+  .cdcp :is(.cq-status,.cq-sum,.cq-brk,.cq-det,.cq-rest){grid-column:2;padding-inline:var(--s5)}
+  .cdcp .cq-status{grid-row:1;min-height:12rem;padding-top:var(--s5);padding-bottom:var(--s2)}   /* a steady height keeps the figure in place as the state changes */
+  .cdcp .cq-sum,.cdcp.cq-ledger .cq-sum{grid-row:2;position:static;display:block;margin:0;padding-top:var(--s2);padding-bottom:var(--s4);border:0;background:none}
+  .cdcp .cq-brk{grid-row:3;padding-top:var(--s2)}
+  .cdcp .cq-det{grid-row:4;padding-top:var(--s1);padding-bottom:var(--s4)}
+  .cdcp .cq-rest{grid-row:5;margin-inline:var(--s5);padding:var(--s5) 0;border-top:1px solid var(--c-line)}
+  .cdcp .cq-rest:empty{display:none}
+  .cdcp .cq-brk .cq-sec{margin-top:var(--s2)}
+  .cdcp .cq-skip{display:block}
+  .cdcp .cq-dl>div{padding:var(--s3) 0}
+  .cdcp .cq-grid{--t-status:clamp(20px,3.2cqw,26px);--t-fig:clamp(52px,9cqw,76px);--t-cents:.42em}
+}
+@container (min-width:900px){.cdcp .cq-grid{grid-template-columns:minmax(340px,400px) minmax(0,1fr)}}
+/* the answers stay in reach while the longer result is read (short screens keep the normal flow) */
+@media (min-height:760px){@container (min-width:680px){.cdcp .cq-ctl-in{position:sticky;top:var(--cdcp-sticky-top,var(--s4))}}}
 
-/* ---- motion: one duration scale, one easing ---- */
-@property --cov{syntax:"<percentage>";inherits:true;initial-value:0%}
-.cdcp{--dur-press:.1s;--dur-state:.16s;--dur-value:.26s;--ease:cubic-bezier(.2,.7,.2,1);transition:--cov .38s var(--ease)}
-@keyframes cq-tick{from{opacity:.4}to{opacity:1}}
-.cdcp .cq-tick{animation:cq-tick var(--dur-value) var(--ease) both}
-.cdcp .cq-dl dd{font-variant-numeric:tabular-nums}
-/* controls: surfaces and edges ease; the label dips on press and returns on release */
-.cdcp .cq-opt{transition:background-color var(--dur-state) var(--ease),box-shadow var(--dur-state) var(--ease)}
-.cdcp .cq-opt>span,.cdcp .cq-opt>small{transition:transform var(--dur-press) var(--ease)}
-.cdcp .cq-opt:active>span,.cdcp .cq-opt:active>small{transform:scale(.97)}
-.cdcp .cq-opt:active:not(:has(input:checked)){background:var(--c-hover)}
-.cdcp .cq-select{transition:border-color var(--dur-state) var(--ease),background-color var(--dur-state) var(--ease),box-shadow var(--dur-state) var(--ease)}
-.cdcp .cq-cta-btn{transition:background-color var(--dur-state) var(--ease),border-color var(--dur-state) var(--ease),transform var(--dur-press) var(--ease)}
-.cdcp .cq-cta-btn:active{transform:translateY(1px)}
-.cdcp .cq-row{transition:opacity var(--dur-state) var(--ease)}
-/* selection is carried by the ring and surface, not by weight, so a selected label never changes width or wraps differently */
-/* accepted: an answered select takes the strong edge. invalid: the estimate cannot be produced for this choice */
-.cdcp .cq-row[data-done="1"] .cq-select{border-color:var(--c-ink)}
-.cdcp .cq-select[aria-invalid="true"]{border-color:var(--c-bad);box-shadow:inset 0 0 0 1px var(--c-bad)}
-/* editing: the select shows the same strong edge while it has focus or is open */
-.cdcp .cq-select:focus-visible{border-color:var(--c-ink)}
-/* interactive text only */
-.cdcp :is(.cq-skip a,.cq-help a){transition:text-decoration-color var(--dur-state) var(--ease),opacity var(--dur-state) var(--ease)}
+/* ============ 6 states ============ */
+/* hover (pointer devices only) */
 @media (hover:hover){
-  .cdcp .cq-row.cq-off .cq-opt:hover,.cdcp .cq-row.cq-off .cq-select:hover{background:var(--c-tint);border-color:var(--c-edge)}
-  .cdcp :is(.cq-skip a,.cq-help a):hover{text-decoration-thickness:2px}
-  .cdcp :is(.cq-matrix-all,.cq-matrix-item)>summary{transition:background-color var(--dur-state) var(--ease)}
-  .cdcp :is(.cq-matrix-all,.cq-matrix-item)>summary:hover{background:var(--c-tint)}
+  .cdcp .cq-opt:hover:not(:has(input:checked)){background:var(--c-hover)}
+  .cdcp .cq-cta-btn-primary:hover{background:color-mix(in srgb,var(--c-brand) 86%,#000)}
+  .cdcp .cq-cta-btn-secondary:hover{border-color:var(--c-ink);background:var(--c-tint)}
+  .cdcp .cq-next:not(:disabled):hover{background:var(--c-ink);color:var(--c-paper)}
+  .cdcp :is(.cq-sumrow,.cq-tr,.cq-matrix-all>summary,.cq-matrix-item>summary):hover{background:var(--c-tint)}
+  .cdcp :is(.cq-skip a,.cq-help a,.cq-back,.cq-clear):hover{text-decoration-thickness:2px}
+  .cdcp :is(.cq-back,.cq-clear):hover{opacity:1}
 }
-.cdcp :is(.cq-matrix-all,.cq-matrix-item)>summary:active{background:var(--c-hover)}
+/* press */
+.cdcp .cq-opt:active:not(:has(input:checked)){background:var(--c-hover)}
+.cdcp .cq-opt:active>:is(span,small){transform:scale(.97)}
+.cdcp .cq-cta-btn:active{transform:translateY(1px)}
+.cdcp .cq-cta-btn-primary:active{background:color-mix(in srgb,var(--c-brand) 74%,#000)}
+.cdcp .cq-cta-btn-secondary:active,.cdcp :is(.cq-matrix-all,.cq-matrix-item)>summary:active{background:var(--c-hover)}
+/* focus: one ring. Outside by default; inside for rows of a bordered list; a 2-up control rings the whole group */
+.cdcp :is(a,button,summary):focus-visible,.cdcp .cq-seg:has(input:focus-visible){outline:var(--ring);outline-offset:var(--ring-out)}
+.cdcp :is(.cq-sumrow,.cq-tr):focus-visible{outline-offset:var(--ring-in)}
+.cdcp .cq-visit:has(input:focus-visible),.cdcp .cq-seg-4:has(input:focus-visible){outline:0}
+.cdcp :is(.cq-visit,.cq-seg-4) .cq-opt:has(input:focus-visible){outline:var(--ring);outline-offset:var(--ring-in);z-index:2}
+@container (max-width:679px){
+  .cdcp .cq-seg-4:has(input:focus-visible){outline:var(--ring);outline-offset:var(--ring-out)}
+  .cdcp .cq-seg-4 .cq-opt:has(input:focus-visible){outline:0}
+}
+
+/* ============ 7 motion ============ */
+@keyframes cq-tick{from{opacity:.4}to{opacity:1}}
 @keyframes cq-fade{from{opacity:0}to{opacity:1}}
+.cdcp .cq-tick{animation:cq-tick var(--dur-value) var(--ease) both}
 .cdcp .cq-fade{animation:cq-fade var(--dur-state) var(--ease) both}
+.cdcp .cq-ctl-in .cq-fade{animation-duration:var(--dur-state)}
+.cdcp :is(.cq-opt,.cq-sumrow,.cq-tr,.cq-tr-n,.cq-next,.cq-matrix-all>summary,.cq-matrix-item>summary){transition:var(--tr-surface),color var(--dur-state) var(--ease)}
+.cdcp :is(.cq-visit,.cq-seg-4) .cq-opt::before{transition:var(--tr-surface)}
+.cdcp .cq-opt>:is(span,small){transition:transform var(--dur-press) var(--ease)}
+.cdcp :is(.cq-skip a,.cq-help a,.cq-back,.cq-clear){transition:text-decoration-color var(--dur-state) var(--ease),opacity var(--dur-state) var(--ease)}
 /* optional content opens and closes with a short height ease (browsers without ::details-content simply snap) */
 @supports selector(::details-content){
   .cdcp details{interpolate-size:allow-keywords}
@@ -238,234 +385,7 @@
   .cdcp,.cdcp *,.cdcp *::before,.cdcp *::after,.cdcp details::details-content{transition:none!important;animation:none!important}
 }
 
-/* clear answers: quiet text control, shown only once there is something to clear */
-.cdcp .cq-ctl-in>.cq-clear{grid-column:1/-1;justify-self:start;min-height:var(--h);padding:0;margin:calc(var(--s2) * -1) 0 0;background:none;border:0;border-radius:0;
-  font:inherit;font-size:var(--t-m);color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;cursor:pointer;opacity:.8;
-  transition:opacity var(--dur-state) var(--ease)}
-.cdcp .cq-ctl-in>.cq-clear[hidden]{display:none}
-@media (hover:hover){.cdcp .cq-ctl-in>.cq-clear:hover{opacity:1;text-decoration-thickness:2px}}
-.cdcp .cq-ctl-in>.cq-clear:focus-visible{outline:2px solid var(--c-ink);outline-offset:2px}
-
-/* narrow layout: the pinned result bar must never cover the control that has keyboard focus */
-@container (max-width:679px){
-  .cdcp :is(input,select,a,button,summary){scroll-margin-bottom:calc(var(--bar-h,0px) + 12px)}
-}
-
-/* ================= results-led composition =================
-   Narrow: answers, then the pinned result bar, then the statement.
-   Wide: a tinted answer rail beside one statement column. The statement reads top to bottom:
-   state, the figure, the split behind it, what it assumes, what to do next. */
-/* state label: a shape and a word, never colour alone */
-.cdcp .cq-pill{display:inline-flex;align-items:center;gap:var(--s2);margin-bottom:var(--s2);font-size:var(--t-s);font-weight:600;letter-spacing:.02em;line-height:1.3}
-.cdcp .cq-pill::before{content:"";flex:none;width:9px;height:9px;border:1.5px solid currentColor;border-radius:50%}
-.cdcp .cq-pill{color:var(--c-ink)}
-.cdcp .cq-pill:is(:where(.cq-pill)){opacity:1}
-.cdcp .cq-status-in.cq-good .cq-pill{color:var(--c-good)}
-.cdcp .cq-status-in.cq-good .cq-pill::before{background:currentColor}
-.cdcp .cq-status-in.cq-bad .cq-pill{color:var(--c-bad)}
-.cdcp .cq-status-in.cq-bad .cq-pill::before{background:currentColor;border-radius:0}
-.cdcp .cq-status-in.cq-warn .cq-pill{color:var(--c-warn)}
-.cdcp .cq-status-in.cq-warn .cq-pill::before{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
-.cdcp .cq-status-in.cq-neutral .cq-pill{opacity:.75}
-
-.cdcp .cq-sw{display:inline-block;width:8px;height:8px;margin-right:var(--s2);background:var(--c-good);vertical-align:baseline}
-.cdcp .cq-basis,.cdcp .cq-bar,.cdcp .cq-prog,.cdcp .cq-trace{display:none}
-.cdcp .cq-big-empty{display:none}
-
-@container (min-width:680px){
-  .cdcp .cq-grid{grid-template-columns:minmax(320px,380px) minmax(0,1fr);grid-template-rows:repeat(5,auto) 1fr}
-  .cdcp .cq-ctl{grid-column:1;grid-row:1/-1;padding:var(--s5);border-bottom:0;border-right:1px solid var(--c-line);background:var(--c-tint)}
-  .cdcp :is(.cq-status,.cq-sum,.cq-brk,.cq-det,.cq-rest){grid-column:2;padding-left:var(--s5);padding-right:var(--s5)}
-  .cdcp .cq-status{grid-row:1;padding-top:var(--s5);padding-bottom:var(--s2)}
-  .cdcp .cq-sum,.cdcp.cq-ledger .cq-sum{grid-row:2;position:static;display:block;margin:0;padding-top:var(--s2);padding-bottom:var(--s4);border:0;background:none}
-  .cdcp .cq-brk{grid-row:3;padding-top:0}
-  .cdcp .cq-det{grid-row:4;padding-top:var(--s2);padding-bottom:var(--s4)}
-  .cdcp .cq-rest{grid-row:5;margin:0 var(--s5);padding:var(--s4) 0 var(--s5);border-top:1px solid var(--c-line)}
-  .cdcp .cq-rest:empty{display:none}
-  .cdcp .cq-dl>div{padding:var(--s3) 0}
-  .cdcp .cq-skip{display:block}
-
-  /* the figure */
-  .cdcp .cq-status-title{font-size:clamp(20px,3.2cqw,26px)}
-  .cdcp .cq-lbl{display:flex;align-items:center;font-size:var(--t-m)}
-  .cdcp .cq-lbl::before{content:"";width:8px;height:8px;margin-right:var(--s2);background:var(--c-ink)}
-  .cdcp .cq-sum .cq-big{display:block;margin-top:var(--s1);font-size:clamp(52px,9cqw,76px);line-height:1;letter-spacing:-.02em}
-  .cdcp .cq-sum .cq-big.cq-big-empty{opacity:.22}
-  .cdcp .cq-sum .cq-cents{font-size:.42em;margin-left:0;letter-spacing:0}
-  .cdcp .cq-sum .cq-basis{display:block;margin-top:var(--s3);font-size:var(--t-m);font-weight:600}
-  .cdcp .cq-sum .cq-sum-note{flex-basis:auto;margin-top:var(--s2)}
-  /* the split: green is what the plan pays, ink is what you pay */
-  .cdcp .cq-sum .cq-bar{display:block;position:relative;height:10px;margin-top:var(--s3);background:var(--c-ink);border-radius:var(--c-r);overflow:clip}
-  .cdcp .cq-sum .cq-bar i{position:absolute;inset:0 auto 0 0;width:var(--cov,0%);background:var(--c-good)}
-  .cdcp .cq-sum .cq-prog{display:flex;gap:var(--s1);margin-top:var(--s3)}
-  .cdcp .cq-sum .cq-prog i{flex:1;height:4px;background:var(--c-line);transition:background-color var(--dur-state) var(--ease)}
-  .cdcp .cq-sum .cq-prog i.on{background:var(--c-ink)}
-
-  /* answer rail: wells on the tint, selection = tint + strong ring */
-  .cdcp .cq-ctl .cq-seg,.cdcp .cq-ctl .cq-select{background-color:var(--c-paper)}
-  .cdcp .cq-ctl .cq-select{background-image:linear-gradient(45deg,transparent 50%,var(--c-ink) 50%),linear-gradient(135deg,var(--c-ink) 50%,transparent 50%)}
-  .cdcp .cq-ctl .cq-opt:has(input:checked){background:var(--c-tint)}
-  .cdcp .cq-ctl .cq-seg-4{display:flex;flex-direction:column;gap:0;background:var(--c-paper)}
-  .cdcp .cq-ctl .cq-seg-4 .cq-opt{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;column-gap:var(--s2);min-height:44px;padding:8px 12px 8px 36px;text-align:left;
-    background:var(--c-paper);border-top:1px solid var(--c-line)}
-  .cdcp .cq-ctl .cq-seg-4 .cq-opt:first-child{border-top:0}
-  .cdcp .cq-ctl .cq-seg-4 .cq-opt:has(input:checked){background:var(--c-tint)}
-  .cdcp .cq-ctl .cq-seg-4 .cq-opt>span{font-weight:600}
-  .cdcp .cq-ctl .cq-seg-4 .cq-opt>small{margin-left:auto;text-align:right}
-  .cdcp .cq-ctl .cq-seg-4 .cq-opt::before{content:"";position:absolute;left:12px;top:50%;width:14px;height:14px;margin-top:-7px;border:1.5px solid var(--c-edge);border-radius:50%;
-    transition:background-color var(--dur-state) var(--ease),border-color var(--dur-state) var(--ease),box-shadow var(--dur-state) var(--ease)}
-  .cdcp .cq-ctl .cq-seg-4 .cq-opt:has(input:checked)::before{background:var(--c-ink);border-color:var(--c-ink);box-shadow:inset 0 0 0 3px var(--c-tint)}
-}
-@container (min-width:900px){
-  .cdcp .cq-grid{grid-template-columns:minmax(340px,400px) minmax(0,1fr)}
-}
-
-/* ================= interaction refinements ================= */
-@container (min-width:680px){
-  /* the figure keeps its place as the state changes: the status block holds a steady height */
-  .cdcp .cq-status{min-height:12rem}
-  .cdcp .cq-sum:has(.cq-trace) .cq-sum-note{display:none}
-  .cdcp .cq-sum .cq-trace{display:block;margin-top:var(--s3);border-top:1px solid var(--c-line)}
-  .cdcp .cq-trace li+li{border-top:1px solid var(--c-line)}
-  .cdcp .cq-tr{display:grid;grid-template-columns:20px minmax(0,1fr) auto;align-items:center;column-gap:var(--s2);width:100%;min-height:var(--h);padding:var(--s2) var(--s1);text-align:left;cursor:pointer;
-    font-size:var(--t-m);transition:background-color var(--dur-state) var(--ease)}
-  .cdcp .cq-tr-n{display:inline-grid;place-items:center;width:20px;height:20px;border:1px solid var(--c-edge);border-radius:50%;font-size:var(--t-s);font-weight:600;line-height:1;font-variant-numeric:tabular-nums;
-    transition:background-color var(--dur-state) var(--ease),color var(--dur-state) var(--ease)}
-  .cdcp .cq-tr[data-done="1"] .cq-tr-n{background:var(--c-ink);border-color:var(--c-ink);color:var(--c-paper)}
-  .cdcp .cq-tr-q{opacity:.8}
-  .cdcp .cq-tr-a{font-weight:600;text-align:right}
-  .cdcp .cq-tr[data-done="0"] .cq-tr-a{font-weight:400;opacity:.6}
-  .cdcp .cq-tr.cq-on{background:var(--c-tint)}
-  .cdcp .cq-tr:focus-visible{outline:2px solid var(--c-ink);outline-offset:-2px}
-}
-@media (hover:hover){@container (min-width:680px){.cdcp .cq-tr:hover{background:var(--c-tint)}}}
-/* tier table: the ring sits on the focused row, not around the whole table */
-@container (min-width:680px){
-  .cdcp .cq-ctl .cq-seg-4:has(input:focus-visible){outline:0}
-  .cdcp .cq-ctl .cq-seg-4 .cq-opt:has(input:focus-visible){outline:2px solid var(--c-ink);outline-offset:-2px;z-index:2}
-}
-
-/* ================= result hierarchy =================
-   outcome (state + headline + the reason) > figure > calculation > limits > next step.
-   Section labels are quiet; only the outcome, the figure and the primary action are heavy. */
-.cdcp .cq-sec{margin:0 0 var(--s2);font-size:var(--t-s);font-weight:600;letter-spacing:.04em;opacity:.62}
-.cdcp .cq-status-detail{max-width:52ch}
-.cdcp .cq-pg{display:none}
-.cdcp .cq-det .cq-sec{margin-top:var(--s1)}
-.cdcp .cq-rest>.cq-sec{margin-bottom:0}
-.cdcp .cq-rest>.cq-sec+.cq-cta-row,.cdcp .cq-rest>.cq-sec+.cq-steps{margin-top:var(--s2)}
-.cdcp .cq-step-lbl{font-size:var(--t-s);font-weight:600;letter-spacing:.04em;opacity:.62;margin-bottom:2px}
-.cdcp .cq-billing-notice{padding:var(--s1) 0 var(--s1) var(--s3);border-left:2px solid var(--c-accent);font-size:var(--t-m);line-height:1.55;opacity:1}
-.cdcp .cq-incl{font-size:var(--t-m)}
-.cdcp .cq-note{font-size:var(--t-m)}
-@container (min-width:680px){
-  .cdcp .cq-lbl{justify-content:space-between;width:100%}
-  .cdcp .cq-lbl::before{display:none}
-  .cdcp .cq-lbl>span:first-child{display:inline-flex;align-items:center}
-  .cdcp .cq-lbl>span:first-child::before{content:"";width:8px;height:8px;margin-right:var(--s2);background:var(--c-ink)}
-  .cdcp .cq-pg{display:inline-flex;align-items:center;gap:var(--s1);font-size:var(--t-s);font-weight:400;opacity:.8}
-  .cdcp .cq-pg i{width:14px;height:3px;background:var(--c-line)}
-  .cdcp .cq-pg i.on{background:var(--c-ink)}
-  .cdcp .cq-pg b{margin-left:var(--s2);font-weight:400}
-  /* the calculation reads as one block with the figure; limits and next step step back / forward */
-  .cdcp .cq-brk{padding-top:var(--s2);border-top:0}
-  .cdcp .cq-brk .cq-sec{margin-top:var(--s2)}
-  .cdcp .cq-det{padding-top:var(--s1)}
-  .cdcp .cq-det>.cq-incl{margin-top:0}
-  /* next step: one continuous sequence, a strong rule on each stage */
-  .cdcp .cq-rest{padding-top:var(--s5)}
-  .cdcp .cq-steps{margin-top:var(--s2);column-gap:var(--s3)}
-  .cdcp .cq-step-card{padding:var(--s3) 0 0;border-top:2px solid var(--c-ink)}
-  .cdcp .cq-step-card+.cq-step-card{padding-top:var(--s3);border-top:2px solid var(--c-ink)}
-  .cdcp .cq-step-text{margin:2px 0 var(--s3) 0}
-  .cdcp .cq-step-title{font-family:var(--c-display);font-size:18px;font-weight:500;line-height:1.3;letter-spacing:-.005em}
-}
-
-/* ================= craftsmanship pass ================= */
-/* the answers stay in reach while the longer result is read (needs room: short screens keep the normal flow) */
-@media (min-height:760px){
-  @container (min-width:680px){
-    .cdcp .cq-ctl-in{position:sticky;top:var(--cdcp-sticky-top,16px)}
-  }
-}
-/* the figure: dollars large, the unit and cents set small together, no loose gap before the currency */
-@container (min-width:680px){
-  .cdcp .cq-sum .cq-cur{font-size:.42em;letter-spacing:0}
-  .cdcp .cq-sum .cq-sp{font-size:.42em}
-  .cdcp .cq-sum .cq-cur-lead{vertical-align:.95em;margin-right:.08em}
-}
-
-/* ================= stage: one question at a time, then the summary ================= */
-.cdcp .cq-stg-h{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:var(--s5);margin-bottom:var(--s3)}
-.cdcp .cq-stg-n{display:inline-flex;align-items:center;gap:var(--s3);margin-left:auto;font-size:var(--t-s)}
-.cdcp .cq-stg-n b{font-weight:600}
-.cdcp .cq-ticks{display:inline-flex;gap:var(--s1)}
-.cdcp .cq-ticks i{width:16px;height:3px;background:var(--c-line);transition:background-color var(--dur-state) var(--ease)}
-.cdcp .cq-ticks i.on{background:var(--c-ink)}
-.cdcp .cq-ticks i.cur{background:var(--c-edge)}
-.cdcp .cq-back,.cdcp .cq-next{display:inline-flex;align-items:center;gap:var(--s2);min-height:var(--h);padding:0;font-size:var(--t-m);font-weight:600;cursor:pointer;
-  transition:opacity var(--dur-state) var(--ease),background-color var(--dur-state) var(--ease)}
-.cdcp .cq-back{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;opacity:.85}
-.cdcp .cq-stg-f{display:flex;justify-content:flex-end;margin-top:var(--s3)}
-.cdcp .cq-next{padding:0 var(--s4);border:1px solid var(--c-ink);border-radius:var(--c-r);background:var(--c-paper)}
-.cdcp .cq-next:disabled{visibility:hidden}
-@media (hover:hover){.cdcp .cq-next:not(:disabled):hover{background:var(--c-ink);color:var(--c-paper)}.cdcp .cq-back:hover{opacity:1;text-decoration-thickness:2px}}
-.cdcp .cq-back:focus-visible,.cdcp .cq-next:focus-visible,.cdcp .cq-sumrow:focus-visible{outline:2px solid var(--c-ink);outline-offset:2px}
-.cdcp .cq-row-ins legend>span:first-child,.cdcp .cq-row-inc legend>span:first-child,.cdcp .cq-row-filed legend>span:first-child,.cdcp .cq-row-appt legend>span:first-child{font-family:var(--c-display);font-size:20px;font-weight:500;line-height:1.25;letter-spacing:-.005em}
-.cdcp .cq-row legend .cq-infl{padding-left:0;font-size:var(--t-m);opacity:.8}
-.cdcp .cq-row legend{margin-bottom:var(--s3)}
-/* the two-way answers are larger in the stage: one decision, easy to hit */
-.cdcp .cq-seg-2 .cq-opt{min-height:56px;font-size:var(--t-l)}
-/* visit type: a list, each with what it includes */
-.cdcp .cq-visit{display:flex;flex-direction:column;border:1px solid var(--c-edge);background:var(--c-tint);border-radius:var(--c-r);overflow:clip}
-.cdcp .cq-visit .cq-opt{align-items:flex-start;justify-content:center;gap:2px;min-height:56px;padding:var(--s2) var(--s3) var(--s2) 40px;text-align:left;border-left:0;border-top:1px solid var(--c-line);background:var(--c-paper)}
-.cdcp .cq-visit .cq-opt:first-child{border-top:0}
-.cdcp .cq-visit .cq-opt>span{font-weight:600}
-.cdcp .cq-visit .cq-opt>small{font-size:var(--t-s);line-height:1.4;opacity:.78}
-.cdcp .cq-visit .cq-opt::before{content:"";position:absolute;left:var(--s3);top:50%;width:14px;height:14px;margin-top:-7px;border:1.5px solid var(--c-edge);border-radius:50%;
-  transition:background-color var(--dur-state) var(--ease),box-shadow var(--dur-state) var(--ease)}
-.cdcp .cq-visit .cq-opt:has(input:checked){background:var(--c-tint);box-shadow:inset 0 0 0 2px var(--c-brand)}
-.cdcp .cq-visit .cq-opt:has(input:checked)::before{background:var(--c-ink);border-color:var(--c-ink);box-shadow:inset 0 0 0 3px var(--c-tint)}
-.cdcp .cq-visit:has(input:focus-visible){outline:0}
-.cdcp .cq-visit .cq-opt:has(input:focus-visible){outline:2px solid var(--c-ink);outline-offset:-2px;z-index:2}
-@media (hover:hover){.cdcp .cq-visit .cq-opt:hover:not(:has(input:checked)){background:var(--c-hover)}}
-.cdcp[data-bad="1"] .cq-visit .cq-opt:has(input:checked){box-shadow:inset 0 0 0 2px var(--c-bad)}
-/* summary of the answers, each one editable */
-.cdcp .cq-ans{margin:0 0 var(--s4);border:1px solid var(--c-edge);background:var(--c-paper);border-radius:var(--c-r)}
-.cdcp .cq-ans li+li{border-top:1px solid var(--c-line)}
-.cdcp .cq-sumrow{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:var(--s3);align-items:center;width:100%;min-height:56px;padding:var(--s2) var(--s3);text-align:left;cursor:pointer;
-  transition:background-color var(--dur-state) var(--ease)}
-.cdcp .cq-sr-q{grid-column:1;font-size:var(--t-s);opacity:.7}
-.cdcp .cq-sr-a{grid-column:1;font-size:var(--t-m);font-weight:600}
-.cdcp .cq-sr-e{grid-column:2;grid-row:1/3;font-size:var(--t-s);font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
-@media (hover:hover){.cdcp .cq-sumrow:hover{background:var(--c-tint)}}
-.cdcp .cq-ctl-in>.cq-sec{margin:0 0 var(--s2)}
-/* the stage swaps content: a short fade, no movement */
-.cdcp .cq-ctl-in .cq-fade{animation-duration:var(--dur-state)}
-.cdcp .cq-stg-f:has(.cq-next:disabled){display:none}
-
-/* ================= narrow, completed: the figure, then the one control that changes it =================
-   Once the assessment is complete the figure leads; the visit list (the lens on the estimate) sits right under it,
-   the ledger and next steps follow, and the answers (already stated in the sentence above) close the tool.
-   The figure pins to the top while the list is used. */
-@container (max-width:679px){
-  .cdcp[data-view="result"] .cq-ctl,.cdcp[data-view="result"] .cq-ctl-in{display:contents}
-  .cdcp[data-view="result"] .cq-status{order:1;padding-top:var(--s4)}
-  .cdcp[data-view="result"] .cq-sum{order:2;bottom:auto;top:var(--cdcp-sticky-top,0px);margin-top:var(--s3)}
-  .cdcp[data-view="result"] .cq-row-appt{order:3;padding:var(--s4);margin:0;background:var(--c-tint);border-top:1px solid var(--c-line);border-bottom:1px solid var(--c-line)}
-  .cdcp[data-view="result"] .cq-brk{order:4}
-  .cdcp[data-view="result"] .cq-det{order:5}
-  .cdcp[data-view="result"] .cq-rest{order:6}
-  .cdcp[data-view="result"] :is(.cq-ctl-in>.cq-sec,.cq-ctl-in>.cq-ans,.cq-ctl-in>.cq-clear,.cq-ctl-in>.cq-skip){order:7;margin-left:var(--s4);margin-right:var(--s4)}
-  .cdcp[data-view="result"] .cq-ctl-in>.cq-sec{margin-top:var(--s5)}
-  .cdcp .cq-status{min-height:0}
-}
-.cdcp[data-view="result"] .cq-trace{list-style:none}
-@container (min-width:680px){
-  .cdcp[data-view="result"] .cq-sum .cq-trace{display:none}
-  .cdcp[data-view="result"] .cq-sum:has(.cq-trace) .cq-sum-note{display:block}
-}
-.cdcp .cq-trace{list-style:none}
-@container (max-width:679px){
-  .cdcp[data-view="result"] .cq-row-appt>legend{float:left;width:100%;margin-bottom:var(--s3)}
-}
+/* ============ 8 host: sss.marketing demo wrappers (not needed on a clinic site) ============ */
+.quiz-wrap{max-width:920px}
+.quiz-demo-tag{display:inline-flex;margin-bottom:20px;font-family:var(--body);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);opacity:.7}
+.quiz-card{background:none;border:0;padding:0}

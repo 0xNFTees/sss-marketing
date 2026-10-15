@@ -76,3 +76,15 @@ The widget asks one question at a time in the left stage (insurance, income, tax
 ### Assessment, then estimate
 
 The stage asks only the questions that decide eligibility (private insurance, income, tax return; two or one when the answers end the assessment early). The visit type is not a question: once the assessment is complete the view becomes `result` and the visit list sits on the finished assessment as a lens on the estimate. Until a visit is chosen the figure is empty and says so; choosing one fills it without moving anything. On narrow screens the result view reads: status, figure (pinned to the top while the visit list is used), visit list, ledger, limits, next steps, then the answers. Set `--cdcp-sticky-top` to the height of any fixed header on the host page.
+
+## Design system and maintenance
+
+The rules live at the top of `cdcp-embed.css` (tokens, type roles, spacing scale, control sizes, the single focus ring, motion scale, money presentation, the three container breakpoints). The file is organised in layers: tokens, reset, narrow layout, text roles, components, responsive layout, states, motion, host wrappers. Add a rule to the layer it belongs to; do not append a new "pass".
+
+- **New colour or size:** add a token in layer 1 and use it. The test suite fails on colour literals or px font sizes outside the token layer.
+- **A control on a different surface:** set `--well` / `--sel` on the surface; the choice controls invert themselves.
+- **A new choice list:** reuse `.cq-opt` inside `.cq-seg` (2-up), `.cq-seg-4` or `.cq-visit` (list). Do not restyle options per page.
+- **A new text control:** list it in the "quiet text control" rule; it gets the underline, the hover and the focus ring for free.
+- **A figure:** tabular numerals, never wrapped; dollars large, cents/unit small (`--t-fig`, `--t-cents`).
+- Wide-layout overrides must sit in the responsive layout layer (after the components), or the base rule will win the cascade.
+- `tests/cdcp-calculator.test.py` section 10d enforces these rules (no duplicate selectors, three UI type sizes, 44px targets, selection ring, focus ring on every control, three breakpoints only).
