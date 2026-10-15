@@ -12,7 +12,9 @@ One widget: the patient answers four questions and gets eligibility and an estim
 <script>
   mountCdcpQuiz(document.getElementById("calculator"), "fr", {
     bookingUrl: "https://your-clinic.ca/rendez-vous",   // required for a real clinic
-    insurers: ["Sun Life", "Manuvie", "Croix Bleue"]    // optional; shown on the private-insurance result
+    insurers: ["Sun Life", "Manuvie", "Croix Bleue"],   // optional; shown on the private-insurance result
+    phone: "+1 514 555 0123",                          // optional; with email, adds "Appelez ou envoyez un courriel à notre réception"
+    email: "reception@your-clinic.ca"
   });
 </script>
 ```
@@ -20,7 +22,7 @@ One widget: the patient answers four questions and gets eligibility and an estim
 - `lang` is `"fr"` or `"en"`. Calling the function again on the same element (for example after a language switch) re-renders in place and keeps the patient's answers.
 - `bookingUrl` defaults to `/#contact`, which is only right on sss.marketing. The widget appends `branch`, `utm_source` and, where relevant, `suggestedDate`.
 - `province` defaults to `"QC"` and selects the fee data in `cdcp-estimator-data.js`. If that file is not loaded, the appointment question and cost estimate are left out and the tool becomes eligibility-only.
-- Without `insurers` and `demo`, the insurer list and the sss.marketing audit link are not shown. `demo: true` is used only on sss.marketing.
+- `phone` and/or `email` add a front-desk line under the answers ("Vous préférez aller droit au but? Appelez ou envoyez un courriel à notre réception."), linked with `tel:` / `mailto:`. Without them it is not shown. Without `insurers` and `demo`, the insurer list is not shown. `demo: true` is used only on sss.marketing and shows the front-desk line without links.
 - Fee figures live in `cdcp-estimator-data.js` and must be verified by the clinic before launch. If a fee needed for an appointment is missing from the data, the widget shows "estimate unavailable" for that appointment rather than a partial total.
 
 ## How it decides
