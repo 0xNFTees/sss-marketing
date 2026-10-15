@@ -33,7 +33,7 @@
     fr: {label:"Admissibilité et coût au RCSD",
       ins:"Assurance privée", insI:"Le RCSD s’adresse aux personnes sans assurance", yes:"Oui", no:"Non",
       inc:"Revenu familial net", incI:"Détermine la part couverte", incShort:["< 70 k","70–79 k","80–89 k","90 k +"], incPct:["100 %","60 %","40 %","0 %"],
-      filed:"Déclaration produite", filedI:"Requise pour demander", notYet:"Pas encore",
+      filed:"Déclaration produite", filedI:"Requise pour demander", notYet:"Non",
       appt:"Rendez-vous", apptI:"Détermine le tarif du guide", pick:"Choisir…",
       remain:"Il reste à indiquer :", pendH:"Répondez pour voir votre estimation.",
       share:"Votre part estimée", std:"Guide tarifaire ACDQ 2026", paid:"Versé par le RCSD", you:"Votre part", byAnswers:"selon vos réponses", grid:"{n} % de la grille du RCSD", noelig:"Non admissible",
@@ -227,20 +227,19 @@
       }
     }
     var shown=0,raf=0,bigEl=null;
-    function roll(to){
-      cancelAnimationFrame(raf);
-      if(true){bigEl.textContent=nf.format(to);shown=to;return;}
-      var from=shown,t0=performance.now();
-      (function f(t){var k=Math.min(1,(t-t0)/260),e=1-Math.pow(1-k,3);shown=from+(to-from)*e;bigEl.textContent=nf.format(shown);
-        if(k<1)raf=requestAnimationFrame(f);else{shown=to;bigEl.textContent=nf.format(to);}})(t0);
+    // dollars large, cents small and baseline-aligned (decimal separator and fraction only; the currency sign keeps its place)
+    function setBig(v){
+      var h="";nf.formatToParts(v).forEach(function(p){h+=(p.type==="decimal"||p.type==="fraction")?'<span class="cq-cents">'+esc(p.value)+"</span>":esc(p.value);});
+      bigEl.innerHTML=h;
     }
+    function roll(to){shown=to;setBig(to);}
     function renderSum(c,o){
       sSum.innerHTML="";
       sSum.hidden=false;
       var lbl=textNode("div","cq-lbl",U.share);sSum.appendChild(lbl);
       bigEl=node("div","cq-big");bigEl.setAttribute("aria-hidden","true");sSum.appendChild(bigEl);
       if(c&&!c.bad&&c.known){
-        roll(c.oop);
+        roll(c.oop);sSum.style.setProperty("--cov",(c.fee?Math.max(0,Math.min(100,c.cov/c.fee*100)):0)+"%");
         
       }else{
         bigEl.textContent="—";bigEl.classList.add("cq-big-empty");shown=0;
