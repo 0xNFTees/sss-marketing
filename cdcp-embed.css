@@ -443,3 +443,29 @@
 /* the stage swaps content: a short fade, no movement */
 .cdcp .cq-ctl-in .cq-fade{animation-duration:var(--dur-state)}
 .cdcp .cq-stg-f:has(.cq-next:disabled){display:none}
+
+/* ================= narrow, completed: the figure, then the one control that changes it =================
+   Once the assessment is complete the figure leads; the visit list (the lens on the estimate) sits right under it,
+   the ledger and next steps follow, and the answers (already stated in the sentence above) close the tool.
+   The figure pins to the top while the list is used. */
+@container (max-width:679px){
+  .cdcp[data-view="result"] .cq-ctl,.cdcp[data-view="result"] .cq-ctl-in{display:contents}
+  .cdcp[data-view="result"] .cq-status{order:1;padding-top:var(--s4)}
+  .cdcp[data-view="result"] .cq-sum{order:2;bottom:auto;top:var(--cdcp-sticky-top,0px);margin-top:var(--s3)}
+  .cdcp[data-view="result"] .cq-row-appt{order:3;padding:var(--s4);margin:0;background:var(--c-tint);border-top:1px solid var(--c-line);border-bottom:1px solid var(--c-line)}
+  .cdcp[data-view="result"] .cq-brk{order:4}
+  .cdcp[data-view="result"] .cq-det{order:5}
+  .cdcp[data-view="result"] .cq-rest{order:6}
+  .cdcp[data-view="result"] :is(.cq-ctl-in>.cq-sec,.cq-ctl-in>.cq-ans,.cq-ctl-in>.cq-clear,.cq-ctl-in>.cq-skip){order:7;margin-left:var(--s4);margin-right:var(--s4)}
+  .cdcp[data-view="result"] .cq-ctl-in>.cq-sec{margin-top:var(--s5)}
+  .cdcp .cq-status{min-height:0}
+}
+.cdcp[data-view="result"] .cq-trace{list-style:none}
+@container (min-width:680px){
+  .cdcp[data-view="result"] .cq-sum .cq-trace{display:none}
+  .cdcp[data-view="result"] .cq-sum:has(.cq-trace) .cq-sum-note{display:block}
+}
+.cdcp .cq-trace{list-style:none}
+@container (max-width:679px){
+  .cdcp[data-view="result"] .cq-row-appt>legend{float:left;width:100%;margin-bottom:var(--s3)}
+}

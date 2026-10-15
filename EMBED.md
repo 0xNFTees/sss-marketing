@@ -70,3 +70,7 @@ The widget asks one question at a time in the left stage (insurance, income, tax
 - `mountCdcpQuiz(...)` returns `{state, outcome, cost, view, set}`. `set({ins, inc, filed, appt})` sets several answers and re-renders (useful for deep links and tests); `view()` is the current question key or `null` for the summary.
 - `data-view` on the root is the current question key or `result`; `data-state` is the outcome.
 - `--cdcp-sticky-top` (default 16px): offset for the pinned answers column on wide layouts, set it to your fixed header height.
+
+### Assessment, then estimate
+
+The stage asks only the questions that decide eligibility (private insurance, income, tax return; two or one when the answers end the assessment early). The visit type is not a question: once the assessment is complete the view becomes `result` and the visit list sits on the finished assessment as a lens on the estimate. Until a visit is chosen the figure is empty and says so; choosing one fills it without moving anything. On narrow screens the result view reads: status, figure (pinned to the top while the visit list is used), visit list, ledger, limits, next steps, then the answers. Set `--cdcp-sticky-top` to the height of any fixed header on the host page.

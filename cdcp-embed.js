@@ -35,7 +35,7 @@
       inc:"Revenu familial net rajusté", incI:"Selon votre dernière déclaration d’impôts.", incShort:["< 70 k","70–79 k","80–89 k","90 k +"], incPct:["100 %","60 %","40 %","0 %"],
       filed:"Déclaration d’impôts produite", filedI:"Vous et votre conjoint(e), le cas échéant, pour l’année précédente.", notYet:"Pas encore",
       appt:"Type de rendez-vous", apptI:"", pick:"Choisir…",
-      remain:"Il reste à indiquer :", pendH:"Estimez votre part d’une visite.", pendS:"L’estimation tient compte du Régime canadien de soins dentaires (RCSD) et du guide tarifaire des dentistes du Québec (ACDQ).", prog:"Réponses : {n} sur {t}", estNote:"Estimation selon le guide tarifaire, pas une soumission.",
+      remain:"Il reste à indiquer :", pickVisit:"Choisissez un type de rendez-vous pour estimer votre part.", pendH:"Estimez votre part d’une visite.", pendS:"L’estimation tient compte du Régime canadien de soins dentaires (RCSD) et du guide tarifaire des dentistes du Québec (ACDQ).", prog:"Réponses : {n} sur {t}", estNote:"Estimation selon le guide tarifaire, pas une soumission.",
       share:"Votre part estimée", cost:"Coût du traitement", std:"Guide tarifaire 2026 des dentistes du Québec (ACDQ)", paid:"Versé par le RCSD", noCover:"Service non couvert par le RCSD", full:"Entièrement couvert au tarif du guide.", ifQualify:"Si votre admissibilité est confirmée.", you:"Votre part", byAnswers:"selon vos réponses", grid:"{n} % de la grille du Régime canadien de soins dentaires", noelig:"Non admissible",
       incl:"Inclus", nopick:"Choisissez un rendez-vous pour voir votre part.", unavailable:"Estimation indisponible pour ce rendez-vous. Communiquez avec la clinique.",
       tierUnconfirmed:"Palier RCSD : jusqu’à {n} %. Confirmez votre déclaration d’impôts.", whenIssued:"Montant estimé une fois la carte RCSD reçue.",
@@ -50,7 +50,7 @@
       inc:"Adjusted family net income", incI:"From your last tax return.", incShort:["< 70k","70–79k","80–89k","90k+"], incPct:["100%","60%","40%","0%"],
       filed:"Tax return filed", filedI:"You and your spouse or partner, if applicable, for the previous year.", notYet:"Not yet",
       appt:"Appointment type", apptI:"", pick:"Choose…",
-      remain:"Still to answer:", pendH:"Estimate your share of a visit.", pendS:"The estimate factors in the Canadian Dental Care Plan (CDCP) and the Quebec dentists' fee guide (ACDQ).", prog:"{n} of {t} answered", estNote:"Estimate from the fee guide, not a quote.",
+      remain:"Still to answer:", pickVisit:"Choose an appointment type to estimate your share.", pendH:"Estimate your share of a visit.", pendS:"The estimate factors in the Canadian Dental Care Plan (CDCP) and the Quebec dentists' fee guide (ACDQ).", prog:"{n} of {t} answered", estNote:"Estimate from the fee guide, not a quote.",
       share:"Your estimated share", cost:"Treatment cost", std:"Quebec dentists' 2026 fee guide (ACDQ)", paid:"Paid by CDCP", noCover:"Not a CDCP-covered service", full:"Fully covered at the guide price.", ifQualify:"If your eligibility is confirmed.", you:"Your share", byAnswers:"depends on your answers", grid:"{n}% of the Canadian Dental Care Plan fee schedule", noelig:"Not eligible",
       incl:"Includes", nopick:"Choose an appointment to see your share.", unavailable:"Estimate unavailable for this appointment. Please contact the clinic.",
       tierUnconfirmed:"CDCP tier: up to {n}%. Confirm your tax filing.", whenIssued:"Estimated amount once your CDCP card is issued.",
@@ -156,10 +156,10 @@
     root.addEventListener("pointerdown",function(){ptr=true;kbd=false;},true);
     root.addEventListener("keydown",function(){ptr=false;kbd=true;},true);
     var srS=node("div","cq-sr");srS.setAttribute("role","status");root.appendChild(srS);
-    function required(){var r=["ins"];if(A.ins==="no"){r.push("inc");if(A.inc!=="over90")r.push("filed");if(DATA)r.push("appt");}return r;}
+    function required(){var r=["ins"];if(A.ins==="no"){r.push("inc");if(A.inc!=="over90")r.push("filed");}return r;}   // the visit type is not a gate: it refines the estimate once the assessment is complete
     function autoStep(){var r=required();for(var i=0;i<r.length;i++)if(!A[r[i]])return r[i];return null;}
     function view(){return cur&&required().indexOf(cur)>=0?cur:autoStep();}
-    function totalQ(){return A.ins==="yes"?1:(A.inc==="over90"?(DATA?3:2):(DATA?4:3));}
+    function totalQ(){return A.ins==="yes"?1:(A.inc==="over90"?2:3);}
     function legend(fs,label,hint){fs.appendChild(node("legend",null,'<span>'+esc(label)+'</span>'+(hint?'<span class="cq-infl">'+esc(hint)+'</span>':'')));}
     function optionsFor(k){
       if(k==="ins")return {label:U.ins,hint:U.insI,items:[{v:"yes",t:U.yes,aria:L.step1.yes,html:"<span>"+esc(U.yes)+"</span>"},{v:"no",t:U.no,aria:L.step1.no,html:"<span>"+esc(U.no)+"</span>"}]};
@@ -289,7 +289,7 @@
       requestAnimationFrame(function(){
         var f=t.getBoundingClientRect(),b=sSum.getBoundingClientRect();
         if(f.bottom<=b.top||f.top>=b.bottom)return;
-        var d=f.bottom-b.top+12,sp=t.parentElement;
+        var top=getComputedStyle(sSum).bottom==="auto",d=top?-(b.bottom-f.top+12):f.bottom-b.top+12,sp=t.parentElement;
         while(sp&&sp!==document.body){var o=getComputedStyle(sp).overflowY;if((o==="auto"||o==="scroll")&&sp.scrollHeight>sp.clientHeight)break;sp=sp.parentElement;}
         if(sp&&sp!==document.body)sp.scrollTop+=d;else window.scrollBy(0,d);
       });
@@ -344,7 +344,7 @@
       }else{
         bigEl.textContent=ghost();bigEl.classList.add("cq-big-empty");shown=0;last.oop=null;
         var pr=progress();
-        sSum.appendChild(textNode("p","cq-sum-note",c&&c.bad?U.unavailable:(missing().length?U.prog.replace("{n}",pr.n).replace("{t}",pr.t)+". "+U.remain+" "+missing().join(", ")+".":U.nopick)));
+        sSum.appendChild(textNode("p","cq-sum-note",c&&c.bad?U.unavailable:(missing().length===1&&missing()[0]===U.appt&&A.ins==="no"&&A.inc&&(A.inc==="over90"||A.filed)?U.pickVisit:missing().length?U.prog.replace("{n}",pr.n).replace("{t}",pr.t)+". "+U.remain+" "+missing().join(", ")+".":U.nopick)));
         if(!(c&&c.bad))sSum.appendChild(traceList());
       }
     }

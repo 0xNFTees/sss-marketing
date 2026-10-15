@@ -160,10 +160,10 @@ with sync_playwright() as p:
     s0=snap(); ok("stage: starts on question 1, nothing preselected, one question shown, no dropdown",s0["view"]=="ins" and s0["checked"]=="" and s0["fs"]==1 and s0["sel"]==0 and not s0["clear"],str(s0))
     ans("ins","no");s1=snap(); ok("stage: a click answers and advances",s1["view"]=="inc" and s1["st"]=="pending" and s1["big"] is None,str(s1))
     ans("inc","band70");s2=snap(); ok("stage: income answered -> tax return asked, eligibility still to confirm",s2["view"]=="filed" and s2["st"]=="unconfirmed" and s2["big"] is None,str(s2))
-    ans("filed","yes");s3=snap(); ok("stage: tax return answered -> visit asked, still no figure",s3["view"]=="appt" and s3["st"]=="qualified" and s3["big"] is None,str(s3))
-    pg.click("#quiz .cq-back");pg.wait_for_timeout(200);s3b=snap(); ok("stage: Back returns to the previous question with its answer",s3b["view"]=="filed" and s3b["checked"]=="yes",str(s3b))
-    pg.click("#quiz .cq-next");pg.wait_for_timeout(200);ok("stage: Continue goes to the first unanswered question",snap()["view"]=="appt")
-    ans("appt","new");s4=snap(); ok("stage: all answered -> result with figure and editable answers",s4["view"]=="result" and s4["big"] is not None and s4["sum"].count("|")==2 and s4["sum"].startswith("ins=") and s4["checked"]=="new",str(s4))
+    ans("filed","yes");s3=snap(); ok("stage: assessment complete after three answers -> result, visit is an optional control, no figure yet",s3["view"]=="result" and s3["st"]=="qualified" and s3["big"] is None and s3["fs"]==1 and s3["checked"]=="",str(s3))
+    pg.locator('#quiz button[data-k="filed"]').first.click();pg.wait_for_timeout(200);pg.click("#quiz .cq-back");pg.wait_for_timeout(200);s3b=snap(); ok("stage: Back returns to the previous question with its answer",s3b["view"]=="inc" and s3b["checked"]=="band70",str(s3b))
+    pg.click("#quiz .cq-next");pg.wait_for_timeout(200);ok("stage: Continue with nothing left unanswered returns to the result",snap()["view"]=="result")
+    ans("appt","new");s4=snap(); ok("stage: visit chosen -> figure shown and editable answers",s4["view"]=="result" and s4["big"] is not None and s4["sum"].count("|")==2 and s4["sum"].startswith("ins=") and s4["checked"]=="new",str(s4))
     fig=s4["big"]
     ans("appt","recall");s5=snap(); ok("result: switching the visit changes the figure and nothing else",s5["view"]=="result" and s5["big"]!=fig and s5["sum"]==s4["sum"],str((s5,fig)))
     ans("appt","new")
@@ -186,9 +186,9 @@ with sync_playwright() as p:
     tr=lambda:pg.evaluate("[...document.querySelectorAll('#quiz .cq-tr')].map(x=>x.dataset.k+':'+x.dataset.done).join(',')")
     pill=lambda:pg.evaluate("document.querySelector('#quiz .cq-pill')?.textContent")
     ok("states: no answers -> every row to answer, own label",tr()=="ins:0,inc:0,filed:0,appt:0" and pill() in("Aucune réponse","No answers yet"),tr()+str(pill()))
-    ans("ins","no");ok("states: some answers -> row marked, still incomplete",tr().startswith("ins:1,inc:0") and pill() in("Incomplet","Incomplete"),tr()+str(pill()))
+    ans("ins","no");pg.locator("#quiz .cq-tr[data-k=ins]").click();pg.wait_for_timeout(200);ok("states: a trace row (while answering) jumps to its question",snap()["view"]=="ins");pg.locator("#quiz input[name$=ins][value=no]").click(force=True);pg.wait_for_timeout(300);ok("states: some answers -> row marked, still incomplete",tr().startswith("ins:1,inc:0") and pill() in("Incomplet","Incomplete"),tr()+str(pill()))
     ans("inc","over90");ok("states: 90k+ drops the tax-return row (not applicable), ineligible label",tr()=="ins:1,inc:1,appt:0" and pill() in("Non admissible","Not eligible"),tr()+str(pill()))
-    pg.locator("#quiz .cq-tr[data-k=ins]").click();pg.wait_for_timeout(200);ok("states: a result row jumps to its question",snap()["view"]=="ins")
+    pg.locator("#quiz button.cq-sumrow[data-k=ins]").click();pg.wait_for_timeout(200);ok("states: an answer row jumps to its question",snap()["view"]=="ins")
 
     # 11. shipped data sanity
     data=pg.evaluate("window.CDCP_PROVINCES.QC.procedures")
