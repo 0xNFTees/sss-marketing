@@ -45,7 +45,6 @@ export interface EmbeddableDentalCalculatorProps {
 
 /* ------------------------------------------------------------------------------------------------ helpers */
 const HEADER = { fr: "Calculateur dentaire", en: "Dental calculator" } as const;
-const lc = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
 const nb = (s: string) => s.replace(/(\d) (?=\d)/g, "$1 ").replace(/ (%|\$)/g, " $1");
 const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ink)]";
 
@@ -246,19 +245,13 @@ export function EmbeddableDentalCalculator({
   /* ----- copy for the current outcome ----- */
   const R = L.results;
   const tier = a.inc === "under70" ? "100" : a.inc === "band70" ? "60" : a.inc === "band80" ? "40" : null;
-  const because = (() => {
-    if (a.ins !== "no" || !a.inc) return null;
-    const B = U.bc, parts: string[] = [B.noIns, B.inc.replace("{r}", nb(lc(L.step2[a.inc])))];
-    if (a.inc !== "over90" && a.filed) parts.push(a.filed === "yes" ? B.fy : B.fn);
-    return B.based + (parts.length > 2 ? parts.slice(0, -1).join(", ") + B.and + parts[parts.length - 1] : parts.join(B.and)) + ".";
-  })();
   const head: { title: string; detail: string | null; tone: "good" | "bad" | "warn" | "neutral"; label: string } = (() => {
     switch (oc) {
       case "insurance": return { title: R.branchInsurance.headline, detail: R.branchInsurance.microCopy, tone: "good", label: U.st.insurance };
       case "income": return { title: R.branchIncome.headline, detail: R.branchIncome.microCopy, tone: "bad", label: U.st.income };
       case "tax": return { title: R.branchTaxFiling.headline, detail: R.branchTaxFiling.microCopy, tone: "warn", label: U.st.tax };
-      case "qualified": return { title: nb(R[`tier${tier}Badge` as "tier100Badge"]), detail: because, tone: "good", label: U.st.qualified };
-      case "unconfirmed": return { title: nb(U.tierUnconfirmed.replace("{n}", String(tier === "100" ? 100 : tier))), detail: because, tone: "warn", label: U.st.unconfirmed };
+      case "qualified": return { title: nb(R[`tier${tier}Badge` as "tier100Badge"]), detail: null, tone: "good", label: U.st.qualified };
+      case "unconfirmed": return { title: nb(U.tierUnconfirmed.replace("{n}", String(tier === "100" ? 100 : tier))), detail: null, tone: "warn", label: U.st.unconfirmed };
       default: return { title: U.pendH, detail: U.pendS, tone: "neutral", label: a.ins || a.inc || a.filed ? U.st.pending : U.st.none };
     }
   })();
@@ -382,7 +375,6 @@ export function EmbeddableDentalCalculator({
             <p ref={figRef} aria-hidden className={`mt-1 font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-5xl font-extrabold leading-none tracking-tight @2xl:text-6xl ${shown === null ? "opacity-25" : ""}`}>
               {shown === null ? <span>—<span className="ml-1 align-[.4em] text-[.42em]">$</span></span> : <Money value={shown} lang={lang} />}
             </p>
-            {est && !est.bad && est.known && <p className="mt-2 text-[13px] font-semibold">{U.pk[est.visit][0]} · {nb(L.step2[a.inc as IncomeKey])}</p>}
             {missingLine && <p className="mt-2 text-[13px] leading-snug opacity-85">{missingLine}</p>}
             {est && !est.bad && !est.known && null}
           </div>

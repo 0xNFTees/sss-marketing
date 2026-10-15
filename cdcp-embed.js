@@ -348,12 +348,11 @@
       sSum.innerHTML="";
       sSum.hidden=false;
       var lbl=node("div","cq-lbl"),pr0=progress(),pgH="";for(var q=0;q<pr0.t;q++)pgH+="<i"+(q<pr0.n?' class="on"':"")+"></i>";
-      lbl.appendChild(textNode("span",null,U.share));lbl.appendChild(node("span","cq-pg",pgH+"<b>"+esc(U.prog.replace("{n}",pr0.n).replace("{t}",pr0.t))+"</b>"));lbl.lastChild.setAttribute("aria-hidden","true");sSum.appendChild(lbl);
+      lbl.appendChild(textNode("span",null,U.share));if(pr0.n<pr0.t){lbl.appendChild(node("span","cq-pg",pgH+"<b>"+esc(U.prog.replace("{n}",pr0.n).replace("{t}",pr0.t))+"</b>"));lbl.lastChild.setAttribute("aria-hidden","true");}sSum.appendChild(lbl);
       bigEl=node("div","cq-big");bigEl.setAttribute("aria-hidden","true");sSum.appendChild(bigEl);
       if(c&&!c.bad&&c.known){
         roll(c.oop);root.style.setProperty("--cov",(c.fee?Math.max(0,Math.min(100,c.cov/c.fee*100)):0)+"%");
         if(last.oop!==null&&last.oop!==c.oop)bigEl.classList.add("cq-tick");last.oop=c.oop;
-        sSum.appendChild(textNode("p","cq-basis",U.pk[c.pk.id][0]+" \u00b7 "+nb(L.step2[A.inc])));
         var bar=node("div","cq-bar",'<i></i>');bar.setAttribute("aria-hidden","true");sSum.appendChild(bar);
       }else{
         bigEl.textContent=ghost();bigEl.classList.add("cq-big-empty");shown=0;last.oop=null;
@@ -361,11 +360,6 @@
         sSum.appendChild(textNode("p","cq-sum-note",c&&c.bad?U.unavailable:(missing().length===1&&missing()[0]===U.appt&&A.ins==="no"&&A.inc&&(A.inc==="over90"||A.filed)?U.pickVisit:missing().length?U.prog.replace("{n}",pr.n).replace("{t}",pr.t)+". "+U.remain+" "+missing().join(", ")+".":U.nopick)));
         if(!(c&&c.bad))sSum.appendChild(traceList());
       }
-    }
-    function because(){
-      if(A.ins!=="no"||!A.inc)return null;var B=U.bc,p=[B.noIns,B.inc.replace("{r}",nb(lcf(L.step2[A.inc])))];
-      if(A.inc!=="over90"&&A.filed)p.push(A.filed==="yes"?B.fy:B.fn);
-      return B.based+(p.length>2?p.slice(0,-1).join(", ")+B.and+p[p.length-1]:p.join(B.and))+".";
     }
     function secLabel(k){return textNode("p","cq-sec",U.sec[k]);}
     function renderCostDetail(t,c,o){
@@ -428,13 +422,13 @@
         var R=L.results.branchInsurance;kind="good";title=R.headline;
         sStatus.appendChild(statusBlock("good",R.headline,R.microCopy,"insurance"));
         sSum.innerHTML="";sSum.hidden=true;
-        sAct.appendChild(secLabel("next"));var row=ctaRow();row.appendChild(ctaLink(withBookingParams(BOOK,{branch:"insurance",utm_source:"cdcp-calculator"}),R.primaryCta));sAct.appendChild(row);
+        var row=ctaRow();row.appendChild(ctaLink(withBookingParams(BOOK,{branch:"insurance",utm_source:"cdcp-calculator"}),R.primaryCta));sAct.appendChild(row);
         insurersBlock(sRest,R);
       }else{
         if(oc==="income"){var R2=L.results.branchIncome;title=R2.headline;sStatus.appendChild(statusBlock("bad",R2.headline,R2.microCopy,"income"));}
         else if(oc==="tax"){var R3=L.results.branchTaxFiling;title=R3.headline;sStatus.appendChild(statusBlock("warn",R3.headline,R3.microCopy,"tax"));}
-        else if(oc==="qualified"){title=nb(L.results["tier"+tier+"Badge"]);sStatus.appendChild(statusBlock("good",title,because(),"qualified"));}
-        else{title=U.tierUnconfirmed.replace("{n}",Math.round(TIER_PCT[A.inc]*100));sStatus.appendChild(statusBlock("warn",nb(title),because(),"unconfirmed"));}
+        else if(oc==="qualified"){title=nb(L.results["tier"+tier+"Badge"]);sStatus.appendChild(statusBlock("good",title,"","qualified"));}
+        else{title=U.tierUnconfirmed.replace("{n}",Math.round(TIER_PCT[A.inc]*100));sStatus.appendChild(statusBlock("warn",nb(title),"","unconfirmed"));}
         if(DATA)renderSum(c,oc);else{sSum.innerHTML="";sSum.hidden=true;}
         if(DATA&&c&&!c.bad&&c.known){
           if(oc==="tax")sSum.appendChild(textNode("p","cq-sum-note",U.whenIssued));
@@ -444,20 +438,20 @@
         renderCostDetail(sDet,c,oc);
         // calls to action
         if(oc==="income"){
-          sAct.appendChild(secLabel("next"));var r4=ctaRow();r4.appendChild(ctaLink(withBookingParams(BOOK,{branch:"income",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sAct.appendChild(r4);
+          var r4=ctaRow();r4.appendChild(ctaLink(withBookingParams(BOOK,{branch:"income",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sAct.appendChild(r4);
         }else if(oc==="tax"){
-          sAct.appendChild(secLabel("next"));var R5=L.results.branchTaxFiling,r5=ctaRow();
+          var R5=L.results.branchTaxFiling,r5=ctaRow();
           r5.appendChild(ctaLink(L.craMyAccountUrl,R5.primaryCta,{external:true}));
           r5.appendChild(ctaLink(withBookingParams(BOOK,{branch:"tax-filing",utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(4)}),R5.secondaryCta,{variant:"secondary"}));
           sAct.appendChild(r5);
         }
         if(oc==="unconfirmed"){
-          sAct.appendChild(secLabel("next"));var ru=ctaRow();ru.appendChild(ctaLink(withBookingParams(BOOK,{branch:"unconfirmed",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sAct.appendChild(ru);
+          var ru=ctaRow();ru.appendChild(ctaLink(withBookingParams(BOOK,{branch:"unconfirmed",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sAct.appendChild(ru);
         }
         if(oc==="qualified"||oc==="unconfirmed"){
         }
         if(oc==="qualified"){
-          sAct.appendChild(secLabel("next"));var R6=L.results.branchQualified,steps=node("div","cq-steps");
+          var R6=L.results.branchQualified,steps=node("div","cq-steps");
           function strip(x){return x.replace(/^[^—-]*[—-]\s*/,"");}
           steps.appendChild(stepRow(1,strip(R6.step1Title),R6.step1Body,ctaLink(L.cdcpApplyUrl,R6.step1Cta,{external:true,variant:"secondary"}),L.stepLabel));
           steps.appendChild(stepRow(2,strip(R6.step2Title),R6.step2MicroCopy,ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:tier,utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(7)}),R6.step2Cta),L.stepLabel));

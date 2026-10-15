@@ -193,7 +193,7 @@
 .cdcp .cq-big-empty{display:none}
 .cdcp .cq-cents{font-size:var(--t-cents);letter-spacing:0;margin-left:.03em}
 .cdcp .cq-sum-note{flex-basis:100%;margin-top:var(--s1);opacity:.8}
-.cdcp .cq-basis,.cdcp .cq-bar,.cdcp .cq-trace,.cdcp .cq-pg{display:none}
+.cdcp .cq-bar,.cdcp .cq-trace,.cdcp .cq-pg{display:none}
 @container (min-width:680px){
   .cdcp .cq-lbl{display:flex;align-items:center;justify-content:space-between;width:100%}
   .cdcp .cq-lbl>span:first-child{display:inline-flex;align-items:center}
@@ -207,7 +207,6 @@
   .cdcp .cq-sum .cq-cents{margin-left:0}
   .cdcp .cq-sum :is(.cq-cur,.cq-sp){font-size:.42em;letter-spacing:0}
   .cdcp .cq-sum .cq-cur-lead{vertical-align:.95em;margin-right:.08em}
-  .cdcp .cq-sum .cq-basis{display:block;margin-top:var(--s3);font-size:var(--t-m);font-weight:600}
   .cdcp .cq-sum .cq-sum-note{flex-basis:auto;margin-top:var(--s2)}
   /* the split: green is what the plan pays, ink is what you pay */
   .cdcp .cq-sum .cq-bar{display:block;position:relative;height:10px;margin-top:var(--s3);background:var(--c-ink);border-radius:var(--c-r);overflow:clip}
@@ -329,7 +328,7 @@
   .cdcp .cq-grid{grid-template-columns:minmax(320px,380px) minmax(0,1fr);grid-template-rows:repeat(4,auto) 1fr auto}
   .cdcp .cq-ctl{grid-column:1;grid-row:1/-2;display:flex;flex-direction:column;--well:var(--c-paper);--sel:var(--c-tint);padding:var(--s5);border-bottom:0;border-right:1px solid var(--c-line);background:var(--c-tint)}
   .cdcp :is(.cq-status,.cq-sum,.cq-act,.cq-brk,.cq-det,.cq-rest){grid-column:2;padding-inline:var(--s5)}
-  .cdcp .cq-status{grid-row:1;min-height:10.5rem;padding-top:var(--s5);padding-bottom:var(--s2)}   /* a steady height keeps the figure in place as the state changes */
+  .cdcp .cq-status{grid-row:1;min-height:8rem;padding-top:var(--s5);padding-bottom:var(--s2)}   /* a steady height keeps the figure in place as the state changes */
   .cdcp .cq-sum,.cdcp.cq-ledger .cq-sum{grid-row:2;position:static;display:block;margin:0;padding-top:var(--s2);padding-bottom:var(--s4);border:0;background:none}
   .cdcp .cq-act{grid-row:3;padding-top:var(--s2);padding-bottom:var(--s3)}
   .cdcp .cq-brk{grid-row:4;padding-top:var(--s2)}
