@@ -13,7 +13,7 @@ with sync_playwright() as p:
       const el=document.createElement('div');document.body.appendChild(el);
       const m=window.mountCdcpQuiz(el,'fr',{});
       const bad=[];let n=0;
-      const ins=[null,'yes','no'],inc=[null,'under70','band70','band80','over90'],filed=[null,'yes','no'],appt=[null,'new','recall','emerg','filling','major'];
+      const ins=[null,'yes','no'],inc=[null,'under70','band70','band80','over90'],filed=[null,'yes','no'],appt=[null,'new','recall','emerg'];
       for(const i of ins)for(const c of inc)for(const f of filed)for(const a of appt){
         const A={ins:i,inc:c,filed:f,appt:a};m.set(A);n++;
         const v=m.cost(),e=E.estimate({...A},by);

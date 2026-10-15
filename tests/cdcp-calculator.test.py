@@ -13,7 +13,7 @@ from decimal import Decimal, ROUND_HALF_UP
 from playwright.sync_api import sync_playwright
 
 BASE = "http://localhost:8123"
-PK = {"new":["01103","02102","11112","12101"],"recall":["01202","11112"],"emerg":["01205","02102"],"filling":["23311"],"major":["51101"]}
+PK = {"new":["01103","02102","11112","12101"],"recall":["01202","11112"],"emerg":["01205","02102"]}
 TIER = {"under70":Decimal("1"),"band70":Decimal("0.6"),"band80":Decimal("0.4"),"over90":Decimal("0")}
 fails=[];n=0
 def ok(name,cond,detail=""):
@@ -31,6 +31,10 @@ def expected(proc, pkid, inc, ins="no"):
         if ins=="no" and p["isCoveredByCDCP"]:
             covd+=c2(min(d(p["cdcpGridFee2026"])*TIER[inc],d(p["acdqFee2026"])))
     return c2(fee),covd,c2(fee)-covd
+
+def mk1(over):
+    """one effective line: recall package with 01202 neutralised, `over` applied to 11112"""
+    return mk({"01202":{"acdqFee2026":0,"cdcpGridFee2026":0},"11112":over})
 
 def mk(codes_over=None, base=None):
     base=base or {}
@@ -79,20 +83,20 @@ with sync_playwright() as p:
             fee,cov,oop=expected(pm,pk,inc)
             ok(f"tier {pk}/{inc}",abs(d(r["fee"])-fee)<Decimal("0.001") and abs(d(r["cov"])-covd if False else d(r["cov"])-cov)<Decimal("0.001") and abs(d(r["oop"])-oop)<Decimal("0.001"),str((r,fee,cov,oop)))
     # 2. cap at ACDQ fee: grid above fee never pays more than the fee
-    r=run(pg,mk({"23311":{"acdqFee2026":50,"cdcpGridFee2026":100}}),{"ins":"no","inc":"under70","filed":"yes","appt":"filling"})["c"]
+    r=run(pg,mk1({"acdqFee2026":50,"cdcpGridFee2026":100}),{"ins":"no","inc":"under70","filed":"yes","appt":"recall"})["c"]
     ok("cap at ACDQ fee (100% tier)",r["cov"]==50 and r["oop"]==0,str(r))
-    r=run(pg,mk({"23311":{"acdqFee2026":50,"cdcpGridFee2026":100}}),{"ins":"no","inc":"band70","filed":"yes","appt":"filling"})["c"]
+    r=run(pg,mk1({"acdqFee2026":50,"cdcpGridFee2026":100}),{"ins":"no","inc":"band70","filed":"yes","appt":"recall"})["c"]
     ok("cap at ACDQ fee (60% of 100 = 60 > 50)",r["cov"]==50 and r["oop"]==0,str(r))
     # 3. zero values
-    z=mk({"23311":{"acdqFee2026":0,"cdcpGridFee2026":0}})
-    r=run(pg,z,{"ins":"no","inc":"under70","filed":"yes","appt":"filling"})
+    z=mk1({"acdqFee2026":0,"cdcpGridFee2026":0})
+    r=run(pg,z,{"ins":"no","inc":"under70","filed":"yes","appt":"recall"})
     ok("zero fee/zero grid",r["c"]["fee"]==0 and r["c"]["cov"]==0 and r["c"]["oop"]==0 and "NaN" not in r["text"],str(r))
-    r=run(pg,mk({"23311":{"cdcpGridFee2026":0}}),{"ins":"no","inc":"under70","filed":"yes","appt":"filling"})["c"]
+    r=run(pg,mk1({"cdcpGridFee2026":0}),{"ins":"no","inc":"under70","filed":"yes","appt":"recall"})["c"]
     ok("zero grid, positive fee: patient pays all",r["cov"]==0 and r["oop"]==100,str(r))
     # 4. rounding: line coverage rounded to the cent, never above the fee, patient share = fee - coverage
-    r=run(pg,mk({"23311":{"acdqFee2026":100,"cdcpGridFee2026":33.33}}),{"ins":"no","inc":"band70","filed":"yes","appt":"filling"})["c"]
+    r=run(pg,mk1({"acdqFee2026":100,"cdcpGridFee2026":33.33}),{"ins":"no","inc":"band70","filed":"yes","appt":"recall"})["c"]
     ok("rounding 33.33*0.6=19.998 -> 20.00",r["cov"]==20 and r["oop"]==80,str(r))
-    r=run(pg,mk({"23311":{"acdqFee2026":100,"cdcpGridFee2026":10.01}}),{"ins":"no","inc":"band80","filed":"yes","appt":"filling"})["c"]
+    r=run(pg,mk1({"acdqFee2026":100,"cdcpGridFee2026":10.01}),{"ins":"no","inc":"band80","filed":"yes","appt":"recall"})["c"]
     ok("rounding 10.01*0.4=4.004 -> 4.00",r["cov"]==4 and r["oop"]==96,str(r))
     # 5. non-covered / pre-auth / lab flags and multi-line totals
     r=run(pg,mk({"01103":{"isCoveredByCDCP":False},"02102":{"preAuthRequired":True},"11112":{"hasLabFee":True}}),{"ins":"no","inc":"under70","filed":"yes","appt":"new"})["c"]
@@ -107,34 +111,34 @@ with sync_playwright() as p:
     r=run(pg,mk(),{"ins":"no","inc":None,"appt":"new"})["c"]
     ok("tier unknown: no coverage claimed",r["known"] is False and r["cov"]==0 and r["fee"]==400,str(r))
     # 8b. presentation of the statement (labels, honest captions, notes)
-    ST={"ins":"no","inc":"under70","filed":"yes","appt":"filling"}
-    t=run_ui(pg,mk({"23311":{"acdqFee2026":50,"cdcpGridFee2026":100}}),ST)["text"]
+    ST={"ins":"no","inc":"under70","filed":"yes","appt":"recall"}
+    t=run_ui(pg,mk1({"acdqFee2026":50,"cdcpGridFee2026":100}),ST)["text"]
     ok("capped line: fully covered note",("Fully covered at the guide price" in t) and "$0.00" in t,t[:200])
-    t=run_ui(pg,mk({"23311":{"isCoveredByCDCP":False}}),ST)["text"]
+    t=run_ui(pg,mk1({"isCoveredByCDCP":False}),ST)["text"]
     ok("non-covered service: honest caption, no tier claim",("Not a CDCP-covered service" in t) and "100% of the CDCP fee schedule" not in t,t[:200])
-    t=run_ui(pg,mk({"23311":{"acdqFee2026":0,"cdcpGridFee2026":0}}),ST)["text"]
+    t=run_ui(pg,mk1({"acdqFee2026":0,"cdcpGridFee2026":0}),ST)["text"]
     ok("zero fee is not called non-covered",("Not a CDCP-covered service" not in t) and "Fully covered" not in t,t[:200])
     t=run_ui(pg,mk(),dict(ST,filed=None))["text"]
     ok("unconfirmed eligibility: conditional note",("If your eligibility is confirmed" in t),t[:200])
-    t=run_ui(pg,mk({"23311":{"acdqFee2026":12345.67,"cdcpGridFee2026":9000.5}}),dict(ST,inc="band70"))["text"]
+    t=run_ui(pg,mk1({"acdqFee2026":12345.67,"cdcpGridFee2026":9000.5}),dict(ST,inc="band70"))["text"]
     ok("large amounts keep separators and cents",("$12,345.67" in t) and ("$6,945" in t) and ("Treatment cost" in t),t[:240])
     t=run_ui(pg,mk(),dict(ST,inc="over90"))["text"]
-    ok("over 90k: not eligible caption, full cost",("Not eligible" in t) and ("$100.00" in t),t[:200])
+    ok("over 90k: not eligible caption, full cost",("Not eligible" in t) and ("$200.00" in t),t[:900])
     # 9. invalid fee data must never produce a number
     bad_vals=[("missing fee","__DEL__"),("null",None),("string","88"),("NaN",float("nan")),("negative",-5),("Infinity",float("inf"))]
     for field in ("acdqFee2026","cdcpGridFee2026"):
         for label,v in bad_vals:
-            procs=mk({"23311":{field:v}})
+            procs=mk1({field:v})
             if isinstance(v,float) and not math.isfinite(v):
                 js=f"""()=>{{const procs={json.dumps(mk())};
-                  const t=procs.find(p=>p.code==='23311');t['{field}']={ 'NaN' if v!=v else 'Infinity'};
+                  const t=procs.find(p=>p.code==='11112');t['{field}']={ 'NaN' if v!=v else 'Infinity'};
                   window.CDCP_PROVINCES={{QC:{{procedures:procs}}}};
                   const el=document.createElement('div');document.body.appendChild(el);
-                  const m=window.mountCdcpQuiz(el,'en',{{}});Object.assign(m.state,{{ins:'no',inc:'under70',filed:'yes',appt:'filling'}});
+                  const m=window.mountCdcpQuiz(el,'en',{{}});Object.assign(m.state,{{ins:'no',inc:'under70',filed:'yes',appt:'recall'}});
                   el.querySelectorAll('details').forEach(d=>d.open=true);return {{c:m.cost(),text:el.innerText}};}}"""
                 r=pg.evaluate(js)
             else:
-                r=run(pg,procs,{"ins":"no","inc":"under70","filed":"yes","appt":"filling"})
+                r=run(pg,procs,{"ins":"no","inc":"under70","filed":"yes","appt":"recall"})
             ok(f"invalid {field}={label} -> flagged, not computed",bool(r["c"] and r["c"].get("bad")),str(r["c"]))
     # 10. rendered text must never contain NaN / undefined / Infinity across the real UI states
     pg.goto(BASE+"/123/");pg.wait_for_timeout(300)
@@ -142,7 +146,7 @@ with sync_playwright() as p:
     for ins in ("yes","no"):
         for inc in ("under70","band70","band80","over90"):
             for fl in ("yes","no"):
-                for pk in ("new","recall","emerg","filling","major"):
+                for pk in ("new","recall","emerg"):
                     t=pg.evaluate(MOUNT,{"ins":ins,"inc":inc,"filed":fl,"appt":pk})
                     ok(f"no NaN text {ins}/{inc}/{fl}/{pk}",not any(w in t for w in("NaN","undefined","Infinity","null")),t[:120])
     # 10b. the stage: one question at a time, answers survive every route, reset is explicit
@@ -218,7 +222,7 @@ with sync_playwright() as p:
     ok("ds: only three breakpoints (container 339 / 679-680 / 900) and no viewport width queries",set(re.findall(r"@container \((?:min|max)-width:(\d+)px\)",css))<={"339","679","680","900"} and not re.findall(r"@media[^{]*(?:min|max)-width",css))
     # runtime: type scale, targets, selection and focus ring across states and container widths
     pg.evaluate("""()=>{const e=document.createElement('div');e.id='dsx';document.body.appendChild(e);}""")
-    DS_STATES=[{},{"ins":"no"},{"ins":"no","inc":"band70"},{"ins":"no","inc":"band70","filed":"yes"},{"ins":"no","inc":"band70","filed":"yes","appt":"major"},{"ins":"no","inc":"over90","appt":"new"},{"ins":"no","inc":"under70","filed":"no","appt":"filling"},{"ins":"yes"}]
+    DS_STATES=[{},{"ins":"no"},{"ins":"no","inc":"band70"},{"ins":"no","inc":"band70","filed":"yes"},{"ins":"no","inc":"band70","filed":"yes","appt":"emerg"},{"ins":"no","inc":"over90","appt":"new"},{"ins":"no","inc":"under70","filed":"no","appt":"recall"},{"ins":"yes"}]
     sizes=set();small=[];noring=[];nosel=[]
     for width in (360,1000):
         for st in DS_STATES:
@@ -234,7 +238,7 @@ with sync_playwright() as p:
     ok("ds: small text uses only the three UI sizes (12 / 13 / 14)",sizes<={12.0,13.0,14.0},str(sorted(sizes)))
     ok("ds: every button, summary and choice is at least 44px tall",not small,str(small[:5]))
     ok("ds: a selected choice always shows the selection ring",not nosel,str(nosel))
-    for st in ({"ins":"no","inc":"band70"},{"ins":"no","inc":"band70","filed":"yes","appt":"major"}):
+    for st in ({"ins":"no","inc":"band70"},{"ins":"no","inc":"band70","filed":"yes","appt":"emerg"}):
         pg.evaluate("""(st)=>{const e=document.getElementById('dsx');e.innerHTML='';e.style.width='1000px';const m=mountCdcpQuiz(e,'fr',{demo:true});m.set(st)}""",st)
         pg.evaluate("document.getElementById('dsx').scrollIntoView();document.activeElement&&document.activeElement.blur()")
         pg.keyboard.press("Tab")

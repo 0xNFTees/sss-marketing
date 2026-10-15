@@ -12,7 +12,7 @@
  */
 export type IncomeKey = "under70" | "band70" | "band80" | "over90";
 export type YesNo = "yes" | "no";
-export type VisitId = "new" | "recall" | "emerg" | "filling" | "major";
+export type VisitId = "new" | "recall" | "emerg";
 export type Step = "ins" | "inc" | "filed";
 
 export interface Answers { ins: YesNo | null; inc: IncomeKey | null; filed: YesNo | null; appt: VisitId | null }
@@ -33,8 +33,6 @@ export const VISITS: readonly { id: VisitId; items: readonly (readonly [string, 
   { id: "new", items: [["01103", 1], ["02102", 1], ["11112", 1], ["12101", 1]] },
   { id: "recall", items: [["01202", 1], ["11112", 1]] },
   { id: "emerg", items: [["01205", 1], ["02102", 1]] },
-  { id: "filling", items: [["23311", 1]] },
-  { id: "major", items: [["51101", 1]] },
 ];
 
 export type Outcome = "pending" | "insurance" | "income" | "tax" | "qualified" | "unconfirmed";

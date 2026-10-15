@@ -356,17 +356,7 @@ export const UI = {
     "Urgence, mal de dent",
     "Examen d’urgence, radiographie",
     "Un traitement immédiat (obturation, canal, extraction) s’ajoute au tarif."
-   ],
-   "filling": [
-    "Carie, obturation",
-    "Obturation en composite sur une molaire (1 surface)",
-    "L’examen n’est pas inclus."
-   ],
-   "major": [
-    "Prothèse complète",
-    "Prothèse complète standard, une arcade",
-    "Frais de laboratoire en sus."
-   ]
+      ]
   }
  },
  "en": {
@@ -467,17 +457,7 @@ export const UI = {
     "Emergency, toothache",
     "Emergency exam, X-ray",
     "Immediate treatment (filling, root canal, extraction) is extra."
-   ],
-   "filling": [
-    "Cavity, filling",
-    "Composite filling on a molar (1 surface)",
-    "The exam is not included."
-   ],
-   "major": [
-    "Complete denture",
-    "Standard complete denture, one arch",
-    "Lab fees billed extra."
-   ]
+      ]
   }
  }
 } as const;

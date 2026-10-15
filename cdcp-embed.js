@@ -44,8 +44,7 @@
       ramq:"Enfants de moins de 10 ans : la RAMQ couvre déjà les soins de base.",
       disc:"Estimation seulement. Chaque clinique fixe ses tarifs. Limites annuelles et frais de laboratoire non inclus.", matrix:"Soins couverts, autorisation et exclusions", insurers:"Assureurs acceptés par la clinique :",
       pk:{new:["Nouveau patient","Examen complet, 2 radiographies, nettoyage de 30 min, fluorure"],recall:["Rappel et nettoyage","Examen périodique, nettoyage de 30 min"],
-          emerg:["Urgence, mal de dent","Examen d’urgence, radiographie","Un traitement immédiat (obturation, canal, extraction) s’ajoute au tarif."],
-          filling:["Carie, obturation","Obturation en composite sur une molaire (1 surface)","L’examen n’est pas inclus."],major:["Prothèse complète","Prothèse complète standard, une arcade","Frais de laboratoire en sus."]}},
+          emerg:["Urgence, mal de dent","Examen d’urgence, radiographie","Un traitement immédiat (obturation, canal, extraction) s’ajoute au tarif."],}},
     en: {label:"CDCP eligibility and cost",
       clear:"Clear answers", todo:"To answer", edit:"Edit", yours:"Your answers", qn:"Question {n} of {t}", cont:"Continue",  sec:{calc:"How the estimate is built",limits:"Limits of the estimate",next:"Next step"}, bc:{based:"Based on your answers: ",and:" and ",noIns:"you have no private dental insurance",inc:"your adjusted family net income is {r}",fy:"your tax return is filed",fn:"your tax return is not filed yet"}, st:{none:"No answers yet",pending:"Incomplete",unconfirmed:"To confirm",qualified:"Eligible based on your answers",income:"Not eligible",tax:"Return required",insurance:"Private insurance"}, ins:"Private dental insurance", insI:"Through an employer, a private plan or a health spending account.", yes:"Yes", no:"No",
       inc:"Adjusted family net income", incI:"From your last tax return.", incShort:["< 70k","70–79k","80–89k","90k+"], incPct:["100%","60%","40%","0%"],
@@ -59,8 +58,7 @@
       ramq:"Children under 10: RAMQ already covers basic care.",
       disc:"Estimate only. Each clinic sets its own fees. Annual limits and lab fees not included.", matrix:"Covered care, authorization and exclusions", insurers:"Insurers accepted by the clinic:",
       pk:{new:["New patient","Complete exam, 2 X-rays, 30-minute cleaning, fluoride"],recall:["Recall and cleaning","Periodic exam, 30-minute cleaning"],
-          emerg:["Emergency, toothache","Emergency exam, X-ray","Immediate treatment (filling, root canal, extraction) is extra."],
-          filling:["Cavity, filling","Composite filling on a molar (1 surface)","The exam is not included."],major:["Complete denture","Standard complete denture, one arch","Lab fees billed extra."]}}
+          emerg:["Emergency, toothache","Emergency exam, X-ray","Immediate treatment (filling, root canal, extraction) is extra."],}}
   };
   var INCOME_KEYS = ["under70","band70","band80","over90"];
   var INCOME_TIER = {under70:"100",band70:"60",band80:"40"};
@@ -68,9 +66,7 @@
   var PK = [
     {id:"new",items:[["01103",1],["02102",1],["11112",1],["12101",1]]},
     {id:"recall",items:[["01202",1],["11112",1]]},
-    {id:"emerg",items:[["01205",1],["02102",1]]},
-    {id:"filling",items:[["23311",1]]},
-    {id:"major",items:[["51101",1]]}
+    {id:"emerg",items:[["01205",1],["02102",1]]}
   ];
   var REDUCE_MOTION = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   var uid = 0, SAVED = (typeof WeakMap==="function")?new WeakMap():null;
@@ -169,11 +165,17 @@
     function view(){return cur&&required().indexOf(cur)>=0?cur:autoStep();}
     function totalQ(){return A.ins==="yes"?1:(A.inc==="over90"?2:3);}
     function legend(fs,label,hint){fs.appendChild(node("legend",null,'<span>'+esc(label)+'</span>'+(hint?'<span class="cq-infl">'+esc(hint)+'</span>':'')));}
+    // what each visit would cost the patient under the answers given so far: the same cost() rules, shown only where the result view shows a personal figure
+    function share(id){
+      var oc=outcome();if(oc!=="qualified"&&oc!=="unconfirmed"&&oc!=="income"&&oc!=="tax")return "";
+      var c=cost(id);if(!c||c.bad)return "";
+      return nf.format(oc==="tax"?c.fee:c.oop);
+    }
     function optionsFor(k){
       if(k==="ins")return {label:U.ins,hint:U.insI,items:[{v:"yes",t:U.yes,aria:L.step1.yes,html:"<span>"+esc(U.yes)+"</span>"},{v:"no",t:U.no,aria:L.step1.no,html:"<span>"+esc(U.no)+"</span>"}]};
       if(k==="filed")return {label:U.filed,hint:U.filedI,items:[{v:"yes",t:U.yes,aria:L.step3.yes,html:"<span>"+esc(U.yes)+"</span>"},{v:"no",t:U.notYet,aria:L.step3.no,html:"<span>"+esc(U.notYet)+"</span>"}]};
       if(k==="inc")return {label:U.inc,hint:U.incI,items:INCOME_KEYS.map(function(x){return {v:x,t:L.step2[x],aria:L.step2[x],html:"<span>"+esc(nb(L.step2[x]))+"</span>"};})};
-      return {label:U.appt,hint:U.apptI,items:PK.map(function(p){return {v:p.id,t:U.pk[p.id][0],aria:U.pk[p.id][0]+". "+U.pk[p.id][1],html:"<span>"+esc(U.pk[p.id][0])+"</span><small>"+esc(U.pk[p.id][1])+"</small>"};})};
+      return {label:U.appt,hint:U.apptI,items:PK.map(function(p){var m=share(p.id);return {v:p.id,t:U.pk[p.id][0],aria:U.pk[p.id][0]+". "+U.pk[p.id][1]+(m?". "+U.share+" "+m:""),html:"<span>"+esc(U.pk[p.id][0])+"</span><small>"+esc(U.pk[p.id][1])+"</small>"+(m?'<em class="cq-opt-amt" aria-hidden="true">'+esc(m)+"</em>":"")};})};
     }
     function fieldset(k){
       var d=optionsFor(k),fs=node("fieldset","cq-row cq-row-"+k);fs.setAttribute("data-k",k);legend(fs,d.label,d.hint);
@@ -246,8 +248,8 @@
 
     /* ---- model ---- */
     function validFee(v){return typeof v==="number"&&isFinite(v)&&v>=0;}   // reject NaN, Infinity and negatives from bad data
-    function cost(){
-      var p=null;PK.forEach(function(x){if(x.id===A.appt)p=x;});
+    function cost(id){
+      var p=null;PK.forEach(function(x){if(x.id===(id||A.appt))p=x;});
       if(!p||!DATA)return null;
       var fee=0,cov=0,pre=false,lab=false,excl=false,known=(A.ins==="no"&&!!A.inc),tp=known?(TIER_PCT[A.inc]||0):null;
       for(var i=0;i<p.items.length;i++){
@@ -378,7 +380,7 @@
       var notes=[];
       var x=U.pk[c.pk.id][2];if(x)notes.push(["bad",x]);
       if(c.known&&c.pre&&c.cov)notes.push(["warn",U.pre]);
-      if(c.lab&&c.pk.id!=="major")notes.push(["bad",U.lab]);
+      if(c.lab)notes.push(["bad",U.lab]);
       if(c.excl)notes.push(["bad",U.excl]);
       notes.forEach(function(n){t.appendChild(textNode("p","cq-note cq-"+n[0]+"-t",n[1]));});
     }

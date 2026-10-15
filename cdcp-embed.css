@@ -148,6 +148,10 @@
 .cdcp :is(.cq-seg-4,.cq-visit) .cq-opt>small{line-height:1.4}
 .cdcp :is(.cq-seg-4,.cq-visit) .cq-opt::before{content:"";position:absolute;left:var(--s3);top:50%;width:var(--radio);height:var(--radio);margin-top:calc(var(--radio) / -2);
   border:1.5px solid var(--c-edge);border-radius:50%}
+/* visit types: roomier rows, the patient's share for that visit on the right so the three can be compared at a glance */
+.cdcp .cq-visit .cq-opt{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:var(--s3);align-items:center;min-height:76px;padding-block:var(--s3)}
+.cdcp .cq-visit .cq-opt>span,.cdcp .cq-visit .cq-opt>small{grid-column:1}
+.cdcp .cq-visit .cq-opt-amt{grid-column:2;grid-row:1 / span 2;font-style:normal;font-family:var(--c-display);font-size:var(--t-h);font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
 .cdcp :is(.cq-seg-4,.cq-visit) .cq-opt:has(input:checked){background:var(--sel)}
 .cdcp :is(.cq-seg-4,.cq-visit) .cq-opt:has(input:checked)::before{background:var(--c-ink);border-color:var(--c-ink);box-shadow:inset 0 0 0 3px var(--sel)}
 .cdcp[data-bad="1"] .cq-visit .cq-opt:has(input:checked){box-shadow:inset 0 0 0 2px var(--c-bad)}   /* invalid: no estimate can be produced for this choice */
