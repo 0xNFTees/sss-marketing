@@ -62,34 +62,37 @@ The widget checks your colours when it mounts: if button text on `--cdcp-brand`,
 
 - Every rule is scoped under `.cdcp`, with a zero-specificity reset for buttons, inputs, fieldsets, links, headings and lists, so site-wide element styles do not restyle the widget.
 - Widget class names are prefixed (`cq-`), so the host's own `.btn`, `.card` or `.matrix` rules do not apply.
-- Layout follows the width of the container, not the viewport: two columns from 680px, stacked below. It fits a 320px column without horizontal scroll. When stacked, the estimated-share bar stays pinned to the bottom of the viewport while the patient changes answers.
+- The widget is one card, 32rem wide at most and centred in its container; it fits a 320px column without horizontal scroll. There are no breakpoints: one screen is shown at a time.
 - Browser support: current evergreen browsers (uses `:has()`, container queries and `overflow: clip`). Older browsers get the stacked layout where container queries are missing. Sticky positioning does not work inside a host ancestor that has `overflow: hidden` or `auto`; use `overflow: clip` there.
 
-## Interaction model (stage, then result)
+## Interaction model (one frame, three phases)
 
-The widget asks one question at a time in the left stage (insurance, income, tax return, appointment type) while the statement on the right builds from the answers so far. A click answers and advances; keyboard arrows choose without advancing and **Continuer** moves on. **Retour** goes back. Once everything required is answered (or private insurance ends the calculation) the stage becomes **Vos réponses**: each answer has **Modifier**, and the appointment-type list stays in place so the patient can compare visit types. Changing an answer never clears the others; **Effacer les réponses** is the only reset.
+The card shows **one screen at a time**; each replaces the previous one inside the same frame, and nothing from an earlier step stays on screen.
 
-- `mountCdcpQuiz(...)` returns `{state, outcome, cost, view, set}`. `set({ins, inc, filed, appt})` sets several answers and re-renders (useful for deep links and tests); `view()` is the current question key or `null` for the summary.
-- `data-view` on the root is the current question key or `result`; `data-state` is the outcome.
-- `--cdcp-sticky-top` (default 16px): offset for the pinned answers column on wide layouts, set it to your fixed header height.
+1. **Setup:** one question per screen (private insurance, income, tax return; fewer when the answers end the assessment early) with **Retour** and progress ticks. A pointer click answers and advances; keyboard arrows choose without advancing and **Continuer** moves on.
+2. **Appointment:** the appointment-type cards, under a small answer chip (`Non-assuré • < 70 k • Impôts : oui  Modifier`; each segment jumps to its question). Choosing a card (pointer) reveals the result; with the keyboard an arrow only chooses and **Continuer** reveals it. Skipped when private insurance ends the calculation or when no fee data is loaded.
+3. **Result:** the card turns dark (the colour tokens are swapped on `[data-view="result"]`): status, large estimated share, covered/paid bar, `Coût du traitement | Versé par le RCSD`, one full-width primary action with a quiet text link for the second action, what is included, one **Avis de transparence tarifaire** drawer (which also holds the coverage matrix) and the front-desk card. **Retour** goes back to the appointment cards (the chosen one stays selected); **Effacer les réponses** is the only reset.
+
+Changing an answer never clears the others. Screen changes slide in (the result springs in) and the frame animates its height; both are off under `prefers-reduced-motion`.
+
+- `mountCdcpQuiz(...)` returns `{state, outcome, cost, view, set}`. `set({ins, inc, filed, appt})` sets several answers and re-renders without animation (deep links, tests); answers already held by the element are kept unless overwritten, so pass `appt: null` to land on the appointment screen. `view()` is the current question key or `null` once a question is not being asked.
+- `data-view` on the root is the current screen: a question key (`ins`, `inc`, `filed`), `appt` or `result`; `data-state` is the outcome.
 
 ### Assessment, then estimate
 
-The stage asks only the questions that decide eligibility (private insurance, income, tax return; two or one when the answers end the assessment early). The visit type is not a question: once the assessment is complete the view becomes `result` and the visit list sits on the finished assessment as a lens on the estimate. Three visit types are offered (new patient, recall and cleaning, toothache emergency), defined once in the `PK` list in `cdcp-embed.js` (and `VISITS` in the React port). No prices are shown in the list. Until a visit is chosen the figure is empty and says so; choosing one fills it without moving anything. On narrow screens the result view reads: status, figure (pinned to the top while the visit list is used), visit list, ledger, limits, next steps, then the answers. Set `--cdcp-sticky-top` to the height of any fixed header on the host page.
+Three visit types are offered (new patient, recall and cleaning, toothache emergency), defined once in the `PK` list in `cdcp-embed.js` (and `VISITS` in the React port). No prices are shown on the cards. The booking action appears only on the result screen, i.e. after an appointment type is chosen (except when private insurance applies or no fee data is loaded, where the result needs no appointment).
 
 ## Design system and maintenance
 
-The rules live at the top of `cdcp-embed.css` (tokens, type roles, spacing scale, control sizes, the single focus ring, motion scale, money presentation, the three container breakpoints). The file is organised in layers: tokens, reset, narrow layout, text roles, components, responsive layout, states, motion, host wrappers. Add a rule to the layer it belongs to; do not append a new "pass".
+The rules live at the top of `cdcp-embed.css` (tokens, type roles, spacing scale, control sizes, the single focus ring, motion scale, money presentation). The file is organised in layers: tokens, reset, layout, text roles, components, states, motion, host wrappers. Add a rule to the layer it belongs to; do not append a new "pass".
 
 - **New colour or size:** add a token in layer 1 and use it. The test suite fails on colour literals or px font sizes outside the token layer.
-- **A control on a different surface:** set `--well` / `--sel` on the surface; the choice controls invert themselves.
-- **A new choice list:** reuse `.cq-opt` inside `.cq-seg` (2-up), `.cq-seg-4` or `.cq-visit` (list). Do not restyle options per page.
+- **The dark result:** the result screen re-declares the colour tokens (`--c-paper`, `--c-ink`, `--c-brand`, `--c-line`, `--c-good`, `--c-bad`, `--c-warn`) in layer 1; components keep using the tokens and invert on their own. `--c-card` is the one surface that stays light on the dark result.
+- **A new choice list:** reuse `.cq-opt` inside `.cq-seg` or `.cq-visit` (a stack of cards). Do not restyle options per page.
 - **A new text control:** list it in the "quiet text control" rule; it gets the underline, the hover and the focus ring for free.
 - **A figure:** tabular numerals, never wrapped; dollars large, cents/unit small (`--t-fig`, `--t-cents`).
-- Wide-layout overrides must sit in the responsive layout layer (after the components), or the base rule will win the cascade.
-- `tests/cdcp-calculator.test.py` section 10d enforces these rules (no duplicate selectors, three UI type sizes, 44px targets, selection ring, focus ring on every control, three breakpoints only).
+- `tests/cdcp-calculator.test.py` section 10d enforces these rules (no duplicate selectors, three UI type sizes, 44px targets, selection ring, focus ring on every control, no breakpoints).
 
-## Result layout (actions first, fine print in drawers)
-- Order of the result: status, figure and split bar, **actions** (`.cq-act`: booking, CDCP application), ledger, plan-included/limit notes, then two drawers (`Avis de transparence tarifaire`, `Soins couverts, autorisation et exclusions`). On narrow screens the actions follow the figure, before the visit list.
-- `.cq-dock`: a sticky bottom bar with "Votre part estimée | Coût total | Réserver" that appears only after `.cq-act` scrolls out of view (IntersectionObserver). Shown for qualified, unconfirmed and income outcomes once a visit is chosen; hidden for insurance, tax and no visit.
-- Tests: section 10e of `tests/cdcp-calculator.test.py`.
+## Result layout
+- Order of the result: back, status, figure and covered/paid bar, the cost | paid split, **actions** (`.cq-act`: booking, CDCP application), what is included and limits, one fine-print drawer, the front-desk card.
+- Tests: sections 10b-10e of `tests/cdcp-calculator.test.py`.

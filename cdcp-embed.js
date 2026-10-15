@@ -32,7 +32,7 @@
        covered = isCoveredByCDCP ? min(cdcpGridFee * tier%, acdqFee) : 0     you pay = acdqFee - covered  */
   var T = {
     fr: {label:"Admissibilité et coût au RCSD",
-      clear:"Effacer les réponses", todo:"À indiquer", edit:"Modifier", yours:"Vos réponses", qn:"Question {n} sur {t}", cont:"Continuer",  sec:{calc:"Calcul de l’estimation",limits:"Limites de l’estimation",next:"Prochaine étape"}, bc:{based:"Selon vos réponses : ",and:" et ",noIns:"vous n’avez pas d’assurance dentaire privée",inc:"votre revenu familial net rajusté est de {r}",fy:"votre déclaration d’impôts est produite",fn:"votre déclaration d’impôts n’est pas encore produite"}, st:{none:"Aucune réponse",pending:"Incomplet",unconfirmed:"À confirmer",qualified:"Admissible selon vos réponses",income:"Non admissible",tax:"Déclaration requise",insurance:"Assurance privée"}, ins:"Assurance dentaire privée", insI:"Par un employeur, un régime privé ou un compte de gestion santé.", yes:"Oui", no:"Non",
+      clear:"Effacer les réponses", todo:"À indiquer", edit:"Modifier", yours:"Vos réponses", qn:"Question {n} sur {t}", cont:"Continuer",  sec:{calc:"Calcul de l’estimation",limits:"Limites de l’estimation",next:"Prochaine étape"}, bc:{based:"Selon vos réponses : ",and:" et ",noIns:"vous n’avez pas d’assurance dentaire privée",inc:"votre revenu familial net rajusté est de {r}",fy:"votre déclaration d’impôts est produite",fn:"votre déclaration d’impôts n’est pas encore produite"}, st:{none:"Aucune réponse",pending:"Incomplet",unconfirmed:"À confirmer",qualified:"Admissible selon vos réponses",income:"Non admissible",tax:"Déclaration requise",insurance:"Assurance privée"}, ins:"Assurance dentaire privée", insI:"Par un employeur, un régime privé ou un compte de gestion santé.", yes:"Oui", no:"Non", chipIns:{yes:"Assuré",no:"Non-assuré"}, applyLink:"Étape 1 : faire la demande RCSD (Santé Canada)", chipFiled:{yes:"Impôts : oui",no:"Impôts : pas encore"},
       inc:"Revenu familial net rajusté", incI:"Selon votre dernière déclaration d’impôts.", incShort:["< 70 k","70–79 k","80–89 k","90 k +"], incPct:["100 %","60 %","40 %","0 %"],
       filed:"Déclaration d’impôts produite", filedI:"Vous et votre conjoint(e), le cas échéant, pour l’année précédente.", notYet:"Pas encore",
       appt:"Type de rendez-vous", apptI:"", pick:"Choisir…",
@@ -46,7 +46,7 @@
       pk:{new:["Nouveau patient","Examen complet, 2 radiographies, nettoyage de 30 min, fluorure"],recall:["Rappel et nettoyage","Examen périodique, nettoyage de 30 min"],
           emerg:["Urgence, mal de dent","Examen d’urgence, radiographie","Un traitement immédiat (obturation, canal, extraction) s’ajoute au tarif."],}},
     en: {label:"CDCP eligibility and cost",
-      clear:"Clear answers", todo:"To answer", edit:"Edit", yours:"Your answers", qn:"Question {n} of {t}", cont:"Continue",  sec:{calc:"How the estimate is built",limits:"Limits of the estimate",next:"Next step"}, bc:{based:"Based on your answers: ",and:" and ",noIns:"you have no private dental insurance",inc:"your adjusted family net income is {r}",fy:"your tax return is filed",fn:"your tax return is not filed yet"}, st:{none:"No answers yet",pending:"Incomplete",unconfirmed:"To confirm",qualified:"Eligible based on your answers",income:"Not eligible",tax:"Return required",insurance:"Private insurance"}, ins:"Private dental insurance", insI:"Through an employer, a private plan or a health spending account.", yes:"Yes", no:"No",
+      clear:"Clear answers", todo:"To answer", edit:"Edit", yours:"Your answers", qn:"Question {n} of {t}", cont:"Continue",  sec:{calc:"How the estimate is built",limits:"Limits of the estimate",next:"Next step"}, bc:{based:"Based on your answers: ",and:" and ",noIns:"you have no private dental insurance",inc:"your adjusted family net income is {r}",fy:"your tax return is filed",fn:"your tax return is not filed yet"}, st:{none:"No answers yet",pending:"Incomplete",unconfirmed:"To confirm",qualified:"Eligible based on your answers",income:"Not eligible",tax:"Return required",insurance:"Private insurance"}, ins:"Private dental insurance", insI:"Through an employer, a private plan or a health spending account.", yes:"Yes", no:"No", chipIns:{yes:"Insured",no:"Uninsured"}, applyLink:"Step 1: apply for CDCP (Health Canada)", chipFiled:{yes:"Taxes filed",no:"Taxes not filed yet"},
       inc:"Adjusted family net income", incI:"From your last tax return.", incShort:["< 70k","70–79k","80–89k","90k+"], incPct:["100%","60%","40%","0%"],
       filed:"Tax return filed", filedI:"You and your spouse or partner, if applicable, for the previous year.", notYet:"Not yet",
       appt:"Appointment type", apptI:"", pick:"Choose…",
@@ -134,8 +134,7 @@
     root.setAttribute("role","group");root.setAttribute("aria-label",U.label);
     var grid=node("div","cq-grid"),ctl=node("div","cq-ctl"),sStatus=node("div","cq-status"),sSum=node("div","cq-sum"),sAct=node("div","cq-act"),sBrk=node("div","cq-brk"),sDet=node("div","cq-det"),sRest=node("div","cq-rest"),cin=node("div","cq-ctl-in");ctl.appendChild(cin);
     var sr=node("div","cq-sr");sr.setAttribute("role","status");
-    var dock=node("div","cq-dock");dock.hidden=true;dock.setAttribute("role","region");
-    [ctl,sStatus,sSum,sAct,sBrk,sDet,sRest].forEach(function(n){grid.appendChild(n);});root.appendChild(grid);root.appendChild(dock);root.appendChild(sr);
+    [ctl,sStatus,sSum,sAct,sBrk,sDet,sRest].forEach(function(n){grid.appendChild(n);});root.appendChild(grid);root.appendChild(sr);
 
 
     /* Clinic theming guard: if a brand colour pair is unreadable, fall back to a readable one. */
@@ -156,7 +155,7 @@
     })();
 
     /* ---- answers: one stage that asks a question at a time, then becomes the summary ---- */
-    var ORDER=["ins","inc","filed","appt"],cur=null,shownKey=null,ptr=false,kbd=false,advT=0;
+    var ORDER=["ins","inc","filed","appt"],cur=null,shownKey=null,ptr=false,kbd=false,advT=0,hold=false,lastScr=null,lastRank=0;
     root.addEventListener("pointerdown",function(){ptr=true;kbd=false;},true);
     root.addEventListener("keydown",function(){ptr=false;kbd=true;},true);
     var srS=node("div","cq-sr");srS.setAttribute("role","status");root.appendChild(srS);
@@ -181,9 +180,14 @@
       });
       fs.appendChild(s);return fs;
     }
-    // an answer updates the statement at once; in the stage a pointer click then moves on, the keyboard stays until Continue
+    // an answer updates the statement at once; a pointer click then moves on, the keyboard stays until Continue
     function pick(k,v){
       A[k]=v;update();
+      if(k==="appt"&&shownKey==="appt"){            // the appointment screen: choosing one reveals the result
+        hold=!ptr;refreshNext();
+        if(ptr){clearTimeout(advT);advT=setTimeout(function(){hold=false;renderCtl(false);},140);}
+        return;
+      }
       if(shownKey===k){
         refreshNext();
         if(ptr){clearTimeout(advT);advT=setTimeout(function(){cur=null;renderCtl(false);},140);}
@@ -191,54 +195,88 @@
     }
     var nextBtn=null;
     function refreshNext(){if(nextBtn)nextBtn.disabled=!A[shownKey];}
-    function goStep(k,focus){cur=k;renderCtl(focus!==false);}
+    function goStep(k,focus){hold=false;cur=k;renderCtl(focus!==false);}
     var clearBtn=node("button","cq-clear",esc(U.clear));clearBtn.type="button";clearBtn.hidden=true;
     clearBtn.addEventListener("click",function(){
-      Object.keys(A).forEach(function(k){A[k]=null;});cur=null;
+      Object.keys(A).forEach(function(k){A[k]=null;});cur=null;hold=false;
       update();renderCtl("force");
     });
+    function needAppt(){return !!DATA&&A.ins==="no";}
+    // one screen at a time: a question, the appointment picker, then the result
+    function screen(){if(view()!==null)return "q";return needAppt()&&(!A.appt||hold)?"appt":"result";}
+    function chipText(k){return k==="ins"?U.chipIns[A.ins]:k==="inc"?U.incShort[INCOME_KEYS.indexOf(A.inc)]:U.chipFiled[A.filed];}
+    function chip(){
+      var w=node("div","cq-chip");w.setAttribute("role","group");w.setAttribute("aria-label",U.yours);
+      required().forEach(function(k){
+        if(!A[k])return;
+        var b=node("button","cq-sumrow");b.type="button";b.setAttribute("data-k",k);
+        b.setAttribute("aria-label",U.edit+" : "+optionsFor(k).label+", "+ansText(k));
+        b.innerHTML='<span class="cq-sr-a">'+esc(chipText(k))+"</span>";
+        b.addEventListener("click",function(){goStep(k,true);});w.appendChild(b);
+      });
+      var e=node("button","cq-sr-e",esc(U.edit));e.type="button";e.setAttribute("aria-label",U.edit);
+      e.addEventListener("click",function(){goStep(required()[0],true);});w.appendChild(e);
+      return w;
+    }
+    function backBar(onBack,extra){
+      var h=node("div","cq-stg-h"),bk=node("button","cq-back",'<span aria-hidden="true">←</span> '+esc(L.back));bk.type="button";bk.addEventListener("click",onBack);h.appendChild(bk);
+      if(extra)h.appendChild(extra);return h;
+    }
+    function contactCard(){
+      if(!(opts.demo||opts.phone||opts.email))return null;
+      // patient-facing: reach the clinic directly. Links only for contacts the host supplies.
+      var ph=opts.phone?String(opts.phone):"",em=opts.email?String(opts.email):"",hasC=ph||em,
+          IC_P='<svg class="cq-skip-i" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3.6 1.5h2l1 3-1.4 1a8 8 0 0 0 4.3 4.3l1-1.4 3 1v2a1.6 1.6 0 0 1-1.7 1.6A11.4 11.4 0 0 1 2 3.2 1.6 1.6 0 0 1 3.6 1.5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>',
+          IC_M='<svg class="cq-skip-i" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2 3.5h12v9H2zM2.3 4l5.7 4.6L13.7 4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>',
+          cA=hasC&&!ph?"":(ph?'<a class="cq-skip-l" href="tel:'+esc(ph.replace(/[^\d+]/g,""))+'">':'<span class="cq-skip-l">')+IC_P+esc(L.skipCall)+(ph?"</a>":"</span>"),
+          mA=hasC&&!em?"":(em?'<a class="cq-skip-l" href="mailto:'+esc(em)+'">':'<span class="cq-skip-l">')+IC_M+esc(hasC&&!ph?L.skipMail.charAt(0).toUpperCase()+L.skipMail.slice(1):L.skipMail)+(em?"</a>":"</span>");
+      return node("p","cq-skip",'<span class="cq-skip-q">'+esc(L.skipPrompt)+"</span> "+cA+(cA&&mA?esc(L.skipOr):"")+mA+esc(hasC&&!em?L.skipTailCall:L.skipTail));
+    }
+    function continueBar(onNext,enabled){
+      var ft=node("div","cq-stg-f");nextBtn=node("button","cq-next",esc(U.cont)+' <span aria-hidden="true">→</span>');nextBtn.type="button";nextBtn.disabled=!enabled;
+      nextBtn.addEventListener("click",onNext);ft.appendChild(nextBtn);return ft;
+    }
     function renderCtl(focus){
-      clearTimeout(advT);cin.innerHTML="";
-      var v=view(),first;shownKey=v;nextBtn=null;
-      if(v!==null){
-        var r=required(),n=r.indexOf(v)+1,t=totalQ(),h=node("div","cq-stg-h"),ticks="";
+      clearTimeout(advT);var h0=root.offsetHeight;cin.innerHTML="";
+      var sc=screen(),v=view(),r=required(),first=null;shownKey=null;nextBtn=null;
+      if(sc==="q"){
+        shownKey=v;
+        var n=r.indexOf(v)+1,t=totalQ(),ticks="";
         for(var q=1;q<=t;q++)ticks+='<i'+(q<n?' class="on"':q===n?' class="cur"':"")+"></i>";
+        var dots=node("span","cq-stg-n","<b>"+esc(U.qn.replace("{n}",n).replace("{t}",t))+'</b><span class="cq-ticks" aria-hidden="true">'+ticks+"</span>");
+        var h=node("div","cq-stg-h");
         if(n>1){var bk=node("button","cq-back",'<span aria-hidden="true">←</span> '+esc(L.back));bk.type="button";bk.addEventListener("click",function(){goStep(r[n-2],true);});h.appendChild(bk);}
-        h.appendChild(node("span","cq-stg-n","<b>"+esc(U.qn.replace("{n}",n).replace("{t}",t))+'</b><span class="cq-ticks" aria-hidden="true">'+ticks+"</span>"));
-        cin.appendChild(h);
+        h.appendChild(dots);cin.appendChild(h);
         first=fieldset(v);cin.appendChild(first);
-        var ft=node("div","cq-stg-f");nextBtn=node("button","cq-next",esc(U.cont)+' <span aria-hidden="true">→</span>');nextBtn.type="button";nextBtn.disabled=!A[v];
-        nextBtn.addEventListener("click",function(){cur=null;renderCtl(true);});ft.appendChild(nextBtn);cin.appendChild(ft);
+        cin.appendChild(continueBar(function(){cur=null;renderCtl(true);},!!A[v]));
         srS.textContent=U.qn.replace("{n}",n).replace("{t}",t)+" : "+optionsFor(v).label;
+      }else if(sc==="appt"){
+        shownKey="appt";
+        cin.appendChild(backBar(function(){goStep(r[r.length-1],true);}));
+        cin.appendChild(chip());
+        first=fieldset("appt");cin.appendChild(first);
+        cin.appendChild(continueBar(function(){hold=false;renderCtl(true);},!!A.appt));
+        srS.textContent=optionsFor("appt").label;
       }else{
-        cin.appendChild(textNode("p","cq-sec",U.yours));
-        var ul=node("ul","cq-ans");
-        ["ins","inc","filed"].forEach(function(k){
-          if(required().indexOf(k)<0||!A[k])return;
-          var li=node("li"),b=node("button","cq-sumrow");b.type="button";b.setAttribute("data-k",k);
-          b.setAttribute("aria-label",U.edit+" : "+optionsFor(k).label+", "+ansText(k));
-          b.innerHTML="<span class=\"cq-sr-q\">"+esc(U[k])+"</span><span class=\"cq-sr-a\">"+esc(ansText(k))+"</span><span class=\"cq-sr-e\" aria-hidden=\"true\">"+esc(U.edit)+"</span>";
-          b.addEventListener("click",function(){goStep(k,true);});li.appendChild(b);ul.appendChild(li);
-        });
-        cin.appendChild(ul);
-        if(A.ins==="no"&&DATA){first=fieldset("appt");cin.appendChild(first);}
+        cin.appendChild(backBar(function(){if(needAppt()){hold=true;renderCtl(true);}else goStep(r[r.length-1],true);}));
+        var cc=contactCard();if(cc)cin.appendChild(cc);
+        cin.appendChild(clearBtn);
         srS.textContent="";
       }
-      cin.appendChild(clearBtn);
-      if(opts.demo||opts.phone||opts.email){
-        // patient-facing: reach the clinic directly. Links only for contacts the host supplies.
-        var ph=opts.phone?String(opts.phone):"",em=opts.email?String(opts.email):"",hasC=ph||em,
-            IC_P='<svg class="cq-skip-i" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3.6 1.5h2l1 3-1.4 1a8 8 0 0 0 4.3 4.3l1-1.4 3 1v2a1.6 1.6 0 0 1-1.7 1.6A11.4 11.4 0 0 1 2 3.2 1.6 1.6 0 0 1 3.6 1.5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>',
-            IC_M='<svg class="cq-skip-i" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2 3.5h12v9H2zM2.3 4l5.7 4.6L13.7 4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>',
-            cA=hasC&&!ph?"":(ph?'<a class="cq-skip-l" href="tel:'+esc(ph.replace(/[^\d+]/g,""))+'">':'<span class="cq-skip-l">')+IC_P+esc(L.skipCall)+(ph?"</a>":"</span>"),
-            mA=hasC&&!em?"":(em?'<a class="cq-skip-l" href="mailto:'+esc(em)+'">':'<span class="cq-skip-l">')+IC_M+esc(hasC&&!ph?L.skipMail.charAt(0).toUpperCase()+L.skipMail.slice(1):L.skipMail)+(em?"</a>":"</span>");
-        cin.appendChild(node("p","cq-skip",'<span class="cq-skip-q">'+esc(L.skipPrompt)+"</span> "+cA+(cA&&mA?esc(L.skipOr):"")+mA+esc(hasC&&!em?L.skipTailCall:L.skipTail)));
-      }
+      if(sc!=="result")cin.appendChild(node("span","cq-end"));
       clearBtn.hidden=!(A.ins||A.inc||A.filed||A.appt);
-      root.setAttribute("data-view",v===null?"result":v);
-      if(!(first&&first.classList.contains("cq-fade")))fade(cin.firstChild);
-      if(focus&&(kbd||focus==="force")){var f=cin.querySelector("input:checked")||cin.querySelector("input,button.cq-sumrow");if(f)f.focus();}
+      root.setAttribute("data-view",sc==="q"?v:sc);
+      // screen change: the frame resizes to its new content and the new screen slides (or, for the result, springs) in
+      var rank=sc==="q"?r.indexOf(v):sc==="appt"?3:4,key=sc+(v||"");
+      if(lastScr!==null&&lastScr!==key){
+        var h1=root.offsetHeight;
+        if(!REDUCE_MOTION&&h0&&h1!==h0&&root.animate)root.animate([{height:h0+"px"},{height:h1+"px"}],{duration:300,easing:"cubic-bezier(.2,.7,.2,1)"});
+        enter(sc==="result"?"cq-reveal":rank>=lastRank?"cq-in-f":"cq-in-b");
+      }
+      lastScr=key;lastRank=rank;
+      if(focus&&(kbd||focus==="force")){var f=cin.querySelector("input:checked")||cin.querySelector("input,button.cq-sumrow,button.cq-back");if(f)f.focus();}
     }
+    function enter(c){grid.classList.remove("cq-in-f","cq-in-b","cq-reveal");void grid.offsetWidth;grid.classList.add(c);}
 
     /* ---- model ---- */
     function validFee(v){return typeof v==="number"&&isFinite(v)&&v>=0;}   // reject NaN, Infinity and negatives from bad data
@@ -290,22 +328,6 @@
       }
     }
     var shown=0,raf=0,bigEl=null,last={oop:null,fee:null,cov:null,title:null,led:false,oc:null};
-    // the narrow-layout result bar is pinned over the content: tell the browser how tall it is so a focused control is scrolled clear of it
-    function syncBar(){root.style.setProperty("--bar-h",(sSum.hidden?0:sSum.offsetHeight)+"px");}
-    if(typeof ResizeObserver==="function")new ResizeObserver(syncBar).observe(sSum);
-    // browsers do not scroll a focused control that is already on screen but under the pinned bar; nudge it clear (keyboard focus must stay visible)
-    root.addEventListener("focusin",function(e){
-      var t=e.target;if(!t||sSum.hidden||getComputedStyle(sSum).position!=="sticky"||sSum.contains(t))return;
-      requestAnimationFrame(function(){
-        var f=t.getBoundingClientRect(),b=sSum.getBoundingClientRect();
-        if(f.bottom<=b.top||f.top>=b.bottom)return;
-        var top=getComputedStyle(sSum).bottom==="auto",d=top?-(b.bottom-f.top+12):f.bottom-b.top+12,sp=t.parentElement;
-        while(sp&&sp!==document.body){var o=getComputedStyle(sp).overflowY;if((o==="auto"||o==="scroll")&&sp.scrollHeight>sp.clientHeight)break;sp=sp.parentElement;}
-        if(sp&&sp!==document.body)sp.scrollTop+=d;else window.scrollBy(0,d);
-      });
-    });
-    ctl.addEventListener("focusin",function(e){var r=e.target.closest&&e.target.closest(".cq-row");focusKey=null;if(r)focusKey=r.getAttribute("data-k");markFocus();});
-    ctl.addEventListener("focusout",function(){focusKey=null;markFocus();});
     function fade(el){el.classList.remove("cq-fade");void el.offsetWidth;el.classList.add("cq-fade");el.addEventListener("animationend",function f(){el.classList.remove("cq-fade");el.removeEventListener("animationend",f);});}
     // dollars large, cents small and baseline-aligned (decimal separator and fraction only; the currency sign keeps its place)
     function setBig(v){
@@ -314,11 +336,8 @@
       bigEl.innerHTML=h;
     }
     function roll(to){shown=to;setBig(to);}
-    function progress(){var req=["ins","inc"];if(A.inc!=="over90")req.push("filed");if(DATA)req.push("appt");var n=0;req.forEach(function(k){if(A[k])n++;});return {n:n,t:req.length};}
     // the empty figure keeps the shape of a real one (a dash where the dollars go), so the focal point never collapses
     function ghost(){var h="";nf.formatToParts(0).forEach(function(p){if(p.type==="integer")h+="\u2014";else if(p.type!=="decimal"&&p.type!=="fraction"&&p.type!=="group")h+=p.value;});return h;}
-    // the answers so far, mirroring the numbered questions beside them; each row jumps to its control
-    var focusKey=null;
     function ansText(k){
       var v=A[k];if(!v)return null;
       if(k==="ins")return v==="yes"?U.yes:U.no;
@@ -326,25 +345,10 @@
       if(k==="filed")return v==="yes"?U.yes:U.notYet;
       return U.pk[v][0];
     }
-    function markFocus(){var li=sSum.querySelectorAll(".cq-tr");for(var i=0;i<li.length;i++)li[i].classList.toggle("cq-on",li[i].getAttribute("data-k")===focusKey);}
-    function traceList(){
-      var ol=node("ol","cq-trace"),need=["ins","inc"];if(A.inc!=="over90")need.push("filed");if(DATA)need.push("appt");
-      need.forEach(function(k){
-        var t=ansText(k),li=node("li"),b=node("button","cq-tr");b.type="button";b.setAttribute("data-k",k);b.setAttribute("data-done",t?"1":"0");
-        b.appendChild(textNode("span","cq-tr-n",String(need.indexOf(k)+1)));
-        b.appendChild(textNode("span","cq-tr-q",U[k]));
-        b.appendChild(textNode("span","cq-tr-a",t||U.todo));
-        b.addEventListener("click",function(){kbd=true;goStep(k,true);});
-        if(last.ans&&last.ans[k]!==undefined&&last.ans[k]!==t)b.classList.add("cq-fade");
-        li.appendChild(b);ol.appendChild(li);
-      });
-      return ol;
-    }
     function renderSum(c,o){
       sSum.innerHTML="";
       sSum.hidden=false;
-      var lbl=node("div","cq-lbl"),pr0=progress(),pgH="";for(var q=0;q<pr0.t;q++)pgH+="<i"+(q<pr0.n?' class="on"':"")+"></i>";
-      lbl.appendChild(textNode("span",null,U.share));if(pr0.n<pr0.t){lbl.appendChild(node("span","cq-pg",pgH+"<b>"+esc(U.prog.replace("{n}",pr0.n).replace("{t}",pr0.t))+"</b>"));lbl.lastChild.setAttribute("aria-hidden","true");}sSum.appendChild(lbl);
+      var lbl=node("div","cq-lbl");lbl.appendChild(textNode("span",null,U.share));sSum.appendChild(lbl);
       bigEl=node("div","cq-big");bigEl.setAttribute("aria-hidden","true");sSum.appendChild(bigEl);
       if(c&&!c.bad&&c.known){
         roll(c.oop);root.style.setProperty("--cov",(c.fee?Math.max(0,Math.min(100,c.cov/c.fee*100)):0)+"%");
@@ -352,23 +356,20 @@
         var bar=node("div","cq-bar",'<i></i>');bar.setAttribute("aria-hidden","true");sSum.appendChild(bar);
       }else{
         bigEl.textContent=ghost();bigEl.classList.add("cq-big-empty");shown=0;last.oop=null;
-        var pr=progress();
-        sSum.appendChild(textNode("p","cq-sum-note",c&&c.bad?U.unavailable:(missing().length===1&&missing()[0]===U.appt&&A.ins==="no"&&A.inc&&(A.inc==="over90"||A.filed)?U.pickVisit:missing().length?U.prog.replace("{n}",pr.n).replace("{t}",pr.t)+". "+U.remain+" "+missing().join(", ")+".":U.nopick)));
-        if(!(c&&c.bad))sSum.appendChild(traceList());
+        sSum.appendChild(textNode("p","cq-sum-note",c&&c.bad?U.unavailable:(DATA&&!A.appt?U.pickVisit:U.nopick)));
       }
     }
     function secLabel(k){return textNode("p","cq-sec",U.sec[k]);}
     function renderCostDetail(t,c,o){
       if(!c||c.bad)return;
       var tf=last.fee!==null&&last.fee!==c.fee,tc=last.cov!==null&&last.cov!==c.cov;last.fee=c.fee;last.cov=c.known?c.cov:null;
-      var rowsH='<div><dt>'+esc(U.cost)+'<small class="cq-mute">'+esc(U.std)+'</small></dt><dd'+(tf?' class="cq-tick"':'')+'>'+esc(nf.format(c.fee))+'</dd></div>';
-      if(c.known){
-        var covers=c.tp&&(c.cov>0||!c.excl),tierTxt=covers?U.grid.replace("{n}",Math.round(c.tp*100)):(c.tp?U.noCover:U.noelig);
-        rowsH+='<div><dt><i class="cq-sw" aria-hidden="true"></i>'+esc(U.paid)+'<small class="'+(covers?"cq-good-t":"cq-bad-t")+'">'+esc(nb(tierTxt))+'</small></dt><dd class="'+(c.cov?"cq-good-t":"")+(tc?" cq-tick":"")+'">'+(c.cov?"− ":"")+esc(nf.format(c.cov))+'</dd></div>';
-      }else rowsH+='<div><dt>'+esc(U.paid)+'</dt><dd class="cq-dim">'+esc(U.byAnswers)+'</dd></div>';
-      // one line under the figure: the estimate caveat on the left, the way to open the arithmetic on the right
-      var calc=accordion(c.known?U.estNote:U.sec.calc,[node("dl","cq-dl",rowsH)],U.viewCalc);
-      calc.className+=" cq-calc";sBrk.appendChild(calc);
+      var covers=c.known&&c.tp&&(c.cov>0||!c.excl),tierTxt=covers?U.grid.replace("{n}",Math.round(c.tp*100)):(c.tp?U.noCover:U.noelig);
+      // the split is always visible: treatment cost | paid by the plan, then the caveat
+      var split=node("dl","cq-split");
+      split.appendChild(node("div",null,'<dt>'+esc(U.cost)+'</dt><dd'+(tf?' class="cq-tick"':'')+'>'+esc(nf.format(c.fee))+'</dd>'));
+      split.appendChild(node("div",null,'<dt>'+esc(U.paid)+'</dt><dd class="'+(c.cov?"cq-good-t":"cq-dim")+(tc?" cq-tick":"")+'">'+(c.known?(c.cov?"− ":"")+esc(nf.format(c.cov)):esc(U.byAnswers))+'</dd>'));
+      sBrk.appendChild(split);
+      sBrk.appendChild(textNode("p","cq-estnote",(c.known?nb(tierTxt)+" · ":"")+U.estNote));
       t.appendChild(secLabel("limits"));
       t.appendChild(node("p","cq-incl","<b>"+esc(U.incl)+"</b>"+(lang==="fr"?" : ":": ")+esc(U.pk[c.pk.id][1])));
       var notes=[];
@@ -377,26 +378,6 @@
       if(c.lab)notes.push(["bad",U.lab]);
       if(c.excl)notes.push(["bad",U.excl]);
       notes.forEach(function(n){t.appendChild(textNode("p","cq-note cq-"+n[0]+"-t",n[1]));});
-    }
-    /* sticky summary dock: the share, the total and the booking action stay in reach once the main actions scroll away */
-    var actSeen=false,dockOn=false;
-    function syncDock(){
-      var show=dockOn&&!actSeen;dock.hidden=!show;
-      root.style.setProperty("--dock-h",(show?dock.offsetHeight:0)+"px");
-    }
-    if(typeof IntersectionObserver==="function"){
-      new IntersectionObserver(function(es){actSeen=es[es.length-1].isIntersecting;syncDock();},{rootMargin:"0px 0px -72px 0px"}).observe(sAct);
-    }
-    function renderDock(oc,c,tier){
-      dock.innerHTML="";dockOn=false;
-      if(!(c&&!c.bad&&c.known&&c.fee>0&&(oc==="qualified"||oc==="unconfirmed"||oc==="income"))){syncDock();return;}
-      var cta=oc==="qualified"
-        ?ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:tier,utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(7)}),L.results.branchQualified.step2Cta)
-        :ctaLink(withBookingParams(BOOK,{branch:oc,utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta);
-      dock.setAttribute("aria-label",U.share+" / "+U.total);
-      dock.appendChild(node("div","cq-dock-fig","<span>"+esc(U.share)+"</span><b>"+esc(nf.format(c.oop))+"</b>"));
-      dock.appendChild(node("div","cq-dock-fig cq-dock-tot","<span>"+esc(U.total)+"</span><b>"+esc(nf.format(c.fee))+"</b>"));
-      dock.appendChild(cta);dockOn=true;syncDock();
     }
     var lastKey=null;
     function update(){
@@ -447,13 +428,11 @@
         if(oc==="qualified"||oc==="unconfirmed"){
         }
         if(oc==="qualified"){
-          var R6=L.results.branchQualified,steps=node("div","cq-steps");
-          function strip(x){return x.replace(/^[^—-]*[—-]\s*/,"");}
-          steps.appendChild(stepRow(1,strip(R6.step1Title),R6.step1Body,ctaLink(L.cdcpApplyUrl,R6.step1Cta,{external:true,variant:"secondary"}),L.stepLabel));
-          steps.appendChild(stepRow(2,strip(R6.step2Title),R6.step2MicroCopy,ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:tier,utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(7)}),R6.step2Cta),L.stepLabel));
-          sAct.appendChild(steps);
-          var help=node("p","cq-help");help.appendChild(document.createTextNode(strip(R6.step3Title)+" "));
-          var ha=node("a",null);ha.href=withBookingParams(BOOK,{branch:"qualified-help",utm_source:"cdcp-calculator"});ha.textContent=R6.step3Cta;help.appendChild(ha);sAct.appendChild(help);
+          var R6=L.results.branchQualified,r6=ctaRow();
+          r6.appendChild(ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:tier,utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(7)}),R6.step2Cta));
+          r6.appendChild(textNode("p","cq-cta-note",R6.step2MicroCopy));
+          r6.appendChild(ctaLink(L.cdcpApplyUrl,U.applyLink,{external:true,variant:"secondary"}));
+          sAct.appendChild(r6);
         }
         var fine=[],tn=[];
         if(oc==="qualified"||oc==="unconfirmed")fine.push(U.ramq);
@@ -461,16 +440,14 @@
         if(oc==="qualified")fine.push(L.results.sourceNote);
         if(oc==="qualified"||oc==="unconfirmed")tn.push(billingNotice(L.results.billingNoticeHeading,L.results.billingNoticeBody));
         if(fine.length)tn.push(textNode("p","cq-fine",fine.join(" ")));
+        if(oc==="qualified")tn.push(coverageMatrix(L.results.coverageMatrix,U.matrix));
         // fine print lives in two drawers: the notice about fees and billing, then what is covered
         if(tn.length)sRest.appendChild(accordion(L.results.billingNoticeHeading,tn));
-        if(oc==="qualified")sRest.appendChild(coverageMatrix(L.results.coverageMatrix,U.matrix));
       }
       // one concise announcement per change (the animated number is aria-hidden)
       if(!sBrk.childNodes.length){last.fee=null;last.cov=null;}
       if(c&&c.bad)root.setAttribute("data-bad","1");else root.removeAttribute("data-bad");
-      syncBar();renderDock(oc,c,tier);
-      last.ans={};ORDER.forEach(function(k){last.ans[k]=ansText(k);});markFocus();
-      var hasLed=sBrk.childNodes.length>0;
+            var hasLed=sBrk.childNodes.length>0;
       if(last.oc!==null&&last.oc!==oc){fade(sRest);if(sDet.childNodes.length)fade(sDet);}   // a different outcome: its next steps ease in
       if(hasLed&&!last.led){fade(sBrk);fade(sDet);}                                         // ledger appears once the appointment is chosen
       last.led=hasLed;last.oc=oc;
@@ -482,7 +459,7 @@
     }
     update();renderCtl(false);
     // programmatic use (tests, host pages): set several answers at once and re-render
-    function set(ans){Object.keys(ans||{}).forEach(function(k){if(k in A)A[k]=ans[k]||null;});cur=null;update();renderCtl(false);}
+    function set(ans){Object.keys(ans||{}).forEach(function(k){if(k in A)A[k]=ans[k]||null;});cur=null;hold=false;lastScr=null;update();renderCtl(false);}
     return {state:A,outcome:outcome,cost:cost,view:view,set:set};
   }
 

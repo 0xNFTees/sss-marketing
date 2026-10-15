@@ -149,66 +149,74 @@ with sync_playwright() as p:
                 for pk in ("new","recall","emerg"):
                     t=pg.evaluate(MOUNT,{"ins":ins,"inc":inc,"filed":fl,"appt":pk})
                     ok(f"no NaN text {ins}/{inc}/{fl}/{pk}",not any(w in t for w in("NaN","undefined","Infinity","null")),t[:120])
-    # 10b. the stage: one question at a time, answers survive every route, reset is explicit
+    # 10b. one screen at a time: question -> question -> question -> appointment -> result; answers survive every route
     pg.goto(BASE+"/123/");pg.wait_for_timeout(300);pg.click("#tryCard");pg.wait_for_timeout(300)
     def ans(k,v):
         if pg.locator(f'#quiz input[name$="{k}"]').count()==0:
-            pg.locator(f'#quiz button[data-k="{k}"]').first.click();pg.wait_for_timeout(120)
-        pg.locator(f'#quiz input[name$="{k}"][value="{v}"]').click(force=True);pg.wait_for_timeout(300)
+            if pg.locator('#quiz[data-view="result"]').count(): pg.click("#quiz .cq-back");pg.wait_for_timeout(450)
+            if pg.locator(f'#quiz input[name$="{k}"]').count()==0:
+                pg.locator(f'#quiz button.cq-sumrow[data-k="{k}"]').first.click();pg.wait_for_timeout(450)
+        pg.locator(f'#quiz input[name$="{k}"][value="{v}"]').click(force=True);pg.wait_for_timeout(450)
     def snap():
-        return pg.evaluate("""()=>{const r=document.querySelector('#quiz');
+        return pg.evaluate("""()=>{const r=document.querySelector('#quiz'),vis=s=>[...r.querySelectorAll(s)].filter(e=>e.getClientRects().length).length;
           return {view:r.dataset.view,st:r.dataset.state,fs:r.querySelectorAll('.cq-ctl .cq-row').length,sel:r.querySelectorAll('select').length,
             checked:[...r.querySelectorAll('.cq-ctl input:checked')].map(i=>i.value).join(','),
-            sum:[...r.querySelectorAll('.cq-sumrow')].map(b=>b.dataset.k+'='+b.querySelector('.cq-sr-a').textContent).join('|'),
-            big:(r.querySelector('.cq-big:not(.cq-big-empty)')||{}).textContent||null,clear:!r.querySelector('.cq-clear').hidden,
+            chip:[...r.querySelectorAll('.cq-sumrow')].map(b=>b.dataset.k).join(','),
+            big:(r.querySelector('.cq-big:not(.cq-big-empty)')||{}).textContent||null,clear:!!r.querySelector('.cq-clear')&&!r.querySelector('.cq-clear').hidden,
+            resultVisible:vis('.cq-status')+vis('.cq-sum')+vis('.cq-act')+vis('.cq-rest'),ctlVisible:vis('.cq-ctl .cq-row'),
             pill:(r.querySelector('.cq-pill')||{}).textContent}}""")
-    nbs=lambda x:(x or "").replace("\xa0","").replace(" ","")
-    s0=snap(); ok("stage: starts on question 1, nothing preselected, one question shown, no dropdown",s0["view"]=="ins" and s0["checked"]=="" and s0["fs"]==1 and s0["sel"]==0 and not s0["clear"],str(s0))
-    ans("ins","no");s1=snap(); ok("stage: a click answers and advances",s1["view"]=="inc" and s1["st"]=="pending" and s1["big"] is None,str(s1))
-    ans("inc","band70");s2=snap(); ok("stage: income answered -> tax return asked, eligibility still to confirm",s2["view"]=="filed" and s2["st"]=="unconfirmed" and s2["big"] is None,str(s2))
-    ans("filed","yes");s3=snap(); ok("stage: assessment complete after three answers -> result, visit is an optional control, no figure yet",s3["view"]=="result" and s3["st"]=="qualified" and s3["big"] is None and s3["fs"]==1 and s3["checked"]=="",str(s3))
-    pg.locator('#quiz button[data-k="filed"]').first.click();pg.wait_for_timeout(200);pg.click("#quiz .cq-back");pg.wait_for_timeout(200);s3b=snap(); ok("stage: Back returns to the previous question with its answer",s3b["view"]=="inc" and s3b["checked"]=="band70",str(s3b))
-    pg.click("#quiz .cq-next");pg.wait_for_timeout(200);ok("stage: Continue with nothing left unanswered returns to the result",snap()["view"]=="result")
-    ans("appt","new");s4=snap(); ok("stage: visit chosen -> figure shown and editable answers",s4["view"]=="result" and s4["big"] is not None and s4["sum"].count("|")==2 and s4["sum"].startswith("ins=") and s4["checked"]=="new",str(s4))
+    s0=snap(); ok("stage: starts on question 1, nothing preselected, one question shown, no dropdown, no result blocks on screen",s0["view"]=="ins" and s0["checked"]=="" and s0["fs"]==1 and s0["sel"]==0 and not s0["clear"] and s0["resultVisible"]==0,str(s0))
+    ans("ins","no");s1=snap(); ok("stage: a click answers and advances",s1["view"]=="inc" and s1["st"]=="pending" and s1["big"] is None and s1["resultVisible"]==0,str(s1))
+    ans("inc","band70");s2=snap(); ok("stage: income answered -> tax return asked, still no result on screen",s2["view"]=="filed" and s2["st"]=="unconfirmed" and s2["resultVisible"]==0,str(s2))
+    ans("filed","yes");s3=snap(); ok("stage: three answers -> the appointment picker (no figure, no booking action yet)",s3["view"]=="appt" and s3["st"]=="qualified" and s3["big"] is None and s3["fs"]==1 and s3["checked"]=="" and s3["chip"]=="ins,inc,filed" and s3["resultVisible"]==0,str(s3))
+    pg.click("#quiz .cq-back");pg.wait_for_timeout(250);s3b=snap(); ok("stage: Back returns to the previous question with its answer",s3b["view"]=="filed" and s3b["checked"]=="yes",str(s3b))
+    pg.click("#quiz .cq-back");pg.wait_for_timeout(250);ok("stage: Back again, one question at a time",snap()["view"]=="inc" and snap()["checked"]=="band70")
+    pg.click("#quiz .cq-next");pg.wait_for_timeout(250);ok("stage: Continue with nothing left unanswered returns to the appointment picker",snap()["view"]=="appt")
+    ans("appt","new");s4=snap(); ok("stage: visit chosen -> the whole card becomes the result (figure, no controls left)",s4["view"]=="result" and s4["big"] is not None and s4["ctlVisible"]==0 and s4["resultVisible"]>=4,str(s4))
     fig=s4["big"]
-    ans("appt","recall");s5=snap(); ok("result: switching the visit changes the figure and nothing else",s5["view"]=="result" and s5["big"]!=fig and s5["sum"]==s4["sum"],str((s5,fig)))
+    ans("appt","recall");s5=snap(); ok("result: Back, another visit -> a different figure",s5["view"]=="result" and s5["big"]!=fig,str((s5,fig)))
     ans("appt","new")
-    ans("inc","band80");s6=snap(); ok("edit: changing income returns straight to the result, other answers kept",s6["view"]=="result" and s6["big"]!=fig and s6["sum"].split("|")[0::2]==s4["sum"].split("|")[0::2] and s6["checked"]=="new",str(s6))
+    ans("inc","band80");s6=snap(); ok("edit: changing income from the chip returns straight to the result, appointment kept",s6["view"]=="result" and s6["big"]!=fig,str(s6))
     ans("inc","band70");ok("edit: restoring the answer restores the figure",snap()["big"]==fig)
     ans("ins","yes");s7=snap(); ok("branch: private insurance ends the calculation, answers kept behind it",s7["st"]=="insurance" and s7["view"]=="result",str(s7))
-    ans("ins","no");s8=snap(); ok("branch: undoing it restores the whole result",s8["view"]=="result" and s8["big"]==fig and s8["sum"]==s4["sum"],str(s8))
-    ans("inc","over90");s9=snap(); ok("branch: 90k+ is ineligible, tax-return row not applicable, full cost shown",s9["st"]=="income" and "filed" not in s9["sum"] and s9["big"] is not None and "Not eligible" in (s9["pill"] or "") or "Non admissible" in (s9["pill"] or ""),str(s9))
-    ans("inc","band70");ok("branch: leaving 90k+ brings the tax-return answer back",snap()["sum"]==s4["sum"] and snap()["big"]==fig)
-    # keyboard: arrows choose without jumping ahead; Continue moves on
-    pg.click("#quiz .cq-clear");pg.wait_for_timeout(200)
+    ans("ins","no");s8=snap(); ok("branch: undoing it restores the whole result",s8["view"]=="result" and s8["big"]==fig,str(s8))
+    ans("inc","over90");s9=snap(); ok("branch: 90k+ is ineligible, full cost shown",s9["st"]=="income" and s9["big"] is not None and ("Not eligible" in (s9["pill"] or "") or "Non admissible" in (s9["pill"] or "")),str(s9))
+    pg.click("#quiz .cq-back");pg.wait_for_timeout(250);ok("branch: with 90k+ the tax-return answer is not applicable (not in the chip)",snap()["chip"]=="ins,inc",snap()["chip"])
+    ans("inc","band70");ok("branch: leaving 90k+ brings the tax-return answer back and the figure",snap()["big"]==fig and snap()["st"]=="qualified")
+    pg.click("#quiz .cq-clear");pg.wait_for_timeout(250)
     s10=snap(); ok("reset: explicit, clears every answer, returns to question 1",s10["view"]=="ins" and s10["checked"]=="" and not s10["clear"] and pg.evaluate("document.activeElement.closest('.cq-ctl')!==null"),str(s10))
     pg.focus('#quiz input[name$="ins"][value="yes"]');pg.keyboard.press("ArrowRight");pg.wait_for_timeout(350)
     s11=snap(); ok("keyboard: arrow selects but does not advance",s11["view"]=="ins" and s11["checked"]=="no",str(s11))
-    pg.focus("#quiz .cq-next");pg.keyboard.press("Enter");pg.wait_for_timeout(200)
+    pg.focus("#quiz .cq-next");pg.keyboard.press("Enter");pg.wait_for_timeout(250)
     ok("keyboard: Continue advances and focus stays in the controls",snap()["view"]=="inc" and pg.evaluate("document.activeElement.closest('.cq-ctl')!==null"))
+    pg.evaluate("document.querySelector('#quiz').__m=0")
+    for k,v in (("inc","under70"),("filed","yes")):
+        pg.focus(f'#quiz input[name$="{k}"][value="{v}"]');pg.keyboard.press("Space");pg.wait_for_timeout(200);pg.focus("#quiz .cq-next");pg.keyboard.press("Enter");pg.wait_for_timeout(250)
+    pg.focus('#quiz input[name$="appt"][value="new"]');pg.keyboard.press("ArrowDown");pg.wait_for_timeout(350)
+    ok("keyboard: on the appointment picker an arrow chooses without revealing the result",snap()["view"]=="appt" and snap()["checked"]=="recall",str(snap()))
+    pg.focus("#quiz .cq-next");pg.keyboard.press("Enter");pg.wait_for_timeout(250)
+    ok("keyboard: Continue reveals the result",snap()["view"]=="result" and snap()["big"] is not None)
 
-    # 10c. result states mirror the answers: none -> some -> complete, without an unsupported figure
-    pg.click("#quiz .cq-clear");pg.wait_for_timeout(200)
-    tr=lambda:pg.evaluate("[...document.querySelectorAll('#quiz .cq-tr')].map(x=>x.dataset.k+':'+x.dataset.done).join(',')")
+    # 10c. status labels follow the answers, without an unsupported figure
+    pg.click("#quiz .cq-clear");pg.wait_for_timeout(250)
     pill=lambda:pg.evaluate("document.querySelector('#quiz .cq-pill')?.textContent")
-    ok("states: no answers -> every row to answer, own label",tr()=="ins:0,inc:0,filed:0,appt:0" and pill() in("Aucune réponse","No answers yet"),tr()+str(pill()))
-    ans("ins","no");pg.locator("#quiz .cq-tr[data-k=ins]").click();pg.wait_for_timeout(200);ok("states: a trace row (while answering) jumps to its question",snap()["view"]=="ins");pg.locator("#quiz input[name$=ins][value=no]").click(force=True);pg.wait_for_timeout(300);ok("states: some answers -> row marked, still incomplete",tr().startswith("ins:1,inc:0") and pill() in("Incomplet","Incomplete"),tr()+str(pill()))
-    ans("inc","over90");ok("states: 90k+ drops the tax-return row (not applicable), ineligible label",tr()=="ins:1,inc:1,appt:0" and pill() in("Non admissible","Not eligible"),tr()+str(pill()))
-    pg.locator("#quiz button.cq-sumrow[data-k=ins]").click();pg.wait_for_timeout(200);ok("states: an answer row jumps to its question",snap()["view"]=="ins")
+    ok("states: no answers -> own label",pill() in("Aucune réponse","No answers yet"),str(pill()))
+    ans("ins","no");ok("states: some answers -> incomplete",pill() in("Incomplet","Incomplete"),str(pill()))
+    ans("inc","over90");ok("states: 90k+ -> ineligible label",pill() in("Non admissible","Not eligible"),str(pill()))
+    ok("states: the appointment picker follows, chip lists only the applicable answers",snap()["view"]=="appt" and snap()["chip"]=="ins,inc",str(snap()))
+    pg.locator("#quiz button.cq-sumrow[data-k=ins]").click();pg.wait_for_timeout(250);ok("states: a chip segment jumps to its question",snap()["view"]=="ins")
 
     # 10d. design-system conformance: the rules written at the top of cdcp-embed.css, enforced
     import re
     css=open("cdcp-embed.css",encoding="utf-8").read()
     body=re.sub(r"/\*.*?\*/","",css,flags=re.S)
-    t0=body.index("/* ")if False else 0
     sec_tokens_end=body.index(".cdcp *,.cdcp *::before")          # everything before the reset is the token layer
     host_start=body.index(".quiz-wrap{")
     rules=body[sec_tokens_end:host_start]
     ok("ds: no colour literals outside the token layer (except #000 mixed into hover/press)",not re.findall(r"#[0-9a-fA-F]{3,8}\b(?<!#000)|rgba?\(",re.sub(r"color-mix\([^;]*#000\)","",rules)),str(re.findall(r"#[0-9a-fA-F]{3,8}\b|rgba?\(",rules))[:200])
     ok("ds: no px font sizes outside the token layer",not re.findall(r"font-size:\s*\d+px",rules),str(re.findall(r"font-size:\s*\d+px",rules)))
-    rm=rules[rules.index("@media (prefers-reduced-motion"):rules.index(".quiz-wrap") if False else len(rules)]
+    rm=rules[rules.index("@media (prefers-reduced-motion"):len(rules)]
     ok("ds: !important only in the reduced-motion switch",rules.count("!important")==rm.count("!important")>0)
-    # one definition per selector in the same (top-level) context
     depth=0;top=[];buf=""
     for ch in rules:
         if ch=="{":
@@ -219,8 +227,7 @@ with sync_playwright() as p:
         elif depth==0: buf+=ch
     dup=sorted({x for x in top if top.count(x)>1 and not x.startswith("@")})
     ok("ds: no top-level selector defined twice",not dup,str(dup))
-    ok("ds: only three breakpoints (container 339 / 679-680 / 900) and no viewport width queries",set(re.findall(r"@container \((?:min|max)-width:(\d+)px\)",css))<={"339","679","680","900"} and not re.findall(r"@media[^{]*(?:min|max)-width",css))
-    # runtime: type scale, targets, selection and focus ring across states and container widths
+    ok("ds: no viewport width queries; no layout breakpoints (one frame)",not re.findall(r"@media[^{]*(?:min|max)-width",css) and not re.findall(r"@container",css))
     pg.evaluate("""()=>{const e=document.createElement('div');e.id='dsx';document.body.appendChild(e);}""")
     DS_STATES=[{},{"ins":"no"},{"ins":"no","inc":"band70"},{"ins":"no","inc":"band70","filed":"yes"},{"ins":"no","inc":"band70","filed":"yes","appt":"emerg"},{"ins":"no","inc":"over90","appt":"new"},{"ins":"no","inc":"under70","filed":"no","appt":"recall"},{"ins":"yes"}]
     sizes=set();small=[];noring=[];nosel=[]
@@ -238,50 +245,47 @@ with sync_playwright() as p:
     ok("ds: small text uses only the three UI sizes (12 / 13 / 14)",sizes<={12.0,13.0,14.0},str(sorted(sizes)))
     ok("ds: every button, summary and choice is at least 44px tall",not small,str(small[:5]))
     ok("ds: a selected choice always shows the selection ring",not nosel,str(nosel))
-    for st in ({"ins":"no","inc":"band70"},{"ins":"no","inc":"band70","filed":"yes","appt":"emerg"}):
+    for st in ({"ins":"no","inc":"band70"},{"ins":"no","inc":"band70","filed":"yes"},{"ins":"no","inc":"band70","filed":"yes","appt":"emerg"}):
         pg.evaluate("""(st)=>{const e=document.getElementById('dsx');e.innerHTML='';e.style.width='1000px';const m=mountCdcpQuiz(e,'fr',{demo:true});m.set(st)}""",st)
         pg.evaluate("document.getElementById('dsx').scrollIntoView();document.activeElement&&document.activeElement.blur()")
         pg.keyboard.press("Tab")
         for _ in range(14):
             has=pg.evaluate("""()=>{const a=document.activeElement;if(!a||!a.closest||!a.closest('#dsx'))return null;
-              const hit=[a,a.closest('.cq-opt'),a.closest('.cq-seg')].filter(Boolean).some(x=>{const o=getComputedStyle(x);return o.outlineStyle!=='none'&&parseFloat(o.outlineWidth)>=2});
+              const hit=[a,a.closest('.cq-opt')].filter(Boolean).some(x=>{const o=getComputedStyle(x);return o.outlineStyle!=='none'&&parseFloat(o.outlineWidth)>=2});
               return [hit,a.tagName+'.'+a.className+(a.value?'='+a.value:'')]}""")
             if has and not has[0]: noring.append(has[1])
             pg.keyboard.press("Tab")
     ok("ds: every focusable control shows the focus ring",not noring,str(noring[:5]))
 
-    # 10e. result layout: actions above the fold, fine print in drawers, summary dock
+    # 10e. the result screen: one frame, actions above the fold, fine print in one drawer
     pg.set_viewport_size({"width":1280,"height":720})
-    pg.evaluate("""()=>{const s=document.createElement('div');s.style.height='1600px';document.body.appendChild(s)}""")
     MNT="""([w,st])=>{const e=document.getElementById('dsx');e.innerHTML='';e.style.width=w+'px';const m=mountCdcpQuiz(e,'fr',{demo:true});m.set(st);
       e.scrollIntoView({behavior:'instant'});return true}"""
     full={"ins":"no","inc":"under70","filed":"yes","appt":"new"}
-    pg.evaluate(MNT,[1000,full]);pg.wait_for_timeout(900)
-    r=pg.evaluate("""()=>{const e=document.getElementById('dsx'),a=e.querySelector('.cq-act'),t=e.getBoundingClientRect().top,bs=[...a.querySelectorAll('a.cq-cta-btn')],ab=bs[bs.length-1].getBoundingClientRect().bottom;
-      const dr=[...e.querySelectorAll('.cq-rest details.cq-matrix-all')].map(d=>[d.querySelector('summary').textContent.trim(),d.open]);
-      return {actBottom:ab-t,btns:[...a.querySelectorAll('a.cq-cta-btn')].length,dr,dockHidden:e.querySelector('.cq-dock').hidden,
-        noticeInDrawer:!!e.querySelector('.cq-rest details .cq-billing-notice'),noticeOutside:!!e.querySelector('.cq-det .cq-billing-notice')}}""")
-    ok("layout: wide, the booking actions end within the first 640px of the widget",r["actBottom"]<640,str(r["actBottom"]))
-    ok("layout: wide, both calls to action are in the actions block",r["btns"]==2,str(r["btns"]))
-    ok("layout: the two fine-print drawers exist and start closed",[d[0] for d in r["dr"]]==["Avis de transparence tarifaire","Soins couverts, autorisation et exclusions"] and not any(d[1] for d in r["dr"]),str(r["dr"]))
-    ok("layout: the billing notice lives in its drawer",r["noticeInDrawer"] and not r["noticeOutside"])
-    ok("dock: hidden while the actions are on screen",r["dockHidden"])
-    c=pg.evaluate("""()=>{const d=document.getElementById('dsx').querySelector('details.cq-calc');return {open:d.open,sum:d.querySelector('summary').innerText.replace(/\\s+/g,' '),body:d.textContent,sibling:!!document.getElementById('dsx').querySelector('.cq-estnote')}}""")
-    ok("layout: the arithmetic is one closed line under the figure (caveat + 'Voir le calcul'), with the ledger inside",not c["open"] and "pas une soumission" in c["sum"] and "Voir le calcul" in c["sum"] and "344,00" in c["body"] and "268,00" in c["body"] and not c["sibling"],str(c))
-    pg.evaluate("window.scrollBy({top:document.getElementById('dsx').querySelector('.cq-act').getBoundingClientRect().bottom+120,behavior:'instant'})");pg.wait_for_timeout(700)
-    d=pg.evaluate("""()=>{const k=document.getElementById('dsx').querySelector('.cq-dock'),r=k.getBoundingClientRect();
-      return {hidden:k.hidden,t:k.innerText.replace(/\\s+/g,' '),href:(k.querySelector('a')||{}).href||'',bottom:r.bottom,vh:innerHeight}}""")
-    ok("dock: shows once the actions scroll away",not d["hidden"],str(d))
-    ok("dock: carries the estimated share, the total and a booking link","76,00" in d["t"] and "344,00" in d["t"] and "branch=qualified" in d["href"],str(d))
-    ok("dock: sits at the bottom of the viewport",abs(d["bottom"]-d["vh"])<=1 or d["bottom"]<=d["vh"],str(d))
-    for st,nm in (({"ins":"yes"},"insurance"),({"ins":"no","inc":"under70","filed":"no","appt":"new"},"tax"),({"ins":"no","inc":"under70","filed":"yes"},"no visit")):
-        pg.evaluate(MNT,[1000,st]);pg.wait_for_timeout(300)
-        ok(f"dock: not offered for {nm}",pg.evaluate("document.getElementById('dsx').querySelector('.cq-dock').hidden"))
+    for w in (1000,390):
+        pg.set_viewport_size({"width":1280 if w==1000 else 390,"height":720 if w==1000 else 844})
+        pg.evaluate(MNT,[w,full]);pg.wait_for_timeout(900)
+        r=pg.evaluate("""()=>{const e=document.getElementById('dsx'),a=e.querySelector('.cq-act'),t=e.getBoundingClientRect(),bs=[...a.querySelectorAll('a.cq-cta-btn')],pb=e.querySelector('a.cq-cta-btn-primary').getBoundingClientRect();
+          const dr=[...e.querySelectorAll('.cq-rest > details')].map(d=>[d.querySelector('summary').textContent.trim(),d.open,!!d.querySelector('details.cq-matrix-all')]);
+          const y=s=>e.querySelector(s).getBoundingClientRect().top;
+          return {view:e.dataset.view,w:t.width,primaryW:pb.width,primaryBottom:pb.bottom-t.top,btns:bs.length,dr,split:e.querySelector('.cq-split').innerText.replace(/\\s+/g,' '),splitVisible:e.querySelector('.cq-split').getClientRects().length>0,
+            noticeInDrawer:!!e.querySelector('.cq-rest details .cq-billing-notice'),noticeOutside:!!e.querySelector('.cq-det .cq-billing-notice'),
+            order:[y('.cq-status'),y('.cq-sum'),y('.cq-brk'),y('.cq-act'),y('.cq-det'),y('.cq-rest')],controls:e.querySelectorAll('.cq-row').length,dark:getComputedStyle(e).backgroundColor}}""")
+        ok(f"result@{w}: the card is one column no wider than 32rem, controls gone",r["view"]=="result" and r["w"]<=512.5 and r["controls"]==0,str(r))
+        ok(f"result@{w}: the primary action is full width and within the first 900px",r["primaryW"]>r["w"]-64 and r["primaryBottom"]<900,str(r))
+        ok(f"result@{w}: the secondary action is a text link (two calls to action in all)",r["btns"]==2,str(r["btns"]))
+        ok(f"result@{w}: one fine-print drawer, closed, holding the coverage matrix",[d[0] for d in r["dr"]]==["Avis de transparence tarifaire"] and not r["dr"][0][1] and r["dr"][0][2],str(r["dr"]))
+        ok(f"result@{w}: the notice lives in the drawer",r["noticeInDrawer"] and not r["noticeOutside"])
+        ok(f"result@{w}: the split is visible: cost | paid by the plan","344,00" in r["split"] and "268,00" in r["split"] and r["splitVisible"],r["split"])
+        ok(f"result@{w}: reading order is state, figure, split, actions, inclusions, drawer",r["order"]==sorted(r["order"]),str(r["order"]))
+        ok(f"result@{w}: the card is on the dark surface",r["dark"] not in("rgb(255, 255, 255)","rgba(0, 0, 0, 0)"),r["dark"])
     pg.set_viewport_size({"width":390,"height":844})
-    pg.evaluate(MNT,[390,full]);pg.wait_for_timeout(400)
-    r=pg.evaluate("""()=>{const e=document.getElementById('dsx'),y=s=>e.querySelector(s).getBoundingClientRect().top;
-      return {act:y('.cq-act'),appt:y('.cq-row-appt'),brk:y('.cq-brk'),sum:y('.cq-sum')}}""")
-    ok("layout: narrow, the calculation line and the actions follow the figure, before the visit list",r["sum"]<r["brk"]<r["act"]<r["appt"],str(r))
+    pg.evaluate(MNT,[390,{"ins":"no","inc":"under70","filed":"yes","appt":None}]);pg.wait_for_timeout(500)
+    r=pg.evaluate("""()=>{const e=document.getElementById('dsx'),vis=s=>[...e.querySelectorAll(s)].some(x=>x.getClientRects().length);return {view:e.dataset.view,act:vis('.cq-act'),big:vis('.cq-big'),status:vis('.cq-status'),rows:e.querySelectorAll('.cq-row').length}}""")
+    ok("appointment screen: no figure, no booking action, no status block on screen; only the picker",r["view"]=="appt" and not r["act"] and not r["big"] and not r["status"] and r["rows"]==1,str(r))
+    for st,nm in (({"ins":"yes"},"insurance"),({"ins":"no","inc":"under70","filed":"no","appt":"new"},"tax")):
+        pg.evaluate(MNT,[390,st]);pg.wait_for_timeout(300)
+        ok(f"result: {nm} shows its own action on the result screen",pg.evaluate("document.getElementById('dsx').dataset.view")=="result" and pg.evaluate("[...document.getElementById('dsx').querySelectorAll('.cq-act a.cq-cta-btn')].length")>=1)
     pg.set_viewport_size({"width":1280,"height":720})
 
     # 11. shipped data sanity

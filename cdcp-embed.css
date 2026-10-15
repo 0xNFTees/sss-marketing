@@ -6,7 +6,7 @@
  * HOW THIS FILE IS ORGANISED (add to the right layer; do not append "passes" at the end)
  *   1 tokens        every colour, size, space, motion and ring decision lives here
  *   2 reset         the widget stands alone on any host page
- *   3 layout        narrow first; one wide layout from a 680px container; narrow "result" reorder
+ *   3 layout        one frame: a question, the appointment picker or the result is shown, never two
  *   4 text roles    label / caption / fine print / heading / link
  *   5 components    choice groups, buttons, status, figure, ledger, next steps, disclosures, stage
  *   6 states        one focus ring, one set of hover / press / disabled / invalid rules
@@ -30,13 +30,13 @@
  *              the patient's share is --c-ink; a figure that cannot be produced is shown as unavailable.
  *   Motion     --dur-press .1s / --dur-state .16s / --dur-value .26s, one --ease; surfaces ease, nothing moves
  *              sideways; reduced-motion removes all of it.
- *   Responsive container queries (the widget follows its column, not the viewport): <680 narrow, >=680 two
- *              columns, >=900 wider rail. Those are the only breakpoints.
+ *   Frame      one card, 32rem wide at most. A screen replaces the previous one inside it (question -> appointment ->
+ *              result); the result turns the card dark by swapping the colour tokens. No viewport breakpoints.
  *
  * Public theme tokens (set on the container, a parent, or :root; unset ones use the defaults on the right):
  *   --cdcp-brand #1c1812   --cdcp-on-brand #fff   --cdcp-ink #1c1812   --cdcp-paper #fff   --cdcp-tint #f3f1ea
  *   --cdcp-accent #b5835a  --cdcp-line #d8d4c8    --cdcp-good #2f6b35  --cdcp-bad #b3261e  --cdcp-warn #8a4f1c
- *   --cdcp-font inherit    --cdcp-display inherit --cdcp-radius 0      --cdcp-sticky-top (height of a fixed host header)
+ *   --cdcp-font inherit    --cdcp-display inherit --cdcp-radius 0   
  */
 
 /* ============ 1 tokens ============ */
@@ -48,12 +48,13 @@
   --c-tint:var(--cdcp-tint,#f3f1ea);--c-accent:var(--cdcp-accent,var(--est-accent,#b5835a));
   --c-line:var(--cdcp-line,var(--est-line,#d8d4c8));--c-good:var(--cdcp-good,#2f6b35);--c-bad:var(--cdcp-bad,#b3261e);--c-warn:var(--cdcp-warn,#8a4f1c);
   --c-edge:color-mix(in srgb,var(--c-ink) 48%,var(--c-paper));--c-hover:color-mix(in srgb,var(--c-ink) 7%,var(--c-tint));
+  --c-card:var(--cdcp-paper,var(--est-paper,#fff));--c-card-ink:var(--cdcp-ink,var(--est-ink,#1c1812));   /* a light card that stays light on the dark result */
   /* control wells: inverse of the surface they sit on (overridden where the surface is tint) */
   --well:var(--c-tint);--sel:var(--c-paper);
   /* type */
   --c-font:var(--cdcp-font,var(--est-font,inherit));--c-display:var(--cdcp-display,var(--est-display,inherit));
   --t-s:12px;--t-m:13px;--t-l:14px;--t-h:20px;--t-h2:18px;
-  --t-status:clamp(17px,4.4cqw,20px);--t-fig:30px;--t-cents:.55em;
+  --t-status:clamp(18px,5cqw,22px);--t-fig:clamp(52px,17cqw,68px);--t-cents:.42em;
   /* space, size, shape */
   --s0:2px;--s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;
   --h:44px;--h-row:56px;--mark:8px;--radio:14px;--c-r:var(--cdcp-radius,0px);
@@ -62,11 +63,20 @@
   /* motion */
   --dur-press:.1s;--dur-state:.16s;--dur-value:.26s;--ease:cubic-bezier(.2,.7,.2,1);
   --tr-surface:background-color var(--dur-state) var(--ease),border-color var(--dur-state) var(--ease),box-shadow var(--dur-state) var(--ease),opacity var(--dur-state) var(--ease);
-  transition:--cov .38s var(--ease);
-  display:block;box-sizing:border-box;width:100%;max-width:100%;min-width:0;container-type:inline-size;
+  transition:--cov .38s var(--ease),background-color .5s var(--ease),color .5s var(--ease),border-color .5s var(--ease);
+  display:block;box-sizing:border-box;width:100%;max-width:32rem;margin-inline:auto;min-width:0;container-type:inline-size;
   background:var(--c-paper);color:var(--c-ink);border:1px solid var(--c-line);border-radius:var(--c-r);overflow:clip;
   font-family:var(--c-font);font-size:var(--t-l);font-weight:400;font-style:normal;line-height:1.5;letter-spacing:normal;
   text-align:left;text-transform:none;text-indent:0;word-spacing:normal;-webkit-text-size-adjust:100%;
+}
+
+/* the result turns the card dark: the same components, read against the inverse surface */
+.cdcp[data-view="result"]{
+  --c-paper:var(--cdcp-ink,var(--est-ink,#1c1812));--c-ink:var(--cdcp-paper,var(--est-paper,#fff));
+  --c-brand:var(--cdcp-paper,var(--est-paper,#fff));--c-on:var(--cdcp-ink,var(--est-ink,#1c1812));
+  --c-line:color-mix(in srgb,var(--c-ink) 22%,transparent);--c-tint:color-mix(in srgb,var(--c-ink) 9%,var(--c-paper));
+  --c-edge:color-mix(in srgb,var(--c-ink) 55%,var(--c-paper));--c-hover:color-mix(in srgb,var(--c-ink) 14%,var(--c-paper));
+  --c-good:color-mix(in srgb,var(--cdcp-good,#2f6b35) 40%,#fff);--c-bad:#ffb4ab;--c-warn:#ffd8a8;
 }
 
 /* ============ 2 reset ============ */
@@ -85,92 +95,78 @@
 .cdcp .cq-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
 /* ============ 3 layout ============ */
-/* narrow (container < 680): controls, status, pinned figure, ledger, details, next steps */
+/* the frame shows one screen: the controls (a question or the appointment picker), or the result blocks */
 .cdcp .cq-grid{display:grid;grid-template-columns:minmax(0,1fr)}
-.cdcp .cq-ctl{padding:var(--s4);border-bottom:1px solid var(--c-line)}
+.cdcp .cq-ctl{padding:var(--s4) var(--s5) var(--s5)}
 .cdcp .cq-ctl-in{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s4)}
-.cdcp :is(.cq-status,.cq-sum,.cq-act,.cq-brk,.cq-det,.cq-rest){min-width:0;padding:0 var(--s4)}
-.cdcp .cq-status{padding-top:var(--s4)}
-.cdcp :is(.cq-brk,.cq-det){padding-top:var(--s1)}
-.cdcp .cq-rest{padding-top:var(--s3);padding-bottom:var(--s4)}
-.cdcp :is(.cq-act,.cq-brk,.cq-det):empty{display:none}
-.cdcp .cq-act{padding-top:var(--s1);padding-bottom:var(--s3)}
-.cdcp :is(.cq-rest,.cq-det,.cq-act)>:first-child{margin-top:0}
-.cdcp .cq-sum{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;column-gap:var(--s3);
-  position:sticky;bottom:0;z-index:1;margin:var(--s3) 0 0;padding-top:var(--s3);padding-bottom:var(--s3);border-bottom:1px solid var(--c-line);
-  background:var(--c-paper) linear-gradient(var(--c-line),var(--c-line)) 0 0/100% 3px no-repeat}
-.cdcp.cq-ledger .cq-sum{background-image:linear-gradient(90deg,var(--c-good) var(--cov,0%),var(--c-ink) var(--cov,0%))}
+.cdcp :is(.cq-status,.cq-sum,.cq-act,.cq-brk,.cq-det,.cq-rest){min-width:0;padding:0 var(--s5)}
+.cdcp:not([data-view="result"]) :is(.cq-status,.cq-sum,.cq-act,.cq-brk,.cq-det,.cq-rest){display:none}
+.cdcp :is(.cq-act,.cq-brk,.cq-det,.cq-rest):empty{display:none}
 .cdcp .cq-sum[hidden]{display:none}
-/* the pinned figure must never cover the control that has keyboard focus */
-@container (max-width:679px){.cdcp :is(input,a,button,summary){scroll-margin-bottom:calc(var(--bar-h,0px) + var(--s3))}}
-@media (max-height:500px){.cdcp .cq-sum{padding-top:var(--s2);padding-bottom:var(--s2)}.cdcp{--t-fig:24px}}
-@container (max-width:339px){.cdcp .cq-grid{--t-fig:26px}}
+.cdcp .cq-end{display:none}
+/* result: back, state, figure, split, actions, what is included, fine print, then the front desk */
+.cdcp[data-view="result"] :is(.cq-ctl,.cq-ctl-in){display:contents}
+.cdcp[data-view="result"] .cq-stg-h{order:0;margin:0;padding:var(--s2) var(--s4) 0}
+.cdcp[data-view="result"] .cq-status{order:1;padding-top:var(--s2)}
+.cdcp[data-view="result"] .cq-sum{order:2;padding-top:var(--s4)}
+.cdcp[data-view="result"] .cq-brk{order:3;padding-top:var(--s3)}
+.cdcp[data-view="result"] .cq-act{order:4;padding-top:var(--s4)}
+.cdcp[data-view="result"] .cq-det{order:5;padding-top:var(--s3)}
+.cdcp[data-view="result"] .cq-rest{order:6;padding-top:var(--s4)}
+.cdcp[data-view="result"] .cq-skip{order:7;margin:var(--s4) var(--s5) 0}
+.cdcp[data-view="result"] .cq-clear{order:8;margin:0 var(--s5) var(--s3);min-height:var(--h)}
+.cdcp[data-view="result"] .cq-grid{padding-bottom:var(--s2)}
 
 /* ============ 4 text roles ============ */
-.cdcp .cq-sec,.cdcp .cq-step-lbl{font-size:var(--t-s);font-weight:600;letter-spacing:.04em;opacity:.62}        /* section label: quiet */
-.cdcp .cq-sec{margin:0 0 var(--s2)}
-.cdcp :is(.cq-incl,.cq-note,.cq-billing-notice,.cq-insurer-note,.cq-sum-note,.cq-help){font-size:var(--t-m);line-height:1.5}   /* body */
+.cdcp .cq-sec{margin:0 0 var(--s2);font-size:var(--t-s);font-weight:600;letter-spacing:.04em;opacity:.62}        /* section label: quiet */
+.cdcp :is(.cq-incl,.cq-note,.cq-billing-notice,.cq-insurer-note,.cq-sum-note){font-size:var(--t-m);line-height:1.5}   /* body */
 .cdcp :is(.cq-estnote,.cq-fine,.cq-skip){font-size:var(--t-s);line-height:1.5}
-/* front-desk card: the direct route to the clinic, pinned to the foot of the answer rail */
-.cdcp .cq-skip{display:block;margin-top:auto;padding:var(--s3) var(--s4);background:var(--c-paper);border:1px solid var(--c-line);border-left:3px solid var(--c-accent);border-radius:var(--c-r);font-size:var(--t-m);line-height:1.55}
+/* front-desk card: the direct route to the clinic, on the result screen */
+.cdcp .cq-skip{display:block;padding:var(--s3) var(--s4);background:var(--c-card);color:var(--c-card-ink);border:1px solid var(--c-line);border-left:3px solid var(--c-accent);border-radius:var(--c-r);font-size:var(--t-m);line-height:1.55}
 .cdcp .cq-skip-q{display:block;font-weight:600}
-.cdcp .cq-skip-l{display:inline-block;padding-block:var(--s2);margin-block:calc(-1*var(--s2));font-weight:600;color:var(--c-ink);text-decoration:underline;text-decoration-color:var(--c-accent);text-decoration-thickness:2px;text-underline-offset:4px;white-space:nowrap}
-.cdcp .cq-skip-i{display:inline-block;vertical-align:-2px;margin-right:6px;color:var(--c-ink)}
+.cdcp .cq-skip-l{display:inline-block;padding-block:var(--s2);margin-block:calc(-1*var(--s2));font-weight:600;color:var(--c-card-ink);text-decoration:underline;text-decoration-color:var(--c-accent);text-decoration-thickness:2px;text-underline-offset:4px;white-space:nowrap}
+.cdcp .cq-skip-i{display:inline-block;vertical-align:-2px;margin-right:6px;color:var(--c-card-ink)}
 .cdcp .cq-estnote{margin:var(--s2) 0 var(--s3);opacity:.72}
 .cdcp .cq-fine{margin-top:var(--s3);max-width:72ch;opacity:.75}
 .cdcp .cq-good-t{color:var(--c-good)}.cdcp .cq-bad-t{color:var(--c-bad)}
 /* quiet text control (links, Back, Clear, Edit): underlined, thicker underline on hover */
-.cdcp :is(.cq-help a,.cq-back,.cq-clear,.cq-sr-e){text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
-.cdcp :is(.cq-help a,.cq-clear,.cq-back){font-weight:600}
+.cdcp :is(.cq-back,.cq-clear){text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.cdcp :is(.cq-clear,.cq-back){font-weight:600}
 
 /* ============ 5 components ============ */
-/* ---- choice groups: .cq-seg (2-up, and 2x2 when narrow), .cq-seg-4 and .cq-visit (lists) ---- */
+/* ---- choice groups: every option is a card; the chosen one gets a ring, a tint and a check ---- */
 .cdcp .cq-row{display:flex;flex-direction:column;min-width:0}
-.cdcp .cq-row>.cq-seg{margin-top:auto}
 .cdcp .cq-row>.cq-legend{display:flex;flex-direction:column;gap:1px;width:100%;margin-bottom:var(--s3)}
 .cdcp .cq-row>.cq-legend>span:first-child{font-family:var(--c-display);font-size:var(--t-h);font-weight:500;line-height:1.25;letter-spacing:-.005em}
 .cdcp .cq-infl{font-size:var(--t-m);line-height:1.35;opacity:.8}
-.cdcp .cq-seg,.cdcp .cq-visit{display:grid;border:1px solid var(--c-edge);background:var(--well);border-radius:var(--c-r);overflow:clip}
-.cdcp .cq-seg-2{grid-template-columns:repeat(2,minmax(0,1fr))}
-.cdcp .cq-seg-2 .cq-opt{min-height:var(--h-row);font-size:var(--t-l)}
-.cdcp .cq-opt{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:var(--h);padding:var(--s1);cursor:pointer;
-  font-size:var(--t-m);line-height:1.25;text-align:center;border-left:1px solid var(--c-line)}
-.cdcp .cq-opt:first-child{border-left:0}
-.cdcp .cq-opt small{font-size:var(--t-s);opacity:.78}
-.cdcp .cq-opt input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:inherit}
-.cdcp .cq-opt:has(input:checked){background:var(--sel);box-shadow:inset 0 0 0 2px var(--c-brand);z-index:1}
-/* lists: the visit types (always) and the income bands (wide). One radio mark, one row rhythm. */
-.cdcp .cq-seg-4,.cdcp .cq-visit{display:flex;flex-direction:column}
-.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt{display:grid;grid-template-columns:var(--radio) minmax(0,1fr);column-gap:var(--s3);row-gap:var(--s0);align-content:center;align-items:center;
-  padding:var(--s2) var(--s3);text-align:left;border-left:0;border-top:1px solid var(--c-line);background:var(--well)}
-.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt:first-child{border-top:0}
-.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt>span{grid-column:2;grid-row:1;font-weight:600}
-.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt>small{grid-column:2;grid-row:2;line-height:1.4}
-/* radio mark and title share the first grid row, so the mark always lines up with the title however long the description is */
-.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt::before{content:"";grid-column:1;grid-row:1;align-self:center;width:var(--radio);height:var(--radio);border:1.5px solid var(--c-edge);border-radius:50%}
-.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt:has(input:checked){background:var(--sel)}
-.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt:has(input:checked)::before{background:var(--c-ink);border-color:var(--c-ink);box-shadow:inset 0 0 0 3px var(--sel)}
-.cdcp[data-bad="1"] .cq-visit .cq-opt:has(input:checked){box-shadow:inset 0 0 0 2px var(--c-bad)}   /* invalid: no estimate can be produced for this choice */
-/* narrow: the four income bands sit in a 2x2 grid */
-@container (max-width:679px){
-  .cdcp .cq-seg-4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--c-edge)}
-  .cdcp .cq-seg-4 .cq-opt{display:flex;flex-direction:column;align-content:normal;align-items:center;justify-content:center;min-height:var(--h-row);padding:var(--s2);text-align:center;border-top:0;background:var(--well)}
-  .cdcp .cq-seg-4 .cq-opt::before{display:none}
-  .cdcp .cq-seg-4 .cq-opt>span{font-weight:400}
-  .cdcp .cq-seg-4 .cq-opt:has(input:checked){background:var(--sel);box-shadow:inset 0 0 0 2px var(--c-brand)}
-}
+.cdcp :is(.cq-seg,.cq-visit){display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s2)}
+.cdcp .cq-opt{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-height:var(--h-row);padding:var(--s3) var(--s5) var(--s3) var(--s4);cursor:pointer;
+  font-size:var(--t-l);line-height:1.3;text-align:left;background:var(--c-paper);border:2px solid var(--c-line);border-radius:var(--c-r);transition:var(--tr-surface),transform var(--dur-press) var(--ease)}
+.cdcp .cq-opt>span{font-weight:600}
+.cdcp .cq-opt>small{margin-top:var(--s0);font-size:var(--t-m);line-height:1.4;opacity:.78}
+.cdcp .cq-opt input{position:absolute;inset:0;z-index:1;width:100%;height:100%;opacity:0;cursor:inherit}
+.cdcp .cq-opt::after{content:"\2713";position:absolute;right:var(--s3);top:50%;display:grid;place-items:center;width:24px;height:24px;margin-top:-12px;border-radius:50%;
+  background:var(--c-brand);color:var(--c-on);font-size:var(--t-m);font-weight:700;line-height:1;opacity:0;transform:scale(.5);
+  transition:opacity var(--dur-state) var(--ease),transform var(--dur-value) cubic-bezier(.34,1.56,.64,1)}
+.cdcp .cq-opt:has(input:checked){background:var(--c-tint);border-color:var(--c-brand);box-shadow:inset 0 0 0 1px var(--c-brand)}
+.cdcp .cq-opt:has(input:checked)::after{opacity:1;transform:scale(1)}
+.cdcp[data-bad="1"] .cq-visit .cq-opt:has(input:checked){border-color:var(--c-bad);box-shadow:inset 0 0 0 1px var(--c-bad)}   /* invalid: no estimate can be produced for this choice */
 
-/* ---- buttons ---- */
-.cdcp .cq-cta-row{margin-top:var(--s4);display:flex;flex-wrap:wrap;gap:var(--s3)}
+/* ---- buttons: one full-width hero action; the second action is a quiet text link ---- */
+.cdcp .cq-cta-row{display:flex;flex-direction:column;gap:var(--s1)}
 .cdcp .cq-cta-btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:var(--h);max-width:100%;padding:var(--s3) var(--s4);border-radius:var(--c-r);
   font-size:var(--t-m);font-weight:600;text-align:center;line-height:1.3;transition:var(--tr-surface),transform var(--dur-press) var(--ease)}
-.cdcp .cq-cta-btn-primary{background:var(--c-brand);color:var(--c-on)}
-.cdcp .cq-cta-btn-secondary{border:1px solid var(--c-line)}
-.cdcp .cq-cta-ext{opacity:.7;font-size:var(--t-s)}
+.cdcp .cq-cta-btn-primary{width:100%;min-height:56px;background:var(--c-brand);color:var(--c-on);font-size:var(--t-l);font-weight:700}
+.cdcp .cq-cta-btn-primary::after{content:"\203A";font-size:var(--t-h);line-height:1}
+.cdcp .cq-cta-btn-primary:has(.cq-cta-ext)::after{content:none}
+.cdcp .cq-cta-btn-secondary{display:block;align-self:center;min-height:var(--h);padding:var(--s3);font-weight:500;opacity:.85}
+.cdcp .cq-cta-btn-secondary>span:first-child{text-decoration:underline;text-decoration-color:color-mix(in srgb,currentColor 40%,transparent);text-underline-offset:4px}
+.cdcp .cq-cta-note{padding:var(--s2) var(--s1) var(--s1);font-size:var(--t-s);line-height:1.4;text-align:center;opacity:.8}
+.cdcp .cq-cta-ext{margin-left:var(--s1);opacity:.7;font-size:var(--t-s)}
 .cdcp .cq-next{display:inline-flex;align-items:center;gap:var(--s2);min-height:var(--h);padding:0 var(--s4);border:1px solid var(--c-ink);border-radius:var(--c-r);background:var(--c-paper);
   font-size:var(--t-m);font-weight:600}
 .cdcp .cq-next:disabled{visibility:hidden}
-.cdcp .cq-clear{justify-self:start;min-height:var(--h);margin-top:calc(var(--s2) * -1);font-size:var(--t-m);opacity:.8}
+.cdcp .cq-clear{justify-self:start;min-height:var(--h);font-size:var(--t-m);opacity:.8}
 .cdcp .cq-clear[hidden]{display:none}
 
 /* ---- status: green = eligible, red = not eligible, amber = to confirm ---- */
@@ -187,55 +183,25 @@
 .cdcp .cq-neutral .cq-pill{opacity:.75}
 
 /* ---- the figure (financial values: tabular, never wrapped, dollars large and cents / unit small) ---- */
-.cdcp :is(.cq-big,.cq-dl dd,.cq-tr-n){font-variant-numeric:tabular-nums}
+.cdcp :is(.cq-big,.cq-split dd){font-variant-numeric:tabular-nums}
 .cdcp .cq-lbl{font-size:var(--t-m);font-weight:600}
-.cdcp .cq-big{font-family:var(--c-display);font-weight:500;font-size:var(--t-fig);line-height:1.1;letter-spacing:-.01em;overflow-wrap:normal;white-space:nowrap}
+.cdcp .cq-big{margin-top:var(--s1);font-family:var(--c-display);font-weight:800;font-size:var(--t-fig);line-height:1;letter-spacing:-.02em;overflow-wrap:normal;white-space:nowrap}
 .cdcp .cq-big-empty{display:none}
-.cdcp .cq-cents{font-size:var(--t-cents);letter-spacing:0;margin-left:.03em}
-.cdcp .cq-sum-note{flex-basis:100%;margin-top:var(--s1);opacity:.8}
-.cdcp .cq-bar,.cdcp .cq-trace,.cdcp .cq-pg{display:none}
-@container (min-width:680px){
-  .cdcp .cq-lbl{display:flex;align-items:center;justify-content:space-between;width:100%}
-  .cdcp .cq-lbl>span:first-child{display:inline-flex;align-items:center}
-  .cdcp .cq-lbl>span:first-child::before{content:"";width:var(--mark);height:var(--mark);margin-right:var(--s2);background:var(--c-ink)}
-  .cdcp .cq-pg{display:inline-flex;align-items:center;gap:var(--s1);font-size:var(--t-s);opacity:.8}
-  .cdcp .cq-pg i{width:14px;height:3px;background:var(--c-line)}
-  .cdcp .cq-pg i.on{background:var(--c-ink)}
-  .cdcp .cq-pg b{margin-left:var(--s2);font-weight:400}
-  .cdcp .cq-sum .cq-big{display:block;margin-top:var(--s1);line-height:1;letter-spacing:-.02em}
-  .cdcp .cq-sum .cq-big.cq-big-empty{display:block;opacity:.22}
-  .cdcp .cq-sum .cq-cents{margin-left:0}
-  .cdcp .cq-sum :is(.cq-cur,.cq-sp){font-size:.42em;letter-spacing:0}
-  .cdcp .cq-sum .cq-cur-lead{vertical-align:.95em;margin-right:.08em}
-  .cdcp .cq-sum .cq-sum-note{flex-basis:auto;margin-top:var(--s2)}
-  /* the split: green is what the plan pays, ink is what you pay */
-  .cdcp .cq-sum .cq-bar{display:block;position:relative;height:10px;margin-top:var(--s3);background:var(--c-ink);border-radius:var(--c-r);overflow:clip}
-  .cdcp .cq-sum .cq-bar i{position:absolute;inset:0 auto 0 0;width:var(--cov,0%);background:var(--c-good)}
-  /* while answering: the answers so far, each one jumps back to its question */
-  .cdcp .cq-sum:has(.cq-trace) .cq-sum-note{display:none}
-  .cdcp .cq-sum .cq-trace{display:block;margin-top:var(--s3);border-top:1px solid var(--c-line)}
-  .cdcp[data-view="result"] .cq-sum .cq-trace{display:none}
-  .cdcp[data-view="result"] .cq-sum:has(.cq-trace) .cq-sum-note{display:block}
-  .cdcp .cq-trace li+li{border-top:1px solid var(--c-line)}
-  .cdcp .cq-tr{display:grid;grid-template-columns:20px minmax(0,1fr) auto;align-items:center;column-gap:var(--s2);width:100%;min-height:var(--h);padding:var(--s2) var(--s1);text-align:left;font-size:var(--t-m)}
-  .cdcp .cq-tr-n{display:inline-grid;place-items:center;width:20px;height:20px;border:1px solid var(--c-edge);border-radius:50%;font-size:var(--t-s);font-weight:600;line-height:1}
-  .cdcp .cq-tr[data-done="1"] .cq-tr-n{background:var(--c-ink);border-color:var(--c-ink);color:var(--c-paper)}
-  .cdcp .cq-tr-q{opacity:.8}
-  .cdcp .cq-tr-a{font-weight:600;text-align:right}
-  .cdcp .cq-tr[data-done="0"] .cq-tr-a{font-weight:400;opacity:.6}
-  .cdcp .cq-tr.cq-on{background:var(--c-tint)}
-}
+.cdcp .cq-cents{font-size:var(--t-cents);letter-spacing:0}
+.cdcp .cq-sum :is(.cq-cur,.cq-sp){font-size:.42em;letter-spacing:0}
+.cdcp .cq-sum .cq-cur-lead{vertical-align:.95em;margin-right:.08em}
+.cdcp .cq-sum-note{margin-top:var(--s2);font-size:var(--t-m);opacity:.8}
+/* the split: green is what the plan pays, ink is what you pay */
+.cdcp .cq-bar{position:relative;height:10px;margin-top:var(--s4);background:var(--c-ink);border-radius:var(--c-r);overflow:clip}
+.cdcp .cq-bar i{position:absolute;inset:0 auto 0 0;width:var(--cov,0%);background:var(--c-good)}
+.cdcp .cq-split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.cdcp .cq-split>div{padding-right:var(--s3)}
+.cdcp .cq-split>div+div{padding:0 0 0 var(--s4);border-left:1px solid var(--c-line)}
+.cdcp .cq-split dt{font-size:var(--t-m);opacity:.78}
+.cdcp .cq-split dd{margin-top:var(--s0);font-size:var(--t-h2);font-weight:700;white-space:nowrap}
+.cdcp .cq-split dd.cq-dim{font-size:var(--t-m);font-weight:400;white-space:normal;opacity:.7}
 
-/* ---- ledger, limits, next steps ---- */
-.cdcp .cq-dl{font-size:var(--t-m)}
-.cdcp .cq-dl>div{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s3);padding:var(--s2) 0}
-.cdcp .cq-dl>div+div{border-top:1px solid var(--c-line)}
-.cdcp .cq-dl dt{min-width:0}
-.cdcp .cq-dl dt small{display:block;margin-top:1px;font-size:var(--t-s)}
-.cdcp .cq-dl dt small.cq-mute{opacity:.72}
-.cdcp .cq-dl dd{flex:none;white-space:nowrap;text-align:right;font-weight:600}
-.cdcp .cq-dl dd.cq-dim{font-weight:400;opacity:.7;font-size:var(--t-s);white-space:normal}
-.cdcp .cq-sw{display:inline-block;width:var(--mark);height:var(--mark);margin-right:var(--s2);background:var(--c-good)}
+/* ---- limits ---- */
 .cdcp .cq-incl{margin-top:var(--s2);opacity:.9}
 .cdcp .cq-incl b{font-weight:600}
 .cdcp .cq-note{margin-top:var(--s2)}
@@ -244,25 +210,7 @@
 .cdcp .cq-insurer-note{margin-top:var(--s4);line-height:1.6;opacity:.8}
 .cdcp .cq-insurer-pills{margin-top:var(--s2);display:flex;flex-wrap:wrap;gap:var(--s2)}
 .cdcp .cq-insurer-pill{padding:var(--s2) var(--s3);border:1px solid var(--c-line);border-radius:var(--c-r);font-size:var(--t-s)}
-.cdcp :is(.cq-rest,.cq-act)>.cq-sec{margin-bottom:0}
-.cdcp :is(.cq-rest,.cq-act)>.cq-sec+:is(.cq-cta-row,.cq-steps){margin-top:var(--s2)}
 .cdcp .cq-det .cq-sec{margin-top:var(--s1)}
-.cdcp .cq-steps{margin-top:var(--s4);display:grid;grid-template-columns:minmax(0,1fr)}
-.cdcp .cq-step-card{display:flex;flex-direction:column;padding:var(--s3) 0}
-.cdcp .cq-step-card+.cq-step-card{padding-top:var(--s2)}
-.cdcp .cq-step-main{display:flex;flex-direction:column;flex:1}
-.cdcp .cq-step-lbl{margin-bottom:var(--s0)}
-.cdcp .cq-step-title{font-size:var(--t-l);font-weight:600}
-.cdcp .cq-step-text{margin:var(--s0) 0 var(--s3);font-size:var(--t-m);line-height:1.5;opacity:.88}
-.cdcp .cq-step-main .cq-cta-btn{margin-top:auto;width:100%;padding:var(--s2) var(--s3)}
-.cdcp .cq-help{margin-top:var(--s1)}
-.cdcp .cq-help a{display:inline-flex;align-items:center;min-height:var(--h)}
-@container (min-width:680px){
-  .cdcp .cq-steps{margin-top:var(--s2);grid-template-columns:repeat(2,minmax(0,1fr));column-gap:var(--s3)}
-  .cdcp .cq-step-card,.cdcp .cq-step-card+.cq-step-card{padding:var(--s3) 0 0;border-top:2px solid var(--c-ink)}   /* a strong rule on each stage */
-  .cdcp .cq-step-title{font-family:var(--c-display);font-size:var(--t-h2);font-weight:500;line-height:1.3;letter-spacing:-.005em}
-  .cdcp .cq-det>.cq-incl{margin-top:0}
-}
 
 /* ---- disclosures ---- */
 .cdcp .cq-matrix-all{margin-top:var(--s1)}
@@ -287,8 +235,8 @@
 .cdcp .cq-matrix-item-body li::before{content:'\2013';position:absolute;left:0;opacity:.5}
 .cdcp .cq-matrix-item-note{font-size:var(--t-s);line-height:1.6;opacity:.8;border-left:2px solid var(--c-line);padding-left:var(--s3)}
 
-/* ---- stage: one question at a time, then the answers ---- */
-.cdcp .cq-stg-h{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:var(--s5);margin-bottom:var(--s3)}
+/* ---- stage: back + progress, the answer chip, the continue action ---- */
+.cdcp .cq-stg-h{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:var(--s5);margin-bottom:var(--s1)}
 .cdcp .cq-stg-n{display:inline-flex;align-items:center;gap:var(--s3);margin-left:auto;font-size:var(--t-s)}
 .cdcp .cq-stg-n b{font-weight:600}
 .cdcp .cq-back{display:inline-flex;align-items:center;gap:var(--s2);min-height:var(--h);font-size:var(--t-m);opacity:.85}
@@ -296,59 +244,12 @@
 .cdcp .cq-ticks i{width:16px;height:3px;background:var(--c-line);transition:background-color var(--dur-state) var(--ease)}
 .cdcp .cq-ticks i.on{background:var(--c-ink)}
 .cdcp .cq-ticks i.cur{background:var(--c-edge)}
-.cdcp .cq-stg-f{display:flex;justify-content:flex-end;margin-top:var(--s3)}
+.cdcp .cq-stg-f{display:flex;justify-content:flex-end;margin-top:var(--s1)}
 .cdcp .cq-stg-f:has(.cq-next:disabled){display:none}
-.cdcp .cq-ans{margin:0 0 var(--s4);border:1px solid var(--c-edge);background:var(--c-paper);border-radius:var(--c-r)}
-.cdcp .cq-ans li+li{border-top:1px solid var(--c-line)}
-.cdcp .cq-sumrow{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:var(--s3);align-items:center;width:100%;min-height:var(--h-row);padding:var(--s2) var(--s3);text-align:left}
-.cdcp .cq-sr-q{grid-column:1;font-size:var(--t-s);opacity:.7}
-.cdcp .cq-sr-a{grid-column:1;font-size:var(--t-m);font-weight:600}
-.cdcp .cq-sr-e{grid-column:2;grid-row:1/3;font-size:var(--t-s);font-weight:600}
-.cdcp .cq-ctl-in>.cq-sec{margin:0 0 var(--s2)}
-
-/* ============ responsive layout: after the components so it can place and re-space them ============ */
-/* narrow, assessment complete: status, figure (pinned to the top), visit list, ledger, details, next steps, answers */
-@container (max-width:679px){
-  .cdcp[data-view="result"] :is(.cq-ctl,.cq-ctl-in){display:contents}
-  .cdcp[data-view="result"] .cq-status{order:1}
-  .cdcp[data-view="result"] .cq-sum{order:2;bottom:auto;top:var(--cdcp-sticky-top,0px)}
-  .cdcp[data-view="result"] .cq-brk{order:3}
-  .cdcp[data-view="result"] .cq-row-appt{order:5;--well:var(--c-paper);--sel:var(--c-tint);padding:var(--s4);background:var(--c-tint);border-block:1px solid var(--c-line)}
-  .cdcp[data-view="result"] .cq-act{order:4}
-  .cdcp[data-view="result"] .cq-det{order:6}
-  .cdcp[data-view="result"] .cq-rest{order:7}
-  .cdcp[data-view="result"] .cq-ctl-in>:is(.cq-sec,.cq-ans,.cq-clear,.cq-skip){order:8;margin-inline:var(--s4)}
-  .cdcp[data-view="result"] .cq-ctl-in>.cq-sec{margin-top:var(--s5)}
-}
-
-/* wide (container >= 680): a tinted answer rail beside one statement column.
-   The statement reads top to bottom: state, the figure, the split behind it, what it assumes, what to do next. */
-@container (min-width:680px){
-  .cdcp .cq-grid{grid-template-columns:minmax(320px,380px) minmax(0,1fr);grid-template-rows:repeat(5,auto) 1fr}
-  .cdcp .cq-ctl{grid-column:1;grid-row:1/-1;display:flex;flex-direction:column;--well:var(--c-paper);--sel:var(--c-tint);padding:var(--s5);border-bottom:0;border-right:1px solid var(--c-line);background:var(--c-tint)}
-  .cdcp :is(.cq-status,.cq-sum,.cq-act,.cq-brk,.cq-det,.cq-rest){grid-column:2;padding-inline:var(--s5)}
-  .cdcp .cq-status{grid-row:1;min-height:8rem;padding-top:var(--s5);padding-bottom:var(--s2)}   /* a steady height keeps the figure in place as the state changes */
-  .cdcp .cq-sum,.cdcp.cq-ledger .cq-sum{grid-row:2;position:static;display:block;margin:0;padding-top:var(--s2);padding-bottom:var(--s4);border:0;background:none}
-  .cdcp .cq-brk{grid-row:3;padding-top:0}
-  .cdcp .cq-act{grid-row:4;padding-top:var(--s1);padding-bottom:var(--s3)}
-  .cdcp .cq-det{grid-row:5;padding-top:var(--s1);padding-bottom:var(--s4)}
-  .cdcp .cq-rest{grid-column:2;grid-row:6;align-self:end;margin:0;padding:var(--s3) var(--s5) var(--s4);border-top:1px solid var(--c-line)}
-  .cdcp .cq-rest:empty{display:none}
-  .cdcp .cq-ctl-in{flex:1;display:flex;flex-direction:column}
-  .cdcp:not([data-view="result"]) .cq-seg-2 .cq-opt{min-height:76px}   /* roomier choices while answering */
-  .cdcp .cq-ctl-in>*+*{margin-top:var(--s4)}
-  .cdcp .cq-skip{margin-top:auto;position:relative}
-  .cdcp .cq-ctl-in>.cq-skip{margin-top:auto}
-  /* the visit list takes the slack: rows share the column height equally, so the left edge ends where the right one does */
-  .cdcp .cq-ctl-in>.cq-row-appt{flex:1 1 auto;display:flex;flex-direction:column}
-  .cdcp .cq-row-appt>.cq-visit{flex:1}
-  .cdcp .cq-row-appt .cq-visit .cq-opt{flex:1 1 0;min-height:68px}
-  .cdcp .cq-brk .cq-sec{margin-top:var(--s2)}
-  .cdcp .cq-dl>div{padding:var(--s3) 0}
-  .cdcp .cq-grid{--t-status:clamp(20px,3.2cqw,26px);--t-fig:clamp(52px,9cqw,76px);--t-cents:.42em}
-}
-@container (min-width:900px){.cdcp .cq-grid{grid-template-columns:minmax(340px,400px) minmax(0,1fr)}}
-/* the answers stay in reach while the longer result is read (short screens keep the normal flow) */
+.cdcp .cq-chip{display:flex;flex-wrap:wrap;align-items:center;padding:0 var(--s1);border:1px solid var(--c-line);border-radius:var(--c-r);background:var(--c-paper);font-size:var(--t-s);font-weight:600}
+.cdcp .cq-sumrow{display:inline-flex;align-items:center;min-height:var(--h);padding:0 var(--s1)}
+.cdcp .cq-sumrow+.cq-sumrow::before{content:"\2022";margin-right:var(--s1);opacity:.4}
+.cdcp .cq-sr-e{margin-left:auto;min-height:var(--h);padding:0 var(--s1);text-decoration:underline;text-decoration-color:var(--c-accent);text-decoration-thickness:2px;text-underline-offset:4px}
 
 /* ---- drawers for fine print ---- */
 .cdcp .cq-acc{margin-top:0;border-bottom:1px solid var(--c-line)}
@@ -356,24 +257,8 @@
 .cdcp .cq-acc>summary{gap:var(--s3)}
 .cdcp .cq-acc>summary>span:first-child{flex:1;min-width:0}
 .cdcp .cq-acc-meta{font-size:var(--t-s);font-weight:400;font-variant-numeric:tabular-nums;white-space:nowrap;opacity:.8}
-.cdcp .cq-calc{border-bottom:0}
-.cdcp .cq-calc>summary{font-size:var(--t-s);font-weight:400;line-height:1.4}
-.cdcp .cq-calc>summary .cq-acc-meta{font-weight:600;font-size:var(--t-s);opacity:1;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--c-accent);text-decoration-thickness:2px}
-.cdcp .cq-calc .cq-acc-body{border-top:1px solid var(--c-line)}
 .cdcp .cq-acc-body{padding:0 0 var(--s3)}
 .cdcp .cq-acc-body .cq-billing-notice{margin-top:0}
-
-/* ---- summary dock: sticks to the bottom of the viewport while the calculator is on screen ---- */
-.cdcp .cq-dock{position:sticky;bottom:0;z-index:4;display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2) var(--s4);padding:var(--s3) var(--s4);background:var(--c-brand);color:var(--c-on);border-top:1px solid var(--c-line)}
-.cdcp .cq-dock[hidden]{display:none}
-.cdcp .cq-dock-fig{display:flex;flex-direction:column;min-width:0}
-.cdcp .cq-dock-fig span{font-size:var(--t-s);line-height:1.3;opacity:.85}
-.cdcp .cq-dock-fig b{font-size:var(--t-l);font-weight:600;line-height:1.2;font-variant-numeric:tabular-nums;white-space:nowrap}
-.cdcp .cq-dock-tot{padding-left:var(--s4);border-left:1px solid color-mix(in srgb,var(--c-on) 35%,transparent)}
-.cdcp .cq-dock .cq-cta-btn{margin-left:auto;flex:1 1 12rem;max-width:20rem;background:var(--c-on);color:var(--c-brand)}
-.cdcp .cq-dock a.cq-cta-btn:is(:hover,:active){background:color-mix(in srgb,var(--c-on) 88%,var(--c-brand));color:var(--c-brand)}
-.cdcp :is(.cq-dock a):focus-visible{outline-color:var(--c-on)}
-.cdcp :is(input,a,button,summary){scroll-margin-bottom:calc(var(--dock-h,0px) + var(--s3))}
 
 /* ============ 6 states ============ */
 /* hover (pointer devices only) */
@@ -382,37 +267,34 @@
   .cdcp .cq-cta-btn-primary:hover{background:color-mix(in srgb,var(--c-brand) 86%,#000)}
   .cdcp .cq-cta-btn-secondary:hover{border-color:var(--c-ink);background:var(--c-tint)}
   .cdcp .cq-next:not(:disabled):hover{background:var(--c-ink);color:var(--c-paper)}
-  .cdcp :is(.cq-sumrow,.cq-tr,.cq-matrix-all>summary,.cq-matrix-item>summary):hover{background:var(--c-tint)}
-  .cdcp :is(.cq-help a,.cq-back,.cq-clear):hover{text-decoration-thickness:2px}
+  .cdcp :is(.cq-sumrow,.cq-matrix-all>summary,.cq-matrix-item>summary):hover{background:var(--c-tint)}
+  .cdcp :is(.cq-back,.cq-clear):hover{text-decoration-thickness:2px}
   .cdcp a.cq-skip-l:hover{text-decoration-color:var(--c-ink)}
   .cdcp :is(.cq-back,.cq-clear):hover{opacity:1}
 }
 /* press */
 .cdcp .cq-opt:active:not(:has(input:checked)){background:var(--c-hover)}
-.cdcp .cq-opt:active>:is(span,small){transform:scale(.97)}
+.cdcp .cq-opt:active{transform:scale(.98)}
 .cdcp .cq-cta-btn:active{transform:translateY(1px)}
 .cdcp .cq-cta-btn-primary:active{background:color-mix(in srgb,var(--c-brand) 74%,#000)}
 .cdcp .cq-cta-btn-secondary:active,.cdcp :is(.cq-matrix-all,.cq-matrix-item)>summary:active{background:var(--c-hover)}
 /* focus: one ring. Outside by default; inside for rows of a bordered list; a 2-up control rings the whole group */
-.cdcp :is(a,button,summary):focus-visible,.cdcp .cq-seg:has(input:focus-visible){outline:var(--ring);outline-offset:var(--ring-out)}
-.cdcp :is(.cq-sumrow,.cq-tr):focus-visible{outline-offset:var(--ring-in)}
-.cdcp .cq-visit:has(input:focus-visible),.cdcp .cq-seg-4:has(input:focus-visible){outline:0}
-.cdcp :is(.cq-visit,.cq-seg-4) .cq-opt:has(input:focus-visible){outline:var(--ring);outline-offset:var(--ring-in);z-index:2}
-@container (max-width:679px){
-  .cdcp .cq-seg-4:has(input:focus-visible){outline:var(--ring);outline-offset:var(--ring-out)}
-  .cdcp .cq-seg-4 .cq-opt:has(input:focus-visible){outline:0}
-}
+.cdcp :is(a,button,summary):focus-visible,.cdcp .cq-opt:has(input:focus-visible){outline:var(--ring);outline-offset:var(--ring-out)}
+.cdcp :is(.cq-sumrow,.cq-sr-e):focus-visible{outline-offset:var(--ring-in)}
 
 /* ============ 7 motion ============ */
 @keyframes cq-tick{from{opacity:.4}to{opacity:1}}
 @keyframes cq-fade{from{opacity:0}to{opacity:1}}
 .cdcp .cq-tick{animation:cq-tick var(--dur-value) var(--ease) both}
 .cdcp .cq-fade{animation:cq-fade var(--dur-state) var(--ease) both}
-.cdcp .cq-ctl-in .cq-fade{animation-duration:var(--dur-state)}
-.cdcp :is(.cq-opt,.cq-sumrow,.cq-tr,.cq-tr-n,.cq-next,.cq-matrix-all>summary,.cq-matrix-item>summary){transition:var(--tr-surface),color var(--dur-state) var(--ease)}
-.cdcp :is(.cq-visit,.cq-seg-4) .cq-opt::before{transition:var(--tr-surface)}
-.cdcp .cq-opt>:is(span,small){transition:transform var(--dur-press) var(--ease)}
-.cdcp :is(.cq-skip-l,.cq-help a,.cq-back,.cq-clear){transition:text-decoration-color var(--dur-state) var(--ease),opacity var(--dur-state) var(--ease)}
+@keyframes cq-in-f{from{opacity:0;transform:translateX(32px)}to{opacity:1;transform:none}}
+@keyframes cq-in-b{from{opacity:0;transform:translateX(-32px)}to{opacity:1;transform:none}}
+@keyframes cq-reveal{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+.cdcp .cq-in-f{animation:cq-in-f .3s var(--ease) both}
+.cdcp .cq-in-b{animation:cq-in-b .3s var(--ease) both}
+.cdcp .cq-reveal{animation:cq-reveal .5s cubic-bezier(.34,1.4,.64,1) both}
+.cdcp :is(.cq-opt,.cq-sumrow,.cq-next,.cq-matrix-all>summary,.cq-matrix-item>summary){transition:var(--tr-surface),color var(--dur-state) var(--ease)}
+.cdcp :is(.cq-skip-l,.cq-back,.cq-clear){transition:text-decoration-color var(--dur-state) var(--ease),opacity var(--dur-state) var(--ease)}
 /* optional content opens and closes with a short height ease (browsers without ::details-content simply snap) */
 @supports selector(::details-content){
   .cdcp details{interpolate-size:allow-keywords}
