@@ -116,7 +116,7 @@
 .cdcp .cq-opt small{font-size:var(--t-s);opacity:.78}
 .cdcp .cq-opt:first-child{border-left:0}
 .cdcp .cq-opt input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:inherit}
-.cdcp .cq-opt:has(input:checked){background:var(--c-paper);box-shadow:inset 0 0 0 2px var(--c-brand);font-weight:600;z-index:1}
+.cdcp .cq-opt:has(input:checked){background:var(--c-paper);box-shadow:inset 0 0 0 2px var(--c-brand);z-index:1}
 @media (hover:hover){.cdcp .cq-opt:hover:not(:has(input:checked)):not(:has(input:disabled)){background:var(--c-hover)}
   .cdcp .cq-select:hover:not(:disabled){border-color:var(--c-ink)}}
 .cdcp .cq-select{display:block;width:100%;min-height:var(--h);padding:0 36px 0 12px;border:1px solid var(--c-edge);border-radius:var(--c-r);
@@ -234,20 +234,36 @@
 .cdcp .cq-fine{max-width:72ch}
 .cdcp .cq-dl dt small.cq-mute{opacity:.72}
 
-/* ---- motion: purposeful and restrained ---- */
+/* ---- motion: one duration scale, one easing ---- */
 @property --cov{syntax:"<percentage>";inherits:true;initial-value:0%}
-.cdcp{transition:--cov .38s cubic-bezier(.2,.7,.2,1)}
+.cdcp{--dur-press:.1s;--dur-state:.16s;--dur-value:.26s;--ease:cubic-bezier(.2,.7,.2,1);transition:--cov .38s var(--ease)}
 @keyframes cq-tick{from{opacity:.2;transform:translateY(3px)}to{opacity:1;transform:none}}
-.cdcp .cq-tick{animation:cq-tick .26s cubic-bezier(.2,.7,.2,1) both}
+.cdcp .cq-tick{animation:cq-tick var(--dur-value) var(--ease) both}
 .cdcp .cq-dl dd{font-variant-numeric:tabular-nums}
-.cdcp .cq-opt{transition:background-color .14s ease,box-shadow .14s ease}
-.cdcp .cq-opt>span,.cdcp .cq-opt>small{transition:transform .12s ease}
+/* controls: surfaces and edges ease; the label dips on press and returns on release */
+.cdcp .cq-opt{transition:background-color var(--dur-state) var(--ease),box-shadow var(--dur-state) var(--ease)}
+.cdcp .cq-opt>span,.cdcp .cq-opt>small{transition:transform var(--dur-press) var(--ease)}
 .cdcp .cq-opt:active>span,.cdcp .cq-opt:active>small{transform:scale(.97)}
 .cdcp .cq-opt:active:not(:has(input:checked)){background:var(--c-hover)}
-.cdcp .cq-select{transition:border-color .14s ease,background-color .14s ease}
-.cdcp .cq-cta-btn{transition:background-color .14s ease,border-color .14s ease,transform .1s ease}
+.cdcp .cq-select{transition:border-color var(--dur-state) var(--ease),background-color var(--dur-state) var(--ease),box-shadow var(--dur-state) var(--ease)}
+.cdcp .cq-cta-btn{transition:background-color var(--dur-state) var(--ease),border-color var(--dur-state) var(--ease),transform var(--dur-press) var(--ease)}
 .cdcp .cq-cta-btn:active{transform:translateY(1px)}
-.cdcp .cq-row{transition:opacity .2s ease}
+.cdcp .cq-row{transition:opacity var(--dur-state) var(--ease)}
+/* selection is carried by the ring and surface, not by weight, so a selected label never changes width or wraps differently */
+/* accepted: an answered select takes the strong edge. invalid: the estimate cannot be produced for this choice */
+.cdcp .cq-row[data-done="1"] .cq-select{border-color:var(--c-ink)}
+.cdcp .cq-select[aria-invalid="true"]{border-color:var(--c-bad);box-shadow:inset 0 0 0 1px var(--c-bad)}
+/* editing: the select shows the same strong edge while it has focus or is open */
+.cdcp .cq-select:focus-visible{border-color:var(--c-ink)}
+/* interactive text only */
+.cdcp :is(.cq-skip a,.cq-help a){transition:text-decoration-color var(--dur-state) var(--ease),opacity var(--dur-state) var(--ease)}
+@media (hover:hover){
+  .cdcp .cq-row.cq-off .cq-opt:hover,.cdcp .cq-row.cq-off .cq-select:hover{background:var(--c-tint);border-color:var(--c-edge)}
+  .cdcp :is(.cq-skip a,.cq-help a):hover{text-decoration-thickness:2px}
+  .cdcp :is(.cq-matrix-all,.cq-matrix-item)>summary{transition:background-color var(--dur-state) var(--ease)}
+  .cdcp :is(.cq-matrix-all,.cq-matrix-item)>summary:hover{background:var(--c-tint)}
+}
+.cdcp :is(.cq-matrix-all,.cq-matrix-item)>summary:active{background:var(--c-hover)}
 @media (prefers-reduced-motion:reduce){
   .cdcp,.cdcp *{transition:none!important;animation:none!important}
 }
