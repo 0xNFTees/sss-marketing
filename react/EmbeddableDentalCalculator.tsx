@@ -123,7 +123,7 @@ function StepPills({ n, t, label }: { n: number; t: number; label: string }) {
   );
 }
 
-interface Option<V extends string> { value: V; label: string; hint?: string; aria?: string; amount?: string }
+interface Option<V extends string> { value: V; label: string; hint?: string; aria?: string }
 /** A radio group drawn as selectable cards. Native radios underneath: arrows, Space and screen readers all work. */
 function Choice<V extends string>(props: {
   name: string; legend: string; hint?: string; options: readonly Option<V>[]; value: V | null; onChange: (v: V) => void;
@@ -152,7 +152,6 @@ function Choice<V extends string>(props: {
                 <span className="block text-[15px] font-semibold leading-snug">{o.label}</span>
                 {o.hint && <span className="mt-0.5 block text-[13px] leading-snug opacity-75">{o.hint}</span>}
               </span>
-              {o.amount && <span aria-hidden className="shrink-0 font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-xl font-medium tabular-nums">{o.amount}</span>}
               <span aria-hidden className="grid size-5 shrink-0 place-items-center rounded-full border border-[var(--edge)] bg-[var(--paper)] text-[var(--paper)] transition duration-150
                 group-has-[:checked]/c:border-transparent group-has-[:checked]/c:bg-[var(--p)] group-has-[:checked]/c:text-[var(--paper)]">
                 <Check className="size-3 scale-50 opacity-0 transition duration-150 group-has-[:checked]/c:scale-100 group-has-[:checked]/c:opacity-100" strokeWidth={3} />
@@ -275,13 +274,7 @@ export function EmbeddableDentalCalculator({
     return [{ value: "yes", label: s.yes }, { value: "no", label: s.no }];
   };
   const incomeOptions: Option<IncomeKey>[] = INCOME_KEYS.map((k) => ({ value: k, label: nb(L.step2[k]) }));
-  // what each visit would cost the patient under the answers so far: same estimate() rules, shown only where a personal figure is shown
-  const showShare = oc === "qualified" || oc === "unconfirmed" || oc === "income" || oc === "tax";
-  const visitOptions: Option<VisitId>[] = VISITS.map((v) => {
-    const e = showShare ? estimate({ ...a, appt: v.id }, byCode) : null;
-    const amount = e && !e.bad ? plain(oc === "tax" ? e.fee : e.patient, lang) : undefined;
-    return { value: v.id, label: U.pk[v.id][0], hint: U.pk[v.id][1], amount, aria: amount ? `${U.pk[v.id][0]}. ${U.pk[v.id][1]}. ${U.share} ${amount}` : undefined };
-  });
+  const visitOptions: Option<VisitId>[] = VISITS.map((v) => ({ value: v.id, label: U.pk[v.id][0], hint: U.pk[v.id][1] }));
   const answerText = (k: Step): string | null =>
     k === "ins" ? (a.ins ? (a.ins === "yes" ? L.step1.yes : L.step1.no) : null)
     : k === "inc" ? (a.inc ? nb(L.step2[a.inc]) : null) : a.filed ? (a.filed === "yes" ? L.step3.yes : L.step3.no) : null;

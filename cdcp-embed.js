@@ -165,17 +165,11 @@
     function view(){return cur&&required().indexOf(cur)>=0?cur:autoStep();}
     function totalQ(){return A.ins==="yes"?1:(A.inc==="over90"?2:3);}
     function legend(fs,label,hint){fs.appendChild(node("legend",null,'<span>'+esc(label)+'</span>'+(hint?'<span class="cq-infl">'+esc(hint)+'</span>':'')));}
-    // what each visit would cost the patient under the answers given so far: the same cost() rules, shown only where the result view shows a personal figure
-    function share(id){
-      var oc=outcome();if(oc!=="qualified"&&oc!=="unconfirmed"&&oc!=="income"&&oc!=="tax")return "";
-      var c=cost(id);if(!c||c.bad)return "";
-      return nf.format(oc==="tax"?c.fee:c.oop);
-    }
     function optionsFor(k){
       if(k==="ins")return {label:U.ins,hint:U.insI,items:[{v:"yes",t:U.yes,aria:L.step1.yes,html:"<span>"+esc(U.yes)+"</span>"},{v:"no",t:U.no,aria:L.step1.no,html:"<span>"+esc(U.no)+"</span>"}]};
       if(k==="filed")return {label:U.filed,hint:U.filedI,items:[{v:"yes",t:U.yes,aria:L.step3.yes,html:"<span>"+esc(U.yes)+"</span>"},{v:"no",t:U.notYet,aria:L.step3.no,html:"<span>"+esc(U.notYet)+"</span>"}]};
       if(k==="inc")return {label:U.inc,hint:U.incI,items:INCOME_KEYS.map(function(x){return {v:x,t:L.step2[x],aria:L.step2[x],html:"<span>"+esc(nb(L.step2[x]))+"</span>"};})};
-      return {label:U.appt,hint:U.apptI,items:PK.map(function(p){var m=share(p.id);return {v:p.id,t:U.pk[p.id][0],aria:U.pk[p.id][0]+". "+U.pk[p.id][1]+(m?". "+U.share+" "+m:""),html:"<span>"+esc(U.pk[p.id][0])+"</span><small>"+esc(U.pk[p.id][1])+"</small>"+(m?'<em class="cq-opt-amt" aria-hidden="true">'+esc(m)+"</em>":"")};})};
+      return {label:U.appt,hint:U.apptI,items:PK.map(function(p){return {v:p.id,t:U.pk[p.id][0],aria:U.pk[p.id][0]+". "+U.pk[p.id][1],html:"<span>"+esc(U.pk[p.id][0])+"</span><small>"+esc(U.pk[p.id][1])+"</small>"};})};
     }
     function fieldset(k){
       var d=optionsFor(k),fs=node("fieldset","cq-row cq-row-"+k);fs.setAttribute("data-k",k);legend(fs,d.label,d.hint);
