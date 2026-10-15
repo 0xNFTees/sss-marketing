@@ -164,8 +164,8 @@
       fs.appendChild(s);ctl.appendChild(fs);rows[key]=fs;
     }
     seg("ins",U.ins,U.insI,[{v:"yes",t:U.yes,aria:L.step1.yes,html:"<span>"+esc(U.yes)+"</span>"},{v:"no",t:U.no,aria:L.step1.no,html:"<span>"+esc(U.no)+"</span>"}]);
-    seg("inc",U.inc,U.incI,INCOME_KEYS.map(function(k){return {v:k,t:L.step2[k],aria:L.step2[k]+", "+L.step2[k+"Hint"],
-      html:"<span>"+esc(nb(L.step2[k]))+"</span><small>"+esc(nb(L.step2[k+"Hint"]))+"</small>"};}));
+    seg("inc",U.inc,U.incI,INCOME_KEYS.map(function(k){return {v:k,t:L.step2[k],aria:L.step2[k],
+      html:"<span>"+esc(nb(L.step2[k]))+"</span>"};}));
     seg("filed",U.filed,U.filedI,[{v:"yes",t:U.yes,aria:L.step3.yes,html:"<span>"+esc(U.yes)+"</span>"},{v:"no",t:U.notYet,aria:L.step3.no,html:"<span>"+esc(U.notYet)+"</span>"}]);
     if(DATA){
       var fs=node("fieldset","cq-row cq-row-wide");legend(fs,U.appt,U.apptI);

@@ -312,7 +312,7 @@
   .cdcp .cq-ctl .cq-select{background-image:linear-gradient(45deg,transparent 50%,var(--c-ink) 50%),linear-gradient(135deg,var(--c-ink) 50%,transparent 50%)}
   .cdcp .cq-ctl .cq-opt:has(input:checked){background:var(--c-tint)}
   .cdcp .cq-ctl .cq-seg-4{display:flex;flex-direction:column;gap:0;background:var(--c-paper)}
-  .cdcp .cq-ctl .cq-seg-4 .cq-opt{display:flex;flex-direction:row;flex-wrap:wrap;align-items:baseline;justify-content:space-between;column-gap:var(--s2);min-height:44px;padding:8px 12px 8px 36px;text-align:left;
+  .cdcp .cq-ctl .cq-seg-4 .cq-opt{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;column-gap:var(--s2);min-height:44px;padding:8px 12px 8px 36px;text-align:left;
     background:var(--c-paper);border-top:1px solid var(--c-line)}
   .cdcp .cq-ctl .cq-seg-4 .cq-opt:first-child{border-top:0}
   .cdcp .cq-ctl .cq-seg-4 .cq-opt:has(input:checked){background:var(--c-tint)}
