@@ -35,8 +35,8 @@
       inc:"Revenu familial net", incI:"Détermine la part couverte", incShort:["< 70 k","70–79 k","80–89 k","90 k +"], incPct:["100 %","60 %","40 %","0 %"],
       filed:"Déclaration produite", filedI:"Requise pour demander", notYet:"Non",
       appt:"Rendez-vous", apptI:"Détermine le tarif du guide", pick:"Choisir…",
-      remain:"Il reste à indiquer :", pendH:"Répondez pour voir votre estimation.",
-      share:"Votre part estimée", cost:"Coût du traitement", std:"Guide tarifaire ACDQ 2026", paid:"Versé par le RCSD", noCover:"Service non couvert par le RCSD", full:"Entièrement couvert au tarif du guide.", ifQualify:"Si votre admissibilité est confirmée.", you:"Votre part", byAnswers:"selon vos réponses", grid:"{n} % de la grille du RCSD", noelig:"Non admissible",
+      remain:"Il reste à indiquer :", pendH:"Estimez votre part d’une visite.", pendS:"Quatre réponses : assurance, revenu, déclaration de revenus et type de rendez-vous. Le Régime canadien de soins dentaires (RCSD) est pris en compte.", prog:"Réponses : {n} sur {t}", estNote:"Estimation selon le guide tarifaire, pas une soumission.",
+      share:"Votre part estimée", cost:"Coût du traitement", std:"Guide tarifaire 2026 des dentistes du Québec (ACDQ)", paid:"Versé par le Régime canadien de soins dentaires (RCSD)", noCover:"Service non couvert par le RCSD", full:"Entièrement couvert au tarif du guide.", ifQualify:"Si votre admissibilité est confirmée.", you:"Votre part", byAnswers:"selon vos réponses", grid:"{n} % de la grille du RCSD", noelig:"Non admissible",
       incl:"Inclus", nopick:"Choisissez un rendez-vous pour voir votre part.", unavailable:"Estimation indisponible pour ce rendez-vous. Communiquez avec la clinique.",
       tierUnconfirmed:"Palier RCSD : jusqu’à {n} %. Confirmez votre déclaration de revenus.", whenIssued:"Montant estimé une fois la carte RCSD reçue.",
       pre:"Préautorisation du RCSD requise.", lab:"Frais de laboratoire en sus.", excl:"Non couvert par le RCSD.",
@@ -50,8 +50,8 @@
       inc:"Net family income", incI:"Sets the share CDCP covers", incShort:["< 70k","70–79k","80–89k","90k+"], incPct:["100%","60%","40%","0%"],
       filed:"Tax return filed", filedI:"Required to apply", notYet:"Not yet",
       appt:"Appointment", apptI:"Sets the guide price", pick:"Choose…",
-      remain:"Still to answer:", pendH:"Answer to see your estimate.",
-      share:"Your estimated share", cost:"Treatment cost", std:"ACDQ 2026 price guide", paid:"Paid by CDCP", noCover:"Not a CDCP-covered service", full:"Fully covered at the guide price.", ifQualify:"If your eligibility is confirmed.", you:"Your share", byAnswers:"depends on your answers", grid:"{n}% of the CDCP fee schedule", noelig:"Not eligible",
+      remain:"Still to answer:", pendH:"Estimate your share of a visit.", pendS:"Four answers: insurance, income, tax return and appointment type. The Canadian Dental Care Plan (CDCP) is factored in.", prog:"{n} of {t} answered", estNote:"Estimate from the fee guide, not a quote.",
+      share:"Your estimated share", cost:"Treatment cost", std:"Quebec dentists' 2026 fee guide (ACDQ)", paid:"Paid by the Canadian Dental Care Plan (CDCP)", noCover:"Not a CDCP-covered service", full:"Fully covered at the guide price.", ifQualify:"If your eligibility is confirmed.", you:"Your share", byAnswers:"depends on your answers", grid:"{n}% of the CDCP fee schedule", noelig:"Not eligible",
       incl:"Includes", nopick:"Choose an appointment to see your share.", unavailable:"Estimate unavailable for this appointment. Please contact the clinic.",
       tierUnconfirmed:"CDCP tier: up to {n}%. Confirm your tax filing.", whenIssued:"Estimated amount once your CDCP card is issued.",
       pre:"CDCP pre-authorization required.", lab:"Lab fee billed extra.", excl:"Not covered by CDCP.",
@@ -243,7 +243,7 @@
         
       }else{
         bigEl.textContent="—";bigEl.classList.add("cq-big-empty");shown=0;
-        var rem=missing();sSum.appendChild(textNode("p","cq-sum-note",c&&c.bad?U.unavailable:(rem.length?U.remain+" "+rem.join(", ")+".":U.nopick)));
+        var rem=missing();sSum.appendChild(textNode("p","cq-sum-note",c&&c.bad?U.unavailable:(rem.length?(function(){var t=DATA?4:3,n=Math.max(0,t-rem.length);return (n?U.prog.replace("{n}",n).replace("{t}",t)+". ":"")+U.remain+" "+rem.join(", ")+".";})():U.nopick)));
       }
     }
     function renderCostDetail(t,c,o){
@@ -254,6 +254,7 @@
         rowsH+='<div><dt>'+esc(U.paid)+'<small class="'+(covers?"cq-good-t":"cq-bad-t")+'">'+esc(nb(tierTxt))+'</small></dt><dd class="'+(c.cov?"cq-good-t":"")+'">'+(c.cov?"− ":"")+esc(nf.format(c.cov))+'</dd></div>';
       }else rowsH+='<div><dt>'+esc(U.paid)+'</dt><dd class="cq-dim">'+esc(U.byAnswers)+'</dd></div>';
       sBrk.appendChild(node("dl","cq-dl",rowsH));
+      if(c.known)sBrk.appendChild(textNode("p","cq-estnote",U.estNote));
       t.appendChild(node("p","cq-incl","<b>"+esc(U.incl)+"</b>"+(lang==="fr"?" : ":": ")+esc(U.pk[c.pk.id][1])));
       var notes=[];
       var x=U.pk[c.pk.id][2];if(x)notes.push(["bad",x]);
@@ -277,7 +278,7 @@
       sRest.innerHTML="";sStatus.innerHTML="";sBrk.innerHTML="";sDet.innerHTML="";
       if(oc==="pending"){
         var rem=missing();
-        sStatus.appendChild(statusBlock("neutral",U.pendH,DATA?"":U.remain+" "+rem.join(", ")+"."));
+        sStatus.appendChild(statusBlock("neutral",U.pendH,U.pendS));
         if(DATA){renderSum(c,oc);}else{sSum.innerHTML="";sSum.hidden=true;}
         title=U.pendH;
         if(DATA&&c&&!c.bad)renderCostDetail(sDet,c,oc);

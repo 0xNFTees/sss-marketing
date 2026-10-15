@@ -135,6 +135,7 @@
 .cdcp .cq-cents{font-size:.55em;letter-spacing:0;margin-left:.03em}
 .cdcp .cq-sum-note{flex-basis:100%;margin-top:var(--s1);font-size:var(--t-m);opacity:.8}
 .cdcp .cq-dl{font-size:var(--t-m)}
+.cdcp .cq-estnote{margin:var(--s2) 0 var(--s3);font-size:var(--t-s);opacity:.72}
 .cdcp .cq-dl>div{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s3);padding:var(--s2) 0}
 .cdcp .cq-dl>div+div{border-top:1px solid var(--c-line)}
 .cdcp .cq-dl dt small{display:block;margin-top:1px;font-size:var(--t-s)}
