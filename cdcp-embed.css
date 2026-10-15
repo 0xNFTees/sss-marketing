@@ -146,15 +146,18 @@
 .cdcp :is(.cq-seg-4,.cq-visit) .cq-opt:first-child{border-top:0}
 .cdcp :is(.cq-seg-4,.cq-visit) .cq-opt>span{font-weight:600}
 .cdcp :is(.cq-seg-4,.cq-visit) .cq-opt>small{line-height:1.4}
-.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt::before{content:"";position:absolute;left:var(--s3);top:50%;width:var(--radio);height:var(--radio);margin-top:calc(var(--radio) / -2);
-  border:1.5px solid var(--c-edge);border-radius:50%}
+/* radio mark and title share the first grid row, so the mark always lines up with the title however long the description is */
+.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt{display:grid;grid-template-columns:var(--radio) minmax(0,1fr);column-gap:var(--s3);row-gap:var(--s0);align-content:center;align-items:center;padding-left:var(--s3)}
+.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt::before{content:"";grid-column:1;grid-row:1;align-self:center;width:var(--radio);height:var(--radio);border:1.5px solid var(--c-edge);border-radius:50%}
+.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt>span{grid-column:2;grid-row:1}
+.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt>small{grid-column:2;grid-row:2}
 .cdcp :is(.cq-seg-4,.cq-visit) .cq-opt:has(input:checked){background:var(--sel)}
 .cdcp :is(.cq-seg-4,.cq-visit) .cq-opt:has(input:checked)::before{background:var(--c-ink);border-color:var(--c-ink);box-shadow:inset 0 0 0 3px var(--sel)}
 .cdcp[data-bad="1"] .cq-visit .cq-opt:has(input:checked){box-shadow:inset 0 0 0 2px var(--c-bad)}   /* invalid: no estimate can be produced for this choice */
 /* narrow: the four income bands sit in a 2x2 grid */
 @container (max-width:679px){
   .cdcp .cq-seg-4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--c-edge)}
-  .cdcp .cq-seg-4 .cq-opt{align-items:center;min-height:var(--h-row);padding:var(--s2);text-align:center;border-top:0;background:var(--well)}
+  .cdcp .cq-seg-4 .cq-opt{display:flex;flex-direction:column;align-content:normal;align-items:center;justify-content:center;min-height:var(--h-row);padding:var(--s2);text-align:center;border-top:0;background:var(--well)}
   .cdcp .cq-seg-4 .cq-opt::before{display:none}
   .cdcp .cq-seg-4 .cq-opt>span{font-weight:400}
   .cdcp .cq-seg-4 .cq-opt:has(input:checked){background:var(--sel);box-shadow:inset 0 0 0 2px var(--c-brand)}
@@ -343,7 +346,7 @@
   /* the visit list takes the slack: rows share the column height equally, so the left edge ends where the right one does */
   .cdcp .cq-ctl-in>.cq-row-appt{flex:1 1 auto;display:flex;flex-direction:column}
   .cdcp .cq-row-appt>.cq-visit{flex:1}
-  .cdcp .cq-row-appt .cq-visit .cq-opt{flex:1 1 0;min-height:68px;justify-content:center;gap:var(--s0)}
+  .cdcp .cq-row-appt .cq-visit .cq-opt{flex:1 1 0;min-height:68px}
   .cdcp .cq-brk .cq-sec{margin-top:var(--s2)}
   .cdcp .cq-dl>div{padding:var(--s3) 0}
   .cdcp .cq-grid{--t-status:clamp(20px,3.2cqw,26px);--t-fig:clamp(52px,9cqw,76px);--t-cents:.42em}
