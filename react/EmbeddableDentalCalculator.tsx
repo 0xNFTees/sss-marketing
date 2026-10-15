@@ -5,14 +5,15 @@
  * calculation lives in ./engine and the copy in ./copy so the two implementations cannot drift.
  * Requires React 18+, Tailwind CSS v4 (container-query variants), framer-motion 11+, lucide-react.
  *
- * Layout follows the clinic's column, not the viewport (container queries): below ~672px the output leads and the
- * answers follow; from there up it is a two-pane card (inputs 7 / live output 5). See README.md for theming.
+ * Layout follows the clinic's column, not the viewport (container queries): below 768px it is a single flow, inputs first
+ * (sticky header + sticky answer chip, appointment cards, then the result card, which scrolls into view when a card is
+ * tapped); from 768px up it is a two-pane card (inputs 7 / live output 5). See README.md for theming.
  */
 import {
   useCallback, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type ReactNode,
 } from "react";
 import { AnimatePresence, animate, motion, useReducedMotion } from "framer-motion";
-import { ArrowDown, ArrowLeft, ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, CircleCheck, FileText, Info, Mail, Phone, ShieldCheck, User, Wallet } from "lucide-react";
+import { ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, CircleCheck, FileText, Info, Lock, Mail, Phone, ShieldCheck, User, Wallet } from "lucide-react";
 import { LABELS, UI, type Lang } from "./copy";
 import {
   EMPTY_ANSWERS, INCOME_KEYS, VISITS, estimate, firstUnanswered, indexProcedures, outcome, requiredSteps,
@@ -142,9 +143,9 @@ function Choice<V extends string>(props: {
           return (
             <label key={o.value} onPointerDown={() => onPointer(true)} onKeyDown={() => onPointer(false)}
               className={`relative flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border-2 p-4 text-[var(--ink)] transition-all duration-150 ease-out
-                hover:border-[var(--p)] active:scale-[.995] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--ink)]
+                hover:border-[var(--p)] active:scale-[.98] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--ink)]
                 forced-colors:has-[:checked]:border-[Highlight] motion-reduce:transition-none motion-reduce:active:scale-100
-                ${on ? `${invalid ? "border-[var(--bad)]" : "border-[var(--p)]"} bg-[var(--paper)] shadow-[0_8px_20px_-12px_rgb(0_0_0/.45)]` : "border-[var(--line)] bg-[var(--paper)]"}`}>
+                ${on ? `${invalid ? "border-[var(--bad)] ring-[var(--bad)]" : "border-[var(--p)] ring-[var(--p)]"} bg-[var(--tint)] ring-1 shadow-[0_8px_20px_-12px_rgb(0_0_0/.45)]` : "border-[var(--line)] bg-[var(--paper)]"}`}>
               <input type="radio" name={name} value={o.value} checked={on} aria-label={o.aria ?? (o.hint ? `${o.label}. ${o.hint}` : o.label)}
                 onChange={() => onChange(o.value)} className="absolute inset-0 z-10 size-full cursor-pointer opacity-0" />
               <span className="min-w-0 flex-1">
@@ -179,7 +180,9 @@ function CtaLink({ href, children, external, variant = "primary" }: { href: stri
   ) : (
     <a href={href} {...ext}
       className={`mx-auto flex min-h-11 w-fit max-w-full items-center rounded-lg px-2 text-center text-[13px] font-medium leading-snug opacity-80 transition hover:opacity-100 ${FOCUS}`}>
-      <span><span className="underline decoration-white/40 underline-offset-4">{children}</span>{external ? <ArrowUpRight className="ml-1 inline size-3.5 align-[-2px]" aria-hidden /> : null}</span>
+      <span>{external && typeof children === "string" && children.includes(" ")
+        ? <><span className="underline decoration-white/40 underline-offset-4">{children.slice(0, children.lastIndexOf(" "))}</span>{" "}<span className="whitespace-nowrap"><span className="underline decoration-white/40 underline-offset-4">{children.slice(children.lastIndexOf(" ") + 1)}</span><ArrowUpRight className="ml-1 inline size-3.5 align-[-2px]" aria-hidden /></span></>
+        : <span className="underline decoration-white/40 underline-offset-4">{children}</span>}</span>
     </a>
   );
 }
@@ -216,9 +219,8 @@ export function EmbeddableDentalCalculator({
   const hasFees = !!byCode;
   const [a, setA] = useState<Answers>({ ...EMPTY_ANSWERS, ...defaultAnswers });
   const [cur, setCur] = useState<Step | null>(null);
-  // narrow screens: the pinned mini-figure appears only once the hero figure has scrolled out of view
-  const figRef = useRef<HTMLParagraphElement>(null);
-  const [figSeen, setFigSeen] = useState(true);
+  // stacked layout: tapping an appointment card brings the result card into view
+  const gridRef = useRef<HTMLDivElement>(null), resRef = useRef<HTMLDivElement>(null);
   // summary dock: shown once the main actions have scrolled out of view
   const actRef = useRef<HTMLDivElement>(null);
   const [actSeen, setActSeen] = useState(true);
@@ -236,12 +238,15 @@ export function EmbeddableDentalCalculator({
   useEffect(() => () => clearTimeout(advance.current), []);
   // keyboard users keep their place: after a step change the focus moves into the new question
   useEffect(() => {
-    const el = figRef.current;
-    if (!el || typeof IntersectionObserver === "undefined") return;
-    const io = new IntersectionObserver(([e]) => setFigSeen(e.isIntersecting || e.boundingClientRect.top > 0), { rootMargin: "-56px 0px 0px 0px" });
-    io.observe(el);
-    return () => io.disconnect();
-  }, [complete, oc, hasFees]);
+    if (!a.appt) return;
+    const t = setTimeout(() => {
+      const g = gridRef.current, r = resRef.current;
+      if (!g || !r || getComputedStyle(g).gridTemplateColumns.trim().split(/\s+/).length > 1) return; // two-pane: both already visible
+      const top = r.getBoundingClientRect().top;
+      if (top > window.innerHeight * 0.5 || top < 96) r.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+    }, 260);
+    return () => clearTimeout(t);
+  }, [a.appt, reduce]);
   useEffect(() => {
     const el = actRef.current;
     if (!el || typeof IntersectionObserver === "undefined") return;
@@ -299,6 +304,26 @@ export function EmbeddableDentalCalculator({
     : k === "inc" ? (a.inc ? nb(L.step2[a.inc]) : null) : a.filed ? (a.filed === "yes" ? L.step3.yes : L.step3.no) : null;
   const stepLabel = (k: Step) => (k === "ins" ? U.ins : k === "inc" ? U.inc : U.filed);
 
+  const chip = (bare: boolean) => (
+      <div role="group" aria-label={U.yours} className={`flex flex-wrap items-center rounded-2xl bg-[var(--paper)] py-0.5 pl-0.5 pr-0 text-xs font-semibold @md:pl-1 @md:text-[13px] ${bare ? "" : "border border-[var(--line)]"}`}>
+        {steps.map((k, i) => {
+          const Icon = k === "ins" ? User : k === "inc" ? Wallet : FileText;
+          const text = k === "ins" ? U.chipIns[a.ins === "yes" ? "yes" : "no"] : k === "inc" ? nb(L.step2[a.inc as IncomeKey]) : U.chipFiled[a.filed === "yes" ? "yes" : "no"];
+          return (
+            <span key={k} className="inline-flex items-center">
+              {i > 0 && <span aria-hidden className="opacity-40">•</span>}
+              <button type="button" onClick={() => { pointer.current = false; setCur(k); }} aria-label={`${U.edit} : ${stepLabel(k)}, ${answerText(k)}`}
+                className={`inline-flex min-h-11 items-center gap-1.5 rounded-lg px-1 transition hover:bg-[var(--tint)] @md:px-1.5 ${FOCUS}`}>
+                <Icon className="hidden size-4 shrink-0 opacity-70 @md:block" aria-hidden /><span>{text}</span>
+              </button>
+            </span>
+          );
+        })}
+        <button type="button" onClick={() => { pointer.current = false; setCur(steps[0]); }}
+          className={`ml-auto inline-flex min-h-11 items-center rounded-lg px-1 text-xs font-semibold underline @md:px-1.5 @md:text-[13px] decoration-[var(--a)] decoration-2 underline-offset-4 hover:decoration-[var(--ink)] ${FOCUS}`}>{U.edit}</button>
+      </div>
+  );
+
   const stagePane = view ? (
     <motion.div key={view} ref={stage} initial={{ opacity: reduce ? 1 : 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0 : 0.16 }}>
       <div className="mb-4 flex min-h-11 items-center justify-between gap-3">
@@ -318,23 +343,7 @@ export function EmbeddableDentalCalculator({
     </motion.div>
   ) : (
     <motion.div key="done" ref={stage} initial={{ opacity: reduce ? 1 : 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0 : 0.16 }} className="space-y-6">
-      <div role="group" aria-label={U.yours} className="flex flex-wrap items-center gap-x-0 gap-y-0 rounded-2xl border border-[var(--line)] bg-[var(--paper)] py-0.5 pl-1 pr-0.5 text-[13px] font-semibold">
-        {steps.map((k, i) => {
-          const Icon = k === "ins" ? User : k === "inc" ? Wallet : FileText;
-          const text = k === "ins" ? U.chipIns[a.ins === "yes" ? "yes" : "no"] : k === "inc" ? nb(L.step2[a.inc as IncomeKey]) : U.chipFiled[a.filed === "yes" ? "yes" : "no"];
-          return (
-            <span key={k} className="inline-flex items-center">
-              {i > 0 && <span aria-hidden className="opacity-40">•</span>}
-              <button type="button" onClick={() => { pointer.current = false; setCur(k); }} aria-label={`${U.edit} : ${stepLabel(k)}, ${answerText(k)}`}
-                className={`inline-flex min-h-11 items-center gap-1.5 rounded-lg px-1.5 transition hover:bg-[var(--tint)] ${FOCUS}`}>
-                <Icon className="size-4 shrink-0 opacity-70" aria-hidden /><span>{text}</span>
-              </button>
-            </span>
-          );
-        })}
-        <button type="button" onClick={() => { pointer.current = false; setCur(steps[0]); }}
-          className={`ml-auto inline-flex min-h-11 items-center rounded-lg px-1.5 text-[13px] font-semibold underline decoration-[var(--a)] decoration-2 underline-offset-4 hover:decoration-[var(--ink)] ${FOCUS}`}>{U.edit}</button>
-      </div>
+      <div className="hidden @3xl:block">{chip(false)}</div>
       {hasFees && oc !== "insurance" && (
         <Choice name={`${uid}appt`} legend={U.appt} options={visitOptions} value={a.appt} onChange={(v) => set("appt", v)} onPointer={(p) => (pointer.current = p)} reduce={reduce} invalid={!!est?.bad} />
       )}
@@ -358,23 +367,37 @@ export function EmbeddableDentalCalculator({
   const dockOn = !!(est && !est.bad && est.known && est.fee > 0 && (oc === "qualified" || oc === "unconfirmed" || oc === "income"));
   const dockHref = oc === "qualified" ? book({ branch: "qualified", cdcpTier: tier ?? "", suggestedDate: weeksIso(7) }) : book({ branch: oc });
   const dockLabel = oc === "qualified" ? R.branchQualified.step2Cta : R.branchIncome.primaryCta;
+  // booking stays locked until an appointment is chosen (the fee drives the estimate it books against); the CRA step is never gated
+  const locked = hasFees && oc !== "insurance" && oc !== "pending" && !a.appt;
+  const ctaSpring = reduce ? { duration: 0 } : { type: "spring" as const, stiffness: 320, damping: 26 };
   const ctaNode = oc === "pending" ? null : (
     <div ref={actRef} className="space-y-1 pt-1">
-      {oc === "insurance" && <CtaLink href={book({ branch: "insurance" })}>{R.branchInsurance.primaryCta}</CtaLink>}
-      {oc === "income" && <CtaLink href={book({ branch: "income" })}>{R.branchIncome.primaryCta}</CtaLink>}
-      {oc === "unconfirmed" && <CtaLink href={book({ branch: "unconfirmed" })}>{R.branchIncome.primaryCta}</CtaLink>}
-      {oc === "tax" && (<>
-        <CtaLink href={L.craMyAccountUrl} external>{R.branchTaxFiling.primaryCta}</CtaLink>
-        <CtaLink variant="secondary" href={book({ branch: "tax-filing", suggestedDate: weeksIso(4) })}>{R.branchTaxFiling.secondaryCta}</CtaLink></>)}
-      {oc === "qualified" && (<>
-        <CtaLink href={book({ branch: "qualified", cdcpTier: tier ?? "", suggestedDate: weeksIso(7) })}>{R.branchQualified.step2Cta}</CtaLink>
-        <p className="px-1 pb-1 pt-2 text-center text-xs leading-snug opacity-80">{R.branchQualified.step2MicroCopy}</p>
-        <CtaLink variant="secondary" href={L.cdcpApplyUrl} external>{U.applyLink}</CtaLink></>)}
+      {oc === "tax" && <CtaLink href={L.craMyAccountUrl} external>{R.branchTaxFiling.primaryCta}</CtaLink>}
+      <AnimatePresence mode="wait" initial={false}>
+        {locked && oc !== "tax" ? (
+          <motion.div key="lock" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: reduce ? 0 : 0.1 } }} transition={{ duration: reduce ? 0 : 0.18 }}>
+            <button type="button" disabled aria-disabled="true" className="flex min-h-14 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-white/15 px-5 text-[13px] font-medium text-[var(--onpanel)]/60">
+              <Lock className="size-4" aria-hidden />{U.lockCta}
+            </button>
+          </motion.div>
+        ) : !locked ? (
+          <motion.div key="open" className="space-y-1" initial={{ opacity: 0, y: reduce ? 0 : 14, scale: reduce ? 1 : 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={ctaSpring}>
+            {oc === "insurance" && <CtaLink href={book({ branch: "insurance" })}>{R.branchInsurance.primaryCta}</CtaLink>}
+            {oc === "income" && <CtaLink href={book({ branch: "income" })}>{R.branchIncome.primaryCta}</CtaLink>}
+            {oc === "unconfirmed" && <CtaLink href={book({ branch: "unconfirmed" })}>{R.branchIncome.primaryCta}</CtaLink>}
+            {oc === "tax" && <CtaLink variant="secondary" href={book({ branch: "tax-filing", suggestedDate: weeksIso(4) })}>{R.branchTaxFiling.secondaryCta}</CtaLink>}
+            {oc === "qualified" && (<>
+              <CtaLink href={book({ branch: "qualified", cdcpTier: tier ?? "", suggestedDate: weeksIso(7) })}>{R.branchQualified.step2Cta}</CtaLink>
+              <p className="px-1 pb-1 pt-2 text-center text-xs leading-snug opacity-80">{R.branchQualified.step2MicroCopy}</p>
+              <CtaLink variant="secondary" href={L.cdcpApplyUrl} external>{U.applyLink}</CtaLink></>)}
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 
   const panel = (
-    <div className="flex h-full flex-col gap-5 bg-[var(--panel)] p-6 text-[var(--onpanel)] @2xl:p-8">
+    <div className="flex h-full flex-col gap-5 bg-[var(--panel)] p-6 text-[var(--onpanel)] @3xl:p-8">
       <div className="space-y-3">
         <p className="inline-flex items-center gap-2 rounded-full border border-white/25 px-3 py-1 text-xs font-semibold">
           <span className={head.tone === "good" ? "text-[var(--good-on-panel)]" : head.tone === "bad" ? "text-[#ffb4ab]" : head.tone === "warn" ? "text-[#ffd8a8]" : ""}>{badgeIcon}</span>{head.label}
@@ -386,26 +409,31 @@ export function EmbeddableDentalCalculator({
           <div className="pt-2">
             <AnimatePresence mode="wait" initial={false}>
               {shown !== null ? (
-                <motion.div key="fig" initial={{ opacity: 0, y: reduce ? 0 : 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 30 }}>
+                <motion.div key="fig" style={{ transformOrigin: "left center" }} initial={{ scale: reduce ? 1 : 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ opacity: 0 }}
+                  transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 24 }}>
                   <p className="text-[13px] font-semibold">{U.share}</p>
-                  <p ref={figRef} aria-hidden className="mt-1 font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-5xl font-black leading-none tracking-tight">
+                  <p aria-hidden className="mt-1 font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-5xl font-black leading-none tracking-tight">
                     <Money value={shown} lang={lang} />
                   </p>
                 </motion.div>
               ) : (
-                <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0 : 0.18 }}
-                  className="flex items-start gap-3 rounded-xl border border-dashed border-white/30 p-4 text-[15px] font-medium leading-snug">
-                  {complete && !est?.bad && <><ArrowLeft className="mt-0.5 hidden size-5 shrink-0 @2xl:block" aria-hidden /><ArrowDown className="mt-0.5 size-5 shrink-0 @2xl:hidden" aria-hidden /></>}
-                  <span>{complete && !est?.bad && hasFees && !a.appt ? U.pickPrompt : missingLine}</span>
-                </motion.div>
+                <motion.p key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0 : 0.18 }}
+                  className="text-[15px] leading-snug text-[var(--onpanel)]/70">
+                  {complete && !est?.bad && hasFees && !a.appt
+                    ? <><span className="@3xl:hidden">{U.pickAbove}</span><span className="hidden @3xl:inline">{U.pickPrompt}</span></>
+                    : missingLine}
+                </motion.p>
               )}
             </AnimatePresence>
             {shown !== null && missingLine && <p className="mt-2 text-[13px] leading-snug opacity-85">{missingLine}</p>}
           </div>
         )}
 
-        {est && !est.bad && est.known && (
-          <div className="space-y-3 pt-1">
+        <AnimatePresence initial={false}>
+          {est && !est.bad && est.known && (
+            <motion.div key="calc" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+              transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 34 }} className="-mx-1 overflow-hidden px-1">
+              <div className="space-y-3 pt-1">
             <div aria-hidden className="flex h-2.5 overflow-hidden rounded-full bg-[var(--onpanel)]/90">
               <motion.div className="h-full bg-[var(--good-on-panel)]" initial={false} animate={{ width: `${coveredPct}%` }} transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 140, damping: 24 }} />
             </div>
@@ -427,13 +455,14 @@ export function EmbeddableDentalCalculator({
             </dl>
               </div>
             </details>
-            {ctaNode}
-            {oc === "tax" && <p className="text-xs opacity-80">{U.whenIssued}</p>}
-            {oc === "unconfirmed" && <p className="text-xs opacity-80">{U.ifQualify}</p>}
-            {est.fee > 0 && est.patient === 0 && <p className="text-xs opacity-80">{U.full}</p>}
-          </div>
-        )}
-        {!(est && !est.bad && est.known) && ctaNode}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        {ctaNode}
+        {oc === "tax" && est && !est.bad && est.known && <p className="text-xs opacity-80">{U.whenIssued}</p>}
+        {oc === "unconfirmed" && est && !est.bad && est.known && <p className="text-xs opacity-80">{U.ifQualify}</p>}
+        {est && !est.bad && est.known && est.fee > 0 && est.patient === 0 && <p className="text-xs opacity-80">{U.full}</p>}
         {est && !est.bad && (
           <div className="space-y-1 text-[13px] leading-relaxed">
             <p><b>{U.incl}</b>{lang === "fr" ? " : " : ": "}{U.pk[est.visit][1]}</p>
@@ -475,7 +504,7 @@ export function EmbeddableDentalCalculator({
   /* ----- assembly ----- */
   const pill = `inline-flex min-h-11 items-center gap-1.5 rounded-full border border-[var(--line)] bg-[var(--tint)] px-3.5 font-semibold transition hover:border-[var(--p)] hover:bg-[var(--paper)] ${FOCUS}`;
   const frontDesk = (phone || email) && (
-    <div className="mt-auto rounded-xl border border-[var(--line)] border-l-[3px] border-l-[var(--a)] bg-[var(--paper)] px-4 py-3 text-sm leading-relaxed">
+    <div className="rounded-xl border border-[var(--line)] border-l-[3px] border-l-[var(--a)] bg-[var(--paper)] px-4 py-3 text-sm leading-relaxed">
       <p className="font-semibold">{L.skipPrompt}</p>
       <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1.5">
         {phoneHref && <a href={phoneHref} className={pill}><Phone className="size-4" aria-hidden />{L.skipCall}</a>}
@@ -492,30 +521,26 @@ export function EmbeddableDentalCalculator({
       className={`@container mx-auto w-full max-w-4xl overflow-clip rounded-[var(--r)] border border-[var(--line)] bg-[var(--paper)] text-[var(--ink)] shadow-2xl ${className}`}>
       <div role="status" className="sr-only">{announce}</div>
 
-      <header className="flex items-center justify-between gap-3 border-b border-[var(--line)] px-6 py-3">
-        <p className="min-w-0 truncate text-xs font-semibold tracking-wide">{HEADER[lang]}{clinicName ? ` · ${clinicName}` : ""}</p>
+      <header className="sticky top-[var(--stick)] z-30 flex h-10 items-center justify-between gap-3 border-b border-[var(--line)] bg-[var(--paper)] px-6 @3xl:static">
+        <p className="min-w-0 truncate text-xs font-semibold tracking-wide">{HEADER[lang]}{clinicName ? ` • ${clinicName}` : ""}</p>
         <ShieldCheck className="size-4 shrink-0 opacity-60" aria-hidden />
       </header>
 
-      {/* narrow: the running figure stays pinned once the assessment is complete */}
-      {complete && oc !== "insurance" && hasFees && (
-        <div className="sticky top-[var(--stick)] z-20 h-0 @2xl:hidden">
-          <div aria-hidden={figSeen} className={`absolute inset-x-0 top-0 flex items-baseline justify-between gap-3 border-b border-[var(--line)] bg-[var(--paper)] px-6 py-2.5 shadow-sm transition duration-200 ${figSeen ? "pointer-events-none -translate-y-2 opacity-0" : ""}`}>
-            <span className="text-[13px] font-semibold">{U.share}</span>
-            {shown === null ? <span className="text-xs opacity-70">{est?.bad ? U.unavailable : U.pickVisit}</span> : <Money value={shown} lang={lang} className="font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-3xl font-extrabold leading-none tracking-tight" />}
-          </div>
-        </div>
+      {/* stacked layout: the answer chip stays pinned under the header; two-pane layout shows it inside the inputs pane */}
+      {complete && (
+        <div className="sticky top-[calc(var(--stick)+2.5rem)] z-20 border-b border-[var(--line)] bg-[var(--paper)] px-3 @3xl:hidden">{chip(true)}</div>
       )}
 
-      <div className="grid grid-cols-1 @2xl:grid-cols-12">
-        <div className={`flex flex-col px-6 py-6 @2xl:col-span-7 @2xl:p-8 ${complete ? "order-2 @2xl:order-none bg-[var(--tint)] @2xl:bg-[var(--paper)]" : ""}`}>
+      <div ref={gridRef} className="grid grid-cols-1 @3xl:grid-cols-12">
+        <div className="flex flex-col px-6 py-6 @3xl:col-span-7 @3xl:p-8">
           <AnimatePresence mode="wait" initial={false}>{stagePane}</AnimatePresence>
           {anyAnswer && (
             <button type="button" onClick={clear} className={`mt-6 inline-flex w-fit min-h-11 items-center text-[13px] font-semibold underline underline-offset-4 opacity-80 hover:opacity-100 ${FOCUS}`}>{U.clear}</button>
           )}
-          {frontDesk}
+          {frontDesk && <div className="mt-auto hidden pt-6 @3xl:block">{frontDesk}</div>}
         </div>
-        <div className={`@2xl:col-span-5 ${complete ? "order-1 @2xl:order-none" : ""}`}>{panel}</div>
+        <div ref={resRef} className="scroll-mt-[calc(var(--stick)+5.5rem)] @3xl:col-span-5">{panel}</div>
+        {frontDesk && <div className="px-6 pb-6 pt-5 @3xl:hidden">{frontDesk}</div>}
       </div>
 
       {/* sticky dock: share, total and the booking action stay reachable without scrolling back up */}
