@@ -152,7 +152,7 @@ function Choice<V extends string>(props: {
           return (
             <label key={o.value} onPointerDown={() => onPointer(true)} onKeyDown={() => onPointer(false)}
               className={`relative flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border-2 p-4 text-[var(--ink)] transition-all duration-150 ease-out
-                hover:border-[var(--p)] active:scale-[.98] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--ink)]
+                hover:border-[color-mix(in_srgb,var(--p)_80%,transparent)] active:scale-[0.98] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--ink)]
                 forced-colors:has-[:checked]:border-[Highlight] motion-reduce:transition-none motion-reduce:active:scale-100
                 ${on ? `${invalid ? "border-[var(--bad)] ring-[var(--bad)]" : "border-[var(--p)] ring-[var(--p)]"} bg-[var(--tint)] ring-1 shadow-[0_8px_20px_-12px_rgb(0_0_0/.45)]` : "border-[var(--line)] bg-[var(--paper)]"}`}>
               <input type="radio" name={name} value={o.value} checked={on} aria-label={o.aria ?? (o.hint ? `${o.label}. ${o.hint}` : o.label)}
@@ -183,7 +183,7 @@ function CtaLink({ href, children, external, variant = "primary" }: { href: stri
   const ext = external ? { target: "_blank", rel: "noopener noreferrer" } : {};
   return variant === "primary" ? (
     <a href={href} {...ext}
-      className={`flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-[var(--paper)] px-5 py-4 text-base font-bold leading-tight text-[var(--ink)] shadow-[0_10px_24px_-12px_rgb(0_0_0/.6)] transition duration-150 hover:brightness-95 active:translate-y-px motion-reduce:transition-none ${FOCUS}`}>
+      className={`flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-[var(--paper)] px-5 py-4 text-base font-bold leading-tight text-[var(--ink)] shadow-[0_10px_24px_-12px_rgb(0_0_0/.6)] transition-all duration-150 hover:scale-[1.01] hover:brightness-95 active:scale-[0.99] motion-reduce:transition-none motion-reduce:transform-none ${FOCUS}`}>
       {children}{external ? <ArrowUpRight className="size-5" aria-hidden /> : <ChevronRight className="size-5" aria-hidden />}
     </a>
   ) : (
@@ -376,7 +376,10 @@ export function CdcpWidget({
         <div className="space-y-3">
           <div>
             <p className="text-[13px] font-semibold">{U.share}</p>
-            <p aria-hidden className="mt-1 font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-6xl font-black leading-none tracking-tight"><CountUp value={est.patient} lang={lang} reduce={reduce} /></p>
+            <p aria-hidden className="mt-1 font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-6xl font-black leading-none tracking-tight"><motion.span className="inline-block" initial={{ opacity: 0, y: reduce ? 0 : 10 }} animate={{ opacity: 1, y: 0 }}
+                transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 20 }}>
+                <CountUp value={est.patient} lang={lang} reduce={reduce} />
+              </motion.span></p>
           </div>
           {est.fee > 0 && (<>
             <div aria-hidden className="flex h-2.5 overflow-hidden rounded-full bg-[var(--onpanel)]/90">
@@ -390,7 +393,7 @@ export function CdcpWidget({
           </>)}
         </div>
       )}
-      {est?.bad && <p className="text-[15px] leading-snug text-[#ffd8a8]">{U.unavailable}</p>}
+      {est?.bad && <p className="text-[15px] leading-snug text-amber-300">{U.unavailable}</p>}
 
       {ctaNode}
       {oc === "tax" && showFigure && <p className="text-xs opacity-80">{U.whenIssued}</p>}
@@ -400,7 +403,7 @@ export function CdcpWidget({
       {est && !est.bad && (
         <div className="space-y-1 text-[13px] leading-relaxed">
           <p><b>{U.incl}</b>{lang === "fr" ? " : " : ": "}{U.pk[est.visit][1]}</p>
-          {notes.map((n) => <p key={n.text} className={n.tone === "bad" ? "text-[#ffb4ab]" : "text-[#ffd8a8]"}>{n.text}</p>)}
+          {notes.map((n) => <p key={n.text} className="text-amber-300">{n.text}</p>)}
         </div>
       )}
 
