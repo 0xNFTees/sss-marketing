@@ -12,7 +12,7 @@ import {
   useCallback, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type ReactNode,
 } from "react";
 import { AnimatePresence, animate, motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, Check, ChevronDown, ChevronLeft, ChevronRight, Info, Mail, Phone, ShieldCheck } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, CircleCheck, FileText, Info, Mail, Phone, ShieldCheck, User, Wallet } from "lucide-react";
 import { LABELS, UI, type Lang } from "./copy";
 import {
   EMPTY_ANSWERS, INCOME_KEYS, VISITS, estimate, firstUnanswered, indexProcedures, outcome, requiredSteps,
@@ -124,12 +124,12 @@ function StepPills({ n, t, label }: { n: number; t: number; label: string }) {
 }
 
 interface Option<V extends string> { value: V; label: string; hint?: string; aria?: string }
-/** A radio group drawn as selectable cards. Native radios underneath: arrows, Space and screen readers all work. */
+/** A radio group drawn as selectable cards. Native radios stay underneath (invisible, full-card hit area) so arrows, Space and screen readers work. */
 function Choice<V extends string>(props: {
   name: string; legend: string; hint?: string; options: readonly Option<V>[]; value: V | null; onChange: (v: V) => void;
-  onPointer: (isPointer: boolean) => void; columns?: 1 | 2; invalid?: boolean; legendId?: string;
+  onPointer: (isPointer: boolean) => void; columns?: 1 | 2; invalid?: boolean; reduce?: boolean | null;
 }) {
-  const { name, legend, hint, options, value, onChange, onPointer, columns = 1, invalid } = props;
+  const { name, legend, hint, options, value, onChange, onPointer, columns = 1, invalid, reduce } = props;
   return (
     <div role="radiogroup" aria-labelledby={`${name}-lg`} className="min-w-0">
       <div id={`${name}-lg`} className="mb-3 w-full">
@@ -137,53 +137,72 @@ function Choice<V extends string>(props: {
         {hint && <span className="mt-0.5 block text-[13px] leading-snug opacity-75">{hint}</span>}
       </div>
       <div className={`grid gap-2.5 ${columns === 2 ? "@md:grid-cols-2" : ""}`}>
-        {options.map((o) => (
-          <label key={o.value} onPointerDown={() => onPointer(true)} onKeyDown={() => onPointer(false)}
-            className={`group/c relative block cursor-pointer rounded-2xl border border-[var(--line)] bg-[var(--tint)] text-[var(--ink)] transition duration-150 ease-out
-              hover:-translate-y-px hover:bg-[var(--paper)] hover:shadow-sm active:translate-y-0
-              has-[:checked]:border-transparent has-[:checked]:bg-[linear-gradient(var(--paper),var(--paper))_padding-box,linear-gradient(135deg,var(--p),var(--a))_border-box]
-              has-[:checked]:shadow-[0_6px_18px_-10px_rgb(0_0_0/.35)] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--ink)]
-              forced-colors:has-[:checked]:border-[Highlight] ${invalid ? "has-[:checked]:[background:linear-gradient(var(--paper),var(--paper))_padding-box,linear-gradient(var(--bad),var(--bad))_border-box]" : ""}
-              motion-reduce:transition-none motion-reduce:hover:translate-y-0`}>
-            <input type="radio" name={name} value={o.value} checked={value === o.value} aria-label={o.aria ?? (o.hint ? `${o.label}. ${o.hint}` : o.label)}
-              onChange={() => onChange(o.value)} className="peer absolute inset-0 size-full cursor-pointer opacity-0" />
-            <span className="flex min-h-14 items-center gap-3 px-4 py-3">
+        {options.map((o) => {
+          const on = value === o.value;
+          return (
+            <label key={o.value} onPointerDown={() => onPointer(true)} onKeyDown={() => onPointer(false)}
+              className={`relative flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border-2 p-4 text-[var(--ink)] transition-all duration-150 ease-out
+                hover:border-[var(--p)] active:scale-[.995] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--ink)]
+                forced-colors:has-[:checked]:border-[Highlight] motion-reduce:transition-none motion-reduce:active:scale-100
+                ${on ? `${invalid ? "border-[var(--bad)]" : "border-[var(--p)]"} bg-[var(--paper)] shadow-[0_8px_20px_-12px_rgb(0_0_0/.45)]` : "border-[var(--line)] bg-[var(--paper)]"}`}>
+              <input type="radio" name={name} value={o.value} checked={on} aria-label={o.aria ?? (o.hint ? `${o.label}. ${o.hint}` : o.label)}
+                onChange={() => onChange(o.value)} className="absolute inset-0 z-10 size-full cursor-pointer opacity-0" />
               <span className="min-w-0 flex-1">
                 <span className="block text-[15px] font-semibold leading-snug">{o.label}</span>
                 {o.hint && <span className="mt-0.5 block text-[13px] leading-snug opacity-75">{o.hint}</span>}
               </span>
-              <span aria-hidden className="grid size-5 shrink-0 place-items-center rounded-full border border-[var(--edge)] bg-[var(--paper)] text-[var(--paper)] transition duration-150
-                group-has-[:checked]/c:border-transparent group-has-[:checked]/c:bg-[var(--p)] group-has-[:checked]/c:text-[var(--paper)]">
-                <Check className="size-3 scale-50 opacity-0 transition duration-150 group-has-[:checked]/c:scale-100 group-has-[:checked]/c:opacity-100" strokeWidth={3} />
-              </span>
-            </span>
-          </label>
-        ))}
+              <AnimatePresence initial={false}>
+                {on && (
+                  <motion.span aria-hidden key="ok" className="shrink-0 text-[var(--p)]"
+                    initial={{ scale: reduce ? 1 : 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: reduce ? 1 : 0.4, opacity: 0 }}
+                    transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 520, damping: 24 }}>
+                    <CircleCheck className="size-6" strokeWidth={2.25} />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </label>
+          );
+        })}
       </div>
     </div>
   );
 }
 
+/** Primary: one full-width, high-contrast hero button. Secondary: a quiet text link, never a second button. */
 function CtaLink({ href, children, external, variant = "primary" }: { href: string; children: ReactNode; external?: boolean; variant?: "primary" | "secondary" }) {
-  return (
-    <a href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-3 text-[13px] font-semibold leading-tight transition duration-150 ${FOCUS}
-        ${variant === "primary" ? "bg-[var(--paper)] text-[var(--ink)] hover:brightness-95 active:translate-y-px" : "border border-white/30 text-[var(--onpanel)] hover:bg-white/10"}`}>
-      {children}
-      {external ? <ArrowUpRight className="size-4" aria-hidden /> : <ChevronRight className="size-4" aria-hidden />}
+  const ext = external ? { target: "_blank", rel: "noopener noreferrer" } : {};
+  return variant === "primary" ? (
+    <a href={href} {...ext}
+      className={`flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-[var(--paper)] px-5 py-4 text-base font-bold leading-tight text-[var(--ink)] shadow-[0_10px_24px_-12px_rgb(0_0_0/.6)] transition duration-150 hover:brightness-95 active:translate-y-px motion-reduce:transition-none ${FOCUS}`}>
+      {children}{external ? <ArrowUpRight className="size-5" aria-hidden /> : <ChevronRight className="size-5" aria-hidden />}
+    </a>
+  ) : (
+    <a href={href} {...ext}
+      className={`mx-auto flex min-h-11 w-fit max-w-full items-center rounded-lg px-2 text-center text-[13px] font-medium leading-snug opacity-80 transition hover:opacity-100 ${FOCUS}`}>
+      <span><span className="underline decoration-white/40 underline-offset-4">{children}</span>{external ? <ArrowUpRight className="ml-1 inline size-3.5 align-[-2px]" aria-hidden /> : null}</span>
     </a>
   );
 }
 
-function Drawer({ title, children }: { title: string; children: ReactNode }) {
+function Drawer({ title, children, reduce }: { title: string; children: ReactNode; reduce?: boolean | null }) {
+  const [open, setOpen] = useState(false);
+  const id = useId();
   return (
-    <details className="group/d rounded-2xl border border-white/15 bg-white/5">
-      <summary className={`flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-2xl px-4 py-2 text-[13px] font-semibold marker:hidden [&::-webkit-details-marker]:hidden ${FOCUS}`}>
+    <div className="rounded-2xl border border-white/15 bg-white/5">
+      <button type="button" aria-expanded={open} aria-controls={id} onClick={() => setOpen((o) => !o)}
+        className={`flex min-h-11 w-full cursor-pointer items-center justify-between gap-3 rounded-2xl px-4 py-2 text-left text-[13px] font-semibold ${FOCUS}`}>
         <span className="flex items-center gap-2"><Info className="size-4" aria-hidden />{title}</span>
-        <ChevronDown className="size-4 transition-transform duration-200 group-open/d:rotate-180 motion-reduce:transition-none" aria-hidden />
-      </summary>
-      <div className="space-y-3 px-4 pb-4 text-[13px] leading-relaxed">{children}</div>
-    </details>
+        <ChevronDown className={`size-4 transition-transform duration-200 motion-reduce:transition-none ${open ? "rotate-180" : ""}`} aria-hidden />
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div id={id} key="body" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+            transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 360, damping: 38 }} className="overflow-hidden">
+            <div className="space-y-3 px-4 pb-4 text-[13px] leading-relaxed">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
@@ -288,9 +307,9 @@ export function EmbeddableDentalCalculator({
           : <span />}
         <StepPills n={steps.indexOf(view) + 1} t={steps.length} label={(a.ins ? U.qn : U.qn.replace(/ (sur|of) \{t\}/, "")).replace("{n}", String(steps.indexOf(view) + 1)).replace("{t}", String(steps.length))} />
       </div>
-      {view === "ins" && <Choice name={`${uid}ins`} legend={U.ins} hint={U.insI} options={yn("ins")} value={a.ins} onChange={(v) => set("ins", v)} onPointer={(p) => (pointer.current = p)} />}
-      {view === "inc" && <Choice name={`${uid}inc`} legend={U.inc} hint={U.incI} options={incomeOptions} value={a.inc} onChange={(v) => set("inc", v)} onPointer={(p) => (pointer.current = p)} columns={2} />}
-      {view === "filed" && <Choice name={`${uid}filed`} legend={U.filed} hint={U.filedI} options={yn("filed")} value={a.filed} onChange={(v) => set("filed", v)} onPointer={(p) => (pointer.current = p)} />}
+      {view === "ins" && <Choice name={`${uid}ins`} legend={U.ins} hint={U.insI} options={yn("ins")} value={a.ins} onChange={(v) => set("ins", v)} onPointer={(p) => (pointer.current = p)} reduce={reduce} />}
+      {view === "inc" && <Choice name={`${uid}inc`} legend={U.inc} hint={U.incI} options={incomeOptions} value={a.inc} onChange={(v) => set("inc", v)} onPointer={(p) => (pointer.current = p)} reduce={reduce} columns={2} />}
+      {view === "filed" && <Choice name={`${uid}filed`} legend={U.filed} hint={U.filedI} options={yn("filed")} value={a.filed} onChange={(v) => set("filed", v)} onPointer={(p) => (pointer.current = p)} reduce={reduce} />}
       {a[view] && (
         <div className="mt-3 flex justify-end">
           <button type="button" onClick={() => { setCur(null); }} className={`inline-flex min-h-11 items-center gap-1 rounded-xl border border-[var(--ink)] px-4 text-[13px] font-semibold transition hover:bg-[var(--ink)] hover:text-[var(--paper)] ${FOCUS}`}>{U.cont}<ChevronRight className="size-4" aria-hidden /></button>
@@ -299,22 +318,25 @@ export function EmbeddableDentalCalculator({
     </motion.div>
   ) : (
     <motion.div key="done" ref={stage} initial={{ opacity: reduce ? 1 : 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0 : 0.16 }} className="space-y-6">
-      <section aria-labelledby={`${uid}yours`}>
-        <h3 id={`${uid}yours`} className="mb-2 text-xs font-semibold tracking-wide opacity-70">{U.yours}</h3>
-        <ul className="divide-y divide-[var(--line)] overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--paper)]">
-          {steps.map((k) => (
-            <li key={k}>
+      <div role="group" aria-label={U.yours} className="flex flex-wrap items-center gap-x-0 gap-y-0 rounded-2xl border border-[var(--line)] bg-[var(--paper)] py-0.5 pl-1 pr-0.5 text-[13px] font-semibold">
+        {steps.map((k, i) => {
+          const Icon = k === "ins" ? User : k === "inc" ? Wallet : FileText;
+          const text = k === "ins" ? U.chipIns[a.ins === "yes" ? "yes" : "no"] : k === "inc" ? nb(L.step2[a.inc as IncomeKey]) : U.chipFiled[a.filed === "yes" ? "yes" : "no"];
+          return (
+            <span key={k} className="inline-flex items-center">
+              {i > 0 && <span aria-hidden className="opacity-40">•</span>}
               <button type="button" onClick={() => { pointer.current = false; setCur(k); }} aria-label={`${U.edit} : ${stepLabel(k)}, ${answerText(k)}`}
-                className={`flex min-h-14 w-full items-center justify-between gap-3 px-4 py-2 text-left transition hover:bg-[var(--tint)] focus-visible:outline-offset-[-2px] ${FOCUS}`}>
-                <span className="min-w-0"><span className="block text-xs opacity-70">{stepLabel(k)}</span><span className="block text-[13px] font-semibold">{answerText(k)}</span></span>
-                <span className="shrink-0 text-xs font-semibold underline underline-offset-4">{U.edit}</span>
+                className={`inline-flex min-h-11 items-center gap-1.5 rounded-lg px-1.5 transition hover:bg-[var(--tint)] ${FOCUS}`}>
+                <Icon className="size-4 shrink-0 opacity-70" aria-hidden /><span>{text}</span>
               </button>
-            </li>
-          ))}
-        </ul>
-      </section>
+            </span>
+          );
+        })}
+        <button type="button" onClick={() => { pointer.current = false; setCur(steps[0]); }}
+          className={`ml-auto inline-flex min-h-11 items-center rounded-lg px-1.5 text-[13px] font-semibold underline decoration-[var(--a)] decoration-2 underline-offset-4 hover:decoration-[var(--ink)] ${FOCUS}`}>{U.edit}</button>
+      </div>
       {hasFees && oc !== "insurance" && (
-        <Choice name={`${uid}appt`} legend={U.appt} options={visitOptions} value={a.appt} onChange={(v) => set("appt", v)} onPointer={(p) => (pointer.current = p)} invalid={!!est?.bad} />
+        <Choice name={`${uid}appt`} legend={U.appt} options={visitOptions} value={a.appt} onChange={(v) => set("appt", v)} onPointer={(p) => (pointer.current = p)} reduce={reduce} invalid={!!est?.bad} />
       )}
     </motion.div>
   );
@@ -336,28 +358,19 @@ export function EmbeddableDentalCalculator({
   const dockOn = !!(est && !est.bad && est.known && est.fee > 0 && (oc === "qualified" || oc === "unconfirmed" || oc === "income"));
   const dockHref = oc === "qualified" ? book({ branch: "qualified", cdcpTier: tier ?? "", suggestedDate: weeksIso(7) }) : book({ branch: oc });
   const dockLabel = oc === "qualified" ? R.branchQualified.step2Cta : R.branchIncome.primaryCta;
-  const ctaNode = (
-    <>
-      {oc !== "pending" && (
-          <div ref={actRef} className="space-y-3 pt-1"><div className="flex flex-wrap gap-3">
-            {oc === "insurance" && <CtaLink href={book({ branch: "insurance" })}>{R.branchInsurance.primaryCta}</CtaLink>}
-            {oc === "income" && <CtaLink href={book({ branch: "income" })}>{R.branchIncome.primaryCta}</CtaLink>}
-            {oc === "unconfirmed" && <CtaLink href={book({ branch: "unconfirmed" })}>{R.branchIncome.primaryCta}</CtaLink>}
-            {oc === "tax" && (<><CtaLink href={L.craMyAccountUrl} external>{R.branchTaxFiling.primaryCta}</CtaLink>
-              <CtaLink variant="secondary" href={book({ branch: "tax-filing", suggestedDate: weeksIso(4) })}>{R.branchTaxFiling.secondaryCta}</CtaLink></>)}
-            {oc === "qualified" && (<><CtaLink href={book({ branch: "qualified", cdcpTier: tier ?? "", suggestedDate: weeksIso(7) })}>{R.branchQualified.step2Cta}</CtaLink>
-              <CtaLink variant="secondary" href={L.cdcpApplyUrl} external>{R.branchQualified.step1Cta}</CtaLink></>)}
-          </div>
-            {oc === "qualified" && (
-              <ol className="space-y-2 text-[13px] leading-relaxed opacity-90">
-                <li><b>{L.stepLabel.replace("{current}", "1").replace("{total}", "2")} · {R.branchQualified.step1Title.replace(/^[^—-]*[—-]\s*/, "")}</b> {R.branchQualified.step1Body}</li>
-                <li><b>{L.stepLabel.replace("{current}", "2").replace("{total}", "2")} · {R.branchQualified.step2Title.replace(/^[^—-]*[—-]\s*/, "")}</b> {R.branchQualified.step2MicroCopy}</li>
-                <li>{R.branchQualified.step3Title.replace(/^[^—-]*[—-]\s*/, "")}{" "}<a className={`font-semibold underline underline-offset-4 ${FOCUS}`} href={book({ branch: "qualified-help" })}>{R.branchQualified.step3Cta}</a></li>
-              </ol>
-            )}
-          </div>
-        )}
-    </>
+  const ctaNode = oc === "pending" ? null : (
+    <div ref={actRef} className="space-y-1 pt-1">
+      {oc === "insurance" && <CtaLink href={book({ branch: "insurance" })}>{R.branchInsurance.primaryCta}</CtaLink>}
+      {oc === "income" && <CtaLink href={book({ branch: "income" })}>{R.branchIncome.primaryCta}</CtaLink>}
+      {oc === "unconfirmed" && <CtaLink href={book({ branch: "unconfirmed" })}>{R.branchIncome.primaryCta}</CtaLink>}
+      {oc === "tax" && (<>
+        <CtaLink href={L.craMyAccountUrl} external>{R.branchTaxFiling.primaryCta}</CtaLink>
+        <CtaLink variant="secondary" href={book({ branch: "tax-filing", suggestedDate: weeksIso(4) })}>{R.branchTaxFiling.secondaryCta}</CtaLink></>)}
+      {oc === "qualified" && (<>
+        <CtaLink href={book({ branch: "qualified", cdcpTier: tier ?? "", suggestedDate: weeksIso(7) })}>{R.branchQualified.step2Cta}</CtaLink>
+        <p className="px-1 pb-1 pt-2 text-center text-xs leading-snug opacity-80">{R.branchQualified.step2MicroCopy}</p>
+        <CtaLink variant="secondary" href={L.cdcpApplyUrl} external>{U.applyLink}</CtaLink></>)}
+    </div>
   );
 
   const panel = (
@@ -371,12 +384,23 @@ export function EmbeddableDentalCalculator({
 
         {oc !== "insurance" && hasFees && (
           <div className="pt-2">
-            <p className="text-[13px] font-semibold">{U.share}</p>
-            <p ref={figRef} aria-hidden className={`mt-1 font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-5xl font-extrabold leading-none tracking-tight @2xl:text-6xl ${shown === null ? "opacity-25" : ""}`}>
-              {shown === null ? <span>—<span className="ml-1 align-[.4em] text-[.42em]">$</span></span> : <Money value={shown} lang={lang} />}
-            </p>
-            {missingLine && <p className="mt-2 text-[13px] leading-snug opacity-85">{missingLine}</p>}
-            {est && !est.bad && !est.known && null}
+            <AnimatePresence mode="wait" initial={false}>
+              {shown !== null ? (
+                <motion.div key="fig" initial={{ opacity: 0, y: reduce ? 0 : 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 30 }}>
+                  <p className="text-[13px] font-semibold">{U.share}</p>
+                  <p ref={figRef} aria-hidden className="mt-1 font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-5xl font-black leading-none tracking-tight">
+                    <Money value={shown} lang={lang} />
+                  </p>
+                </motion.div>
+              ) : (
+                <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0 : 0.18 }}
+                  className="flex items-start gap-3 rounded-xl border border-dashed border-white/30 p-4 text-[15px] font-medium leading-snug">
+                  {complete && !est?.bad && <><ArrowLeft className="mt-0.5 hidden size-5 shrink-0 @2xl:block" aria-hidden /><ArrowDown className="mt-0.5 size-5 shrink-0 @2xl:hidden" aria-hidden /></>}
+                  <span>{complete && !est?.bad && hasFees && !a.appt ? U.pickPrompt : missingLine}</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            {shown !== null && missingLine && <p className="mt-2 text-[13px] leading-snug opacity-85">{missingLine}</p>}
           </div>
         )}
 
@@ -422,7 +446,7 @@ export function EmbeddableDentalCalculator({
       {oc !== "pending" && (
         <div className="space-y-2">
           {(oc === "qualified" || oc === "unconfirmed" || (est && !est.bad)) && (
-            <Drawer title={R.billingNoticeHeading}>
+            <Drawer reduce={reduce} title={R.billingNoticeHeading}>
               {(oc === "qualified" || oc === "unconfirmed") && <p className="border-l-2 border-[var(--a)] pl-3"><b>{R.billingNoticeHeading}.</b> {R.billingNoticeBody}</p>}
               {(oc === "qualified" || oc === "unconfirmed") && <p className="opacity-85">{U.ramq}</p>}
               {est && !est.bad && <p className="opacity-85">{U.disc}</p>}
@@ -430,7 +454,7 @@ export function EmbeddableDentalCalculator({
             </Drawer>
           )}
           {(oc === "qualified" || oc === "unconfirmed") && (
-            <Drawer title={U.matrix}>
+            <Drawer reduce={reduce} title={U.matrix}>
               {([["standard", R.coverageMatrix.standard], ["major", R.coverageMatrix.major], ["excluded", R.coverageMatrix.excluded]] as const).map(([k, m]) => (
                 <details key={k} className="rounded-xl border border-white/15 px-3 py-2" open={k === "standard"}>
                   <summary className={`cursor-pointer text-[13px] font-semibold ${FOCUS}`}>{m.title} <span className="font-normal opacity-75">· {m.subtitle}</span></summary>
@@ -441,7 +465,7 @@ export function EmbeddableDentalCalculator({
             </Drawer>
           )}
           {oc === "insurance" && !!insurers?.length && (
-            <Drawer title={U.insurers}><p>{insurers.join(" · ")}</p></Drawer>
+            <Drawer reduce={reduce} title={U.insurers}><p>{insurers.join(" · ")}</p></Drawer>
           )}
         </div>
       )}
@@ -449,15 +473,17 @@ export function EmbeddableDentalCalculator({
   );
 
   /* ----- assembly ----- */
-  const linkCls = `inline-flex min-h-11 items-center gap-1.5 font-semibold underline decoration-[var(--a)] decoration-2 underline-offset-4 hover:decoration-[var(--ink)] ${FOCUS}`;
+  const pill = `inline-flex min-h-11 items-center gap-1.5 rounded-full border border-[var(--line)] bg-[var(--tint)] px-3.5 font-semibold transition hover:border-[var(--p)] hover:bg-[var(--paper)] ${FOCUS}`;
   const frontDesk = (phone || email) && (
-    <p className="mt-auto rounded-xl border border-[var(--line)] border-l-[3px] border-l-[var(--a)] bg-[var(--paper)] px-4 py-3 text-sm leading-relaxed">
-      <span className="block font-semibold">{L.skipPrompt}</span>
-      {phoneHref && <a href={phoneHref} className={linkCls}><Phone className="size-3.5" aria-hidden />{L.skipCall}</a>}
-      {phoneHref && email ? L.skipOr : ""}
-      {email && <a href={`mailto:${email}`} className={linkCls}><Mail className="size-3.5" aria-hidden />{phone ? L.skipMail : L.skipMail[0].toUpperCase() + L.skipMail.slice(1)}</a>}
-      {phone && !email ? L.skipTailCall : L.skipTail}
-    </p>
+    <div className="mt-auto rounded-xl border border-[var(--line)] border-l-[3px] border-l-[var(--a)] bg-[var(--paper)] px-4 py-3 text-sm leading-relaxed">
+      <p className="font-semibold">{L.skipPrompt}</p>
+      <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1.5">
+        {phoneHref && <a href={phoneHref} className={pill}><Phone className="size-4" aria-hidden />{L.skipCall}</a>}
+        {phoneHref && email ? <span>{L.skipOr}</span> : null}
+        {email && <a href={`mailto:${email}`} className={pill}><Mail className="size-4" aria-hidden />{phone ? L.skipMail : L.skipMail[0].toUpperCase() + L.skipMail.slice(1)}</a>}
+        <span>{phone && !email ? L.skipTailCall : L.skipTail}</span>
+      </p>
+    </div>
   );
   const anyAnswer = !!(a.ins || a.inc || a.filed || a.appt);
 
