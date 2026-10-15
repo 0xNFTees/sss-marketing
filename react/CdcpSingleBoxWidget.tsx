@@ -748,13 +748,34 @@ function Choice<V extends string>(props: {
   );
 }
 
+/** Staggered entrance for the result screen's blocks. */
+function Rise({ i, reduce, className, children }: { i: number; reduce?: boolean | null; className?: string; children: ReactNode }) {
+  return (
+    <motion.div className={className} initial={reduce ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
+      transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 26, delay: 0.08 + i * 0.07 }}>
+      {children}
+    </motion.div>
+  );
+}
+
+const TONE = {
+  good: { chip: "border-emerald-300/40 bg-emerald-300/15 text-emerald-200", glow: "rgb(52_211_153/.20)" },
+  warn: { chip: "border-amber-300/40 bg-amber-300/15 text-amber-200", glow: "rgb(252_211_77/.16)" },
+  bad: { chip: "border-rose-300/40 bg-rose-300/15 text-rose-200", glow: "rgb(253_164_175/.16)" },
+} as const;
+
 /** Primary: one full-width, high-contrast hero button. Secondary: a quiet text link, never a second button. */
 function CtaLink({ href, children, external, variant = "primary" }: { href: string; children: ReactNode; external?: boolean; variant?: "primary" | "secondary" }) {
   const ext = external ? { target: "_blank", rel: "noopener noreferrer" } : {};
+  const reduce = useReducedMotion();
   return variant === "primary" ? (
     <a href={href} {...ext}
-      className={`flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-[var(--paper)] px-5 py-4 text-base font-bold leading-tight text-[var(--ink)] shadow-[0_10px_24px_-12px_rgb(0_0_0/.6)] transition-all duration-150 hover:scale-[1.01] hover:brightness-95 active:scale-[0.99] motion-reduce:transition-none motion-reduce:transform-none ${FOCUS}`}>
-      {children}{external ? <ArrowUpRight className="size-5" aria-hidden /> : <ChevronRight className="size-5" aria-hidden />}
+      className={`group relative flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-[var(--paper)] px-5 py-4 text-base font-bold leading-tight text-[var(--ink)] shadow-[0_0_0_4px_rgb(255_255_255/.08),0_14px_32px_-10px_rgb(52_211_153/.5)] transition-all duration-150 hover:scale-[1.01] hover:brightness-95 active:scale-[0.99] motion-reduce:transition-none motion-reduce:transform-none ${FOCUS}`}>
+      {!reduce && <motion.span aria-hidden className="pointer-events-none absolute -inset-1 rounded-2xl border-2 border-white/50"
+        initial={{ opacity: 0, scale: 1 }} animate={{ opacity: [0, 0.8, 0], scale: [1, 1.025, 1.05] }} transition={{ duration: 2.2, delay: 1.2, repeat: Infinity, repeatDelay: 2.4, ease: "easeOut" }} />}
+      <span className="relative text-center">{children}</span>
+      {external ? <ArrowUpRight className="relative size-5 transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+        : <ChevronRight className="relative size-5 transition-transform duration-150 group-hover:translate-x-1" aria-hidden />}
     </a>
   ) : (
     <a href={href} {...ext}
@@ -927,8 +948,8 @@ export function CdcpSingleBoxWidget({
       {oc === "qualified" && (<>
         <div className="space-y-1.5 pb-3">
           <a href={L.cdcpApplyUrl} target="_blank" rel="noopener noreferrer"
-            className={`flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/30 px-4 py-3 text-center text-sm font-semibold leading-snug transition-all duration-150 hover:border-white/60 hover:bg-white/10 active:scale-[0.99] motion-reduce:transition-none motion-reduce:transform-none ${FOCUS}`}>
-            <span>{U.applyLink}</span><ArrowUpRight className="size-4 shrink-0" aria-hidden />
+            className={`group flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/30 px-4 py-3 text-center text-sm font-semibold leading-snug transition-all duration-150 hover:border-white/60 hover:bg-white/10 active:scale-[0.99] motion-reduce:transition-none motion-reduce:transform-none ${FOCUS}`}>
+            <FileText className="size-4 shrink-0 opacity-80" aria-hidden /><span>{U.applyLink}</span><ArrowUpRight className="size-4 shrink-0 transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
           </a>
           <p className="px-1 text-center text-xs leading-snug opacity-80">{U.applySub}</p>
         </div>
@@ -938,51 +959,54 @@ export function CdcpSingleBoxWidget({
   );
   const covers = est && est.tierPct && (est.covered > 0 || !est.excluded);
 
+  const tone = TONE[head.tone === "good" ? "good" : head.tone === "bad" ? "bad" : "warn"];
   const resultScreen = (
     <motion.div key="result" initial={{ opacity: 0, scale: reduce ? 1 : 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: reduce ? 1 : 0.96 }}
-      transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 25 }} className="space-y-5 px-6 pb-6 pt-3">
-      <div className="space-y-3">
-        <p className="inline-flex items-center gap-2 rounded-full border border-white/25 px-3 py-1 text-xs font-semibold">
-          <span className={head.tone === "good" ? "text-[var(--good-on-panel)]" : head.tone === "bad" ? "text-[#ffb4ab]" : "text-[#ffd8a8]"}>
-            {head.tone === "good" ? <ShieldCheck className="size-4" aria-hidden /> : <Info className="size-4" aria-hidden />}</span>{head.label}
+      transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 25 }} className="relative space-y-5 px-6 pb-6 pt-3">
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-64" style={{ background: `radial-gradient(70% 90% at 50% 0%, ${tone.glow}, transparent)` }} />
+      <Rise i={0} reduce={reduce} className="relative space-y-3">
+        <p className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold ${tone.chip}`}>
+          <motion.span className="inline-flex" initial={reduce ? false : { scale: 0, rotate: -40 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: "spring", stiffness: 500, damping: 14, delay: 0.25 }}>
+            {head.tone === "good" ? <ShieldCheck className="size-4" aria-hidden /> : <Info className="size-4" aria-hidden />}</motion.span>{head.label}
         </p>
         <h2 data-autofocus tabIndex={-1} className="font-sans text-[1.35rem] font-medium leading-tight tracking-tight text-balance outline-none">{head.title}</h2>
         {head.detail && <p className="text-[13px] leading-relaxed opacity-85">{head.detail}</p>}
-      </div>
+      </Rise>
 
       {needAppt && showFigure && est && (
-        <div className="space-y-3">
+        <Rise i={1} reduce={reduce} className="relative space-y-3">
           <div>
             <p className="text-[13px] font-semibold">{U.share}</p>
-            <p aria-hidden className="mt-1 font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-6xl font-black leading-none tracking-tight"><motion.span className="inline-block origin-left" initial={{ opacity: 0, y: reduce ? 0 : 10, scale: reduce ? 1 : 0.85 }} animate={{ opacity: 1, y: 0, scale: 1 }}
+            <p aria-hidden className={`mt-1 font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-6xl font-black leading-none tracking-tight ${est.patient === 0 ? "text-[var(--good-on-panel)]" : ""}`}><motion.span className="inline-block origin-left" initial={{ opacity: 0, y: reduce ? 0 : 10, scale: reduce ? 1 : 0.85 }} animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 20, delay: 0.1 }}>
                 <CountUp value={est.patient} lang={lang} reduce={reduce} />
               </motion.span></p>
           </div>
           {est.fee > 0 && (<>
-            <div aria-hidden className="flex h-2.5 overflow-hidden rounded-full bg-[var(--onpanel)]/90">
+            <div aria-hidden className="relative flex h-2.5 overflow-hidden rounded-full bg-[var(--onpanel)]/90">
               <motion.div className="h-full bg-[var(--good-on-panel)]" initial={{ width: 0 }} animate={{ width: `${coveredPct}%` }} transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 120, damping: 24, delay: 0.15 }} />
+              {!reduce && <motion.span className="absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-transparent via-white/60 to-transparent" initial={{ x: "-100%" }} animate={{ x: "420%" }} transition={{ duration: 1.1, delay: 0.8, ease: "easeOut" }} />}
             </div>
             <dl className="grid grid-cols-2 divide-x divide-white/20 text-[13px] tabular-nums">
-              <div className="pr-3"><dt className="opacity-75">{U.cost}</dt><dd className="mt-0.5 text-base font-bold">{plain(est.fee, lang)}</dd></div>
-              <div className="pl-4"><dt className="opacity-75">{U.paid}</dt><dd className="mt-0.5 text-base font-bold">{est.covered ? "− " : ""}{plain(est.covered, lang)}</dd></div>
+              <div className="pr-3"><dt className="flex items-center gap-1.5 opacity-75"><span aria-hidden className="size-2 rounded-full bg-white/40" />{U.cost}</dt><dd className="mt-0.5 text-base font-bold">{plain(est.fee, lang)}</dd></div>
+              <div className="pl-4"><dt className="flex items-center gap-1.5 opacity-75"><span aria-hidden className="size-2 rounded-full bg-[var(--good-on-panel)]" />{U.paid}</dt><dd className="mt-0.5 text-base font-bold text-[var(--good-on-panel)]">{est.covered ? "− " : ""}{plain(est.covered, lang)}</dd></div>
             </dl>
             <p className="text-xs leading-snug opacity-75">{nb(covers ? U.grid.replace("{n}", String(Math.round((est.tierPct ?? 0) * 100))) : est.tierPct ? U.noCover : U.noelig)} · {U.estNote}</p>
           </>)}
-        </div>
+        </Rise>
       )}
       {est?.bad && <p className="text-[15px] leading-snug text-amber-300">{U.unavailable}</p>}
 
-      {ctaNode}
+      <Rise i={3} reduce={reduce} className="relative">{ctaNode}</Rise>
       {oc === "tax" && showFigure && <p className="text-xs opacity-80">{U.whenIssued}</p>}
       {oc === "unconfirmed" && showFigure && <p className="text-xs opacity-80">{U.ifQualify}</p>}
       {showFigure && est && est.fee > 0 && est.patient === 0 && <p className="text-xs opacity-80">{U.full}</p>}
 
       {est && !est.bad && (
-        <div className="space-y-1 text-[13px] leading-relaxed">
+        <Rise i={4} reduce={reduce} className="relative space-y-2 text-[13px] leading-relaxed">
           <p><b>{U.incl}</b>{lang === "fr" ? " : " : ": "}{U.pk[est.visit][1]}</p>
-          {notes.map((n) => <p key={n.text} className="text-amber-300">{n.text}</p>)}
-        </div>
+          {notes.map((n) => <p key={n.text} className="flex items-start gap-2 rounded-xl border border-amber-300/30 bg-amber-300/10 px-3 py-2.5 text-amber-300"><Info className="mt-0.5 size-4 shrink-0" aria-hidden />{n.text}</p>)}
+        </Rise>
       )}
 
       {(oc === "qualified" || oc === "unconfirmed" || (est && !est.bad)) && (
