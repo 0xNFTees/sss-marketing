@@ -139,7 +139,9 @@
 .cdcp .cq-dl>div{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s3);padding:var(--s2) 0}
 .cdcp .cq-dl>div+div{border-top:1px solid var(--c-line)}
 .cdcp .cq-dl dt small{display:block;margin-top:1px;font-size:var(--t-s)}
-.cdcp .cq-dl dd{white-space:nowrap;text-align:right;font-weight:600}
+.cdcp .cq-dl dt,.cdcp .cq-dl dd{margin:0}
+.cdcp .cq-dl dt{min-width:0}
+.cdcp .cq-dl dd{flex:none;white-space:nowrap;text-align:right;font-weight:600}
 .cdcp .cq-incl{margin-top:8px;font-size:var(--t-s);line-height:1.5;opacity:.9}
 .cdcp .cq-incl b{font-weight:600}
 .cdcp .cq-note{margin-top:8px;font-size:var(--t-s);line-height:1.5}
