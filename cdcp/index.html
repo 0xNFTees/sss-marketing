@@ -881,7 +881,7 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
     if(!state.result && state.step===2){
       buildQuestionPanel(target,L.step2.question,
         [["under70","under70Hint"],["band70","band70Hint"],["band80","band80Hint"],["over90","over90Hint"]].map(function(pair){
-          return {label:L.step2[pair[0]],hint:L.step2[pair[1]],onSelect:function(){
+          return {label:L.step2[pair[0]],onSelect:function(){
             state.answers.income=pair[0];direction=1;
             if(pair[0]==="over90"){state.result={branch:"income"};renderStep();return;}
             state.step=3;renderStep();
