@@ -235,7 +235,8 @@
         var p=node("div","cq-insurer-pills");list.forEach(function(n){p.appendChild(textNode("span","cq-insurer-pill",String(n)));});t.appendChild(p);
       }
     }
-    var shown=0,raf=0,bigEl=null,last={oop:null,fee:null,cov:null,title:null};
+    var shown=0,raf=0,bigEl=null,last={oop:null,fee:null,cov:null,title:null,led:false,oc:null};
+    function fade(el){el.classList.remove("cq-fade");void el.offsetWidth;el.classList.add("cq-fade");el.addEventListener("animationend",function f(){el.classList.remove("cq-fade");el.removeEventListener("animationend",f);});}
     // dollars large, cents small and baseline-aligned (decimal separator and fraction only; the currency sign keeps its place)
     function setBig(v){
       var h="";nf.formatToParts(v).forEach(function(p){h+=(p.type==="decimal"||p.type==="fraction")?'<span class="cq-cents">'+esc(p.value)+"</span>":esc(p.value);});
@@ -347,6 +348,10 @@
       // one concise announcement per change (the animated number is aria-hidden)
       if(!sBrk.childNodes.length){last.fee=null;last.cov=null;}
       if(DATA&&sel)sel.setAttribute("aria-invalid",c&&c.bad?"true":"false");
+      var hasLed=sBrk.childNodes.length>0;
+      if(last.oc!==null&&last.oc!==oc){fade(sRest);if(sDet.childNodes.length)fade(sDet);}   // a different outcome: its next steps ease in
+      if(hasLed&&!last.led){fade(sBrk);fade(sDet);}                                         // ledger appears once the appointment is chosen
+      last.led=hasLed;last.oc=oc;
       var si=sStatus.firstChild;if(si&&last.title!==null&&last.title!==title)si.classList.add("cq-tick");last.title=title;
       var say=title+(c&&!c.bad&&c.known?". "+U.cost+" "+nf.format(c.fee)+", "+U.paid+" "+nf.format(c.cov)+". "+U.share+" "+nf.format(c.oop):"");
       if(key!==lastKey){sr.textContent=say;lastKey=key;}

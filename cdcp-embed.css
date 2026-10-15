@@ -264,8 +264,16 @@
   .cdcp :is(.cq-matrix-all,.cq-matrix-item)>summary:hover{background:var(--c-tint)}
 }
 .cdcp :is(.cq-matrix-all,.cq-matrix-item)>summary:active{background:var(--c-hover)}
+@keyframes cq-fade{from{opacity:0}to{opacity:1}}
+.cdcp .cq-fade{animation:cq-fade var(--dur-state) var(--ease) both}
+/* optional content opens and closes with a short height ease (browsers without ::details-content simply snap) */
+@supports selector(::details-content){
+  .cdcp details{interpolate-size:allow-keywords}
+  .cdcp details::details-content{block-size:0;overflow:clip;transition:block-size var(--dur-value) var(--ease),content-visibility var(--dur-value) var(--ease) allow-discrete}
+  .cdcp details[open]::details-content{block-size:auto}
+}
 @media (prefers-reduced-motion:reduce){
-  .cdcp,.cdcp *{transition:none!important;animation:none!important}
+  .cdcp,.cdcp *,.cdcp *::before,.cdcp *::after,.cdcp details::details-content{transition:none!important;animation:none!important}
 }
 
 /* clear answers: quiet text control, shown only once there is something to clear */
