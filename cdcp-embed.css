@@ -233,3 +233,21 @@
 .cdcp .cq-det>:first-child{margin-top:0}
 .cdcp .cq-fine{max-width:72ch}
 .cdcp .cq-dl dt small.cq-mute{opacity:.72}
+
+/* ---- motion: purposeful and restrained ---- */
+@property --cov{syntax:"<percentage>";inherits:true;initial-value:0%}
+.cdcp{transition:--cov .38s cubic-bezier(.2,.7,.2,1)}
+@keyframes cq-tick{from{opacity:.2;transform:translateY(3px)}to{opacity:1;transform:none}}
+.cdcp .cq-tick{animation:cq-tick .26s cubic-bezier(.2,.7,.2,1) both}
+.cdcp .cq-dl dd{font-variant-numeric:tabular-nums}
+.cdcp .cq-opt{transition:background-color .14s ease,box-shadow .14s ease}
+.cdcp .cq-opt>span,.cdcp .cq-opt>small{transition:transform .12s ease}
+.cdcp .cq-opt:active>span,.cdcp .cq-opt:active>small{transform:scale(.97)}
+.cdcp .cq-opt:active:not(:has(input:checked)){background:var(--c-hover)}
+.cdcp .cq-select{transition:border-color .14s ease,background-color .14s ease}
+.cdcp .cq-cta-btn{transition:background-color .14s ease,border-color .14s ease,transform .1s ease}
+.cdcp .cq-cta-btn:active{transform:translateY(1px)}
+.cdcp .cq-row{transition:opacity .2s ease}
+@media (prefers-reduced-motion:reduce){
+  .cdcp,.cdcp *{transition:none!important;animation:none!important}
+}

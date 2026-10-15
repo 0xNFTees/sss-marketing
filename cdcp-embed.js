@@ -226,7 +226,7 @@
         var p=node("div","cq-insurer-pills");list.forEach(function(n){p.appendChild(textNode("span","cq-insurer-pill",String(n)));});t.appendChild(p);
       }
     }
-    var shown=0,raf=0,bigEl=null;
+    var shown=0,raf=0,bigEl=null,last={oop:null,fee:null,cov:null,title:null};
     // dollars large, cents small and baseline-aligned (decimal separator and fraction only; the currency sign keeps its place)
     function setBig(v){
       var h="";nf.formatToParts(v).forEach(function(p){h+=(p.type==="decimal"||p.type==="fraction")?'<span class="cq-cents">'+esc(p.value)+"</span>":esc(p.value);});
@@ -239,19 +239,21 @@
       var lbl=textNode("div","cq-lbl",U.share);sSum.appendChild(lbl);
       bigEl=node("div","cq-big");bigEl.setAttribute("aria-hidden","true");sSum.appendChild(bigEl);
       if(c&&!c.bad&&c.known){
-        roll(c.oop);sSum.style.setProperty("--cov",(c.fee?Math.max(0,Math.min(100,c.cov/c.fee*100)):0)+"%");
+        roll(c.oop);root.style.setProperty("--cov",(c.fee?Math.max(0,Math.min(100,c.cov/c.fee*100)):0)+"%");
+        if(last.oop!==null&&last.oop!==c.oop)bigEl.classList.add("cq-tick");last.oop=c.oop;
         
       }else{
-        bigEl.textContent="—";bigEl.classList.add("cq-big-empty");shown=0;
+        bigEl.textContent="—";bigEl.classList.add("cq-big-empty");shown=0;last.oop=null;
         var rem=missing();sSum.appendChild(textNode("p","cq-sum-note",c&&c.bad?U.unavailable:(rem.length?(function(){var t=DATA?4:3,n=Math.max(0,t-rem.length);return (n?U.prog.replace("{n}",n).replace("{t}",t)+". ":"")+U.remain+" "+rem.join(", ")+".";})():U.nopick)));
       }
     }
     function renderCostDetail(t,c,o){
       if(!c||c.bad)return;
-      var rowsH='<div><dt>'+esc(U.cost)+'<small class="cq-mute">'+esc(U.std)+'</small></dt><dd>'+esc(nf.format(c.fee))+'</dd></div>';
+      var tf=last.fee!==null&&last.fee!==c.fee,tc=last.cov!==null&&last.cov!==c.cov;last.fee=c.fee;last.cov=c.known?c.cov:null;
+      var rowsH='<div><dt>'+esc(U.cost)+'<small class="cq-mute">'+esc(U.std)+'</small></dt><dd'+(tf?' class="cq-tick"':'')+'>'+esc(nf.format(c.fee))+'</dd></div>';
       if(c.known){
         var covers=c.tp&&(c.cov>0||!c.excl),tierTxt=covers?U.grid.replace("{n}",Math.round(c.tp*100)):(c.tp?U.noCover:U.noelig);
-        rowsH+='<div><dt>'+esc(U.paid)+'<small class="'+(covers?"cq-good-t":"cq-bad-t")+'">'+esc(nb(tierTxt))+'</small></dt><dd class="'+(c.cov?"cq-good-t":"")+'">'+(c.cov?"− ":"")+esc(nf.format(c.cov))+'</dd></div>';
+        rowsH+='<div><dt>'+esc(U.paid)+'<small class="'+(covers?"cq-good-t":"cq-bad-t")+'">'+esc(nb(tierTxt))+'</small></dt><dd class="'+(c.cov?"cq-good-t":"")+(tc?" cq-tick":"")+'">'+(c.cov?"− ":"")+esc(nf.format(c.cov))+'</dd></div>';
       }else rowsH+='<div><dt>'+esc(U.paid)+'</dt><dd class="cq-dim">'+esc(U.byAnswers)+'</dd></div>';
       sBrk.appendChild(node("dl","cq-dl",rowsH));
       if(c.known)sBrk.appendChild(textNode("p","cq-estnote",U.estNote));
@@ -333,6 +335,8 @@
         if(fine.length)sRest.appendChild(textNode("p","cq-fine",fine.join(" ")));
       }
       // one concise announcement per change (the animated number is aria-hidden)
+      if(!sBrk.childNodes.length){last.fee=null;last.cov=null;}
+      var si=sStatus.firstChild;if(si&&last.title!==null&&last.title!==title)si.classList.add("cq-tick");last.title=title;
       var say=title+(c&&!c.bad&&c.known?". "+U.cost+" "+nf.format(c.fee)+", "+U.paid+" "+nf.format(c.cov)+". "+U.share+" "+nf.format(c.oop):"");
       if(key!==lastKey){sr.textContent=say;lastKey=key;}
       root.setAttribute("data-state",oc);
