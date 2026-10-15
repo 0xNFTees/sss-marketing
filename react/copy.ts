@@ -352,11 +352,11 @@ export const UI = {
   "pk": {
    "new": [
     "Nouveau patient",
-    "Examen complet, 2 radiographies, nettoyage de 30 min, fluorure"
+    "Examen complet, radiographies diagnostiques, nettoyage, fluorure"
    ],
    "recall": [
     "Rappel et nettoyage",
-    "Examen périodique, nettoyage de 30 min"
+    "Examen périodique, nettoyage"
    ],
    "emerg": [
     "Urgence, mal de dent",
@@ -459,11 +459,11 @@ export const UI = {
   "pk": {
    "new": [
     "New patient",
-    "Complete exam, 2 X-rays, 30-minute cleaning, fluoride"
+    "Complete exam, diagnostic X-rays, cleaning, fluoride"
    ],
    "recall": [
     "Recall and cleaning",
-    "Periodic exam, 30-minute cleaning"
+    "Periodic exam, cleaning"
    ],
    "emerg": [
     "Emergency, toothache",

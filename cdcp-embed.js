@@ -43,7 +43,7 @@
       pre:"Préautorisation du RCSD requise.", lab:"Frais de laboratoire en sus.", excl:"Non couvert par le RCSD.",
       ramq:"Enfants de moins de 10 ans : la RAMQ couvre déjà les soins de base.",
       disc:"Estimation seulement. Chaque clinique fixe ses tarifs. Limites annuelles et frais de laboratoire non inclus.", matrix:"Soins couverts, autorisation et exclusions", insurers:"Assureurs acceptés par la clinique :",
-      pk:{new:["Nouveau patient","Examen complet, 2 radiographies, nettoyage de 30 min, fluorure"],recall:["Rappel et nettoyage","Examen périodique, nettoyage de 30 min"],
+      pk:{new:["Nouveau patient","Examen complet, radiographies diagnostiques, nettoyage, fluorure"],recall:["Rappel et nettoyage","Examen périodique, nettoyage"],
           emerg:["Urgence, mal de dent","Examen d’urgence, radiographie","Un traitement immédiat (obturation, canal, extraction) s’ajoute au tarif."],}},
     en: {label:"CDCP eligibility and cost",
       clear:"Clear answers", todo:"To answer", edit:"Edit", yours:"Your answers", qn:"Question {n} of {t}", cont:"Continue",  sec:{calc:"How the estimate is built",limits:"Limits of the estimate",next:"Next step"}, bc:{based:"Based on your answers: ",and:" and ",noIns:"you have no private dental insurance",inc:"your adjusted family net income is {r}",fy:"your tax return is filed",fn:"your tax return is not filed yet"}, st:{none:"No answers yet",pending:"Incomplete",unconfirmed:"To confirm",qualified:"Eligible based on your answers",income:"Not eligible",tax:"Return required",insurance:"Private insurance"}, ins:"Private dental insurance", insI:"Through an employer, a private plan or a health spending account.", yes:"Yes", no:"No", chipIns:{yes:"Insured",no:"Uninsured"}, applyLink:"Step 1: apply for CDCP (Health Canada)", chipFiled:{yes:"Taxes filed",no:"Taxes not filed yet"},
@@ -57,7 +57,7 @@
       pre:"CDCP pre-authorization required.", lab:"Lab fee billed extra.", excl:"Not covered by CDCP.",
       ramq:"Children under 10: RAMQ already covers basic care.",
       disc:"Estimate only. Each clinic sets its own fees. Annual limits and lab fees not included.", matrix:"Covered care, authorization and exclusions", insurers:"Insurers accepted by the clinic:",
-      pk:{new:["New patient","Complete exam, 2 X-rays, 30-minute cleaning, fluoride"],recall:["Recall and cleaning","Periodic exam, 30-minute cleaning"],
+      pk:{new:["New patient","Complete exam, diagnostic X-rays, cleaning, fluoride"],recall:["Recall and cleaning","Periodic exam, cleaning"],
           emerg:["Emergency, toothache","Emergency exam, X-ray","Immediate treatment (filling, root canal, extraction) is extra."],}}
   };
   var INCOME_KEYS = ["under70","band70","band80","over90"];
