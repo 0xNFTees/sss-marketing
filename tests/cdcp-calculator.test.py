@@ -155,7 +155,7 @@ with sync_playwright() as p:
           return {st:r.dataset.state,ins:q('ins'),inc:q('inc'),filed:q('filed'),appt:r.querySelector('select').value,big:r.querySelector('.cq-big')?.textContent||null,clear:!r.querySelector('.cq-clear').hidden}}""")
     clk=lambda k,v: pg.dispatch_event(f'#quiz input[name$="{k}"][value="{v}"]',"click")
     s0=snap(); ok("behaviour: starts empty, nothing preselected",s0["ins"] is None and s0["inc"] is None and s0["filed"] is None and s0["appt"]=="" and not s0["clear"])
-    pg.select_option("#quiz select",index=2); s1=snap(); ok("behaviour: appointment alone shows no share figure",s1["st"]=="pending" and s1["big"] in (None,"—") and s1["clear"],str(s1))
+    pg.select_option("#quiz select",index=2); s1=snap(); ok("behaviour: appointment alone shows no share figure",s1["st"]=="pending" and (s1["big"] is None or s1["big"].replace("\xa0","").replace("$","").strip()=="—") and s1["clear"],str(s1))
     clk("ins","no");clk("inc","band70");s2=snap(); ok("behaviour: unconfirmed filing still labelled, not final",s2["st"]=="unconfirmed",str(s2))
     clk("filed","yes");s3=snap()
     clk("ins","yes");clk("ins","no");s4=snap(); ok("behaviour: answers survive insurance toggle",{k:s4[k] for k in("ins","inc","filed","appt","big")}=={k:s3[k] for k in("ins","inc","filed","appt","big")},str((s3,s4)))

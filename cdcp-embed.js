@@ -31,7 +31,7 @@
        covered = isCoveredByCDCP ? min(cdcpGridFee * tier%, acdqFee) : 0     you pay = acdqFee - covered  */
   var T = {
     fr: {label:"Admissibilité et coût au RCSD",
-      clear:"Effacer les réponses", ins:"Assurance dentaire privée", insI:"Par un employeur, un régime privé ou un compte de gestion santé.", yes:"Oui", no:"Non",
+      clear:"Effacer les réponses", st:{pending:"Incomplet",unconfirmed:"À confirmer",qualified:"Admissible selon vos réponses",income:"Non admissible",tax:"Déclaration requise",insurance:"Assurance privée"}, ins:"Assurance dentaire privée", insI:"Par un employeur, un régime privé ou un compte de gestion santé.", yes:"Oui", no:"Non",
       inc:"Revenu familial net rajusté", incI:"Selon votre dernière déclaration d’impôts.", incShort:["< 70 k","70–79 k","80–89 k","90 k +"], incPct:["100 %","60 %","40 %","0 %"],
       filed:"Déclaration d’impôts produite", filedI:"Vous et votre conjoint(e), le cas échéant, pour l’année précédente.", notYet:"Pas encore",
       appt:"Type de rendez-vous", apptI:"", pick:"Choisir…",
@@ -46,7 +46,7 @@
           emerg:["Urgence, mal de dent","Examen d’urgence, radiographie","Un traitement immédiat (obturation, canal, extraction) s’ajoute au tarif."],
           filling:["Carie, obturation","Obturation en composite sur une molaire (1 surface)","L’examen n’est pas inclus."],major:["Prothèse complète","Prothèse complète standard, une arcade","Frais de laboratoire en sus."]}},
     en: {label:"CDCP eligibility and cost",
-      clear:"Clear answers", ins:"Private dental insurance", insI:"Through an employer, a private plan or a health spending account.", yes:"Yes", no:"No",
+      clear:"Clear answers", st:{pending:"Incomplete",unconfirmed:"To confirm",qualified:"Eligible based on your answers",income:"Not eligible",tax:"Return required",insurance:"Private insurance"}, ins:"Private dental insurance", insI:"Through an employer, a private plan or a health spending account.", yes:"Yes", no:"No",
       inc:"Adjusted family net income", incI:"From your last tax return.", incShort:["< 70k","70–79k","80–89k","90k+"], incPct:["100%","60%","40%","0%"],
       filed:"Tax return filed", filedI:"You and your spouse or partner, if applicable, for the previous year.", notYet:"Not yet",
       appt:"Appointment type", apptI:"", pick:"Choose…",
@@ -164,9 +164,9 @@
       fs.appendChild(s);ctl.appendChild(fs);rows[key]=fs;
     }
     seg("ins",U.ins,U.insI,[{v:"yes",t:U.yes,aria:L.step1.yes,html:"<span>"+esc(U.yes)+"</span>"},{v:"no",t:U.no,aria:L.step1.no,html:"<span>"+esc(U.no)+"</span>"}]);
-    seg("filed",U.filed,U.filedI,[{v:"yes",t:U.yes,aria:L.step3.yes,html:"<span>"+esc(U.yes)+"</span>"},{v:"no",t:U.notYet,aria:L.step3.no,html:"<span>"+esc(U.notYet)+"</span>"}]);
     seg("inc",U.inc,U.incI,INCOME_KEYS.map(function(k){return {v:k,t:L.step2[k],aria:L.step2[k]+", "+L.step2[k+"Hint"],
       html:"<span>"+esc(nb(L.step2[k]))+"</span><small>"+esc(nb(L.step2[k+"Hint"]))+"</small>"};}));
+    seg("filed",U.filed,U.filedI,[{v:"yes",t:U.yes,aria:L.step3.yes,html:"<span>"+esc(U.yes)+"</span>"},{v:"no",t:U.notYet,aria:L.step3.no,html:"<span>"+esc(U.notYet)+"</span>"}]);
     if(DATA){
       var fs=node("fieldset","cq-row cq-row-wide");legend(fs,U.appt,U.apptI);
       var sel=node("select","cq-select");sel.setAttribute("autocomplete","off");sel.setAttribute("aria-label",U.appt);
@@ -224,8 +224,10 @@
     }
 
     /* ---- render ---- */
-    function statusBlock(kind,title,detail){
-      var d=node("div","cq-status-in cq-"+kind);d.appendChild(textNode("div","cq-status-title",title));
+    function statusBlock(kind,title,detail,state){
+      var d=node("div","cq-status-in cq-"+kind);
+      if(state)d.appendChild(textNode("div","cq-pill",U.st[state]));
+      d.appendChild(textNode("div","cq-status-title",title));
       if(detail)d.appendChild(textNode("p","cq-status-detail",detail));return d;
     }
     function insurersBlock(t,R){
@@ -257,6 +259,9 @@
       bigEl.innerHTML=h;
     }
     function roll(to){shown=to;setBig(to);}
+    function progress(){var req=["ins","inc"];if(A.inc!=="over90")req.push("filed");if(DATA)req.push("appt");var n=0;req.forEach(function(k){if(A[k])n++;});return {n:n,t:req.length};}
+    // the empty figure keeps the shape of a real one (a dash where the dollars go), so the focal point never collapses
+    function ghost(){var h="";nf.formatToParts(0).forEach(function(p){if(p.type==="integer")h+="\u2014";else if(p.type!=="decimal"&&p.type!=="fraction"&&p.type!=="group")h+=p.value;});return h;}
     function renderSum(c,o){
       sSum.innerHTML="";
       sSum.hidden=false;
@@ -265,10 +270,13 @@
       if(c&&!c.bad&&c.known){
         roll(c.oop);root.style.setProperty("--cov",(c.fee?Math.max(0,Math.min(100,c.cov/c.fee*100)):0)+"%");
         if(last.oop!==null&&last.oop!==c.oop)bigEl.classList.add("cq-tick");last.oop=c.oop;
-        
+        sSum.appendChild(textNode("p","cq-basis",U.pk[c.pk.id][0]+" \u00b7 "+nb(L.step2[A.inc])));
+        var bar=node("div","cq-bar",'<i></i>');bar.setAttribute("aria-hidden","true");sSum.appendChild(bar);
       }else{
-        bigEl.textContent="—";bigEl.classList.add("cq-big-empty");shown=0;last.oop=null;
-        var rem=missing();sSum.appendChild(textNode("p","cq-sum-note",c&&c.bad?U.unavailable:(rem.length?(function(){var t=DATA?4:3,n=Math.max(0,t-rem.length);return (n?U.prog.replace("{n}",n).replace("{t}",t)+". ":"")+U.remain+" "+rem.join(", ")+".";})():U.nopick)));
+        bigEl.textContent=ghost();bigEl.classList.add("cq-big-empty");shown=0;last.oop=null;
+        var pr=progress(),pg=node("div","cq-prog");pg.setAttribute("aria-hidden","true");
+        for(var k=0;k<pr.t;k++)pg.appendChild(node("i",k<pr.n?"on":""));sSum.appendChild(pg);
+        sSum.appendChild(textNode("p","cq-sum-note",c&&c.bad?U.unavailable:(missing().length?U.prog.replace("{n}",pr.n).replace("{t}",pr.t)+". "+U.remain+" "+missing().join(", ")+".":U.nopick)));
       }
     }
     function renderCostDetail(t,c,o){
@@ -277,7 +285,7 @@
       var rowsH='<div><dt>'+esc(U.cost)+'<small class="cq-mute">'+esc(U.std)+'</small></dt><dd'+(tf?' class="cq-tick"':'')+'>'+esc(nf.format(c.fee))+'</dd></div>';
       if(c.known){
         var covers=c.tp&&(c.cov>0||!c.excl),tierTxt=covers?U.grid.replace("{n}",Math.round(c.tp*100)):(c.tp?U.noCover:U.noelig);
-        rowsH+='<div><dt>'+esc(U.paid)+'<small class="'+(covers?"cq-good-t":"cq-bad-t")+'">'+esc(nb(tierTxt))+'</small></dt><dd class="'+(c.cov?"cq-good-t":"")+(tc?" cq-tick":"")+'">'+(c.cov?"− ":"")+esc(nf.format(c.cov))+'</dd></div>';
+        rowsH+='<div><dt><i class="cq-sw" aria-hidden="true"></i>'+esc(U.paid)+'<small class="'+(covers?"cq-good-t":"cq-bad-t")+'">'+esc(nb(tierTxt))+'</small></dt><dd class="'+(c.cov?"cq-good-t":"")+(tc?" cq-tick":"")+'">'+(c.cov?"− ":"")+esc(nf.format(c.cov))+'</dd></div>';
       }else rowsH+='<div><dt>'+esc(U.paid)+'</dt><dd class="cq-dim">'+esc(U.byAnswers)+'</dd></div>';
       sBrk.appendChild(node("dl","cq-dl",rowsH));
       if(c.known)sBrk.appendChild(textNode("p","cq-estnote",U.estNote));
@@ -305,22 +313,22 @@
       sRest.innerHTML="";sStatus.innerHTML="";sBrk.innerHTML="";sDet.innerHTML="";
       if(oc==="pending"){
         var rem=missing();
-        sStatus.appendChild(statusBlock("neutral",U.pendH,U.pendS));
+        sStatus.appendChild(statusBlock("neutral",U.pendH,U.pendS,"pending"));
         if(DATA){renderSum(c,oc);}else{sSum.innerHTML="";sSum.hidden=true;}
         title=U.pendH;
         if(DATA&&c&&!c.bad)renderCostDetail(sDet,c,oc);
         var rp=ctaRow();rp.appendChild(ctaLink(withBookingParams(BOOK,{branch:"pending",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sRest.appendChild(rp);
       }else if(oc==="insurance"){
         var R=L.results.branchInsurance;kind="good";title=R.headline;
-        sStatus.appendChild(statusBlock("good",R.headline,R.microCopy));
+        sStatus.appendChild(statusBlock("good",R.headline,R.microCopy,"insurance"));
         sSum.innerHTML="";sSum.hidden=true;
         var row=ctaRow();row.appendChild(ctaLink(withBookingParams(BOOK,{branch:"insurance",utm_source:"cdcp-calculator"}),R.primaryCta));sRest.appendChild(row);
         insurersBlock(sRest,R);
       }else{
-        if(oc==="income"){var R2=L.results.branchIncome;title=R2.headline;sStatus.appendChild(statusBlock("bad",R2.headline,R2.microCopy));}
-        else if(oc==="tax"){var R3=L.results.branchTaxFiling;title=R3.headline;sStatus.appendChild(statusBlock("bad",R3.headline,R3.microCopy));}
-        else if(oc==="qualified"){title=nb(L.results["tier"+tier+"Badge"]);sStatus.appendChild(statusBlock("good",title));}
-        else{title=U.tierUnconfirmed.replace("{n}",Math.round(TIER_PCT[A.inc]*100));sStatus.appendChild(statusBlock("neutral",nb(title)));}
+        if(oc==="income"){var R2=L.results.branchIncome;title=R2.headline;sStatus.appendChild(statusBlock("bad",R2.headline,R2.microCopy,"income"));}
+        else if(oc==="tax"){var R3=L.results.branchTaxFiling;title=R3.headline;sStatus.appendChild(statusBlock("warn",R3.headline,R3.microCopy,"tax"));}
+        else if(oc==="qualified"){title=nb(L.results["tier"+tier+"Badge"]);sStatus.appendChild(statusBlock("good",title,null,"qualified"));}
+        else{title=U.tierUnconfirmed.replace("{n}",Math.round(TIER_PCT[A.inc]*100));sStatus.appendChild(statusBlock("warn",nb(title),null,"unconfirmed"));}
         if(DATA)renderSum(c,oc);else{sSum.innerHTML="";sSum.hidden=true;}
         if(DATA&&c&&!c.bad&&c.known){
           if(oc==="tax")sSum.appendChild(textNode("p","cq-sum-note",U.whenIssued));
