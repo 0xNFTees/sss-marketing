@@ -12,7 +12,7 @@ import {
   useCallback, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type ReactNode,
 } from "react";
 import { AnimatePresence, animate, motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, Check, ChevronDown, ChevronLeft, ChevronRight, Info, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, Check, ChevronDown, ChevronLeft, ChevronRight, Info, Mail, Phone, ShieldCheck } from "lucide-react";
 import { LABELS, UI, type Lang } from "./copy";
 import {
   EMPTY_ANSWERS, INCOME_KEYS, VISITS, estimate, firstUnanswered, indexProcedures, outcome, requiredSteps,
@@ -369,7 +369,7 @@ export function EmbeddableDentalCalculator({
 
   const panel = (
     <div className="flex h-full flex-col gap-5 bg-[var(--panel)] p-6 text-[var(--onpanel)] @2xl:p-8">
-      <div className="space-y-3 @2xl:sticky @2xl:top-[var(--stick)]">
+      <div className="space-y-3">
         <p className="inline-flex items-center gap-2 rounded-full border border-white/25 px-3 py-1 text-xs font-semibold">
           <span className={head.tone === "good" ? "text-[var(--good-on-panel)]" : head.tone === "bad" ? "text-[#ffb4ab]" : head.tone === "warn" ? "text-[#ffd8a8]" : ""}>{badgeIcon}</span>{head.label}
         </p>
@@ -456,12 +456,13 @@ export function EmbeddableDentalCalculator({
   );
 
   /* ----- assembly ----- */
+  const linkCls = `inline-flex min-h-11 items-center gap-1.5 font-semibold underline decoration-[var(--a)] decoration-2 underline-offset-4 hover:decoration-[var(--ink)] ${FOCUS}`;
   const frontDesk = (phone || email) && (
-    <p className="mt-6 text-xs leading-relaxed opacity-80">
-      {L.skipPrompt}{" "}
-      {phoneHref && <a href={phoneHref} className={`font-semibold underline underline-offset-4 ${FOCUS}`}>{L.skipCall}</a>}
+    <p className="mt-auto rounded-xl border border-[var(--line)] border-l-[3px] border-l-[var(--a)] bg-[var(--paper)] px-4 py-3 text-sm leading-relaxed">
+      <span className="block font-semibold">{L.skipPrompt}</span>
+      {phoneHref && <a href={phoneHref} className={linkCls}><Phone className="size-3.5" aria-hidden />{L.skipCall}</a>}
       {phoneHref && email ? L.skipOr : ""}
-      {email && <a href={`mailto:${email}`} className={`font-semibold underline underline-offset-4 ${FOCUS}`}>{phone ? L.skipMail : L.skipMail[0].toUpperCase() + L.skipMail.slice(1)}</a>}
+      {email && <a href={`mailto:${email}`} className={linkCls}><Mail className="size-3.5" aria-hidden />{phone ? L.skipMail : L.skipMail[0].toUpperCase() + L.skipMail.slice(1)}</a>}
       {phone && !email ? L.skipTailCall : L.skipTail}
     </p>
   );
@@ -488,10 +489,10 @@ export function EmbeddableDentalCalculator({
       )}
 
       <div className="grid grid-cols-1 @2xl:grid-cols-12">
-        <div className={`px-6 py-6 @2xl:col-span-7 @2xl:p-8 ${complete ? "order-2 @2xl:order-none bg-[var(--tint)] @2xl:bg-[var(--paper)]" : ""}`}>
+        <div className={`flex flex-col px-6 py-6 @2xl:col-span-7 @2xl:p-8 ${complete ? "order-2 @2xl:order-none bg-[var(--tint)] @2xl:bg-[var(--paper)]" : ""}`}>
           <AnimatePresence mode="wait" initial={false}>{stagePane}</AnimatePresence>
           {anyAnswer && (
-            <button type="button" onClick={clear} className={`mt-6 inline-flex min-h-11 items-center text-[13px] font-semibold underline underline-offset-4 opacity-80 hover:opacity-100 ${FOCUS}`}>{U.clear}</button>
+            <button type="button" onClick={clear} className={`mt-6 inline-flex w-fit min-h-11 items-center text-[13px] font-semibold underline underline-offset-4 opacity-80 hover:opacity-100 ${FOCUS}`}>{U.clear}</button>
           )}
           {frontDesk}
         </div>

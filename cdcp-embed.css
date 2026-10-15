@@ -111,12 +111,16 @@
 .cdcp .cq-sec{margin:0 0 var(--s2)}
 .cdcp :is(.cq-incl,.cq-note,.cq-billing-notice,.cq-insurer-note,.cq-sum-note,.cq-help){font-size:var(--t-m);line-height:1.5}   /* body */
 .cdcp :is(.cq-estnote,.cq-fine,.cq-skip){font-size:var(--t-s);line-height:1.5}
-.cdcp .cq-skip{display:none;margin-top:auto;padding-top:var(--s3);opacity:.8}                                  /* fine print */
+/* front-desk card: the direct route to the clinic, pinned to the foot of the answer rail */
+.cdcp .cq-skip{display:block;margin-top:auto;padding:var(--s3) var(--s4);background:var(--c-paper);border:1px solid var(--c-line);border-left:3px solid var(--c-accent);border-radius:var(--c-r);font-size:var(--t-m);line-height:1.55}
+.cdcp .cq-skip-q{display:block;font-weight:600}
+.cdcp .cq-skip-l{display:inline-block;padding-block:var(--s2);margin-block:calc(-1*var(--s2));font-weight:600;color:var(--c-ink);text-decoration:underline;text-decoration-color:var(--c-accent);text-decoration-thickness:2px;text-underline-offset:4px;white-space:nowrap}
+.cdcp .cq-skip-i{display:inline-block;vertical-align:-2px;margin-right:6px;color:var(--c-ink)}
 .cdcp .cq-estnote{margin:var(--s2) 0 var(--s3);opacity:.72}
 .cdcp .cq-fine{margin-top:var(--s3);max-width:72ch;opacity:.75}
 .cdcp .cq-good-t{color:var(--c-good)}.cdcp .cq-bad-t{color:var(--c-bad)}
 /* quiet text control (links, Back, Clear, Edit): underlined, thicker underline on hover */
-.cdcp :is(.cq-skip a,.cq-help a,.cq-back,.cq-clear,.cq-sr-e){text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.cdcp :is(.cq-help a,.cq-back,.cq-clear,.cq-sr-e){text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
 .cdcp :is(.cq-help a,.cq-clear,.cq-back){font-weight:600}
 
 /* ============ 5 components ============ */
@@ -322,24 +326,28 @@
 /* wide (container >= 680): a tinted answer rail beside one statement column.
    The statement reads top to bottom: state, the figure, the split behind it, what it assumes, what to do next. */
 @container (min-width:680px){
-  .cdcp .cq-grid{grid-template-columns:minmax(320px,380px) minmax(0,1fr);grid-template-rows:repeat(6,auto) 1fr}
-  .cdcp .cq-ctl{grid-column:1;grid-row:1/-1;--well:var(--c-paper);--sel:var(--c-tint);padding:var(--s5);border-bottom:0;border-right:1px solid var(--c-line);background:var(--c-tint)}
+  .cdcp .cq-grid{grid-template-columns:minmax(320px,380px) minmax(0,1fr);grid-template-rows:repeat(4,auto) 1fr auto}
+  .cdcp .cq-ctl{grid-column:1;grid-row:1/-2;display:flex;flex-direction:column;--well:var(--c-paper);--sel:var(--c-tint);padding:var(--s5);border-bottom:0;border-right:1px solid var(--c-line);background:var(--c-tint)}
   .cdcp :is(.cq-status,.cq-sum,.cq-act,.cq-brk,.cq-det,.cq-rest){grid-column:2;padding-inline:var(--s5)}
-  .cdcp .cq-status{grid-row:1;min-height:12rem;padding-top:var(--s5);padding-bottom:var(--s2)}   /* a steady height keeps the figure in place as the state changes */
+  .cdcp .cq-status{grid-row:1;min-height:10.5rem;padding-top:var(--s5);padding-bottom:var(--s2)}   /* a steady height keeps the figure in place as the state changes */
   .cdcp .cq-sum,.cdcp.cq-ledger .cq-sum{grid-row:2;position:static;display:block;margin:0;padding-top:var(--s2);padding-bottom:var(--s4);border:0;background:none}
   .cdcp .cq-act{grid-row:3;padding-top:var(--s2);padding-bottom:var(--s3)}
   .cdcp .cq-brk{grid-row:4;padding-top:var(--s2)}
   .cdcp .cq-det{grid-row:5;padding-top:var(--s1);padding-bottom:var(--s4)}
-  .cdcp .cq-rest{grid-row:6;margin-inline:var(--s5);padding:var(--s5) 0;border-top:1px solid var(--c-line)}
+  .cdcp .cq-rest{grid-column:1/-1;grid-row:6;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:var(--s5);align-items:start;margin:0;padding:var(--s3) var(--s5) var(--s4);border-top:1px solid var(--c-line)}
+  .cdcp .cq-rest>:not(details){grid-column:1/-1}
   .cdcp .cq-rest:empty{display:none}
+  .cdcp .cq-ctl-in{flex:1;display:flex;flex-direction:column}
+  .cdcp:not([data-view="result"]) .cq-seg-2 .cq-opt{min-height:76px}   /* roomier choices while answering */
+  .cdcp .cq-ctl-in>*+*{margin-top:var(--s4)}
+  .cdcp .cq-skip{margin-top:auto;position:relative}
+  .cdcp .cq-ctl-in>.cq-skip{margin-top:auto}
   .cdcp .cq-brk .cq-sec{margin-top:var(--s2)}
-  .cdcp .cq-skip{display:block}
   .cdcp .cq-dl>div{padding:var(--s3) 0}
   .cdcp .cq-grid{--t-status:clamp(20px,3.2cqw,26px);--t-fig:clamp(52px,9cqw,76px);--t-cents:.42em}
 }
 @container (min-width:900px){.cdcp .cq-grid{grid-template-columns:minmax(340px,400px) minmax(0,1fr)}}
 /* the answers stay in reach while the longer result is read (short screens keep the normal flow) */
-@media (min-height:760px){@container (min-width:680px){.cdcp .cq-ctl-in{position:sticky;top:var(--cdcp-sticky-top,var(--s4))}}}
 
 /* ---- drawers for fine print ---- */
 .cdcp .cq-acc{margin-top:0;border-bottom:1px solid var(--c-line)}
@@ -372,7 +380,8 @@
   .cdcp .cq-cta-btn-secondary:hover{border-color:var(--c-ink);background:var(--c-tint)}
   .cdcp .cq-next:not(:disabled):hover{background:var(--c-ink);color:var(--c-paper)}
   .cdcp :is(.cq-sumrow,.cq-tr,.cq-matrix-all>summary,.cq-matrix-item>summary):hover{background:var(--c-tint)}
-  .cdcp :is(.cq-skip a,.cq-help a,.cq-back,.cq-clear):hover{text-decoration-thickness:2px}
+  .cdcp :is(.cq-help a,.cq-back,.cq-clear):hover{text-decoration-thickness:2px}
+  .cdcp a.cq-skip-l:hover{text-decoration-color:var(--c-ink)}
   .cdcp :is(.cq-back,.cq-clear):hover{opacity:1}
 }
 /* press */
@@ -400,7 +409,7 @@
 .cdcp :is(.cq-opt,.cq-sumrow,.cq-tr,.cq-tr-n,.cq-next,.cq-matrix-all>summary,.cq-matrix-item>summary){transition:var(--tr-surface),color var(--dur-state) var(--ease)}
 .cdcp :is(.cq-visit,.cq-seg-4) .cq-opt::before{transition:var(--tr-surface)}
 .cdcp .cq-opt>:is(span,small){transition:transform var(--dur-press) var(--ease)}
-.cdcp :is(.cq-skip a,.cq-help a,.cq-back,.cq-clear){transition:text-decoration-color var(--dur-state) var(--ease),opacity var(--dur-state) var(--ease)}
+.cdcp :is(.cq-skip-l,.cq-help a,.cq-back,.cq-clear){transition:text-decoration-color var(--dur-state) var(--ease),opacity var(--dur-state) var(--ease)}
 /* optional content opens and closes with a short height ease (browsers without ::details-content simply snap) */
 @supports selector(::details-content){
   .cdcp details{interpolate-size:allow-keywords}

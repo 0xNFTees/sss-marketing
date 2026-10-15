@@ -232,11 +232,11 @@
       if(opts.demo||opts.phone||opts.email){
         // patient-facing: reach the clinic directly. Links only for contacts the host supplies.
         var ph=opts.phone?String(opts.phone):"",em=opts.email?String(opts.email):"",hasC=ph||em,
-            cA=hasC&&!ph?"":'<a href="tel:'+esc(ph.replace(/[^\d+]/g,""))+'">'+esc(L.skipCall)+"</a>",
-            mA=hasC&&!em?"":(em?'<a href="mailto:'+esc(em)+'">':"")+esc(L.skipMail)+(em?"</a>":"");
-        if(hasC&&!ph)mA=mA.replace(/^(<a[^>]*>)(.)/,function(m,a,c){return a+c.toUpperCase();}).replace(/^([a-z])/,function(c){return c.toUpperCase();});
-        if(!hasC)cA=esc(L.skipCall);
-        cin.appendChild(node("p","cq-skip",esc(L.skipPrompt)+" "+cA+(cA&&mA?esc(L.skipOr):"")+mA+esc(hasC&&!em?L.skipTailCall:L.skipTail)));
+            IC_P='<svg class="cq-skip-i" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3.6 1.5h2l1 3-1.4 1a8 8 0 0 0 4.3 4.3l1-1.4 3 1v2a1.6 1.6 0 0 1-1.7 1.6A11.4 11.4 0 0 1 2 3.2 1.6 1.6 0 0 1 3.6 1.5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>',
+            IC_M='<svg class="cq-skip-i" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2 3.5h12v9H2zM2.3 4l5.7 4.6L13.7 4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>',
+            cA=hasC&&!ph?"":(ph?'<a class="cq-skip-l" href="tel:'+esc(ph.replace(/[^\d+]/g,""))+'">':'<span class="cq-skip-l">')+IC_P+esc(L.skipCall)+(ph?"</a>":"</span>"),
+            mA=hasC&&!em?"":(em?'<a class="cq-skip-l" href="mailto:'+esc(em)+'">':'<span class="cq-skip-l">')+IC_M+esc(hasC&&!ph?L.skipMail.charAt(0).toUpperCase()+L.skipMail.slice(1):L.skipMail)+(em?"</a>":"</span>");
+        cin.appendChild(node("p","cq-skip",'<span class="cq-skip-q">'+esc(L.skipPrompt)+"</span> "+cA+(cA&&mA?esc(L.skipOr):"")+mA+esc(hasC&&!em?L.skipTailCall:L.skipTail)));
       }
       clearBtn.hidden=!(A.ins||A.inc||A.filed||A.appt);
       root.setAttribute("data-view",v===null?"result":v);
@@ -455,7 +455,6 @@
           sAct.appendChild(secLabel("next"));var ru=ctaRow();ru.appendChild(ctaLink(withBookingParams(BOOK,{branch:"unconfirmed",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sAct.appendChild(ru);
         }
         if(oc==="qualified"||oc==="unconfirmed"){
-          if(!sDet.querySelector(".cq-sec"))sDet.insertBefore(secLabel("limits"),sDet.firstChild);
         }
         if(oc==="qualified"){
           sAct.appendChild(secLabel("next"));var R6=L.results.branchQualified,steps=node("div","cq-steps");
