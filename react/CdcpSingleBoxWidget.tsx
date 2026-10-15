@@ -723,13 +723,13 @@ function Choice<V extends string>(props: {
         {options.map((o) => {
           const on = value === o.value;
           return (
-            <label key={o.value} onPointerDown={() => onPointer(true)} onKeyDown={() => onPointer(false)}
-              className={`relative flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border-2 p-4 text-[var(--ink)] transition-all duration-200 ease-out
-                hover:border-[color-mix(in_srgb,var(--p)_40%,transparent)] active:scale-[0.98] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--ink)]
-                forced-colors:has-[:checked]:border-[Highlight] motion-reduce:transition-none motion-reduce:active:scale-100
+            <motion.label key={o.value} whileTap={reduce ? undefined : { scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 25 }} onPointerDown={() => onPointer(true)} onKeyDown={() => onPointer(false)}
+              className={`relative flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border-2 p-4 text-[var(--ink)] transition-[border-color,background-color,box-shadow] duration-200 ease-out
+                hover:border-[color-mix(in_srgb,var(--p)_40%,transparent)] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--ink)]
+                forced-colors:has-[:checked]:border-[Highlight] motion-reduce:transition-none
                 ${on ? `${invalid ? "border-[var(--bad)] ring-[var(--bad)]" : "border-[var(--p)] ring-[var(--p)]"} bg-[var(--tint)] ring-1 shadow-[0_8px_20px_-12px_rgb(0_0_0/.45)]` : "border-transparent bg-[color-mix(in_srgb,var(--ink)_6%,var(--paper))]"}`}>
               <input type="radio" name={name} value={o.value} checked={on} aria-label={o.aria ?? (o.hint ? `${o.label}. ${o.hint}` : o.label)}
-                onChange={() => onChange(o.value)} className="absolute inset-0 z-10 size-full cursor-pointer opacity-0" />
+                onChange={() => onChange(o.value)} onClick={() => { if (on) onChange(o.value); }} className="absolute inset-0 z-10 size-full cursor-pointer opacity-0" />
               {o.icon && (
                 <span aria-hidden className={`grid size-10 shrink-0 place-items-center rounded-full transition-colors duration-200 ${on ? "bg-[var(--p)] text-[var(--paper)]" : "bg-[var(--paper)] text-[var(--p)]"}`}>
                   <o.icon className="size-5" strokeWidth={2} />
@@ -748,7 +748,7 @@ function Choice<V extends string>(props: {
                   </motion.span>
                 )}
               </AnimatePresence>
-            </label>
+            </motion.label>
           );
         })}
       </div>
@@ -777,14 +777,14 @@ function CtaLink({ href, children, external, variant = "primary" }: { href: stri
   const ext = external ? { target: "_blank", rel: "noopener noreferrer" } : {};
   const reduce = useReducedMotion();
   return variant === "primary" ? (
-    <a href={href} {...ext}
-      className={`group relative flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-[var(--paper)] px-5 py-4 text-base font-bold leading-tight text-[var(--ink)] shadow-[0_0_0_4px_rgb(255_255_255/.08),0_14px_32px_-10px_rgb(52_211_153/.5)] transition-all duration-150 hover:scale-[1.01] hover:brightness-95 active:scale-[0.99] motion-reduce:transition-none motion-reduce:transform-none ${FOCUS}`}>
+    <motion.a href={href} {...ext} whileTap={reduce ? undefined : { scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      className={`group relative flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-[var(--paper)] px-5 py-4 text-base font-bold leading-tight text-[var(--ink)] shadow-[0_0_0_4px_rgb(255_255_255/.08),0_14px_32px_-10px_rgb(52_211_153/.5)] transition-[filter,opacity,background-color] duration-150 hover:brightness-95 active:bg-slate-100 active:opacity-90 motion-reduce:transition-none ${FOCUS}`}>
       {!reduce && <motion.span aria-hidden className="pointer-events-none absolute -inset-1 rounded-2xl border-2 border-white/50"
         initial={{ opacity: 0, scale: 1 }} animate={{ opacity: [0, 0.8, 0], scale: [1, 1.025, 1.05] }} transition={{ duration: 2.2, delay: 1.2, repeat: Infinity, repeatDelay: 2.4, ease: "easeOut" }} />}
       <span className="relative text-center">{children}</span>
       {external ? <ArrowUpRight className="relative size-5 transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
         : <ChevronRight className="relative size-5 transition-transform duration-150 group-hover:translate-x-1" aria-hidden />}
-    </a>
+    </motion.a>
   ) : (
     <a href={href} {...ext}
       className={`mx-auto flex min-h-11 w-fit max-w-full items-center rounded-lg px-2 text-center text-[13px] font-medium leading-snug opacity-80 transition hover:opacity-100 ${FOCUS}`}>
@@ -858,9 +858,9 @@ export function CdcpSingleBoxWidget({
   const set = useCallback(<K extends keyof Answers>(k: K, v: Answers[K]) => {
     setA((p) => ({ ...p, [k]: v }));
     if (k === "appt") return;
-    setCur(k); // hold the question: keyboard users move on with "Continuer"; pointer users auto-advance
     clearTimeout(advance.current);
-    if (pointer.current) advance.current = setTimeout(() => setCur(null), 140);
+    // Tap / click: advance instantly (the screen is derived from the answers). Keyboard: hold so arrow keys can move between options, then "Continuer".
+    setCur(pointer.current ? null : k);
   }, []);
   const [hasCard, setHasCard] = useState(false);
   const clear = () => { setA(EMPTY_ANSWERS); setCur(null); setHasCard(false); pointer.current = false; };
@@ -956,10 +956,10 @@ export function CdcpSingleBoxWidget({
         <CtaLink href={book({ branch: "qualified", cdcpTier: tier ?? "", hasCard: "1" })}>{U.bookNow}</CtaLink>
         <p className="pt-1 text-center"><button type="button" onClick={() => setHasCard(false)} className={`min-h-11 rounded-lg px-2 text-[13px] font-medium underline decoration-white/40 underline-offset-4 opacity-80 transition hover:opacity-100 ${FOCUS}`}>{U.noCardYet}</button></p></>) : (<>
         <div className="space-y-1.5 pb-1">
-          <a href={L.cdcpApplyUrl} target="_blank" rel="noopener noreferrer"
-            className={`group flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/30 px-4 py-3 text-center text-sm font-semibold leading-snug transition-all duration-150 hover:border-white/60 hover:bg-white/10 active:scale-[0.99] motion-reduce:transition-none motion-reduce:transform-none ${FOCUS}`}>
+          <motion.a href={L.cdcpApplyUrl} target="_blank" rel="noopener noreferrer" whileTap={reduce ? undefined : { scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            className={`group flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/30 px-4 py-3 text-center text-sm font-semibold leading-snug transition-[border-color,background-color] duration-150 hover:border-white/60 hover:bg-white/10 active:border-white/60 active:bg-white/10 motion-reduce:transition-none ${FOCUS}`}>
             <FileText className="size-4 shrink-0 opacity-80" aria-hidden /><span>{U.applyLink}</span><ArrowUpRight className="size-4 shrink-0 transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
-          </a>
+          </motion.a>
           <p className="px-1 text-center text-xs leading-snug opacity-80">{U.applySub}</p>
           <p className="text-center"><button type="button" onClick={() => setHasCard(true)} className={`min-h-11 rounded-lg px-2 text-[13px] font-medium underline decoration-white/40 underline-offset-4 opacity-90 transition hover:opacity-100 ${FOCUS}`}>{U.haveCard}</button></p>
         </div>
@@ -972,9 +972,9 @@ export function CdcpSingleBoxWidget({
   const tone = TONE[head.tone === "good" ? "good" : head.tone === "bad" ? "bad" : "warn"];
   const resultScreen = (
     <motion.div key="result" initial={{ opacity: 0, scale: reduce ? 1 : 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: reduce ? 1 : 0.96 }}
-      transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 25 }} className="relative space-y-5 px-6 pb-6 pt-3">
+      transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 25 }} className="relative space-y-4 px-6 pb-5 pt-3">
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-64" style={{ background: `radial-gradient(70% 90% at 50% 0%, ${tone.glow}, transparent)` }} />
-      <Rise i={0} reduce={reduce} className="relative space-y-3">
+      <Rise i={0} reduce={reduce} className="relative space-y-2">
         <p className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold ${tone.chip}`}>
           <motion.span className="inline-flex" initial={reduce ? false : { scale: 0, rotate: -40 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: "spring", stiffness: 500, damping: 14, delay: 0.25 }}>
             {head.tone === "good" ? <ShieldCheck className="size-4" aria-hidden /> : <Info className="size-4" aria-hidden />}</motion.span>{head.label}
@@ -984,10 +984,10 @@ export function CdcpSingleBoxWidget({
       </Rise>
 
       {needAppt && showFigure && est && (
-        <Rise i={1} reduce={reduce} className="relative space-y-3">
+        <Rise i={1} reduce={reduce} className="relative space-y-2.5">
           <div>
             <p className="text-[13px] font-semibold">{U.share}</p>
-            <p aria-hidden className={`mt-1 font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-6xl font-black leading-none tracking-tight ${est.patient === 0 ? "text-[var(--good-on-panel)]" : ""}`}><motion.span className="inline-block origin-left" initial={{ opacity: 0, y: reduce ? 0 : 10, scale: reduce ? 1 : 0.85 }} animate={{ opacity: 1, y: 0, scale: 1 }}
+            <p aria-hidden className={`mt-1 font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-5xl font-black leading-none tracking-tight ${est.patient === 0 ? "text-[var(--good-on-panel)]" : ""}`}><motion.span className="inline-block origin-left" initial={{ opacity: 0, y: reduce ? 0 : 10, scale: reduce ? 1 : 0.85 }} animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 20, delay: 0.1 }}>
                 <CountUp value={est.patient} lang={lang} reduce={reduce} />
               </motion.span></p>
