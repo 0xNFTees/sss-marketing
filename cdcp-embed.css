@@ -344,6 +344,11 @@
 /* ---- drawers for fine print ---- */
 .cdcp .cq-acc{margin-top:0;border-bottom:1px solid var(--c-line)}
 .cdcp .cq-rest>details+details{margin-top:0}
+.cdcp .cq-acc>summary{gap:var(--s3)}
+.cdcp .cq-acc>summary>span:first-child{flex:1;min-width:0}
+.cdcp .cq-acc-meta{font-size:var(--t-s);font-weight:400;font-variant-numeric:tabular-nums;white-space:nowrap;opacity:.8}
+.cdcp .cq-calc{border-top:1px solid var(--c-line)}
+.cdcp .cq-calc+.cq-estnote{margin-top:var(--s2)}
 .cdcp .cq-acc-body{padding:0 0 var(--s3)}
 .cdcp .cq-acc-body .cq-billing-notice{margin-top:0}
 

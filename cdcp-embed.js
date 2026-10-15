@@ -111,9 +111,9 @@
     inner.appendChild(matrixItem("excluded","&#215;",m.excluded,false));
     wrap.appendChild(inner);return wrap;
   }
-  function accordion(title,nodes){
+  function accordion(title,nodes,meta){
     var d=node("details","cq-matrix-all cq-acc");
-    d.appendChild(node("summary",null,'<span>'+esc(title)+'</span><span class="cq-matrix-item-chevron" aria-hidden="true"></span>'));
+    d.appendChild(node("summary",null,'<span>'+esc(title)+'</span>'+(meta?'<span class="cq-acc-meta">'+esc(meta)+'</span>':'')+'<span class="cq-matrix-item-chevron" aria-hidden="true"></span>'));
     var b=node("div","cq-acc-body");nodes.forEach(function(n){b.appendChild(n);});d.appendChild(b);return d;
   }
   function stepRow(n,title,body,cta,stepLbl){
@@ -376,8 +376,8 @@
         var covers=c.tp&&(c.cov>0||!c.excl),tierTxt=covers?U.grid.replace("{n}",Math.round(c.tp*100)):(c.tp?U.noCover:U.noelig);
         rowsH+='<div><dt><i class="cq-sw" aria-hidden="true"></i>'+esc(U.paid)+'<small class="'+(covers?"cq-good-t":"cq-bad-t")+'">'+esc(nb(tierTxt))+'</small></dt><dd class="'+(c.cov?"cq-good-t":"")+(tc?" cq-tick":"")+'">'+(c.cov?"− ":"")+esc(nf.format(c.cov))+'</dd></div>';
       }else rowsH+='<div><dt>'+esc(U.paid)+'</dt><dd class="cq-dim">'+esc(U.byAnswers)+'</dd></div>';
-      sBrk.appendChild(secLabel("calc"));
-      sBrk.appendChild(node("dl","cq-dl",rowsH));
+      var calc=accordion(U.sec.calc,[node("dl","cq-dl",rowsH)],nf.format(c.fee)+(c.known?" \u2192 "+nf.format(c.oop):""));
+      calc.className+=" cq-calc";sBrk.appendChild(calc);
       if(c.known)sBrk.appendChild(textNode("p","cq-estnote",U.estNote));
       t.appendChild(secLabel("limits"));
       t.appendChild(node("p","cq-incl","<b>"+esc(U.incl)+"</b>"+(lang==="fr"?" : ":": ")+esc(U.pk[c.pk.id][1])));

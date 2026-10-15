@@ -51,6 +51,7 @@ JS = """([procs,answers])=>{
   const m=window.mountCdcpQuiz(el,'en',{});
   Object.assign(m.state,answers);
   const c=m.cost();
+  el.querySelectorAll('details').forEach(d=>d.open=true);
   return {c, text:el.innerText};
 }"""
 
@@ -59,7 +60,8 @@ JSUI = """([procs,ans])=>{
   window.CDCP_PROVINCES={QC:{procedures:procs}};
   const el=document.createElement('div');document.body.appendChild(el);
   const m=window.mountCdcpQuiz(el,'en',{});m.set(ans);
-  return {text:el.innerText};
+  el.querySelectorAll('details').forEach(d=>d.open=true);
+  return {text:el.textContent.replace(/\s+/g,' ')};
 }"""
 def run_ui(pg,procs,answers): return pg.evaluate(JSUI,[procs,answers])
 
@@ -129,14 +131,14 @@ with sync_playwright() as p:
                   window.CDCP_PROVINCES={{QC:{{procedures:procs}}}};
                   const el=document.createElement('div');document.body.appendChild(el);
                   const m=window.mountCdcpQuiz(el,'en',{{}});Object.assign(m.state,{{ins:'no',inc:'under70',filed:'yes',appt:'filling'}});
-                  return {{c:m.cost(),text:el.innerText}};}}"""
+                  el.querySelectorAll('details').forEach(d=>d.open=true);return {{c:m.cost(),text:el.innerText}};}}"""
                 r=pg.evaluate(js)
             else:
                 r=run(pg,procs,{"ins":"no","inc":"under70","filed":"yes","appt":"filling"})
             ok(f"invalid {field}={label} -> flagged, not computed",bool(r["c"] and r["c"].get("bad")),str(r["c"]))
     # 10. rendered text must never contain NaN / undefined / Infinity across the real UI states
     pg.goto(BASE+"/123/");pg.wait_for_timeout(300)
-    MOUNT="""(a)=>{const el=document.createElement('div');document.body.appendChild(el);const m=window.mountCdcpQuiz(el,'en',{});m.set(a);const t=el.innerText;el.remove();return t}"""
+    MOUNT="""(a)=>{const el=document.createElement('div');document.body.appendChild(el);const m=window.mountCdcpQuiz(el,'en',{});m.set(a);el.querySelectorAll('details').forEach(d=>d.open=true);const t=el.innerText;el.remove();return t}"""
     for ins in ("yes","no"):
         for inc in ("under70","band70","band80","over90"):
             for fl in ("yes","no"):
@@ -260,6 +262,8 @@ with sync_playwright() as p:
     ok("layout: the two fine-print drawers exist and start closed",[d[0] for d in r["dr"]]==["Avis de transparence tarifaire","Soins couverts, autorisation et exclusions"] and not any(d[1] for d in r["dr"]),str(r["dr"]))
     ok("layout: the billing notice lives in its drawer",r["noticeInDrawer"] and not r["noticeOutside"])
     ok("dock: hidden while the actions are on screen",r["dockHidden"])
+    c=pg.evaluate("""()=>{const d=document.getElementById('dsx').querySelector('details.cq-calc');return {open:d.open,sum:d.querySelector('summary').innerText.replace(/\\s+/g,' '),note:!!document.getElementById('dsx').querySelector('.cq-calc+.cq-estnote')}}""")
+    ok("layout: the estimate calculation is a closed drawer that still shows cost and share",not c["open"] and "344,00" in c["sum"] and "76,00" in c["sum"] and c["note"],str(c))
     pg.evaluate("window.scrollBy({top:document.getElementById('dsx').querySelector('.cq-act').getBoundingClientRect().bottom+120,behavior:'instant'})");pg.wait_for_timeout(700)
     d=pg.evaluate("""()=>{const k=document.getElementById('dsx').querySelector('.cq-dock'),r=k.getBoundingClientRect();
       return {hidden:k.hidden,t:k.innerText.replace(/\\s+/g,' '),href:(k.querySelector('a')||{}).href||'',bottom:r.bottom,vh:innerHeight}}""")
