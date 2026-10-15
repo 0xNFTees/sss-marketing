@@ -61,27 +61,33 @@
 .cdcp .cq-det{padding-top:var(--s1)}
 .cdcp .cq-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 @container (min-width:680px){
-  .cdcp .cq-grid{grid-template-columns:minmax(270px,320px) minmax(0,1fr);grid-template-rows:auto auto auto auto 1fr}
-  .cdcp .cq-ctl{grid-row:1/6;grid-column:1;display:flex;flex-direction:column;gap:var(--s4);border-bottom:0;padding:var(--s5);align-self:start;position:sticky;top:12px}
+  /* top band: inputs | statement (+ what's included). Next steps run full width beneath. */
+  .cdcp .cq-grid{grid-template-columns:minmax(270px,320px) minmax(0,1fr);grid-template-rows:auto 1fr auto auto auto}
+  .cdcp .cq-ctl{grid-row:1/5;grid-column:1;gap:var(--s4) var(--s3);border-bottom:0;padding:var(--s5);align-self:stretch;align-content:start}
   .cdcp .cq-status{grid-column:2;grid-row:1;padding:var(--s5) var(--s5) var(--s1);border-left:1px solid var(--c-line);background:var(--c-tint)}
   .cdcp:not(.cq-ledger) .cq-status{padding-bottom:var(--s5)}
-  /* the statement: ledger lines, then the total, on one tinted surface */
-  .cdcp .cq-brk{grid-column:2;grid-row:2;align-self:stretch;padding:var(--s2) var(--s5) 0;background:var(--c-tint);border-left:1px solid var(--c-line)}
+  .cdcp .cq-brk{grid-column:2;grid-row:2;align-self:stretch;display:flex;flex-direction:column;justify-content:flex-end;padding:var(--s2) var(--s5) 0;background:var(--c-tint);border-left:1px solid var(--c-line)}
+  .cdcp .cq-dl>div{padding:var(--s3) 0}
   .cdcp .cq-sum{grid-column:2;grid-row:3;position:static;margin:0;padding:var(--s3) var(--s5) var(--s4);border:0;border-left:1px solid var(--c-line);background-color:var(--c-tint);
     background-size:calc(100% - 48px) 3px;background-position:var(--s5) 0;background-repeat:no-repeat}
   .cdcp.cq-ledger .cq-sum{background-image:linear-gradient(90deg,var(--c-good) var(--cov,0%),var(--c-ink) var(--cov,0%))}
   .cdcp .cq-det{grid-column:2;grid-row:4;padding:var(--s3) var(--s5) 0;border-left:1px solid var(--c-line)}
-  .cdcp .cq-rest{grid-column:2;grid-row:5;padding:var(--s4) var(--s5) var(--s5);border-left:1px solid var(--c-line);min-height:90px}
-  .cdcp .cq-big{font-size:36px}
+  .cdcp .cq-rest{grid-column:2;grid-row:5;padding:var(--s4) var(--s5) var(--s5);border-left:1px solid var(--c-line)}
+  .cdcp.cq-ledger .cq-rest{grid-column:1/-1;border-left:0;border-top:1px solid var(--c-line)}
+  .cdcp:not(.cq-ledger) .cq-ctl{grid-row:1/6}
+  .cdcp:not(.cq-ledger) .cq-grid{grid-template-rows:auto auto auto auto 1fr}
+  .cdcp:not(.cq-ledger) .cq-sum{background-image:none}
+  .cdcp .cq-big{font-size:40px}
   .cdcp .cq-skip{display:block}
 }
-/* wide containers: what's included reads beside the statement */
+/* wide containers: what's included and the billing notice sit beside the statement */
 @container (min-width:860px){
   .cdcp .cq-grid{grid-template-columns:minmax(270px,320px) minmax(340px,1.25fr) minmax(0,1fr)}
-  .cdcp.cq-ledger .cq-status{grid-column:2}
+  .cdcp.cq-ledger .cq-det{grid-column:3;grid-row:1/4;padding:var(--s5) var(--s5) var(--s4) var(--s4);border-left:0;align-self:start}
   .cdcp:not(.cq-ledger) .cq-status{grid-column:2/4}
-  .cdcp .cq-det{grid-column:3;grid-row:2/4;padding:var(--s4) var(--s5) var(--s4) var(--s4);border-left:0;align-self:start}
-  .cdcp .cq-rest{grid-column:2/4;padding:var(--s5)}
+  .cdcp:not(.cq-ledger) .cq-det{grid-column:2/4}
+  .cdcp:not(.cq-ledger) .cq-sum{grid-column:2/4}
+  .cdcp:not(.cq-ledger) .cq-rest{grid-column:2/4}
 }
 
 /* ---- controls ---- */
@@ -207,3 +213,5 @@
 
 .cdcp .cq-rest>:first-child{margin-top:0}
 @container (max-width:339px){.cdcp .cq-big{font-size:26px}}
+.cdcp .cq-det>:first-child{margin-top:0}
+.cdcp .cq-fine{max-width:72ch}

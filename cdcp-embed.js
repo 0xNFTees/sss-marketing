@@ -309,7 +309,7 @@
           var ru=ctaRow();ru.appendChild(ctaLink(withBookingParams(BOOK,{branch:"unconfirmed",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sRest.appendChild(ru);
         }
         if(oc==="qualified"||oc==="unconfirmed"){
-          sRest.appendChild(billingNotice(L.results.billingNoticeHeading,L.results.billingNoticeBody));
+          sDet.appendChild(billingNotice(L.results.billingNoticeHeading,L.results.billingNoticeBody));
         }
         if(oc==="qualified"){
           var R6=L.results.branchQualified,steps=node("div","cq-steps");
