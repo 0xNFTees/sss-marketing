@@ -129,7 +129,7 @@
 
     root.innerHTML="";root.className="cdcp cq";
     root.setAttribute("role","group");root.setAttribute("aria-label",U.label);
-    var grid=node("div","cq-grid"),ctl=node("div","cq-ctl"),sStatus=node("div","cq-status"),sSum=node("div","cq-sum"),sBrk=node("div","cq-brk"),sDet=node("div","cq-det"),sRest=node("div","cq-rest");
+    var grid=node("div","cq-grid"),ctl=node("div","cq-ctl"),sStatus=node("div","cq-status"),sSum=node("div","cq-sum"),sBrk=node("div","cq-brk"),sDet=node("div","cq-det"),sRest=node("div","cq-rest"),cin=node("div","cq-ctl-in");ctl.appendChild(cin);
     var sr=node("div","cq-sr");sr.setAttribute("role","status");
     [ctl,sStatus,sSum,sBrk,sDet,sRest].forEach(function(n){grid.appendChild(n);});root.appendChild(grid);root.appendChild(sr);
 
@@ -161,7 +161,7 @@
         lb.firstChild.addEventListener("change",function(){A[key]=o.v;update();});
         s.appendChild(lb);
       });
-      fs.appendChild(s);ctl.appendChild(fs);rows[key]=fs;
+      fs.appendChild(s);cin.appendChild(fs);rows[key]=fs;
     }
     seg("ins",U.ins,U.insI,[{v:"yes",t:U.yes,aria:L.step1.yes,html:"<span>"+esc(U.yes)+"</span>"},{v:"no",t:U.no,aria:L.step1.no,html:"<span>"+esc(U.no)+"</span>"}]);
     seg("inc",U.inc,U.incI,INCOME_KEYS.map(function(k){return {v:k,t:L.step2[k],aria:L.step2[k],
@@ -174,7 +174,7 @@
       PK.forEach(function(p,i){var f=pkFee(p);var o=new Option(U.pk[p.id][0],p.id);sel.appendChild(o);});
       sel.value=A.appt||"";
       sel.addEventListener("change",function(){A.appt=sel.value||null;update();});
-      fs.appendChild(sel);ctl.appendChild(fs);rows.appt=fs;
+      fs.appendChild(sel);cin.appendChild(fs);rows.appt=fs;
     }
     var clearBtn=node("button","cq-clear",esc(U.clear));clearBtn.type="button";clearBtn.hidden=true;
     clearBtn.addEventListener("click",function(){
@@ -184,8 +184,8 @@
       update();
       if(rs.length)rs[0].focus();   // the button hides itself; keep keyboard focus inside the controls
     });
-    ctl.appendChild(clearBtn);
-    if(opts.demo)ctl.appendChild(node("p","cq-skip",esc(L.skipPrompt)+' <a href="'+esc(BOOK)+'">'+esc(L.skipBook)+"</a>"));
+    cin.appendChild(clearBtn);
+    if(opts.demo)cin.appendChild(node("p","cq-skip",esc(L.skipPrompt)+' <a href="'+esc(BOOK)+'">'+esc(L.skipBook)+"</a>"));
 
     /* ---- model ---- */
     function validFee(v){return typeof v==="number"&&isFinite(v)&&v>=0;}   // reject NaN, Infinity and negatives from bad data
@@ -257,7 +257,8 @@
     function fade(el){el.classList.remove("cq-fade");void el.offsetWidth;el.classList.add("cq-fade");el.addEventListener("animationend",function f(){el.classList.remove("cq-fade");el.removeEventListener("animationend",f);});}
     // dollars large, cents small and baseline-aligned (decimal separator and fraction only; the currency sign keeps its place)
     function setBig(v){
-      var h="";nf.formatToParts(v).forEach(function(p){h+=(p.type==="decimal"||p.type==="fraction")?'<span class="cq-cents">'+esc(p.value)+"</span>":esc(p.value);});
+      var h="";var ps=nf.formatToParts(v),lead=ps.length&&ps[0].type==="currency";
+      ps.forEach(function(p){var c=(p.type==="decimal"||p.type==="fraction")?"cq-cents":p.type==="currency"?"cq-cur"+(lead?" cq-cur-lead":""):p.type==="literal"?"cq-sp":"";h+=c?'<span class="'+c+'">'+esc(p.value)+"</span>":esc(p.value);});
       bigEl.innerHTML=h;
     }
     function roll(to){shown=to;setBig(to);}

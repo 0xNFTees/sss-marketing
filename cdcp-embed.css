@@ -47,8 +47,9 @@
 
 /* ---- layout: container-driven, so it follows the host column, not the viewport ---- */
 .cdcp .cq-grid{display:grid;grid-template-columns:minmax(0,1fr)}
-.cdcp .cq-ctl{padding:16px;display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s4) 14px;border-bottom:1px solid var(--c-line)}
-.cdcp .cq-ctl>.cq-skip{grid-column:1/-1}
+.cdcp .cq-ctl{padding:16px;border-bottom:1px solid var(--c-line)}
+.cdcp .cq-ctl-in{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s4) 14px}
+.cdcp .cq-ctl-in>.cq-skip{grid-column:1/-1}
 .cdcp .cq-status,.cdcp .cq-sum,.cdcp .cq-brk,.cdcp .cq-det,.cdcp .cq-rest{min-width:0;padding:0 var(--s4)}
 .cdcp .cq-status{padding-top:16px}
 .cdcp .cq-rest{padding-top:var(--s3);padding-bottom:var(--s4)}
@@ -238,12 +239,12 @@
 }
 
 /* clear answers: quiet text control, shown only once there is something to clear */
-.cdcp .cq-ctl>.cq-clear{grid-column:1/-1;justify-self:start;min-height:var(--h);padding:0;margin:calc(var(--s2) * -1) 0 0;background:none;border:0;border-radius:0;
+.cdcp .cq-ctl-in>.cq-clear{grid-column:1/-1;justify-self:start;min-height:var(--h);padding:0;margin:calc(var(--s2) * -1) 0 0;background:none;border:0;border-radius:0;
   font:inherit;font-size:var(--t-m);color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;cursor:pointer;opacity:.8;
   transition:opacity var(--dur-state) var(--ease)}
-.cdcp .cq-ctl>.cq-clear[hidden]{display:none}
-@media (hover:hover){.cdcp .cq-ctl>.cq-clear:hover{opacity:1;text-decoration-thickness:2px}}
-.cdcp .cq-ctl>.cq-clear:focus-visible{outline:2px solid var(--c-ink);outline-offset:2px}
+.cdcp .cq-ctl-in>.cq-clear[hidden]{display:none}
+@media (hover:hover){.cdcp .cq-ctl-in>.cq-clear:hover{opacity:1;text-decoration-thickness:2px}}
+.cdcp .cq-ctl-in>.cq-clear:focus-visible{outline:2px solid var(--c-ink);outline-offset:2px}
 
 /* narrow layout: the pinned result bar must never cover the control that has keyboard focus */
 @container (max-width:679px){
@@ -280,7 +281,7 @@
 
 @container (min-width:680px){
   .cdcp .cq-grid{grid-template-columns:minmax(320px,380px) minmax(0,1fr);grid-template-rows:repeat(5,auto) 1fr}
-  .cdcp .cq-ctl{grid-column:1;grid-row:1/-1;padding:var(--s5) 20px;border-bottom:0;border-right:1px solid var(--c-line);background:var(--c-tint);align-content:start}
+  .cdcp .cq-ctl{grid-column:1;grid-row:1/-1;padding:var(--s5);border-bottom:0;border-right:1px solid var(--c-line);background:var(--c-tint)}
   .cdcp :is(.cq-status,.cq-sum,.cq-brk,.cq-det,.cq-rest){grid-column:2;padding-left:var(--s5);padding-right:var(--s5)}
   .cdcp .cq-status{grid-row:1;padding-top:var(--s5);padding-bottom:var(--s2)}
   .cdcp .cq-sum,.cdcp.cq-ledger .cq-sum{grid-row:2;position:static;display:block;margin:0;padding-top:var(--s2);padding-bottom:var(--s4);border:0;background:none}
@@ -385,4 +386,18 @@
   .cdcp .cq-step-card+.cq-step-card{padding-top:var(--s3);border-top:2px solid var(--c-ink)}
   .cdcp .cq-step-text{margin:2px 0 var(--s3) 0}
   .cdcp .cq-step-title{font-family:var(--c-display);font-size:18px;font-weight:500;line-height:1.3;letter-spacing:-.005em}
+}
+
+/* ================= craftsmanship pass ================= */
+/* the answers stay in reach while the longer result is read (needs room: short screens keep the normal flow) */
+@media (min-height:760px){
+  @container (min-width:680px){
+    .cdcp .cq-ctl-in{position:sticky;top:var(--cdcp-sticky-top,16px)}
+  }
+}
+/* the figure: dollars large, the unit and cents set small together, no loose gap before the currency */
+@container (min-width:680px){
+  .cdcp .cq-sum .cq-cur{font-size:.42em;letter-spacing:0}
+  .cdcp .cq-sum .cq-sp{font-size:.42em}
+  .cdcp .cq-sum .cq-cur-lead{vertical-align:.95em;margin-right:.08em}
 }
