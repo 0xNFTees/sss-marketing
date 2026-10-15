@@ -141,16 +141,13 @@
 .cdcp .cq-opt:has(input:checked){background:var(--sel);box-shadow:inset 0 0 0 2px var(--c-brand);z-index:1}
 /* lists: the visit types (always) and the income bands (wide). One radio mark, one row rhythm. */
 .cdcp .cq-seg-4,.cdcp .cq-visit{display:flex;flex-direction:column}
-.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt{align-items:flex-start;gap:var(--s0);padding:var(--s2) var(--s3) var(--s2) calc(var(--s3) * 2 + var(--radio));text-align:left;
-  border-left:0;border-top:1px solid var(--c-line);background:var(--well)}
+.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt{display:grid;grid-template-columns:var(--radio) minmax(0,1fr);column-gap:var(--s3);row-gap:var(--s0);align-content:center;align-items:center;
+  padding:var(--s2) var(--s3);text-align:left;border-left:0;border-top:1px solid var(--c-line);background:var(--well)}
 .cdcp :is(.cq-seg-4,.cq-visit) .cq-opt:first-child{border-top:0}
-.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt>span{font-weight:600}
-.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt>small{line-height:1.4}
+.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt>span{grid-column:2;grid-row:1;font-weight:600}
+.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt>small{grid-column:2;grid-row:2;line-height:1.4}
 /* radio mark and title share the first grid row, so the mark always lines up with the title however long the description is */
-.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt{display:grid;grid-template-columns:var(--radio) minmax(0,1fr);column-gap:var(--s3);row-gap:var(--s0);align-content:center;align-items:center;padding-left:var(--s3)}
 .cdcp :is(.cq-seg-4,.cq-visit) .cq-opt::before{content:"";grid-column:1;grid-row:1;align-self:center;width:var(--radio);height:var(--radio);border:1.5px solid var(--c-edge);border-radius:50%}
-.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt>span{grid-column:2;grid-row:1}
-.cdcp :is(.cq-seg-4,.cq-visit) .cq-opt>small{grid-column:2;grid-row:2}
 .cdcp :is(.cq-seg-4,.cq-visit) .cq-opt:has(input:checked){background:var(--sel)}
 .cdcp :is(.cq-seg-4,.cq-visit) .cq-opt:has(input:checked)::before{background:var(--c-ink);border-color:var(--c-ink);box-shadow:inset 0 0 0 3px var(--sel)}
 .cdcp[data-bad="1"] .cq-visit .cq-opt:has(input:checked){box-shadow:inset 0 0 0 2px var(--c-bad)}   /* invalid: no estimate can be produced for this choice */
