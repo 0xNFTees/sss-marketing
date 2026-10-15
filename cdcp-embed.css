@@ -137,7 +137,7 @@
 .cdcp .cq-step-main{display:flex;flex-direction:column;flex:1}
 .cdcp .cq-step-num{display:inline-block;min-width:18px;opacity:.55;font-variant-numeric:tabular-nums}
 .cdcp .cq-step-title{font-size:var(--t-l);font-weight:600}
-.cdcp .cq-step-text{margin:2px 0 10px 18px;font-size:var(--t-m);line-height:1.5;opacity:.88}
+.cdcp .cq-step-text{margin:2px 0 10px 0;font-size:var(--t-m);line-height:1.5;opacity:.88}
 .cdcp .cq-step-main .cq-cta-btn{margin-top:auto;width:100%;min-height:44px;padding:8px 12px}
 .cdcp .cq-help{margin-top:var(--s1);font-size:var(--t-m)}
 .cdcp .cq-help a{font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;display:inline-flex;align-items:center;min-height:44px}
@@ -349,4 +349,40 @@
 @container (min-width:680px){
   .cdcp .cq-ctl .cq-seg-4:has(input:focus-visible){outline:0}
   .cdcp .cq-ctl .cq-seg-4 .cq-opt:has(input:focus-visible){outline:2px solid var(--c-ink);outline-offset:-2px;z-index:2}
+}
+
+/* ================= result hierarchy =================
+   outcome (state + headline + the reason) > figure > calculation > limits > next step.
+   Section labels are quiet; only the outcome, the figure and the primary action are heavy. */
+.cdcp .cq-sec{margin:0 0 var(--s2);font-size:var(--t-s);font-weight:600;letter-spacing:.04em;opacity:.62}
+.cdcp .cq-status-detail{max-width:52ch}
+.cdcp .cq-pg{display:none}
+.cdcp .cq-det .cq-sec{margin-top:var(--s1)}
+.cdcp .cq-rest>.cq-sec{margin-bottom:0}
+.cdcp .cq-rest>.cq-sec+.cq-cta-row,.cdcp .cq-rest>.cq-sec+.cq-steps{margin-top:var(--s2)}
+.cdcp .cq-step-lbl{font-size:var(--t-s);font-weight:600;letter-spacing:.04em;opacity:.62;margin-bottom:2px}
+.cdcp .cq-billing-notice{padding:var(--s1) 0 var(--s1) var(--s3);border-left:2px solid var(--c-accent);font-size:var(--t-m);line-height:1.55;opacity:1}
+.cdcp .cq-incl{font-size:var(--t-m)}
+.cdcp .cq-note{font-size:var(--t-m)}
+@container (min-width:680px){
+  .cdcp .cq-lbl{justify-content:space-between;width:100%}
+  .cdcp .cq-lbl::before{display:none}
+  .cdcp .cq-lbl>span:first-child{display:inline-flex;align-items:center}
+  .cdcp .cq-lbl>span:first-child::before{content:"";width:8px;height:8px;margin-right:var(--s2);background:var(--c-ink)}
+  .cdcp .cq-pg{display:inline-flex;align-items:center;gap:var(--s1);font-size:var(--t-s);font-weight:400;opacity:.8}
+  .cdcp .cq-pg i{width:14px;height:3px;background:var(--c-line)}
+  .cdcp .cq-pg i.on{background:var(--c-ink)}
+  .cdcp .cq-pg b{margin-left:var(--s2);font-weight:400}
+  /* the calculation reads as one block with the figure; limits and next step step back / forward */
+  .cdcp .cq-brk{padding-top:var(--s2);border-top:0}
+  .cdcp .cq-brk .cq-sec{margin-top:var(--s2)}
+  .cdcp .cq-det{padding-top:var(--s1)}
+  .cdcp .cq-det>.cq-incl{margin-top:0}
+  /* next step: one continuous sequence, a strong rule on each stage */
+  .cdcp .cq-rest{padding-top:var(--s5)}
+  .cdcp .cq-steps{margin-top:var(--s2);column-gap:var(--s3)}
+  .cdcp .cq-step-card{padding:var(--s3) 0 0;border-top:2px solid var(--c-ink)}
+  .cdcp .cq-step-card+.cq-step-card{padding-top:var(--s3);border-top:2px solid var(--c-ink)}
+  .cdcp .cq-step-text{margin:2px 0 var(--s3) 0}
+  .cdcp .cq-step-title{font-family:var(--c-display);font-size:18px;font-weight:500;line-height:1.3;letter-spacing:-.005em}
 }

@@ -31,7 +31,7 @@
        covered = isCoveredByCDCP ? min(cdcpGridFee * tier%, acdqFee) : 0     you pay = acdqFee - covered  */
   var T = {
     fr: {label:"Admissibilité et coût au RCSD",
-      clear:"Effacer les réponses", todo:"À indiquer", st:{none:"Aucune réponse",pending:"Incomplet",unconfirmed:"À confirmer",qualified:"Admissible selon vos réponses",income:"Non admissible",tax:"Déclaration requise",insurance:"Assurance privée"}, ins:"Assurance dentaire privée", insI:"Par un employeur, un régime privé ou un compte de gestion santé.", yes:"Oui", no:"Non",
+      clear:"Effacer les réponses", todo:"À indiquer", sec:{calc:"Calcul de l’estimation",limits:"Limites de l’estimation",next:"Prochaine étape"}, bc:{based:"Selon vos réponses : ",and:" et ",noIns:"vous n’avez pas d’assurance dentaire privée",inc:"votre revenu familial net rajusté est de {r}",fy:"votre déclaration d’impôts est produite",fn:"votre déclaration d’impôts n’est pas encore produite"}, st:{none:"Aucune réponse",pending:"Incomplet",unconfirmed:"À confirmer",qualified:"Admissible selon vos réponses",income:"Non admissible",tax:"Déclaration requise",insurance:"Assurance privée"}, ins:"Assurance dentaire privée", insI:"Par un employeur, un régime privé ou un compte de gestion santé.", yes:"Oui", no:"Non",
       inc:"Revenu familial net rajusté", incI:"Selon votre dernière déclaration d’impôts.", incShort:["< 70 k","70–79 k","80–89 k","90 k +"], incPct:["100 %","60 %","40 %","0 %"],
       filed:"Déclaration d’impôts produite", filedI:"Vous et votre conjoint(e), le cas échéant, pour l’année précédente.", notYet:"Pas encore",
       appt:"Type de rendez-vous", apptI:"", pick:"Choisir…",
@@ -46,7 +46,7 @@
           emerg:["Urgence, mal de dent","Examen d’urgence, radiographie","Un traitement immédiat (obturation, canal, extraction) s’ajoute au tarif."],
           filling:["Carie, obturation","Obturation en composite sur une molaire (1 surface)","L’examen n’est pas inclus."],major:["Prothèse complète","Prothèse complète standard, une arcade","Frais de laboratoire en sus."]}},
     en: {label:"CDCP eligibility and cost",
-      clear:"Clear answers", todo:"To answer", st:{none:"No answers yet",pending:"Incomplete",unconfirmed:"To confirm",qualified:"Eligible based on your answers",income:"Not eligible",tax:"Return required",insurance:"Private insurance"}, ins:"Private dental insurance", insI:"Through an employer, a private plan or a health spending account.", yes:"Yes", no:"No",
+      clear:"Clear answers", todo:"To answer", sec:{calc:"How the estimate is built",limits:"Limits of the estimate",next:"Next step"}, bc:{based:"Based on your answers: ",and:" and ",noIns:"you have no private dental insurance",inc:"your adjusted family net income is {r}",fy:"your tax return is filed",fn:"your tax return is not filed yet"}, st:{none:"No answers yet",pending:"Incomplete",unconfirmed:"To confirm",qualified:"Eligible based on your answers",income:"Not eligible",tax:"Return required",insurance:"Private insurance"}, ins:"Private dental insurance", insI:"Through an employer, a private plan or a health spending account.", yes:"Yes", no:"No",
       inc:"Adjusted family net income", incI:"From your last tax return.", incShort:["< 70k","70–79k","80–89k","90k+"], incPct:["100%","60%","40%","0%"],
       filed:"Tax return filed", filedI:"You and your spouse or partner, if applicable, for the previous year.", notYet:"Not yet",
       appt:"Appointment type", apptI:"", pick:"Choose…",
@@ -109,8 +109,8 @@
     inner.appendChild(matrixItem("excluded","&#215;",m.excluded,false));
     wrap.appendChild(inner);return wrap;
   }
-  function stepRow(n,title,body,cta){
-    var d=node("div","cq-step-card");var c=node("div","cq-step-main");c.appendChild(node("div","cq-step-title",'<span class="cq-step-num">'+n+"</span>"+esc(title)));
+  function stepRow(n,title,body,cta,stepLbl){
+    var d=node("div","cq-step-card");var c=node("div","cq-step-main");c.appendChild(textNode("div","cq-step-lbl",stepLbl.replace("{current}",n).replace("{total}",2)));c.appendChild(textNode("div","cq-step-title",title));
     if(body)c.appendChild(textNode("p","cq-step-text",body));
     if(cta)c.appendChild(cta);d.appendChild(c);return d;
   }
@@ -290,7 +290,8 @@
     function renderSum(c,o){
       sSum.innerHTML="";
       sSum.hidden=false;
-      var lbl=textNode("div","cq-lbl",U.share);sSum.appendChild(lbl);
+      var lbl=node("div","cq-lbl"),pr0=progress(),pgH="";for(var q=0;q<pr0.t;q++)pgH+="<i"+(q<pr0.n?' class="on"':"")+"></i>";
+      lbl.appendChild(textNode("span",null,U.share));lbl.appendChild(node("span","cq-pg",pgH+"<b>"+esc(U.prog.replace("{n}",pr0.n).replace("{t}",pr0.t))+"</b>"));lbl.lastChild.setAttribute("aria-hidden","true");sSum.appendChild(lbl);
       bigEl=node("div","cq-big");bigEl.setAttribute("aria-hidden","true");sSum.appendChild(bigEl);
       if(c&&!c.bad&&c.known){
         roll(c.oop);root.style.setProperty("--cov",(c.fee?Math.max(0,Math.min(100,c.cov/c.fee*100)):0)+"%");
@@ -304,6 +305,12 @@
         if(!(c&&c.bad))sSum.appendChild(traceList());
       }
     }
+    function because(){
+      if(A.ins!=="no"||!A.inc)return null;var B=U.bc,p=[B.noIns,B.inc.replace("{r}",nb(L.step2[A.inc]))];
+      if(A.inc!=="over90"&&A.filed)p.push(A.filed==="yes"?B.fy:B.fn);
+      return B.based+(p.length>2?p.slice(0,-1).join(", ")+B.and+p[p.length-1]:p.join(B.and))+".";
+    }
+    function secLabel(k){return textNode("p","cq-sec",U.sec[k]);}
     function renderCostDetail(t,c,o){
       if(!c||c.bad)return;
       var tf=last.fee!==null&&last.fee!==c.fee,tc=last.cov!==null&&last.cov!==c.cov;last.fee=c.fee;last.cov=c.known?c.cov:null;
@@ -312,8 +319,10 @@
         var covers=c.tp&&(c.cov>0||!c.excl),tierTxt=covers?U.grid.replace("{n}",Math.round(c.tp*100)):(c.tp?U.noCover:U.noelig);
         rowsH+='<div><dt><i class="cq-sw" aria-hidden="true"></i>'+esc(U.paid)+'<small class="'+(covers?"cq-good-t":"cq-bad-t")+'">'+esc(nb(tierTxt))+'</small></dt><dd class="'+(c.cov?"cq-good-t":"")+(tc?" cq-tick":"")+'">'+(c.cov?"− ":"")+esc(nf.format(c.cov))+'</dd></div>';
       }else rowsH+='<div><dt>'+esc(U.paid)+'</dt><dd class="cq-dim">'+esc(U.byAnswers)+'</dd></div>';
+      sBrk.appendChild(secLabel("calc"));
       sBrk.appendChild(node("dl","cq-dl",rowsH));
       if(c.known)sBrk.appendChild(textNode("p","cq-estnote",U.estNote));
+      t.appendChild(secLabel("limits"));
       t.appendChild(node("p","cq-incl","<b>"+esc(U.incl)+"</b>"+(lang==="fr"?" : ":": ")+esc(U.pk[c.pk.id][1])));
       var notes=[];
       var x=U.pk[c.pk.id][2];if(x)notes.push(["bad",x]);
@@ -342,18 +351,18 @@
         if(DATA){renderSum(c,oc);}else{sSum.innerHTML="";sSum.hidden=true;}
         title=U.pendH;
         if(DATA&&c&&!c.bad)renderCostDetail(sDet,c,oc);
-        var rp=ctaRow();rp.appendChild(ctaLink(withBookingParams(BOOK,{branch:"pending",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sRest.appendChild(rp);
+        var rp=ctaRow();rp.appendChild(ctaLink(withBookingParams(BOOK,{branch:"pending",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta,{variant:"secondary"}));sRest.appendChild(rp);
       }else if(oc==="insurance"){
         var R=L.results.branchInsurance;kind="good";title=R.headline;
         sStatus.appendChild(statusBlock("good",R.headline,R.microCopy,"insurance"));
         sSum.innerHTML="";sSum.hidden=true;
-        var row=ctaRow();row.appendChild(ctaLink(withBookingParams(BOOK,{branch:"insurance",utm_source:"cdcp-calculator"}),R.primaryCta));sRest.appendChild(row);
+        sRest.appendChild(secLabel("next"));var row=ctaRow();row.appendChild(ctaLink(withBookingParams(BOOK,{branch:"insurance",utm_source:"cdcp-calculator"}),R.primaryCta));sRest.appendChild(row);
         insurersBlock(sRest,R);
       }else{
         if(oc==="income"){var R2=L.results.branchIncome;title=R2.headline;sStatus.appendChild(statusBlock("bad",R2.headline,R2.microCopy,"income"));}
         else if(oc==="tax"){var R3=L.results.branchTaxFiling;title=R3.headline;sStatus.appendChild(statusBlock("warn",R3.headline,R3.microCopy,"tax"));}
-        else if(oc==="qualified"){title=nb(L.results["tier"+tier+"Badge"]);sStatus.appendChild(statusBlock("good",title,null,"qualified"));}
-        else{title=U.tierUnconfirmed.replace("{n}",Math.round(TIER_PCT[A.inc]*100));sStatus.appendChild(statusBlock("warn",nb(title),null,"unconfirmed"));}
+        else if(oc==="qualified"){title=nb(L.results["tier"+tier+"Badge"]);sStatus.appendChild(statusBlock("good",title,because(),"qualified"));}
+        else{title=U.tierUnconfirmed.replace("{n}",Math.round(TIER_PCT[A.inc]*100));sStatus.appendChild(statusBlock("warn",nb(title),because(),"unconfirmed"));}
         if(DATA)renderSum(c,oc);else{sSum.innerHTML="";sSum.hidden=true;}
         if(DATA&&c&&!c.bad&&c.known){
           if(oc==="tax")sSum.appendChild(textNode("p","cq-sum-note",U.whenIssued));
@@ -363,24 +372,25 @@
         renderCostDetail(sDet,c,oc);
         // calls to action
         if(oc==="income"){
-          var r4=ctaRow();r4.appendChild(ctaLink(withBookingParams(BOOK,{branch:"income",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sRest.appendChild(r4);
+          sRest.appendChild(secLabel("next"));var r4=ctaRow();r4.appendChild(ctaLink(withBookingParams(BOOK,{branch:"income",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sRest.appendChild(r4);
         }else if(oc==="tax"){
-          var R5=L.results.branchTaxFiling,r5=ctaRow();
+          sRest.appendChild(secLabel("next"));var R5=L.results.branchTaxFiling,r5=ctaRow();
           r5.appendChild(ctaLink(L.craMyAccountUrl,R5.primaryCta,{external:true}));
           r5.appendChild(ctaLink(withBookingParams(BOOK,{branch:"tax-filing",utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(4)}),R5.secondaryCta,{variant:"secondary"}));
           sRest.appendChild(r5);
         }
         if(oc==="unconfirmed"){
-          var ru=ctaRow();ru.appendChild(ctaLink(withBookingParams(BOOK,{branch:"unconfirmed",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sRest.appendChild(ru);
+          sRest.appendChild(secLabel("next"));var ru=ctaRow();ru.appendChild(ctaLink(withBookingParams(BOOK,{branch:"unconfirmed",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sRest.appendChild(ru);
         }
         if(oc==="qualified"||oc==="unconfirmed"){
+          if(!sDet.querySelector(".cq-sec"))sDet.insertBefore(secLabel("limits"),sDet.firstChild);
           sDet.appendChild(billingNotice(L.results.billingNoticeHeading,L.results.billingNoticeBody));
         }
         if(oc==="qualified"){
-          var R6=L.results.branchQualified,steps=node("div","cq-steps");
+          sRest.appendChild(secLabel("next"));var R6=L.results.branchQualified,steps=node("div","cq-steps");
           function strip(x){return x.replace(/^[^—-]*[—-]\s*/,"");}
-          steps.appendChild(stepRow(1,strip(R6.step1Title),R6.step1Body,ctaLink(L.cdcpApplyUrl,R6.step1Cta,{external:true,variant:"secondary"})));
-          steps.appendChild(stepRow(2,strip(R6.step2Title),R6.step2MicroCopy,ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:tier,utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(7)}),R6.step2Cta)));
+          steps.appendChild(stepRow(1,strip(R6.step1Title),R6.step1Body,ctaLink(L.cdcpApplyUrl,R6.step1Cta,{external:true,variant:"secondary"}),L.stepLabel));
+          steps.appendChild(stepRow(2,strip(R6.step2Title),R6.step2MicroCopy,ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:tier,utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(7)}),R6.step2Cta),L.stepLabel));
           sRest.appendChild(steps);
           var help=node("p","cq-help");help.appendChild(document.createTextNode(strip(R6.step3Title)+" "));
           var ha=node("a",null);ha.href=withBookingParams(BOOK,{branch:"qualified-help",utm_source:"cdcp-calculator"});ha.textContent=R6.step3Cta;help.appendChild(ha);sRest.appendChild(help);
