@@ -110,9 +110,9 @@
 .cdcp[data-view="result"] :is(.cq-ctl,.cq-ctl-in){display:contents}
 .cdcp[data-view="result"] .cq-stg-h{order:0;margin:0;padding:var(--s2) var(--s4) 0}
 .cdcp[data-view="result"] .cq-status{order:1;padding-top:var(--s2);animation-delay:.3s}
-.cdcp[data-view="result"] .cq-sum{order:2;padding-top:var(--s4);animation-delay:.37s}
+.cdcp[data-view="result"] .cq-sum{order:2;padding-top:var(--s3);animation-delay:.37s}
 .cdcp[data-view="result"] .cq-brk{order:3;padding-top:var(--s3);animation-delay:.44s}
-.cdcp[data-view="result"] .cq-act{order:4;padding-top:var(--s4);animation-delay:.51s}
+.cdcp[data-view="result"] .cq-act{order:4;padding-top:var(--s3);animation-delay:.51s}
 .cdcp[data-view="result"] .cq-contact{order:5;margin:var(--s4) var(--s5) 0;animation-delay:.58s}
 .cdcp[data-view="result"] .cq-det{order:6;padding-top:var(--s3);animation-delay:.65s}
 .cdcp[data-view="result"] .cq-rest{order:7;padding-top:var(--s4)}
@@ -160,7 +160,7 @@
 .cdcp .cq-cta-btn-primary{position:relative;width:100%;min-height:56px;background:var(--c-brand);color:var(--c-on);font-size:var(--t-l);font-weight:700;box-shadow:0 14px 32px -10px color-mix(in srgb,var(--c-good) 55%,transparent);transition:var(--tr-surface),transform 150ms var(--ease)}
 .cdcp .cq-cta-btn-primary::before{content:"";position:absolute;inset:-4px;border:2px solid color-mix(in srgb,var(--c-brand) 55%,transparent);border-radius:inherit;opacity:0;pointer-events:none;animation:cq-ring 4.6s ease-out 1.4s infinite}
 .cdcp .cq-cta-btn-outline{width:100%;min-height:48px;padding:var(--s3);border:1px solid color-mix(in srgb,var(--c-ink) 32%,transparent);font-weight:600;transition:var(--tr-surface),transform var(--dur-press) var(--ease)}
-.cdcp .cq-cta-btn-outline:active{transform:scale(.99)}
+.cdcp .cq-cta-btn-outline:active{transform:scale(.98);border-color:color-mix(in srgb,var(--c-ink) 60%,transparent);background:color-mix(in srgb,var(--c-ink) 10%,transparent)}
 .cdcp .cq-linkbtn{align-self:center;min-height:var(--h);padding:0 var(--s3);font-size:var(--t-m);font-weight:500;text-decoration:underline;text-decoration-color:color-mix(in srgb,currentColor 40%,transparent);text-underline-offset:4px;opacity:.9}
 .cdcp .cq-save{display:inline-flex;align-items:center;gap:var(--s2);margin-bottom:var(--s3);padding:var(--s1) var(--s3);border:1px solid color-mix(in srgb,var(--c-good) 40%,transparent);background:color-mix(in srgb,var(--c-good) 15%,transparent);border-radius:var(--c-r);color:var(--c-good);font-size:var(--t-m);font-weight:600}
 .cdcp .cq-cta-btn-primary::after{content:"\203A";font-size:var(--t-h);line-height:1}
@@ -283,9 +283,9 @@
 }
 /* press */
 .cdcp .cq-opt:active:not(:has(input:checked)){background:var(--c-hover)}
-.cdcp .cq-opt:active{transform:scale(.98)}
+.cdcp .cq-opt:active{transform:scale(.97)}
 .cdcp .cq-cta-btn:not(.cq-cta-btn-primary):active{transform:translateY(1px)}
-.cdcp .cq-cta-btn-primary:active{background:color-mix(in srgb,var(--c-brand) 74%,#000);transform:scale(.99)}
+.cdcp .cq-cta-btn-primary:active{background:color-mix(in srgb,var(--c-brand) 74%,#000);transform:scale(.97);opacity:.9}
 .cdcp .cq-cta-btn-secondary:active,.cdcp :is(.cq-matrix-all,.cq-matrix-item)>summary:active{background:var(--c-hover)}
 /* focus: one ring. Outside by default; inside for rows of a bordered list; a 2-up control rings the whole group */
 .cdcp :is(a,button,summary):focus-visible,.cdcp .cq-opt:has(input:focus-visible){outline:var(--ring);outline-offset:var(--ring-out)}

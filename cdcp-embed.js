@@ -185,12 +185,12 @@
       A[k]=v;update();
       if(k==="appt"&&shownKey==="appt"){            // the appointment screen: choosing one reveals the result
         hold=!ptr;refreshNext();
-        if(ptr){clearTimeout(advT);advT=setTimeout(function(){hold=false;renderCtl(false);},140);}
+        if(ptr){clearTimeout(advT);hold=false;renderCtl(false);}
         return;
       }
       if(shownKey===k){
         refreshNext();
-        if(ptr){clearTimeout(advT);advT=setTimeout(function(){cur=null;renderCtl(false);},140);}
+        if(ptr){clearTimeout(advT);cur=null;renderCtl(false);}
       }
     }
     var nextBtn=null;
