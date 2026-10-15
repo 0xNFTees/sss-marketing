@@ -32,7 +32,7 @@
        covered = isCoveredByCDCP ? min(cdcpGridFee * tier%, acdqFee) : 0     you pay = acdqFee - covered  */
   var T = {
     fr: {label:"Admissibilité et coût au RCSD",
-      clear:"Effacer les réponses", todo:"À indiquer", edit:"Modifier", yours:"Vos réponses", qn:"Question {n} sur {t}", cont:"Continuer",  sec:{calc:"Calcul de l’estimation",limits:"Limites de l’estimation",next:"Prochaine étape"}, bc:{based:"Selon vos réponses : ",and:" et ",noIns:"vous n’avez pas d’assurance dentaire privée",inc:"votre revenu familial net rajusté est de {r}",fy:"votre déclaration d’impôts est produite",fn:"votre déclaration d’impôts n’est pas encore produite"}, st:{none:"Aucune réponse",pending:"Incomplet",unconfirmed:"À confirmer",qualified:"Admissible selon vos réponses",income:"Non admissible",tax:"Déclaration requise",insurance:"Assurance privée"}, ins:"Assurance dentaire privée", insI:"Par un employeur, un régime privé ou un compte de gestion santé.", yes:"Oui", no:"Non", chipIns:{yes:"Assuré",no:"Non-assuré"}, applyLink:"Étape 1 : faire la demande RCSD (Santé Canada)", chipFiled:{yes:"Impôts : oui",no:"Impôts : pas encore"},
+      clear:"Effacer les réponses", todo:"À indiquer", edit:"Modifier", yours:"Vos réponses", qn:"Question {n} sur {t}", cont:"Continuer",  sec:{calc:"Calcul de l’estimation",limits:"Limites de l’estimation",next:"Prochaine étape"}, bc:{based:"Selon vos réponses : ",and:" et ",noIns:"vous n’avez pas d’assurance dentaire privée",inc:"votre revenu familial net rajusté est de {r}",fy:"votre déclaration d’impôts est produite",fn:"votre déclaration d’impôts n’est pas encore produite"}, st:{none:"Aucune réponse",pending:"Incomplet",unconfirmed:"À confirmer",qualified:"Admissible selon vos réponses",income:"Non admissible",tax:"Déclaration requise",insurance:"Assurance privée"}, ins:"Assurance dentaire privée", insI:"Par un employeur, un régime privé ou un compte de gestion santé.", yes:"Oui", no:"Non", chipIns:{yes:"Assuré",no:"Non-assuré"}, applyLink:"Étape 1 : Faire la demande d’adhésion au RCSD (Santé Canada)",applySub:"La carte RCSD arrive en 4 à 8 semaines.",bookSub:"Réserver dans 6 à 8 semaines aligne votre visite avec la réception de votre carte.",step2:"Étape 2 : Réserver votre rendez-vous",bookNow:"Réserver votre rendez-vous",haveCard:"J’ai déjà ma carte RCSD",noCardYet:"Pas encore de carte ? Voir l’étape 1",save:"Vous économisez {n}", chipFiled:{yes:"Impôts : oui",no:"Impôts : pas encore"},
       inc:"Revenu familial net rajusté", incI:"Selon votre dernière déclaration d’impôts.", incShort:["< 70 k","70–79 k","80–89 k","90 k +"], incPct:["100 %","60 %","40 %","0 %"],
       filed:"Déclaration d’impôts produite", filedI:"Vous et votre conjoint(e), le cas échéant, pour l’année précédente.", notYet:"Pas encore",
       appt:"Type de rendez-vous", apptI:"", pick:"Choisir…",
@@ -46,7 +46,7 @@
       pk:{new:["Nouveau patient","Examen complet, radiographies diagnostiques, nettoyage, fluorure"],recall:["Rappel et nettoyage","Examen périodique, nettoyage"],
           emerg:["Urgence, mal de dent","Examen d’urgence, radiographie","Un traitement immédiat (obturation, canal, extraction) s’ajoute au tarif."],}},
     en: {label:"CDCP eligibility and cost",
-      clear:"Clear answers", todo:"To answer", edit:"Edit", yours:"Your answers", qn:"Question {n} of {t}", cont:"Continue",  sec:{calc:"How the estimate is built",limits:"Limits of the estimate",next:"Next step"}, bc:{based:"Based on your answers: ",and:" and ",noIns:"you have no private dental insurance",inc:"your adjusted family net income is {r}",fy:"your tax return is filed",fn:"your tax return is not filed yet"}, st:{none:"No answers yet",pending:"Incomplete",unconfirmed:"To confirm",qualified:"Eligible based on your answers",income:"Not eligible",tax:"Return required",insurance:"Private insurance"}, ins:"Private dental insurance", insI:"Through an employer, a private plan or a health spending account.", yes:"Yes", no:"No", chipIns:{yes:"Insured",no:"Uninsured"}, applyLink:"Step 1: apply for CDCP (Health Canada)", chipFiled:{yes:"Taxes filed",no:"Taxes not filed yet"},
+      clear:"Clear answers", todo:"To answer", edit:"Edit", yours:"Your answers", qn:"Question {n} of {t}", cont:"Continue",  sec:{calc:"How the estimate is built",limits:"Limits of the estimate",next:"Next step"}, bc:{based:"Based on your answers: ",and:" and ",noIns:"you have no private dental insurance",inc:"your adjusted family net income is {r}",fy:"your tax return is filed",fn:"your tax return is not filed yet"}, st:{none:"No answers yet",pending:"Incomplete",unconfirmed:"To confirm",qualified:"Eligible based on your answers",income:"Not eligible",tax:"Return required",insurance:"Private insurance"}, ins:"Private dental insurance", insI:"Through an employer, a private plan or a health spending account.", yes:"Yes", no:"No", chipIns:{yes:"Insured",no:"Uninsured"}, applyLink:"Step 1: Apply for CDCP membership (Health Canada)",applySub:"Your CDCP card arrives in 4 to 8 weeks.",bookSub:"Booking 6 to 8 weeks out lines your visit up with your card’s arrival.",step2:"Step 2: Book your appointment",bookNow:"Book your appointment",haveCard:"I already have my CDCP card",noCardYet:"No card yet? Back to step 1",save:"You save {n}", chipFiled:{yes:"Taxes filed",no:"Taxes not filed yet"},
       inc:"Adjusted family net income", incI:"From your last tax return.", incShort:["< 70k","70–79k","80–89k","90k+"], incPct:["100%","60%","40%","0%"],
       filed:"Tax return filed", filedI:"You and your spouse or partner, if applicable, for the previous year.", notYet:"Not yet",
       appt:"Appointment type", apptI:"", pick:"Choose…",
@@ -83,7 +83,7 @@
   function addWeeksIso(w){var d=new Date();d.setDate(d.getDate()+w*7);return d.toISOString().slice(0,10);}
   function ctaLink(href,label,opts){
     opts=opts||{};
-    var a=node("a","cq-cta-btn "+(opts.variant==="secondary"?"cq-cta-btn-secondary":"cq-cta-btn-primary"));
+    var a=node("a","cq-cta-btn "+(opts.variant==="secondary"?"cq-cta-btn-secondary":opts.variant==="outline"?"cq-cta-btn-outline":"cq-cta-btn-primary"));
     a.href=href;
     if(opts.external){a.target="_blank";a.rel="noopener noreferrer";}
     a.innerHTML="<span>"+esc(label)+"</span>"+(opts.external?'<span class="cq-cta-ext" aria-hidden="true">&#8599;</span>':"");
@@ -155,7 +155,7 @@
     })();
 
     /* ---- answers: one stage that asks a question at a time, then becomes the summary ---- */
-    var ORDER=["ins","inc","filed","appt"],cur=null,shownKey=null,ptr=false,kbd=false,advT=0,hold=false,lastScr=null,lastRank=0;
+    var ORDER=["ins","inc","filed","appt"],cur=null,shownKey=null,ptr=false,kbd=false,advT=0,hold=false,lastScr=null,lastRank=0,haveCard=false;
     root.addEventListener("pointerdown",function(){ptr=true;kbd=false;},true);
     root.addEventListener("keydown",function(){ptr=false;kbd=true;},true);
     var srS=node("div","cq-sr");srS.setAttribute("role","status");root.appendChild(srS);
@@ -198,7 +198,7 @@
     function goStep(k,focus){hold=false;cur=k;renderCtl(focus!==false);}
     var clearBtn=node("button","cq-clear",esc(U.clear));clearBtn.type="button";clearBtn.hidden=true;
     clearBtn.addEventListener("click",function(){
-      Object.keys(A).forEach(function(k){A[k]=null;});cur=null;hold=false;
+      Object.keys(A).forEach(function(k){A[k]=null;});cur=null;hold=false;haveCard=false;
       update();renderCtl("force");
     });
     function needAppt(){return !!DATA&&A.ins==="no";}
@@ -224,13 +224,14 @@
     }
     function contactCard(){
       if(!(opts.demo||opts.phone||opts.email))return null;
-      // patient-facing: reach the clinic directly. Links only for contacts the host supplies.
-      var ph=opts.phone?String(opts.phone):"",em=opts.email?String(opts.email):"",hasC=ph||em,
-          IC_P='<svg class="cq-skip-i" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3.6 1.5h2l1 3-1.4 1a8 8 0 0 0 4.3 4.3l1-1.4 3 1v2a1.6 1.6 0 0 1-1.7 1.6A11.4 11.4 0 0 1 2 3.2 1.6 1.6 0 0 1 3.6 1.5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>',
-          IC_M='<svg class="cq-skip-i" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2 3.5h12v9H2zM2.3 4l5.7 4.6L13.7 4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>',
-          cA=hasC&&!ph?"":(ph?'<a class="cq-skip-l" href="tel:'+esc(ph.replace(/[^\d+]/g,""))+'">':'<span class="cq-skip-l">')+IC_P+esc(L.skipCall)+(ph?"</a>":"</span>"),
-          mA=hasC&&!em?"":(em?'<a class="cq-skip-l" href="mailto:'+esc(em)+'">':'<span class="cq-skip-l">')+IC_M+esc(hasC&&!ph?L.skipMail.charAt(0).toUpperCase()+L.skipMail.slice(1):L.skipMail)+(em?"</a>":"</span>");
-      return node("p","cq-skip",'<span class="cq-skip-q">'+esc(L.skipPrompt)+"</span> "+cA+(cA&&mA?esc(L.skipOr):"")+mA+esc(hasC&&!em?L.skipTailCall:L.skipTail));
+      // patient-facing: call or write the clinic directly, as an equal alternative to booking online. Links only for contacts the host supplies.
+      var ph=opts.phone?String(opts.phone):"",em=opts.email?String(opts.email):"";
+      if(!ph&&!em)return null;
+      var d=node("div","cq-contact"),b=node("div","cq-contact-b");
+      d.appendChild(textNode("p","cq-contact-q",L.skipPrompt));
+      if(ph){var pa=node("a","cq-cta-btn cq-cta-btn-outline",esc(L.skipCall));pa.href="tel:"+ph.replace(/[^\d+]/g,"");b.appendChild(pa);}
+      if(em){var ma=node("a","cq-cta-btn cq-cta-btn-outline",esc(L.skipMail.charAt(0).toUpperCase()+L.skipMail.slice(1)));ma.href="mailto:"+em;b.appendChild(ma);}
+      d.appendChild(b);return d;
     }
     function continueBar(onNext,enabled){
       var ft=node("div","cq-stg-f");nextBtn=node("button","cq-next",esc(U.cont)+' <span aria-hidden="true">→</span>');nextBtn.type="button";nextBtn.disabled=!enabled;
@@ -368,6 +369,7 @@
       var split=node("dl","cq-split");
       split.appendChild(node("div",null,'<dt>'+esc(U.cost)+'</dt><dd'+(tf?' class="cq-tick"':'')+'>'+esc(nf.format(c.fee))+'</dd>'));
       split.appendChild(node("div",null,'<dt>'+esc(U.paid)+'</dt><dd class="'+(c.cov?"cq-good-t":"cq-dim")+(tc?" cq-tick":"")+'">'+(c.known?(c.cov?"− ":"")+esc(nf.format(c.cov)):esc(U.byAnswers))+'</dd>'));
+      if(c.known&&c.cov>0)sBrk.appendChild(textNode("p","cq-save",U.save.replace("{n}",nf.format(c.cov))));
       sBrk.appendChild(split);
       sBrk.appendChild(textNode("p","cq-estnote",(c.known?nb(tierTxt)+" · ":"")+U.estNote));
       t.appendChild(secLabel("limits"));
@@ -428,10 +430,19 @@
         if(oc==="qualified"||oc==="unconfirmed"){
         }
         if(oc==="qualified"){
-          var R6=L.results.branchQualified,r6=ctaRow();
-          r6.appendChild(ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:tier,utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(7)}),R6.step2Cta));
-          r6.appendChild(textNode("p","cq-cta-note",R6.step2MicroCopy));
-          r6.appendChild(ctaLink(L.cdcpApplyUrl,U.applyLink,{external:true,variant:"secondary"}));
+          var r6=ctaRow(),lk=function(label,on){var bt=node("button","cq-linkbtn",esc(label));bt.type="button";bt.addEventListener("click",function(){haveCard=on;update();var f=sAct.querySelector(on?".cq-cta-btn-primary":".cq-linkbtn");if(f)f.focus();});return bt;};
+          if(haveCard){
+            // already holds the card: book straight away, no suggested wait
+            r6.appendChild(ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:tier,utm_source:"cdcp-calculator",hasCard:"1"}),U.bookNow));
+            r6.appendChild(lk(U.noCardYet,false));
+          }else{
+            // a two-step path: apply for the card, then book
+            r6.appendChild(ctaLink(L.cdcpApplyUrl,U.applyLink,{external:true,variant:"outline"}));
+            r6.appendChild(textNode("p","cq-cta-note",U.applySub));
+            r6.appendChild(lk(U.haveCard,true));
+            r6.appendChild(ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:tier,utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(7)}),U.step2));
+            r6.appendChild(textNode("p","cq-cta-note",U.bookSub));
+          }
           sAct.appendChild(r6);
         }
         var fine=[],tn=[];
@@ -454,6 +465,7 @@
       var si=sStatus.firstChild;if(si&&last.title!==null&&last.title!==title)si.classList.add("cq-tick");last.title=title;
       var say=title+(c&&!c.bad&&c.known?". "+U.cost+" "+nf.format(c.fee)+", "+U.paid+" "+nf.format(c.cov)+". "+U.share+" "+nf.format(c.oop):"");
       if(key!==lastKey){sr.textContent=say;lastKey=key;}
+      var sk=sStatus.firstChild,tm=sk&&/cq-(good|bad|warn)/.exec(sk.className);root.setAttribute("data-tone",tm?tm[1]:"neutral");
       root.setAttribute("data-state",oc);
       root.classList.toggle("cq-ledger",sBrk.childNodes.length>0);
     }
