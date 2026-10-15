@@ -236,6 +236,20 @@
       }
     }
     var shown=0,raf=0,bigEl=null,last={oop:null,fee:null,cov:null,title:null,led:false,oc:null};
+    // the narrow-layout result bar is pinned over the content: tell the browser how tall it is so a focused control is scrolled clear of it
+    function syncBar(){root.style.setProperty("--bar-h",(sSum.hidden?0:sSum.offsetHeight)+"px");}
+    if(typeof ResizeObserver==="function")new ResizeObserver(syncBar).observe(sSum);
+    // browsers do not scroll a focused control that is already on screen but under the pinned bar; nudge it clear (keyboard focus must stay visible)
+    root.addEventListener("focusin",function(e){
+      var t=e.target;if(!t||sSum.hidden||getComputedStyle(sSum).position!=="sticky"||sSum.contains(t))return;
+      requestAnimationFrame(function(){
+        var f=t.getBoundingClientRect(),b=sSum.getBoundingClientRect();
+        if(f.bottom<=b.top||f.top>=b.bottom)return;
+        var d=f.bottom-b.top+12,sp=t.parentElement;
+        while(sp&&sp!==document.body){var o=getComputedStyle(sp).overflowY;if((o==="auto"||o==="scroll")&&sp.scrollHeight>sp.clientHeight)break;sp=sp.parentElement;}
+        if(sp&&sp!==document.body)sp.scrollTop+=d;else window.scrollBy(0,d);
+      });
+    });
     function fade(el){el.classList.remove("cq-fade");void el.offsetWidth;el.classList.add("cq-fade");el.addEventListener("animationend",function f(){el.classList.remove("cq-fade");el.removeEventListener("animationend",f);});}
     // dollars large, cents small and baseline-aligned (decimal separator and fraction only; the currency sign keeps its place)
     function setBig(v){
@@ -348,6 +362,7 @@
       // one concise announcement per change (the animated number is aria-hidden)
       if(!sBrk.childNodes.length){last.fee=null;last.cov=null;}
       if(DATA&&sel)sel.setAttribute("aria-invalid",c&&c.bad?"true":"false");
+      syncBar();
       var hasLed=sBrk.childNodes.length>0;
       if(last.oc!==null&&last.oc!==oc){fade(sRest);if(sDet.childNodes.length)fade(sDet);}   // a different outcome: its next steps ease in
       if(hasLed&&!last.led){fade(sBrk);fade(sDet);}                                         // ledger appears once the appointment is chosen

@@ -283,3 +283,8 @@
 .cdcp .cq-ctl>.cq-clear[hidden]{display:none}
 @media (hover:hover){.cdcp .cq-ctl>.cq-clear:hover{opacity:1;text-decoration-thickness:2px}}
 .cdcp .cq-ctl>.cq-clear:focus-visible{outline:2px solid var(--c-ink);outline-offset:2px}
+
+/* narrow layout: the pinned result bar must never cover the control that has keyboard focus */
+@container (max-width:679px){
+  .cdcp :is(input,select,a,button,summary){scroll-margin-bottom:calc(var(--bar-h,0px) + 12px)}
+}
