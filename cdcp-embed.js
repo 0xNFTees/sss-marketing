@@ -36,7 +36,7 @@
       filed:"Déclaration produite", filedI:"Requise pour demander", notYet:"Non",
       appt:"Rendez-vous", apptI:"Détermine le tarif du guide", pick:"Choisir…",
       remain:"Il reste à indiquer :", pendH:"Répondez pour voir votre estimation.",
-      share:"Votre part estimée", std:"Guide tarifaire ACDQ 2026", paid:"Versé par le RCSD", you:"Votre part", byAnswers:"selon vos réponses", grid:"{n} % de la grille du RCSD", noelig:"Non admissible",
+      share:"Votre part estimée", cost:"Coût du traitement", std:"Guide tarifaire ACDQ 2026", paid:"Versé par le RCSD", noCover:"Service non couvert par le RCSD", full:"Entièrement couvert au tarif du guide.", ifQualify:"Si votre admissibilité est confirmée.", you:"Votre part", byAnswers:"selon vos réponses", grid:"{n} % de la grille du RCSD", noelig:"Non admissible",
       incl:"Inclus", nopick:"Choisissez un rendez-vous pour voir votre part.", unavailable:"Estimation indisponible pour ce rendez-vous. Communiquez avec la clinique.",
       tierUnconfirmed:"Palier RCSD : jusqu’à {n} %. Confirmez votre déclaration de revenus.", whenIssued:"Montant estimé une fois la carte RCSD reçue.",
       pre:"Préautorisation du RCSD requise.", lab:"Frais de laboratoire en sus.", excl:"Non couvert par le RCSD.",
@@ -51,7 +51,7 @@
       filed:"Tax return filed", filedI:"Required to apply", notYet:"Not yet",
       appt:"Appointment", apptI:"Sets the guide price", pick:"Choose…",
       remain:"Still to answer:", pendH:"Answer to see your estimate.",
-      share:"Your estimated share", std:"ACDQ price guide 2026", paid:"Paid by CDCP", you:"Your share", byAnswers:"depends on your answers", grid:"{n}% of the CDCP fee schedule", noelig:"Not eligible",
+      share:"Your estimated share", cost:"Treatment cost", std:"ACDQ 2026 price guide", paid:"Paid by CDCP", noCover:"Not a CDCP-covered service", full:"Fully covered at the guide price.", ifQualify:"If your eligibility is confirmed.", you:"Your share", byAnswers:"depends on your answers", grid:"{n}% of the CDCP fee schedule", noelig:"Not eligible",
       incl:"Includes", nopick:"Choose an appointment to see your share.", unavailable:"Estimate unavailable for this appointment. Please contact the clinic.",
       tierUnconfirmed:"CDCP tier: up to {n}%. Confirm your tax filing.", whenIssued:"Estimated amount once your CDCP card is issued.",
       pre:"CDCP pre-authorization required.", lab:"Lab fee billed extra.", excl:"Not covered by CDCP.",
@@ -248,10 +248,10 @@
     }
     function renderCostDetail(t,c,o){
       if(!c||c.bad)return;
-      var rowsH='<div><dt>'+esc(U.std)+'</dt><dd>'+esc(nf.format(c.fee))+'</dd></div>';
+      var rowsH='<div><dt>'+esc(U.cost)+'<small class="cq-mute">'+esc(U.std)+'</small></dt><dd>'+esc(nf.format(c.fee))+'</dd></div>';
       if(c.known){
-        var tierTxt=c.tp?U.grid.replace("{n}",Math.round(c.tp*100)):U.noelig;
-        rowsH+='<div><dt>'+esc(U.paid)+'<small class="'+(c.tp?"cq-good-t":"cq-bad-t")+'">'+esc(nb(tierTxt))+'</small></dt><dd class="'+(c.cov?"cq-good-t":"")+'">'+(c.cov?"− ":"")+esc(nf.format(c.cov))+'</dd></div>';
+        var covers=c.tp&&(c.cov>0||!c.excl),tierTxt=covers?U.grid.replace("{n}",Math.round(c.tp*100)):(c.tp?U.noCover:U.noelig);
+        rowsH+='<div><dt>'+esc(U.paid)+'<small class="'+(covers?"cq-good-t":"cq-bad-t")+'">'+esc(nb(tierTxt))+'</small></dt><dd class="'+(c.cov?"cq-good-t":"")+'">'+(c.cov?"− ":"")+esc(nf.format(c.cov))+'</dd></div>';
       }else rowsH+='<div><dt>'+esc(U.paid)+'</dt><dd class="cq-dim">'+esc(U.byAnswers)+'</dd></div>';
       sBrk.appendChild(node("dl","cq-dl",rowsH));
       t.appendChild(node("p","cq-incl","<b>"+esc(U.incl)+"</b>"+(lang==="fr"?" : ":": ")+esc(U.pk[c.pk.id][1])));
@@ -294,7 +294,11 @@
         else if(oc==="qualified"){title=nb(L.results["tier"+tier+"Badge"]);sStatus.appendChild(statusBlock("good",title));}
         else{title=U.tierUnconfirmed.replace("{n}",Math.round(TIER_PCT[A.inc]*100));sStatus.appendChild(statusBlock("neutral",nb(title)));}
         if(DATA)renderSum(c,oc);else{sSum.innerHTML="";sSum.hidden=true;}
-        if(DATA&&c&&!c.bad&&oc==="tax")sSum.appendChild(textNode("p","cq-sum-note",U.whenIssued));
+        if(DATA&&c&&!c.bad&&c.known){
+          if(oc==="tax")sSum.appendChild(textNode("p","cq-sum-note",U.whenIssued));
+          else if(oc==="unconfirmed")sSum.appendChild(textNode("p","cq-sum-note",U.ifQualify));
+          if(c.fee>0&&c.oop===0)sSum.appendChild(textNode("p","cq-sum-note",U.full));
+        }
         renderCostDetail(sDet,c,oc);
         // calls to action
         if(oc==="income"){
@@ -328,7 +332,7 @@
         if(fine.length)sRest.appendChild(textNode("p","cq-fine",fine.join(" ")));
       }
       // one concise announcement per change (the animated number is aria-hidden)
-      var say=title+(c&&!c.bad&&c.known?". "+U.share+" "+nf.format(c.oop):"");
+      var say=title+(c&&!c.bad&&c.known?". "+U.cost+" "+nf.format(c.fee)+", "+U.paid+" "+nf.format(c.cov)+". "+U.share+" "+nf.format(c.oop):"");
       if(key!==lastKey){sr.textContent=say;lastKey=key;}
       root.setAttribute("data-state",oc);
       root.classList.toggle("cq-ledger",sBrk.childNodes.length>0);

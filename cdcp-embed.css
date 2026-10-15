@@ -71,7 +71,7 @@
   .cdcp .cq-sum{grid-column:2;grid-row:3;position:static;margin:0;padding:var(--s3) var(--s5) var(--s4);border:0;border-left:1px solid var(--c-line);background-color:var(--c-tint);
     background-size:calc(100% - 48px) 3px;background-position:var(--s5) 0;background-repeat:no-repeat}
   .cdcp.cq-ledger .cq-sum{background-image:linear-gradient(90deg,var(--c-good) var(--cov,0%),var(--c-ink) var(--cov,0%))}
-  .cdcp .cq-det{grid-column:2;grid-row:4;padding:var(--s3) var(--s5) 0;border-left:1px solid var(--c-line)}
+  .cdcp .cq-det{grid-column:2;grid-row:4;padding:var(--s3) var(--s5) var(--s4);border-left:1px solid var(--c-line)}
   .cdcp .cq-rest{grid-column:2;grid-row:5;padding:var(--s4) var(--s5) var(--s5);border-left:1px solid var(--c-line)}
   .cdcp.cq-ledger .cq-rest{grid-column:1/-1;border-left:0;border-top:1px solid var(--c-line)}
   .cdcp:not(.cq-ledger) .cq-ctl{grid-row:1/6}
@@ -215,3 +215,4 @@
 @container (max-width:339px){.cdcp .cq-big{font-size:26px}}
 .cdcp .cq-det>:first-child{margin-top:0}
 .cdcp .cq-fine{max-width:72ch}
+.cdcp .cq-dl dt small.cq-mute{opacity:.72}

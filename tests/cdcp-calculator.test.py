@@ -55,6 +55,15 @@ JS = """([procs,answers])=>{
 }"""
 
 def run(pg,procs,answers): return pg.evaluate(JS,[procs,answers])
+JSUI = """([procs,ans])=>{
+  window.CDCP_PROVINCES={QC:{procedures:procs}};
+  const el=document.createElement('div');document.body.appendChild(el);
+  window.mountCdcpQuiz(el,'en',{});
+  for(const k of ['ins','inc','filed']) if(ans[k]) el.querySelector('input[name$="'+k+'"][value="'+ans[k]+'"]').click();
+  const sel=el.querySelector('select');sel.value=ans.appt;sel.dispatchEvent(new Event('change',{bubbles:true}));
+  return {text:el.innerText};
+}"""
+def run_ui(pg,procs,answers): return pg.evaluate(JSUI,[procs,answers])
 
 with sync_playwright() as p:
     b=p.chromium.launch();pg=b.new_page();errs=[];pg.on("pageerror",lambda e:errs.append(str(e)))
@@ -97,6 +106,20 @@ with sync_playwright() as p:
     # 8. tier unknown (income unanswered): guide price only, no coverage claimed
     r=run(pg,mk(),{"ins":"no","inc":None,"appt":"new"})["c"]
     ok("tier unknown: no coverage claimed",r["known"] is False and r["cov"]==0 and r["fee"]==400,str(r))
+    # 8b. presentation of the statement (labels, honest captions, notes)
+    ST={"ins":"no","inc":"under70","filed":"yes","appt":"filling"}
+    t=run_ui(pg,mk({"23311":{"acdqFee2026":50,"cdcpGridFee2026":100}}),ST)["text"]
+    ok("capped line: fully covered note",("Fully covered at the guide price" in t) and "$0.00" in t,t[:200])
+    t=run_ui(pg,mk({"23311":{"isCoveredByCDCP":False}}),ST)["text"]
+    ok("non-covered service: honest caption, no tier claim",("Not a CDCP-covered service" in t) and "100% of the CDCP fee schedule" not in t,t[:200])
+    t=run_ui(pg,mk({"23311":{"acdqFee2026":0,"cdcpGridFee2026":0}}),ST)["text"]
+    ok("zero fee is not called non-covered",("Not a CDCP-covered service" not in t) and "Fully covered" not in t,t[:200])
+    t=run_ui(pg,mk(),dict(ST,filed=None))["text"]
+    ok("unconfirmed eligibility: conditional note",("If your eligibility is confirmed" in t),t[:200])
+    t=run_ui(pg,mk({"23311":{"acdqFee2026":12345.67,"cdcpGridFee2026":9000.5}}),dict(ST,inc="band70"))["text"]
+    ok("large amounts keep separators and cents",("$12,345.67" in t) and ("$6,945" in t) and ("Treatment cost" in t),t[:240])
+    t=run_ui(pg,mk(),dict(ST,inc="over90"))["text"]
+    ok("over 90k: not eligible caption, full cost",("Not eligible" in t) and ("$100.00" in t),t[:200])
     # 9. invalid fee data must never produce a number
     bad_vals=[("missing fee","__DEL__"),("null",None),("string","88"),("NaN",float("nan")),("negative",-5),("Infinity",float("inf"))]
     for field in ("acdqFee2026","cdcpGridFee2026"):
