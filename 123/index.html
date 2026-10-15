@@ -84,6 +84,7 @@ h2{font-size:clamp(28px,3.8vw,46px);line-height:1.08;letter-spacing:-.022em;max-
 .lever-p .link{margin:0 16px 14px}
 .lever.open .lever-p{grid-template-rows:1fr;opacity:1}
 .lever.open{border-color:var(--tan-text)}
+@media(max-width:1020px){.levers{grid-template-columns:1fr 1fr}}
 @media(max-width:860px){.levers{grid-template-columns:1fr}}
 .flash .quiz-card{animation:flash 1.6s var(--ease)}
 @keyframes flash{0%{outline:2px solid var(--tan);outline-offset:4px}100%{outline:2px solid transparent;outline-offset:4px}}
@@ -257,7 +258,7 @@ footer .wrap{border-top:1px solid rgba(254,250,224,.18);padding-top:22px;display
     <div class="lever-p" id="lp2" role="region" aria-labelledby="lh2"><div><p><span class="fr">Profil défendu : informations à jour, photos, avis et présence sur la carte.</span><span class="en">A defended profile: up-to-date details, photos, reviews and map presence.</span></p></div></div>
    </div>
    <div class="lever">
-    <button type="button" class="lever-h" id="lh3" aria-expanded="false" aria-controls="lp3"><span><span class="fr">Données, suivi d’appels et tableau de bord</span><span class="en">Data, call tracking and dashboard</span></span><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></button>
+    <button type="button" class="lever-h" id="lh3" aria-expanded="false" aria-controls="lp3"><span><span class="fr">Suivi d’appels et tableau de bord</span><span class="en">Call tracking and dashboard</span></span><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></button>
     <div class="lever-p" id="lp3" role="region" aria-labelledby="lh3"><div><p><span class="fr">Chaque appel est attribué à sa source. Chaque clinique a son propre tableau de bord, activé après l’intégration, avec des résultats transparents. Inclus dans le prix.</span><span class="en">Every call is attributed to its source. Every clinic gets its own dashboard, live after onboarding, with transparent results. Included in the price.</span></p></div></div>
    </div>
    <div class="lever">
