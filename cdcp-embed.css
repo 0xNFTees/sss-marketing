@@ -89,12 +89,13 @@
 .cdcp .cq-grid{display:grid;grid-template-columns:minmax(0,1fr)}
 .cdcp .cq-ctl{padding:var(--s4);border-bottom:1px solid var(--c-line)}
 .cdcp .cq-ctl-in{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s4)}
-.cdcp :is(.cq-status,.cq-sum,.cq-brk,.cq-det,.cq-rest){min-width:0;padding:0 var(--s4)}
+.cdcp :is(.cq-status,.cq-sum,.cq-act,.cq-brk,.cq-det,.cq-rest){min-width:0;padding:0 var(--s4)}
 .cdcp .cq-status{padding-top:var(--s4)}
 .cdcp :is(.cq-brk,.cq-det){padding-top:var(--s1)}
 .cdcp .cq-rest{padding-top:var(--s3);padding-bottom:var(--s4)}
-.cdcp :is(.cq-brk,.cq-det):empty{display:none}
-.cdcp :is(.cq-rest,.cq-det)>:first-child{margin-top:0}
+.cdcp :is(.cq-act,.cq-brk,.cq-det):empty{display:none}
+.cdcp .cq-act{padding-top:var(--s1);padding-bottom:var(--s3)}
+.cdcp :is(.cq-rest,.cq-det,.cq-act)>:first-child{margin-top:0}
 .cdcp .cq-sum{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;column-gap:var(--s3);
   position:sticky;bottom:0;z-index:1;margin:var(--s3) 0 0;padding-top:var(--s3);padding-bottom:var(--s3);border-bottom:1px solid var(--c-line);
   background:var(--c-paper) linear-gradient(var(--c-line),var(--c-line)) 0 0/100% 3px no-repeat}
@@ -240,8 +241,8 @@
 .cdcp .cq-insurer-note{margin-top:var(--s4);line-height:1.6;opacity:.8}
 .cdcp .cq-insurer-pills{margin-top:var(--s2);display:flex;flex-wrap:wrap;gap:var(--s2)}
 .cdcp .cq-insurer-pill{padding:var(--s2) var(--s3);border:1px solid var(--c-line);border-radius:var(--c-r);font-size:var(--t-s)}
-.cdcp .cq-rest>.cq-sec{margin-bottom:0}
-.cdcp .cq-rest>.cq-sec+:is(.cq-cta-row,.cq-steps){margin-top:var(--s2)}
+.cdcp :is(.cq-rest,.cq-act)>.cq-sec{margin-bottom:0}
+.cdcp :is(.cq-rest,.cq-act)>.cq-sec+:is(.cq-cta-row,.cq-steps){margin-top:var(--s2)}
 .cdcp .cq-det .cq-sec{margin-top:var(--s1)}
 .cdcp .cq-steps{margin-top:var(--s4);display:grid;grid-template-columns:minmax(0,1fr)}
 .cdcp .cq-step-card{display:flex;flex-direction:column;padding:var(--s3) 0}
@@ -308,26 +309,28 @@
   .cdcp[data-view="result"] :is(.cq-ctl,.cq-ctl-in){display:contents}
   .cdcp[data-view="result"] .cq-status{order:1}
   .cdcp[data-view="result"] .cq-sum{order:2;bottom:auto;top:var(--cdcp-sticky-top,0px)}
-  .cdcp[data-view="result"] .cq-row-appt{order:3;--well:var(--c-paper);--sel:var(--c-tint);padding:var(--s4);background:var(--c-tint);border-block:1px solid var(--c-line)}
+  .cdcp[data-view="result"] .cq-act{order:3}
+  .cdcp[data-view="result"] .cq-row-appt{order:4;--well:var(--c-paper);--sel:var(--c-tint);padding:var(--s4);background:var(--c-tint);border-block:1px solid var(--c-line)}
   .cdcp[data-view="result"] .cq-row-appt>legend{float:left;width:100%}
-  .cdcp[data-view="result"] .cq-brk{order:4}
-  .cdcp[data-view="result"] .cq-det{order:5}
-  .cdcp[data-view="result"] .cq-rest{order:6}
-  .cdcp[data-view="result"] .cq-ctl-in>:is(.cq-sec,.cq-ans,.cq-clear,.cq-skip){order:7;margin-inline:var(--s4)}
+  .cdcp[data-view="result"] .cq-brk{order:5}
+  .cdcp[data-view="result"] .cq-det{order:6}
+  .cdcp[data-view="result"] .cq-rest{order:7}
+  .cdcp[data-view="result"] .cq-ctl-in>:is(.cq-sec,.cq-ans,.cq-clear,.cq-skip){order:8;margin-inline:var(--s4)}
   .cdcp[data-view="result"] .cq-ctl-in>.cq-sec{margin-top:var(--s5)}
 }
 
 /* wide (container >= 680): a tinted answer rail beside one statement column.
    The statement reads top to bottom: state, the figure, the split behind it, what it assumes, what to do next. */
 @container (min-width:680px){
-  .cdcp .cq-grid{grid-template-columns:minmax(320px,380px) minmax(0,1fr);grid-template-rows:repeat(5,auto) 1fr}
+  .cdcp .cq-grid{grid-template-columns:minmax(320px,380px) minmax(0,1fr);grid-template-rows:repeat(6,auto) 1fr}
   .cdcp .cq-ctl{grid-column:1;grid-row:1/-1;--well:var(--c-paper);--sel:var(--c-tint);padding:var(--s5);border-bottom:0;border-right:1px solid var(--c-line);background:var(--c-tint)}
-  .cdcp :is(.cq-status,.cq-sum,.cq-brk,.cq-det,.cq-rest){grid-column:2;padding-inline:var(--s5)}
+  .cdcp :is(.cq-status,.cq-sum,.cq-act,.cq-brk,.cq-det,.cq-rest){grid-column:2;padding-inline:var(--s5)}
   .cdcp .cq-status{grid-row:1;min-height:12rem;padding-top:var(--s5);padding-bottom:var(--s2)}   /* a steady height keeps the figure in place as the state changes */
   .cdcp .cq-sum,.cdcp.cq-ledger .cq-sum{grid-row:2;position:static;display:block;margin:0;padding-top:var(--s2);padding-bottom:var(--s4);border:0;background:none}
-  .cdcp .cq-brk{grid-row:3;padding-top:var(--s2)}
-  .cdcp .cq-det{grid-row:4;padding-top:var(--s1);padding-bottom:var(--s4)}
-  .cdcp .cq-rest{grid-row:5;margin-inline:var(--s5);padding:var(--s5) 0;border-top:1px solid var(--c-line)}
+  .cdcp .cq-act{grid-row:3;padding-top:var(--s2);padding-bottom:var(--s3)}
+  .cdcp .cq-brk{grid-row:4;padding-top:var(--s2)}
+  .cdcp .cq-det{grid-row:5;padding-top:var(--s1);padding-bottom:var(--s4)}
+  .cdcp .cq-rest{grid-row:6;margin-inline:var(--s5);padding:var(--s5) 0;border-top:1px solid var(--c-line)}
   .cdcp .cq-rest:empty{display:none}
   .cdcp .cq-brk .cq-sec{margin-top:var(--s2)}
   .cdcp .cq-skip{display:block}
@@ -337,6 +340,24 @@
 @container (min-width:900px){.cdcp .cq-grid{grid-template-columns:minmax(340px,400px) minmax(0,1fr)}}
 /* the answers stay in reach while the longer result is read (short screens keep the normal flow) */
 @media (min-height:760px){@container (min-width:680px){.cdcp .cq-ctl-in{position:sticky;top:var(--cdcp-sticky-top,var(--s4))}}}
+
+/* ---- drawers for fine print ---- */
+.cdcp .cq-acc{margin-top:0;border-bottom:1px solid var(--c-line)}
+.cdcp .cq-rest>details+details{margin-top:0}
+.cdcp .cq-acc-body{padding:0 0 var(--s3)}
+.cdcp .cq-acc-body .cq-billing-notice{margin-top:0}
+
+/* ---- summary dock: sticks to the bottom of the viewport while the calculator is on screen ---- */
+.cdcp .cq-dock{position:sticky;bottom:0;z-index:4;display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2) var(--s4);padding:var(--s3) var(--s4);background:var(--c-brand);color:var(--c-on);border-top:1px solid var(--c-line)}
+.cdcp .cq-dock[hidden]{display:none}
+.cdcp .cq-dock-fig{display:flex;flex-direction:column;min-width:0}
+.cdcp .cq-dock-fig span{font-size:var(--t-s);line-height:1.3;opacity:.85}
+.cdcp .cq-dock-fig b{font-size:var(--t-l);font-weight:600;line-height:1.2;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cdcp .cq-dock-tot{padding-left:var(--s4);border-left:1px solid color-mix(in srgb,var(--c-on) 35%,transparent)}
+.cdcp .cq-dock .cq-cta-btn{margin-left:auto;flex:1 1 12rem;max-width:20rem;background:var(--c-on);color:var(--c-brand)}
+.cdcp .cq-dock a.cq-cta-btn:is(:hover,:active){background:color-mix(in srgb,var(--c-on) 88%,var(--c-brand));color:var(--c-brand)}
+.cdcp :is(.cq-dock a):focus-visible{outline-color:var(--c-on)}
+.cdcp :is(input,a,button,summary){scroll-margin-bottom:calc(var(--dock-h,0px) + var(--s3))}
 
 /* ============ 6 states ============ */
 /* hover (pointer devices only) */

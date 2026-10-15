@@ -244,6 +244,38 @@ with sync_playwright() as p:
             pg.keyboard.press("Tab")
     ok("ds: every focusable control shows the focus ring",not noring,str(noring[:5]))
 
+    # 10e. result layout: actions above the fold, fine print in drawers, summary dock
+    pg.set_viewport_size({"width":1280,"height":720})
+    pg.evaluate("""()=>{const s=document.createElement('div');s.style.height='1600px';document.body.appendChild(s)}""")
+    MNT="""([w,st])=>{const e=document.getElementById('dsx');e.innerHTML='';e.style.width=w+'px';const m=mountCdcpQuiz(e,'fr',{demo:true});m.set(st);
+      e.scrollIntoView({behavior:'instant'});return true}"""
+    full={"ins":"no","inc":"under70","filed":"yes","appt":"new"}
+    pg.evaluate(MNT,[1000,full]);pg.wait_for_timeout(900)
+    r=pg.evaluate("""()=>{const e=document.getElementById('dsx'),a=e.querySelector('.cq-act'),t=e.getBoundingClientRect().top,bs=[...a.querySelectorAll('a.cq-cta-btn')],ab=bs[bs.length-1].getBoundingClientRect().bottom;
+      const dr=[...e.querySelectorAll('.cq-rest details.cq-matrix-all')].map(d=>[d.querySelector('summary').textContent.trim(),d.open]);
+      return {actBottom:ab-t,btns:[...a.querySelectorAll('a.cq-cta-btn')].length,dr,dockHidden:e.querySelector('.cq-dock').hidden,
+        noticeInDrawer:!!e.querySelector('.cq-rest details .cq-billing-notice'),noticeOutside:!!e.querySelector('.cq-det .cq-billing-notice')}}""")
+    ok("layout: wide, the booking actions end within the first 640px of the widget",r["actBottom"]<640,str(r["actBottom"]))
+    ok("layout: wide, both calls to action are in the actions block",r["btns"]==2,str(r["btns"]))
+    ok("layout: the two fine-print drawers exist and start closed",[d[0] for d in r["dr"]]==["Avis de transparence tarifaire","Soins couverts, autorisation et exclusions"] and not any(d[1] for d in r["dr"]),str(r["dr"]))
+    ok("layout: the billing notice lives in its drawer",r["noticeInDrawer"] and not r["noticeOutside"])
+    ok("dock: hidden while the actions are on screen",r["dockHidden"])
+    pg.evaluate("window.scrollBy({top:document.getElementById('dsx').querySelector('.cq-act').getBoundingClientRect().bottom+120,behavior:'instant'})");pg.wait_for_timeout(700)
+    d=pg.evaluate("""()=>{const k=document.getElementById('dsx').querySelector('.cq-dock'),r=k.getBoundingClientRect();
+      return {hidden:k.hidden,t:k.innerText.replace(/\\s+/g,' '),href:(k.querySelector('a')||{}).href||'',bottom:r.bottom,vh:innerHeight}}""")
+    ok("dock: shows once the actions scroll away",not d["hidden"],str(d))
+    ok("dock: carries the estimated share, the total and a booking link","76,00" in d["t"] and "344,00" in d["t"] and "branch=qualified" in d["href"],str(d))
+    ok("dock: sits at the bottom of the viewport",abs(d["bottom"]-d["vh"])<=1 or d["bottom"]<=d["vh"],str(d))
+    for st,nm in (({"ins":"yes"},"insurance"),({"ins":"no","inc":"under70","filed":"no","appt":"new"},"tax"),({"ins":"no","inc":"under70","filed":"yes"},"no visit")):
+        pg.evaluate(MNT,[1000,st]);pg.wait_for_timeout(300)
+        ok(f"dock: not offered for {nm}",pg.evaluate("document.getElementById('dsx').querySelector('.cq-dock').hidden"))
+    pg.set_viewport_size({"width":390,"height":844})
+    pg.evaluate(MNT,[390,full]);pg.wait_for_timeout(400)
+    r=pg.evaluate("""()=>{const e=document.getElementById('dsx'),y=s=>e.querySelector(s).getBoundingClientRect().top;
+      return {act:y('.cq-act'),appt:y('.cq-row-appt'),brk:y('.cq-brk'),sum:y('.cq-sum')}}""")
+    ok("layout: narrow, the actions come right after the figure and before the visit list and ledger",r["sum"]<r["act"]<r["appt"]<r["brk"],str(r))
+    pg.set_viewport_size({"width":1280,"height":720})
+
     # 11. shipped data sanity
     data=pg.evaluate("window.CDCP_PROVINCES.QC.procedures")
     dm={x["code"]:x for x in data}

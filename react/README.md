@@ -28,4 +28,5 @@ CSS variables on any ancestor, or the `theme` prop: `--cw-primary`, `--cw-accent
 ## Behaviour notes
 - Layout follows the container, not the viewport: two columns (7/5) from ~672px wide, single column below, with the result first and a mini-figure pinned once the main figure scrolls away.
 - Eligibility questions are shown one at a time; pointer selection advances, keyboard selection waits for "Continuer". The visit type is a lens on the result, not a required step.
-- The one-line estimate caveat and the primary CTA stay visible; the long legal notes, billing notice and coverage matrix live in the "Transparence tarifaire et notes" drawer.
+- The booking actions sit directly under the figure and the cost bar, with the ledger and the plan-included/limit notes below them. Fine print lives in two drawers: "Avis de transparence tarifaire" (billing notice, RAMQ line, disclaimer, source) and "Soins couverts, autorisation et exclusions" (coverage matrix).
+- A bottom dock (`position: sticky`) shows share, total and the booking action once the main actions have scrolled out of view.

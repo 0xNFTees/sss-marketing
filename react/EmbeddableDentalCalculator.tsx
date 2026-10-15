@@ -201,6 +201,9 @@ export function EmbeddableDentalCalculator({
   // narrow screens: the pinned mini-figure appears only once the hero figure has scrolled out of view
   const figRef = useRef<HTMLParagraphElement>(null);
   const [figSeen, setFigSeen] = useState(true);
+  // summary dock: shown once the main actions have scrolled out of view
+  const actRef = useRef<HTMLDivElement>(null);
+  const [actSeen, setActSeen] = useState(true);
   const pointer = useRef(false), advance = useRef<ReturnType<typeof setTimeout>>(undefined), stage = useRef<HTMLDivElement>(null);
 
   const steps = requiredSteps(a);
@@ -221,6 +224,13 @@ export function EmbeddableDentalCalculator({
     io.observe(el);
     return () => io.disconnect();
   }, [complete, oc, hasFees]);
+  useEffect(() => {
+    const el = actRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([e]) => setActSeen(e.isIntersecting), { rootMargin: "0px 0px -72px 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [complete, oc, hasFees, est?.known]);
   const mounted = useRef(false);
   useEffect(() => { if (!mounted.current) { mounted.current = true; return; } if (!pointer.current) stage.current?.querySelector<HTMLElement>("input:checked, input, button")?.focus({ preventScroll: true }); }, [view]);
 
@@ -330,6 +340,33 @@ export function EmbeddableDentalCalculator({
   }
   const phoneHref = phone ? `tel:${phone.replace(/[^\d+]/g, "")}` : null;
 
+  const dockOn = !!(est && !est.bad && est.known && est.fee > 0 && (oc === "qualified" || oc === "unconfirmed" || oc === "income"));
+  const dockHref = oc === "qualified" ? book({ branch: "qualified", cdcpTier: tier ?? "", suggestedDate: weeksIso(7) }) : book({ branch: oc });
+  const dockLabel = oc === "qualified" ? R.branchQualified.step2Cta : R.branchIncome.primaryCta;
+  const ctaNode = (
+    <>
+      {oc !== "pending" && (
+          <div ref={actRef} className="space-y-3 pt-1"><div className="flex flex-wrap gap-3">
+            {oc === "insurance" && <CtaLink href={book({ branch: "insurance" })}>{R.branchInsurance.primaryCta}</CtaLink>}
+            {oc === "income" && <CtaLink href={book({ branch: "income" })}>{R.branchIncome.primaryCta}</CtaLink>}
+            {oc === "unconfirmed" && <CtaLink href={book({ branch: "unconfirmed" })}>{R.branchIncome.primaryCta}</CtaLink>}
+            {oc === "tax" && (<><CtaLink href={L.craMyAccountUrl} external>{R.branchTaxFiling.primaryCta}</CtaLink>
+              <CtaLink variant="secondary" href={book({ branch: "tax-filing", suggestedDate: weeksIso(4) })}>{R.branchTaxFiling.secondaryCta}</CtaLink></>)}
+            {oc === "qualified" && (<><CtaLink href={book({ branch: "qualified", cdcpTier: tier ?? "", suggestedDate: weeksIso(7) })}>{R.branchQualified.step2Cta}</CtaLink>
+              <CtaLink variant="secondary" href={L.cdcpApplyUrl} external>{R.branchQualified.step1Cta}</CtaLink></>)}
+          </div>
+            {oc === "qualified" && (
+              <ol className="space-y-2 text-[13px] leading-relaxed opacity-90">
+                <li><b>{L.stepLabel.replace("{current}", "1").replace("{total}", "2")} · {R.branchQualified.step1Title.replace(/^[^—-]*[—-]\s*/, "")}</b> {R.branchQualified.step1Body}</li>
+                <li><b>{L.stepLabel.replace("{current}", "2").replace("{total}", "2")} · {R.branchQualified.step2Title.replace(/^[^—-]*[—-]\s*/, "")}</b> {R.branchQualified.step2MicroCopy}</li>
+                <li>{R.branchQualified.step3Title.replace(/^[^—-]*[—-]\s*/, "")}{" "}<a className={`font-semibold underline underline-offset-4 ${FOCUS}`} href={book({ branch: "qualified-help" })}>{R.branchQualified.step3Cta}</a></li>
+              </ol>
+            )}
+          </div>
+        )}
+    </>
+  );
+
   const panel = (
     <div className="flex h-full flex-col gap-5 bg-[var(--panel)] p-6 text-[var(--onpanel)] @2xl:p-8">
       <div className="space-y-3 @2xl:sticky @2xl:top-[var(--stick)]">
@@ -356,6 +393,7 @@ export function EmbeddableDentalCalculator({
             <div aria-hidden className="flex h-2.5 overflow-hidden rounded-full bg-[var(--onpanel)]/90">
               <motion.div className="h-full bg-[var(--good-on-panel)]" initial={false} animate={{ width: `${coveredPct}%` }} transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 140, damping: 24 }} />
             </div>
+            {ctaNode}
             <dl className="divide-y divide-white/15 text-[13px]">
               <div className="flex items-baseline justify-between gap-3 py-2"><dt>{U.cost}<small className="block text-xs opacity-70">{U.std}</small></dt><dd className="font-semibold tabular-nums">{plain(est.fee, lang)}</dd></div>
               <div className="flex items-baseline justify-between gap-3 py-2">
@@ -371,57 +409,41 @@ export function EmbeddableDentalCalculator({
             {est.fee > 0 && est.patient === 0 && <p className="text-xs opacity-80">{U.full}</p>}
           </div>
         )}
-
-        {/* next step: the primary action stays in view; the explanation sits in the drawer */}
-        {oc !== "pending" && (
-          <div className="flex flex-wrap gap-3 pt-1">
-            {oc === "insurance" && <CtaLink href={book({ branch: "insurance" })}>{R.branchInsurance.primaryCta}</CtaLink>}
-            {oc === "income" && <CtaLink href={book({ branch: "income" })}>{R.branchIncome.primaryCta}</CtaLink>}
-            {oc === "unconfirmed" && <CtaLink href={book({ branch: "unconfirmed" })}>{R.branchIncome.primaryCta}</CtaLink>}
-            {oc === "tax" && (<><CtaLink href={L.craMyAccountUrl} external>{R.branchTaxFiling.primaryCta}</CtaLink>
-              <CtaLink variant="secondary" href={book({ branch: "tax-filing", suggestedDate: weeksIso(4) })}>{R.branchTaxFiling.secondaryCta}</CtaLink></>)}
-            {oc === "qualified" && (<><CtaLink href={book({ branch: "qualified", cdcpTier: tier ?? "", suggestedDate: weeksIso(7) })}>{R.branchQualified.step2Cta}</CtaLink>
-              <CtaLink variant="secondary" href={L.cdcpApplyUrl} external>{R.branchQualified.step1Cta}</CtaLink></>)}
+        {!(est && !est.bad && est.known) && ctaNode}
+        {est && !est.bad && (
+          <div className="space-y-1 text-[13px] leading-relaxed">
+            <p><b>{U.incl}</b>{lang === "fr" ? " : " : ": "}{U.pk[est.visit][1]}</p>
+            {notes.map((n) => <p key={n.text} className={n.tone === "bad" ? "text-[#ffb4ab]" : "text-[#ffd8a8]"}>{n.text}</p>)}
           </div>
         )}
-        {oc === "pending" && hasFees && null}
+
       </div>
 
       {oc !== "pending" && (
-        <Drawer title={lang === "fr" ? "Transparence tarifaire et notes" : "Fee transparency and notes"}>
-          {(oc === "qualified" || oc === "unconfirmed") && <p className="border-l-2 border-[var(--a)] pl-3"><b>{R.billingNoticeHeading}.</b> {R.billingNoticeBody}</p>}
-          {est && !est.bad && (
-            <div className="space-y-1">
-              <p><b>{U.incl}</b>{lang === "fr" ? " : " : ": "}{U.pk[est.visit][1]}</p>
-              {notes.map((n) => <p key={n.text} className={n.tone === "bad" ? "text-[#ffb4ab]" : "text-[#ffd8a8]"}>{n.text}</p>)}
-            </div>
+        <div className="space-y-2">
+          {(oc === "qualified" || oc === "unconfirmed" || (est && !est.bad)) && (
+            <Drawer title={R.billingNoticeHeading}>
+              {(oc === "qualified" || oc === "unconfirmed") && <p className="border-l-2 border-[var(--a)] pl-3"><b>{R.billingNoticeHeading}.</b> {R.billingNoticeBody}</p>}
+              {(oc === "qualified" || oc === "unconfirmed") && <p className="opacity-85">{U.ramq}</p>}
+              {est && !est.bad && <p className="opacity-85">{U.disc}</p>}
+              {oc === "qualified" && <p className="opacity-85">{R.sourceNote}</p>}
+            </Drawer>
           )}
-          {oc === "qualified" && (
-            <ol className="space-y-2">
-              <li><b>{L.stepLabel.replace("{current}", "1").replace("{total}", "2")} · {R.branchQualified.step1Title.replace(/^[^—-]*[—-]\s*/, "")}</b><br />{R.branchQualified.step1Body}</li>
-              <li><b>{L.stepLabel.replace("{current}", "2").replace("{total}", "2")} · {R.branchQualified.step2Title.replace(/^[^—-]*[—-]\s*/, "")}</b><br />{R.branchQualified.step2MicroCopy}</li>
-              <li>{R.branchQualified.step3Title.replace(/^[^—-]*[—-]\s*/, "")}{" "}<a className={`font-semibold underline underline-offset-4 ${FOCUS}`} href={book({ branch: "qualified-help" })}>{R.branchQualified.step3Cta}</a></li>
-            </ol>
-          )}
-          {(oc === "qualified" || oc === "unconfirmed") && <p className="opacity-85">{U.ramq}</p>}
-          {est && !est.bad && <p className="opacity-85">{U.disc}</p>}
-          {oc === "qualified" && <p className="opacity-85">{R.sourceNote}</p>}
           {(oc === "qualified" || oc === "unconfirmed") && (
-            <div className="space-y-2">
-              <p className="font-semibold">{U.matrix}</p>
+            <Drawer title={U.matrix}>
               {([["standard", R.coverageMatrix.standard], ["major", R.coverageMatrix.major], ["excluded", R.coverageMatrix.excluded]] as const).map(([k, m]) => (
                 <details key={k} className="rounded-xl border border-white/15 px-3 py-2" open={k === "standard"}>
                   <summary className={`cursor-pointer text-[13px] font-semibold ${FOCUS}`}>{m.title} <span className="font-normal opacity-75">· {m.subtitle}</span></summary>
-                  <ul className="mt-2 list-disc space-y-1 pl-5">{m.services.map((s) => <li key={s}>{s}</li>)}</ul>
+                  <ul className="mt-2 list-disc space-y-1 pl-5">{m.services.map((x) => <li key={x}>{x}</li>)}</ul>
                   <p className="mt-2 text-xs opacity-80">{m.note}</p>
                 </details>
               ))}
-            </div>
+            </Drawer>
           )}
-          {oc === "insurance" && (insurers?.length ? insurers : []).length > 0 && (
-            <p><span className="block opacity-80">{U.insurers}</span>{insurers!.join(" · ")}</p>
+          {oc === "insurance" && !!insurers?.length && (
+            <Drawer title={U.insurers}><p>{insurers.join(" · ")}</p></Drawer>
           )}
-        </Drawer>
+        </div>
       )}
     </div>
   );
@@ -468,6 +490,18 @@ export function EmbeddableDentalCalculator({
         </div>
         <div className={`@2xl:col-span-5 ${complete ? "order-1 @2xl:order-none" : ""}`}>{panel}</div>
       </div>
+
+      {/* sticky dock: share, total and the booking action stay reachable without scrolling back up */}
+      {dockOn && !actSeen && est && (
+        <div role="region" aria-label={`${U.share} / ${U.total}`}
+          className="sticky bottom-0 z-30 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-white/15 bg-[var(--panel)] px-6 py-3 text-[var(--onpanel)]">
+          <p className="flex flex-col text-xs"><span className="opacity-85">{U.share}</span><b className="text-lg font-semibold tabular-nums">{plain(est.patient, lang)}</b></p>
+          <p className="flex flex-col border-l border-white/30 pl-5 text-xs"><span className="opacity-85">{U.total}</span><b className="text-lg font-semibold tabular-nums">{plain(est.fee, lang)}</b></p>
+          <a href={dockHref} className={`ml-auto inline-flex min-h-11 flex-1 basis-48 items-center justify-center gap-2 rounded-xl bg-[var(--onpanel)] px-4 text-[13px] font-semibold text-[var(--panel)] hover:opacity-90 sm:max-w-xs ${FOCUS}`}>
+            {dockLabel}<ChevronRight className="size-4" aria-hidden />
+          </a>
+        </div>
+      )}
     </section>
   );
 }

@@ -37,7 +37,7 @@
       filed:"Déclaration d’impôts produite", filedI:"Vous et votre conjoint(e), le cas échéant, pour l’année précédente.", notYet:"Pas encore",
       appt:"Type de rendez-vous", apptI:"", pick:"Choisir…",
       remain:"Il reste à indiquer :", pickVisit:"Choisissez un type de rendez-vous pour estimer votre part.", pendH:"Estimez votre part d’une visite.", pendS:"L’estimation tient compte du Régime canadien de soins dentaires (RCSD) et du guide tarifaire des dentistes du Québec (ACDQ).", prog:"Réponses : {n} sur {t}", estNote:"Estimation selon le guide tarifaire, pas une soumission.",
-      share:"Votre part estimée", cost:"Coût du traitement", std:"Guide tarifaire 2026 des dentistes du Québec (ACDQ)", paid:"Versé par le RCSD", noCover:"Service non couvert par le RCSD", full:"Entièrement couvert au tarif du guide.", ifQualify:"Si votre admissibilité est confirmée.", you:"Votre part", byAnswers:"selon vos réponses", grid:"{n} % de la grille du Régime canadien de soins dentaires", noelig:"Non admissible",
+      share:"Votre part estimée", total:"Coût total", cost:"Coût du traitement", std:"Guide tarifaire 2026 des dentistes du Québec (ACDQ)", paid:"Versé par le RCSD", noCover:"Service non couvert par le RCSD", full:"Entièrement couvert au tarif du guide.", ifQualify:"Si votre admissibilité est confirmée.", you:"Votre part", byAnswers:"selon vos réponses", grid:"{n} % de la grille du Régime canadien de soins dentaires", noelig:"Non admissible",
       incl:"Inclus", nopick:"Choisissez un rendez-vous pour voir votre part.", unavailable:"Estimation indisponible pour ce rendez-vous. Communiquez avec la clinique.",
       tierUnconfirmed:"Palier RCSD : jusqu’à {n} %. Confirmez votre déclaration d’impôts.", whenIssued:"Montant estimé une fois la carte RCSD reçue.",
       pre:"Préautorisation du RCSD requise.", lab:"Frais de laboratoire en sus.", excl:"Non couvert par le RCSD.",
@@ -52,7 +52,7 @@
       filed:"Tax return filed", filedI:"You and your spouse or partner, if applicable, for the previous year.", notYet:"Not yet",
       appt:"Appointment type", apptI:"", pick:"Choose…",
       remain:"Still to answer:", pickVisit:"Choose an appointment type to estimate your share.", pendH:"Estimate your share of a visit.", pendS:"The estimate factors in the Canadian Dental Care Plan (CDCP) and the Quebec dentists' fee guide (ACDQ).", prog:"{n} of {t} answered", estNote:"Estimate from the fee guide, not a quote.",
-      share:"Your estimated share", cost:"Treatment cost", std:"Quebec dentists' 2026 fee guide (ACDQ)", paid:"Paid by CDCP", noCover:"Not a CDCP-covered service", full:"Fully covered at the guide price.", ifQualify:"If your eligibility is confirmed.", you:"Your share", byAnswers:"depends on your answers", grid:"{n}% of the Canadian Dental Care Plan fee schedule", noelig:"Not eligible",
+      share:"Your estimated share", total:"Total cost", cost:"Treatment cost", std:"Quebec dentists' 2026 fee guide (ACDQ)", paid:"Paid by CDCP", noCover:"Not a CDCP-covered service", full:"Fully covered at the guide price.", ifQualify:"If your eligibility is confirmed.", you:"Your share", byAnswers:"depends on your answers", grid:"{n}% of the Canadian Dental Care Plan fee schedule", noelig:"Not eligible",
       incl:"Includes", nopick:"Choose an appointment to see your share.", unavailable:"Estimate unavailable for this appointment. Please contact the clinic.",
       tierUnconfirmed:"CDCP tier: up to {n}%. Confirm your tax filing.", whenIssued:"Estimated amount once your CDCP card is issued.",
       pre:"CDCP pre-authorization required.", lab:"Lab fee billed extra.", excl:"Not covered by CDCP.",
@@ -111,6 +111,11 @@
     inner.appendChild(matrixItem("excluded","&#215;",m.excluded,false));
     wrap.appendChild(inner);return wrap;
   }
+  function accordion(title,nodes){
+    var d=node("details","cq-matrix-all cq-acc");
+    d.appendChild(node("summary",null,'<span>'+esc(title)+'</span><span class="cq-matrix-item-chevron" aria-hidden="true"></span>'));
+    var b=node("div","cq-acc-body");nodes.forEach(function(n){b.appendChild(n);});d.appendChild(b);return d;
+  }
   function stepRow(n,title,body,cta,stepLbl){
     var d=node("div","cq-step-card");var c=node("div","cq-step-main");c.appendChild(textNode("div","cq-step-lbl",stepLbl.replace("{current}",n).replace("{total}",2)));c.appendChild(textNode("div","cq-step-title",title));
     if(body)c.appendChild(textNode("p","cq-step-text",body));
@@ -131,9 +136,10 @@
 
     root.innerHTML="";root.className="cdcp cq";
     root.setAttribute("role","group");root.setAttribute("aria-label",U.label);
-    var grid=node("div","cq-grid"),ctl=node("div","cq-ctl"),sStatus=node("div","cq-status"),sSum=node("div","cq-sum"),sBrk=node("div","cq-brk"),sDet=node("div","cq-det"),sRest=node("div","cq-rest"),cin=node("div","cq-ctl-in");ctl.appendChild(cin);
+    var grid=node("div","cq-grid"),ctl=node("div","cq-ctl"),sStatus=node("div","cq-status"),sSum=node("div","cq-sum"),sAct=node("div","cq-act"),sBrk=node("div","cq-brk"),sDet=node("div","cq-det"),sRest=node("div","cq-rest"),cin=node("div","cq-ctl-in");ctl.appendChild(cin);
     var sr=node("div","cq-sr");sr.setAttribute("role","status");
-    [ctl,sStatus,sSum,sBrk,sDet,sRest].forEach(function(n){grid.appendChild(n);});root.appendChild(grid);root.appendChild(sr);
+    var dock=node("div","cq-dock");dock.hidden=true;dock.setAttribute("role","region");
+    [ctl,sStatus,sSum,sAct,sBrk,sDet,sRest].forEach(function(n){grid.appendChild(n);});root.appendChild(grid);root.appendChild(dock);root.appendChild(sr);
 
 
     /* Clinic theming guard: if a brand colour pair is unreadable, fall back to a readable one. */
@@ -382,6 +388,26 @@
       if(c.excl)notes.push(["bad",U.excl]);
       notes.forEach(function(n){t.appendChild(textNode("p","cq-note cq-"+n[0]+"-t",n[1]));});
     }
+    /* sticky summary dock: the share, the total and the booking action stay in reach once the main actions scroll away */
+    var actSeen=false,dockOn=false;
+    function syncDock(){
+      var show=dockOn&&!actSeen;dock.hidden=!show;
+      root.style.setProperty("--dock-h",(show?dock.offsetHeight:0)+"px");
+    }
+    if(typeof IntersectionObserver==="function"){
+      new IntersectionObserver(function(es){actSeen=es[es.length-1].isIntersecting;syncDock();},{rootMargin:"0px 0px -72px 0px"}).observe(sAct);
+    }
+    function renderDock(oc,c,tier){
+      dock.innerHTML="";dockOn=false;
+      if(!(c&&!c.bad&&c.known&&c.fee>0&&(oc==="qualified"||oc==="unconfirmed"||oc==="income"))){syncDock();return;}
+      var cta=oc==="qualified"
+        ?ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:tier,utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(7)}),L.results.branchQualified.step2Cta)
+        :ctaLink(withBookingParams(BOOK,{branch:oc,utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta);
+      dock.setAttribute("aria-label",U.share+" / "+U.total);
+      dock.appendChild(node("div","cq-dock-fig","<span>"+esc(U.share)+"</span><b>"+esc(nf.format(c.oop))+"</b>"));
+      dock.appendChild(node("div","cq-dock-fig cq-dock-tot","<span>"+esc(U.total)+"</span><b>"+esc(nf.format(c.fee))+"</b>"));
+      dock.appendChild(cta);dockOn=true;syncDock();
+    }
     var lastKey=null;
     function update(){
       var oc=outcome(),c=(oc==="insurance")?null:cost();
@@ -390,19 +416,19 @@
       var key=[oc,A.inc,A.filed,A.appt].join("|");
       var tier=INCOME_TIER[A.inc];
       var title="",detail="",kind="neutral";
-      sRest.innerHTML="";sStatus.innerHTML="";sBrk.innerHTML="";sDet.innerHTML="";
+      sRest.innerHTML="";sAct.innerHTML="";sStatus.innerHTML="";sBrk.innerHTML="";sDet.innerHTML="";
       if(oc==="pending"){
         var rem=missing();
         sStatus.appendChild(statusBlock("neutral",U.pendH,U.pendS,"pending"));
         if(DATA){renderSum(c,oc);}else{sSum.innerHTML="";sSum.hidden=true;}
         title=U.pendH;
         if(DATA&&c&&!c.bad)renderCostDetail(sDet,c,oc);
-        var rp=ctaRow();rp.appendChild(ctaLink(withBookingParams(BOOK,{branch:"pending",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta,{variant:"secondary"}));sRest.appendChild(rp);
+        var rp=ctaRow();rp.appendChild(ctaLink(withBookingParams(BOOK,{branch:"pending",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta,{variant:"secondary"}));sAct.appendChild(rp);
       }else if(oc==="insurance"){
         var R=L.results.branchInsurance;kind="good";title=R.headline;
         sStatus.appendChild(statusBlock("good",R.headline,R.microCopy,"insurance"));
         sSum.innerHTML="";sSum.hidden=true;
-        sRest.appendChild(secLabel("next"));var row=ctaRow();row.appendChild(ctaLink(withBookingParams(BOOK,{branch:"insurance",utm_source:"cdcp-calculator"}),R.primaryCta));sRest.appendChild(row);
+        sAct.appendChild(secLabel("next"));var row=ctaRow();row.appendChild(ctaLink(withBookingParams(BOOK,{branch:"insurance",utm_source:"cdcp-calculator"}),R.primaryCta));sAct.appendChild(row);
         insurersBlock(sRest,R);
       }else{
         if(oc==="income"){var R2=L.results.branchIncome;title=R2.headline;sStatus.appendChild(statusBlock("bad",R2.headline,R2.microCopy,"income"));}
@@ -418,40 +444,42 @@
         renderCostDetail(sDet,c,oc);
         // calls to action
         if(oc==="income"){
-          sRest.appendChild(secLabel("next"));var r4=ctaRow();r4.appendChild(ctaLink(withBookingParams(BOOK,{branch:"income",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sRest.appendChild(r4);
+          sAct.appendChild(secLabel("next"));var r4=ctaRow();r4.appendChild(ctaLink(withBookingParams(BOOK,{branch:"income",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sAct.appendChild(r4);
         }else if(oc==="tax"){
-          sRest.appendChild(secLabel("next"));var R5=L.results.branchTaxFiling,r5=ctaRow();
+          sAct.appendChild(secLabel("next"));var R5=L.results.branchTaxFiling,r5=ctaRow();
           r5.appendChild(ctaLink(L.craMyAccountUrl,R5.primaryCta,{external:true}));
           r5.appendChild(ctaLink(withBookingParams(BOOK,{branch:"tax-filing",utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(4)}),R5.secondaryCta,{variant:"secondary"}));
-          sRest.appendChild(r5);
+          sAct.appendChild(r5);
         }
         if(oc==="unconfirmed"){
-          sRest.appendChild(secLabel("next"));var ru=ctaRow();ru.appendChild(ctaLink(withBookingParams(BOOK,{branch:"unconfirmed",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sRest.appendChild(ru);
+          sAct.appendChild(secLabel("next"));var ru=ctaRow();ru.appendChild(ctaLink(withBookingParams(BOOK,{branch:"unconfirmed",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sAct.appendChild(ru);
         }
         if(oc==="qualified"||oc==="unconfirmed"){
           if(!sDet.querySelector(".cq-sec"))sDet.insertBefore(secLabel("limits"),sDet.firstChild);
-          sDet.appendChild(billingNotice(L.results.billingNoticeHeading,L.results.billingNoticeBody));
         }
         if(oc==="qualified"){
-          sRest.appendChild(secLabel("next"));var R6=L.results.branchQualified,steps=node("div","cq-steps");
+          sAct.appendChild(secLabel("next"));var R6=L.results.branchQualified,steps=node("div","cq-steps");
           function strip(x){return x.replace(/^[^—-]*[—-]\s*/,"");}
           steps.appendChild(stepRow(1,strip(R6.step1Title),R6.step1Body,ctaLink(L.cdcpApplyUrl,R6.step1Cta,{external:true,variant:"secondary"}),L.stepLabel));
           steps.appendChild(stepRow(2,strip(R6.step2Title),R6.step2MicroCopy,ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:tier,utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(7)}),R6.step2Cta),L.stepLabel));
-          sRest.appendChild(steps);
+          sAct.appendChild(steps);
           var help=node("p","cq-help");help.appendChild(document.createTextNode(strip(R6.step3Title)+" "));
-          var ha=node("a",null);ha.href=withBookingParams(BOOK,{branch:"qualified-help",utm_source:"cdcp-calculator"});ha.textContent=R6.step3Cta;help.appendChild(ha);sRest.appendChild(help);
-          sRest.appendChild(coverageMatrix(L.results.coverageMatrix,U.matrix));
+          var ha=node("a",null);ha.href=withBookingParams(BOOK,{branch:"qualified-help",utm_source:"cdcp-calculator"});ha.textContent=R6.step3Cta;help.appendChild(ha);sAct.appendChild(help);
         }
-        var fine=[];
+        var fine=[],tn=[];
         if(oc==="qualified"||oc==="unconfirmed")fine.push(U.ramq);
         if(c&&!c.bad)fine.push(U.disc);
         if(oc==="qualified")fine.push(L.results.sourceNote);
-        if(fine.length)sRest.appendChild(textNode("p","cq-fine",fine.join(" ")));
+        if(oc==="qualified"||oc==="unconfirmed")tn.push(billingNotice(L.results.billingNoticeHeading,L.results.billingNoticeBody));
+        if(fine.length)tn.push(textNode("p","cq-fine",fine.join(" ")));
+        // fine print lives in two drawers: the notice about fees and billing, then what is covered
+        if(tn.length)sRest.appendChild(accordion(L.results.billingNoticeHeading,tn));
+        if(oc==="qualified")sRest.appendChild(coverageMatrix(L.results.coverageMatrix,U.matrix));
       }
       // one concise announcement per change (the animated number is aria-hidden)
       if(!sBrk.childNodes.length){last.fee=null;last.cov=null;}
       if(c&&c.bad)root.setAttribute("data-bad","1");else root.removeAttribute("data-bad");
-      syncBar();
+      syncBar();renderDock(oc,c,tier);
       last.ans={};ORDER.forEach(function(k){last.ans[k]=ansText(k);});markFocus();
       var hasLed=sBrk.childNodes.length>0;
       if(last.oc!==null&&last.oc!==oc){fade(sRest);if(sDet.childNodes.length)fade(sDet);}   // a different outcome: its next steps ease in

@@ -88,3 +88,8 @@ The rules live at the top of `cdcp-embed.css` (tokens, type roles, spacing scale
 - **A figure:** tabular numerals, never wrapped; dollars large, cents/unit small (`--t-fig`, `--t-cents`).
 - Wide-layout overrides must sit in the responsive layout layer (after the components), or the base rule will win the cascade.
 - `tests/cdcp-calculator.test.py` section 10d enforces these rules (no duplicate selectors, three UI type sizes, 44px targets, selection ring, focus ring on every control, three breakpoints only).
+
+## Result layout (actions first, fine print in drawers)
+- Order of the result: status, figure and split bar, **actions** (`.cq-act`: booking, CDCP application), ledger, plan-included/limit notes, then two drawers (`Avis de transparence tarifaire`, `Soins couverts, autorisation et exclusions`). On narrow screens the actions follow the figure, before the visit list.
+- `.cq-dock`: a sticky bottom bar with "Votre part estimée | Coût total | Réserver" that appears only after `.cq-act` scrolls out of view (IntersectionObserver). Shown for qualified, unconfirmed and income outcomes once a visit is chosen; hidden for insurance, tax and no visit.
+- Tests: section 10e of `tests/cdcp-calculator.test.py`.
