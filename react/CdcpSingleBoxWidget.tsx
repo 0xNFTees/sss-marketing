@@ -15,7 +15,8 @@ import {
   useCallback, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type ReactNode,
 } from "react";
 import { AnimatePresence, animate, motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, CircleCheck, FileText, Info, Mail, Pencil, Phone, ShieldCheck, User, Wallet } from "lucide-react";
+import { ArrowUpRight, Calendar, ChevronDown, ChevronLeft, ChevronRight, CircleCheck, Clock, FileText, Info, Mail, Pencil, Phone, ShieldCheck, Sparkles, Siren, User, Wallet } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 
 /* ================================================================================================ engine (eligibility + estimate) */
@@ -224,7 +225,7 @@ export const LABELS = {
     "step1Cta": "Open the CDCP application",
     "step2Title": "Step 2 — Book while you wait",
     "step2MicroCopy": "Your CDCP card arrives in 4 to 8 weeks. Booking 6 to 8 weeks out lines the visit up with it.",
-    "step2Cta": "Book your appointment",
+    "step2Cta": "Step 2: Book your appointment",
     "step3Title": "Step 3 — Need help?",
     "step3Cta": "Contact our front desk"
    }
@@ -351,7 +352,7 @@ export const LABELS = {
     "step1Cta": "Ouvrir la demande RCSD",
     "step2Title": "Étape 2 — Réservez pendant l'attente",
     "step2MicroCopy": "La carte RCSD arrive en 4 à 8 semaines. Réserver dans 6 à 8 semaines aligne le rendez-vous avec sa réception.",
-    "step2Cta": "Réserver votre rendez-vous",
+    "step2Cta": "Étape 2 : Réserver votre rendez-vous",
     "step3Title": "Étape 3 — Besoin d'aide ?",
     "step3Cta": "Contactez notre réception"
    }
@@ -420,7 +421,9 @@ export const UI = {
   "lockCta": "Sélectionnez un rendez-vous pour débloquer la réservation",
   "chipIns": { "yes": "Assuré", "no": "Non-assuré" },
   "chipFiled": { "yes": "Impôts : oui", "no": "Impôts : pas encore" },
-  "applyLink": "Étape 1 : faire la demande RCSD (Santé Canada)",
+  "applyLink": "Étape 1 : Faire la demande d’adhésion au RCSD (Santé Canada)",
+  "applySub": "La carte RCSD arrive en 4 à 8 semaines.",
+  "bookSub": "Réserver dans 6 à 8 semaines aligne votre visite avec la réception de votre carte.",
   "pendH": "Estimez votre part d’une visite.",
   "pendS": "L’estimation tient compte du Régime canadien de soins dentaires (RCSD) et du guide tarifaire des dentistes du Québec (ACDQ).",
   "prog": "Réponses : {n} sur {t}",
@@ -453,7 +456,7 @@ export const UI = {
   "pk": {
    "new": [
     "Nouveau patient",
-    "Examen complet, 2 radiographies, nettoyage de 30 min, fluorure"
+    "Examen complet, radiographies diagnostiques, nettoyage de 30 min, fluorure"
    ],
    "recall": [
     "Rappel et nettoyage",
@@ -527,7 +530,9 @@ export const UI = {
   "lockCta": "Select an appointment to unlock booking",
   "chipIns": { "yes": "Insured", "no": "Uninsured" },
   "chipFiled": { "yes": "Taxes filed", "no": "Taxes not filed yet" },
-  "applyLink": "Step 1: apply for CDCP (Health Canada)",
+  "applyLink": "Step 1: Apply for CDCP membership (Health Canada)",
+  "applySub": "Your CDCP card arrives in 4 to 8 weeks.",
+  "bookSub": "Booking 6 to 8 weeks out lines your visit up with your card’s arrival.",
   "pendH": "Estimate your share of a visit.",
   "pendS": "The estimate factors in the Canadian Dental Care Plan (CDCP) and the Quebec dentists' fee guide (ACDQ).",
   "prog": "{n} of {t} answered",
@@ -560,7 +565,7 @@ export const UI = {
   "pk": {
    "new": [
     "New patient",
-    "Complete exam, 2 X-rays, 30-minute cleaning, fluoride"
+    "Complete exam, diagnostic X-rays, 30-minute cleaning, fluoride"
    ],
    "recall": [
     "Recall and cleaning",
@@ -691,8 +696,10 @@ function Dots({ n, t, label }: { n: number; t: number; label: string }) {
   );
 }
 
-interface Option<V extends string> { value: V; label: string; hint?: string; aria?: string }
+interface Option<V extends string> { value: V; label: string; hint?: string; aria?: string; icon?: LucideIcon }
 /** A radio group drawn as selectable cards. Native radios stay underneath (invisible, full-card hit area) so arrows, Space and screen readers work. */
+const VISIT_ICON: Record<VisitId, LucideIcon> = { new: Sparkles, recall: Calendar, emerg: Siren };
+
 function Choice<V extends string>(props: {
   name: string; legend: string; hint?: string; options: readonly Option<V>[]; value: V | null; onChange: (v: V) => void;
   onPointer: (isPointer: boolean) => void; columns?: 1 | 2; invalid?: boolean; reduce?: boolean | null;
@@ -701,7 +708,7 @@ function Choice<V extends string>(props: {
   return (
     <div role="radiogroup" aria-labelledby={`${name}-lg`} className="min-w-0">
       <div id={`${name}-lg`} className="mb-3 w-full">
-        <span className="block font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-xl font-medium leading-tight tracking-tight">{legend}</span>
+        <span className="block font-sans text-xl font-medium leading-tight tracking-tight opacity-90">{legend}</span>
         {hint && <span className="mt-0.5 block text-[13px] leading-snug opacity-75">{hint}</span>}
       </div>
       <div className={`grid gap-2.5 ${columns === 2 ? "@md:grid-cols-2" : ""}`}>
@@ -709,14 +716,19 @@ function Choice<V extends string>(props: {
           const on = value === o.value;
           return (
             <label key={o.value} onPointerDown={() => onPointer(true)} onKeyDown={() => onPointer(false)}
-              className={`relative flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border-2 p-4 text-[var(--ink)] transition-all duration-150 ease-out
-                hover:border-[color-mix(in_srgb,var(--p)_80%,transparent)] active:scale-[0.98] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--ink)]
+              className={`relative flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border-2 p-4 text-[var(--ink)] transition-all duration-200 ease-out
+                hover:border-[color-mix(in_srgb,var(--p)_40%,transparent)] active:scale-[0.98] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--ink)]
                 forced-colors:has-[:checked]:border-[Highlight] motion-reduce:transition-none motion-reduce:active:scale-100
-                ${on ? `${invalid ? "border-[var(--bad)] ring-[var(--bad)]" : "border-[var(--p)] ring-[var(--p)]"} bg-[var(--tint)] ring-1 shadow-[0_8px_20px_-12px_rgb(0_0_0/.45)]` : "border-[var(--line)] bg-[var(--paper)]"}`}>
+                ${on ? `${invalid ? "border-[var(--bad)] ring-[var(--bad)]" : "border-[var(--p)] ring-[var(--p)]"} bg-[var(--tint)] ring-1 shadow-[0_8px_20px_-12px_rgb(0_0_0/.45)]` : "border-transparent bg-[color-mix(in_srgb,var(--ink)_6%,var(--paper))]"}`}>
               <input type="radio" name={name} value={o.value} checked={on} aria-label={o.aria ?? (o.hint ? `${o.label}. ${o.hint}` : o.label)}
                 onChange={() => onChange(o.value)} className="absolute inset-0 z-10 size-full cursor-pointer opacity-0" />
+              {o.icon && (
+                <span aria-hidden className={`grid size-10 shrink-0 place-items-center rounded-full transition-colors duration-200 ${on ? "bg-[var(--p)] text-[var(--paper)]" : "bg-[var(--paper)] text-[var(--p)]"}`}>
+                  <o.icon className="size-5" strokeWidth={2} />
+                </span>
+              )}
               <span className="min-w-0 flex-1">
-                <span className="block text-[15px] font-semibold leading-snug">{o.label}</span>
+                <span className="block text-[15px] font-medium leading-snug tracking-tight">{o.label}</span>
                 {o.hint && <span className="mt-0.5 block text-[13px] leading-snug opacity-75">{o.hint}</span>}
               </span>
               <AnimatePresence initial={false}>
@@ -849,10 +861,12 @@ export function CdcpSingleBoxWidget({
   /* ----- setup screens ----- */
   const yn = (k: "ins" | "filed"): Option<YesNo>[] => {
     const s = k === "ins" ? L.step1 : L.step3;
-    return [{ value: "yes", label: s.yes }, { value: "no", label: s.no }];
+    return k === "ins"
+      ? [{ value: "yes", label: s.yes, icon: ShieldCheck }, { value: "no", label: s.no, icon: User }]
+      : [{ value: "yes", label: s.yes, icon: FileText }, { value: "no", label: s.no, icon: Clock }];
   };
-  const incomeOptions: Option<IncomeKey>[] = INCOME_KEYS.map((k) => ({ value: k, label: nb(L.step2[k]) }));
-  const visitOptions: Option<VisitId>[] = VISITS.map((v) => ({ value: v.id, label: U.pk[v.id][0], hint: U.pk[v.id][1] }));
+  const incomeOptions: Option<IncomeKey>[] = INCOME_KEYS.map((k) => ({ value: k, label: nb(L.step2[k]), icon: Wallet }));
+  const visitOptions: Option<VisitId>[] = VISITS.map((v) => ({ value: v.id, label: U.pk[v.id][0], hint: U.pk[v.id][1], icon: VISIT_ICON[v.id] }));
   const answerText = (k: Step): string | null =>
     k === "ins" ? (a.ins ? (a.ins === "yes" ? L.step1.yes : L.step1.no) : null)
     : k === "inc" ? (a.inc ? nb(L.step2[a.inc]) : null) : a.filed ? (a.filed === "yes" ? L.step3.yes : L.step3.no) : null;
@@ -911,9 +925,15 @@ export function CdcpSingleBoxWidget({
         <CtaLink href={L.craMyAccountUrl} external>{R.branchTaxFiling.primaryCta}</CtaLink>
         <CtaLink variant="secondary" href={book({ branch: "tax-filing", suggestedDate: weeksIso(4) })}>{R.branchTaxFiling.secondaryCta}</CtaLink></>)}
       {oc === "qualified" && (<>
+        <div className="space-y-1.5 pb-3">
+          <a href={L.cdcpApplyUrl} target="_blank" rel="noopener noreferrer"
+            className={`flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/30 px-4 py-3 text-center text-sm font-semibold leading-snug transition-all duration-150 hover:border-white/60 hover:bg-white/10 active:scale-[0.99] motion-reduce:transition-none motion-reduce:transform-none ${FOCUS}`}>
+            <span>{U.applyLink}</span><ArrowUpRight className="size-4 shrink-0" aria-hidden />
+          </a>
+          <p className="px-1 text-center text-xs leading-snug opacity-80">{U.applySub}</p>
+        </div>
         <CtaLink href={book({ branch: "qualified", cdcpTier: tier ?? "", suggestedDate: weeksIso(7) })}>{R.branchQualified.step2Cta}</CtaLink>
-        <p className="px-1 pb-1 pt-2 text-center text-xs leading-snug opacity-80">{R.branchQualified.step2MicroCopy}</p>
-        <CtaLink variant="secondary" href={L.cdcpApplyUrl} external>{U.applyLink}</CtaLink></>)}
+        <p className="px-1 pt-2 text-center text-xs leading-snug opacity-80">{U.bookSub}</p></>)}
     </div>
   );
   const covers = est && est.tierPct && (est.covered > 0 || !est.excluded);
@@ -926,7 +946,7 @@ export function CdcpSingleBoxWidget({
           <span className={head.tone === "good" ? "text-[var(--good-on-panel)]" : head.tone === "bad" ? "text-[#ffb4ab]" : "text-[#ffd8a8]"}>
             {head.tone === "good" ? <ShieldCheck className="size-4" aria-hidden /> : <Info className="size-4" aria-hidden />}</span>{head.label}
         </p>
-        <h2 data-autofocus tabIndex={-1} className="font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-[1.35rem] font-medium leading-tight tracking-tight text-balance outline-none">{head.title}</h2>
+        <h2 data-autofocus tabIndex={-1} className="font-sans text-[1.35rem] font-medium leading-tight tracking-tight text-balance outline-none">{head.title}</h2>
         {head.detail && <p className="text-[13px] leading-relaxed opacity-85">{head.detail}</p>}
       </div>
 
