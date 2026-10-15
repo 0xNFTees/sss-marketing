@@ -76,7 +76,7 @@
   --c-brand:var(--cdcp-paper,var(--est-paper,#fff));--c-on:var(--cdcp-ink,var(--est-ink,#1c1812));
   --c-line:color-mix(in srgb,var(--c-ink) 22%,transparent);--c-tint:color-mix(in srgb,var(--c-ink) 9%,var(--c-paper));
   --c-edge:color-mix(in srgb,var(--c-ink) 55%,var(--c-paper));--c-hover:color-mix(in srgb,var(--c-ink) 14%,var(--c-paper));
-  --c-good:color-mix(in srgb,var(--cdcp-good,#2f6b35) 40%,#fff);--c-bad:#ffb4ab;--c-warn:#ffd8a8;
+  --c-good:color-mix(in srgb,var(--cdcp-good,#2f6b35) 40%,#fff);--c-bad:#ffb4ab;--c-warn:#fcd34d;
 }
 
 /* ============ 2 reset ============ */
@@ -156,7 +156,7 @@
 .cdcp .cq-cta-row{display:flex;flex-direction:column;gap:var(--s1)}
 .cdcp .cq-cta-btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:var(--h);max-width:100%;padding:var(--s3) var(--s4);border-radius:var(--c-r);
   font-size:var(--t-m);font-weight:600;text-align:center;line-height:1.3;transition:var(--tr-surface),transform var(--dur-press) var(--ease)}
-.cdcp .cq-cta-btn-primary{width:100%;min-height:56px;background:var(--c-brand);color:var(--c-on);font-size:var(--t-l);font-weight:700}
+.cdcp .cq-cta-btn-primary{width:100%;min-height:56px;background:var(--c-brand);color:var(--c-on);font-size:var(--t-l);font-weight:700;transition:var(--tr-surface),transform 150ms var(--ease)}
 .cdcp .cq-cta-btn-primary::after{content:"\203A";font-size:var(--t-h);line-height:1}
 .cdcp .cq-cta-btn-primary:has(.cq-cta-ext)::after{content:none}
 .cdcp .cq-cta-btn-secondary{display:block;align-self:center;min-height:var(--h);padding:var(--s3);font-weight:500;opacity:.85}
@@ -264,7 +264,7 @@
 /* hover (pointer devices only) */
 @media (hover:hover){
   .cdcp .cq-opt:hover:not(:has(input:checked)){background:var(--c-hover)}
-  .cdcp .cq-cta-btn-primary:hover{background:color-mix(in srgb,var(--c-brand) 86%,#000)}
+  .cdcp .cq-cta-btn-primary:hover{background:color-mix(in srgb,var(--c-brand) 86%,#000);transform:scale(1.01)}
   .cdcp .cq-cta-btn-secondary:hover{border-color:var(--c-ink);background:var(--c-tint)}
   .cdcp .cq-next:not(:disabled):hover{background:var(--c-ink);color:var(--c-paper)}
   .cdcp :is(.cq-sumrow,.cq-matrix-all>summary,.cq-matrix-item>summary):hover{background:var(--c-tint)}
@@ -275,8 +275,8 @@
 /* press */
 .cdcp .cq-opt:active:not(:has(input:checked)){background:var(--c-hover)}
 .cdcp .cq-opt:active{transform:scale(.98)}
-.cdcp .cq-cta-btn:active{transform:translateY(1px)}
-.cdcp .cq-cta-btn-primary:active{background:color-mix(in srgb,var(--c-brand) 74%,#000)}
+.cdcp .cq-cta-btn:not(.cq-cta-btn-primary):active{transform:translateY(1px)}
+.cdcp .cq-cta-btn-primary:active{background:color-mix(in srgb,var(--c-brand) 74%,#000);transform:scale(.99)}
 .cdcp .cq-cta-btn-secondary:active,.cdcp :is(.cq-matrix-all,.cq-matrix-item)>summary:active{background:var(--c-hover)}
 /* focus: one ring. Outside by default; inside for rows of a bordered list; a 2-up control rings the whole group */
 .cdcp :is(a,button,summary):focus-visible,.cdcp .cq-opt:has(input:focus-visible){outline:var(--ring);outline-offset:var(--ring-out)}
@@ -289,9 +289,12 @@
 .cdcp .cq-fade{animation:cq-fade var(--dur-state) var(--ease) both}
 @keyframes cq-in-f{from{opacity:0;transform:translateX(32px)}to{opacity:1;transform:none}}
 @keyframes cq-in-b{from{opacity:0;transform:translateX(-32px)}to{opacity:1;transform:none}}
+@keyframes cq-hero{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes cq-reveal{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
 .cdcp .cq-in-f{animation:cq-in-f .3s var(--ease) both}
 .cdcp .cq-in-b{animation:cq-in-b .3s var(--ease) both}
+.cdcp[data-view="result"] .cq-big{animation:cq-hero .5s cubic-bezier(.34,1.56,.64,1) both}
+.cdcp[data-view="result"] .cq-note.cq-note{color:var(--c-warn)}   /* amber on the dark card: AA contrast */
 .cdcp .cq-reveal{animation:cq-reveal .5s cubic-bezier(.34,1.4,.64,1) both}
 .cdcp :is(.cq-opt,.cq-sumrow,.cq-next,.cq-matrix-all>summary,.cq-matrix-item>summary){transition:var(--tr-surface),color var(--dur-state) var(--ease)}
 .cdcp :is(.cq-skip-l,.cq-back,.cq-clear){transition:text-decoration-color var(--dur-state) var(--ease),opacity var(--dur-state) var(--ease)}
