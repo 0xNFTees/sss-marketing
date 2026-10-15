@@ -96,13 +96,13 @@
   function matrixItem(t,icon,data,open){
     var d=node("details","cq-matrix-item cq-tone-"+t);d.name="cq-matrix";if(open)d.open=true;
     d.innerHTML='<summary><span class="cq-matrix-item-icon" aria-hidden="true">'+icon+'</span><span class="cq-matrix-item-head"><span class="cq-matrix-item-title">'+esc(data.title)+
-      '</span><span class="cq-matrix-item-subtitle">'+esc(data.subtitle)+'</span></span><span class="cq-matrix-item-chevron" aria-hidden="true">+</span></summary>'+
+      '</span><span class="cq-matrix-item-subtitle">'+esc(data.subtitle)+'</span></span><span class="cq-matrix-item-chevron" aria-hidden="true"></span></summary>'+
       '<div class="cq-matrix-item-body"><ul>'+data.services.map(function(s){return "<li>"+esc(s)+"</li>";}).join("")+'</ul><p class="cq-matrix-item-note">'+esc(data.note)+"</p></div>";
     return d;
   }
   function coverageMatrix(m,label){
     var wrap=node("details","cq-matrix-all");
-    wrap.appendChild(node("summary",null,'<span>'+esc(label)+'</span><span class="cq-matrix-item-chevron" aria-hidden="true">+</span>'));
+    wrap.appendChild(node("summary",null,'<span>'+esc(label)+'</span><span class="cq-matrix-item-chevron" aria-hidden="true"></span>'));
     var inner=node("div","cq-matrix");
     inner.appendChild(matrixItem("standard","&#10003;",m.standard,true));
     inner.appendChild(matrixItem("major","!",m.major,false));
