@@ -148,6 +148,21 @@ with sync_playwright() as p:
                         pg.dispatch_event(f'#quiz input[name$="{k}"][value="{v}"]',"click")
                     t=pg.inner_text(".cq")
                     ok(f"no NaN text {ins}/{inc}/{fl}/{pk}",not any(w in t for w in("NaN","undefined","Infinity","null")),t[:120])
+    # 10b. input behaviour: selections survive branch changes, incomplete input shows no figure, clear resets
+    pg.goto(BASE+"/123/");pg.wait_for_timeout(300);pg.click("#tryCard");pg.wait_for_timeout(200)
+    def snap():
+        return pg.evaluate("""()=>{const r=document.querySelector('#quiz');const q=k=>{const e=r.querySelector('input[name$='+k+']:checked');return e?e.value:null};
+          return {st:r.dataset.state,ins:q('ins'),inc:q('inc'),filed:q('filed'),appt:r.querySelector('select').value,big:r.querySelector('.cq-big')?.textContent||null,clear:!r.querySelector('.cq-clear').hidden}}""")
+    clk=lambda k,v: pg.dispatch_event(f'#quiz input[name$="{k}"][value="{v}"]',"click")
+    s0=snap(); ok("behaviour: starts empty, nothing preselected",s0["ins"] is None and s0["inc"] is None and s0["filed"] is None and s0["appt"]=="" and not s0["clear"])
+    pg.select_option("#quiz select",index=2); s1=snap(); ok("behaviour: appointment alone shows no share figure",s1["st"]=="pending" and s1["big"] in (None,"—") and s1["clear"],str(s1))
+    clk("ins","no");clk("inc","band70");s2=snap(); ok("behaviour: unconfirmed filing still labelled, not final",s2["st"]=="unconfirmed",str(s2))
+    clk("filed","yes");s3=snap()
+    clk("ins","yes");clk("ins","no");s4=snap(); ok("behaviour: answers survive insurance toggle",{k:s4[k] for k in("ins","inc","filed","appt","big")}=={k:s3[k] for k in("ins","inc","filed","appt","big")},str((s3,s4)))
+    clk("inc","over90");clk("inc","band70");s5=snap(); ok("behaviour: filed answer survives income round-trip",s5["filed"]=="yes" and s5["big"]==s3["big"],str(s5))
+    pg.click("#quiz .cq-clear");pg.wait_for_timeout(100);s6=snap(); ok("behaviour: clear resets every answer and hides itself",s6["ins"] is None and s6["inc"] is None and s6["filed"] is None and s6["appt"]=="" and s6["st"]=="pending" and not s6["clear"],str(s6))
+    ok("behaviour: clear keeps keyboard focus in the controls",pg.evaluate("document.activeElement.closest('.cq-ctl')!==null"))
+
     # 11. shipped data sanity
     data=pg.evaluate("window.CDCP_PROVINCES.QC.procedures")
     dm={x["code"]:x for x in data}

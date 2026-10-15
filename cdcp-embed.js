@@ -31,7 +31,7 @@
        covered = isCoveredByCDCP ? min(cdcpGridFee * tier%, acdqFee) : 0     you pay = acdqFee - covered  */
   var T = {
     fr: {label:"Admissibilité et coût au RCSD",
-      ins:"Assurance dentaire privée", insI:"Par un employeur, un régime privé ou un compte de gestion santé.", yes:"Oui", no:"Non",
+      clear:"Effacer les réponses", ins:"Assurance dentaire privée", insI:"Par un employeur, un régime privé ou un compte de gestion santé.", yes:"Oui", no:"Non",
       inc:"Revenu familial net rajusté", incI:"Selon votre dernière déclaration d’impôts.", incShort:["< 70 k","70–79 k","80–89 k","90 k +"], incPct:["100 %","60 %","40 %","0 %"],
       filed:"Déclaration d’impôts produite", filedI:"Vous et votre conjoint(e), le cas échéant, pour l’année précédente.", notYet:"Pas encore",
       appt:"Type de rendez-vous", apptI:"", pick:"Choisir…",
@@ -46,7 +46,7 @@
           emerg:["Urgence, mal de dent","Examen d’urgence, radiographie","Un traitement immédiat (obturation, canal, extraction) s’ajoute au tarif."],
           filling:["Carie, obturation","Obturation en composite sur une molaire (1 surface)","L’examen n’est pas inclus."],major:["Prothèse complète","Prothèse complète standard, une arcade","Frais de laboratoire en sus."]}},
     en: {label:"CDCP eligibility and cost",
-      ins:"Private dental insurance", insI:"Through an employer, a private plan or a health spending account.", yes:"Yes", no:"No",
+      clear:"Clear answers", ins:"Private dental insurance", insI:"Through an employer, a private plan or a health spending account.", yes:"Yes", no:"No",
       inc:"Adjusted family net income", incI:"From your last tax return.", incShort:["< 70k","70–79k","80–89k","90k+"], incPct:["100%","60%","40%","0%"],
       filed:"Tax return filed", filedI:"You and your spouse or partner, if applicable, for the previous year.", notYet:"Not yet",
       appt:"Appointment type", apptI:"", pick:"Choose…",
@@ -176,6 +176,15 @@
       sel.addEventListener("change",function(){A.appt=sel.value||null;update();});
       fs.appendChild(sel);ctl.appendChild(fs);rows.appt=fs;
     }
+    var clearBtn=node("button","cq-clear",esc(U.clear));clearBtn.type="button";clearBtn.hidden=true;
+    clearBtn.addEventListener("click",function(){
+      Object.keys(A).forEach(function(k){A[k]=null;});
+      var rs=ctl.querySelectorAll("input[type=radio]");for(var i=0;i<rs.length;i++)rs[i].checked=false;
+      if(DATA&&sel)sel.value="";
+      update();
+      if(rs.length)rs[0].focus();   // the button hides itself; keep keyboard focus inside the controls
+    });
+    ctl.appendChild(clearBtn);
     if(opts.demo)ctl.appendChild(node("p","cq-skip",esc(L.skipPrompt)+' <a href="'+esc(BOOK)+'">'+esc(L.skipBook)+"</a>"));
 
     /* ---- model ---- */
@@ -273,6 +282,7 @@
       off(rows.inc,A.ins==="yes");off(rows.filed,A.ins==="yes"||A.inc==="over90");off(rows.appt,A.ins==="yes");
       Object.keys(rows).forEach(function(k){rows[k].setAttribute("data-done",A[k]?"1":"0");});
       if(SAVED)SAVED.set(root,A);
+      clearBtn.hidden=!(A.ins||A.inc||A.filed||A.appt);
 
       var key=[oc,A.inc,A.filed,A.appt].join("|");
       var tier=INCOME_TIER[A.inc];
