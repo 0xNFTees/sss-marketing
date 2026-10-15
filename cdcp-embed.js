@@ -78,6 +78,7 @@
   function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML;}
   function node(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
   function textNode(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;e.textContent=text;return e;}
+  function lcf(s){s=String(s);return s.charAt(0).toLowerCase()+s.slice(1);}
   function nb(s){return String(s).replace(/(\d) (?=\d)/g,"$1 ").replace(/ (%|\$)/g," $1");}
   function withBookingParams(url,params){
     try{var u=new URL(url,window.location.origin);Object.keys(params).forEach(function(k){u.searchParams.set(k,params[k]);});return u.toString();}
@@ -356,7 +357,7 @@
       }
     }
     function because(){
-      if(A.ins!=="no"||!A.inc)return null;var B=U.bc,p=[B.noIns,B.inc.replace("{r}",nb(L.step2[A.inc]))];
+      if(A.ins!=="no"||!A.inc)return null;var B=U.bc,p=[B.noIns,B.inc.replace("{r}",nb(lcf(L.step2[A.inc])))];
       if(A.inc!=="over90"&&A.filed)p.push(A.filed==="yes"?B.fy:B.fn);
       return B.based+(p.length>2?p.slice(0,-1).join(", ")+B.and+p[p.length-1]:p.join(B.and))+".";
     }
