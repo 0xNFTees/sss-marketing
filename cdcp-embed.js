@@ -164,7 +164,7 @@
     function autoStep(){var r=required();for(var i=0;i<r.length;i++)if(!A[r[i]])return r[i];return null;}
     function view(){return cur&&required().indexOf(cur)>=0?cur:autoStep();}
     function totalQ(){return A.ins==="yes"?1:(A.inc==="over90"?2:3);}
-    function legend(fs,label,hint){fs.appendChild(node("legend",null,'<span>'+esc(label)+'</span>'+(hint?'<span class="cq-infl">'+esc(hint)+'</span>':'')));}
+    function legend(fs,label,hint){fs.setAttribute("role","radiogroup");fs.setAttribute("aria-labelledby",id+"lg"+fs.getAttribute("data-k"));var lg=node("div","cq-legend",'<span>'+esc(label)+'</span>'+(hint?'<span class="cq-infl">'+esc(hint)+'</span>':''));lg.id=id+"lg"+fs.getAttribute("data-k");fs.appendChild(lg);}
     function optionsFor(k){
       if(k==="ins")return {label:U.ins,hint:U.insI,items:[{v:"yes",t:U.yes,aria:L.step1.yes,html:"<span>"+esc(U.yes)+"</span>"},{v:"no",t:U.no,aria:L.step1.no,html:"<span>"+esc(U.no)+"</span>"}]};
       if(k==="filed")return {label:U.filed,hint:U.filedI,items:[{v:"yes",t:U.yes,aria:L.step3.yes,html:"<span>"+esc(U.yes)+"</span>"},{v:"no",t:U.notYet,aria:L.step3.no,html:"<span>"+esc(U.notYet)+"</span>"}]};
@@ -172,7 +172,7 @@
       return {label:U.appt,hint:U.apptI,items:PK.map(function(p){return {v:p.id,t:U.pk[p.id][0],aria:U.pk[p.id][0]+". "+U.pk[p.id][1],html:"<span>"+esc(U.pk[p.id][0])+"</span><small>"+esc(U.pk[p.id][1])+"</small>"};})};
     }
     function fieldset(k){
-      var d=optionsFor(k),fs=node("fieldset","cq-row cq-row-"+k);fs.setAttribute("data-k",k);legend(fs,d.label,d.hint);
+      var d=optionsFor(k),fs=node("div","cq-row cq-row-"+k);fs.setAttribute("data-k",k);legend(fs,d.label,d.hint);
       var s=node("div",k==="appt"?"cq-visit":"cq-seg cq-seg-"+d.items.length);
       d.items.forEach(function(o){
         var lb=node("label","cq-opt",'<input type="radio" name="cq'+id+k+'" value="'+o.v+'"'+(A[k]===o.v?" checked":"")+' aria-label="'+esc(o.aria||o.t)+'">'+o.html);

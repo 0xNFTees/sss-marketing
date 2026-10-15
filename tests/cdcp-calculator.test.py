@@ -157,7 +157,7 @@ with sync_playwright() as p:
         pg.locator(f'#quiz input[name$="{k}"][value="{v}"]').click(force=True);pg.wait_for_timeout(300)
     def snap():
         return pg.evaluate("""()=>{const r=document.querySelector('#quiz');
-          return {view:r.dataset.view,st:r.dataset.state,fs:r.querySelectorAll('.cq-ctl fieldset').length,sel:r.querySelectorAll('select').length,
+          return {view:r.dataset.view,st:r.dataset.state,fs:r.querySelectorAll('.cq-ctl .cq-row').length,sel:r.querySelectorAll('select').length,
             checked:[...r.querySelectorAll('.cq-ctl input:checked')].map(i=>i.value).join(','),
             sum:[...r.querySelectorAll('.cq-sumrow')].map(b=>b.dataset.k+'='+b.querySelector('.cq-sr-a').textContent).join('|'),
             big:(r.querySelector('.cq-big:not(.cq-big-empty)')||{}).textContent||null,clear:!r.querySelector('.cq-clear').hidden,

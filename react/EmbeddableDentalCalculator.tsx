@@ -131,11 +131,11 @@ function Choice<V extends string>(props: {
 }) {
   const { name, legend, hint, options, value, onChange, onPointer, columns = 1, invalid } = props;
   return (
-    <fieldset className="min-w-0">
-      <legend className="mb-3 w-full">
+    <div role="radiogroup" aria-labelledby={`${name}-lg`} className="min-w-0">
+      <div id={`${name}-lg`} className="mb-3 w-full">
         <span className="block font-[family-name:var(--cw-display,var(--cdcp-display,inherit))] text-xl font-medium leading-tight tracking-tight">{legend}</span>
         {hint && <span className="mt-0.5 block text-[13px] leading-snug opacity-75">{hint}</span>}
-      </legend>
+      </div>
       <div className={`grid gap-2.5 ${columns === 2 ? "@md:grid-cols-2" : ""}`}>
         {options.map((o) => (
           <label key={o.value} onPointerDown={() => onPointer(true)} onKeyDown={() => onPointer(false)}
@@ -160,7 +160,7 @@ function Choice<V extends string>(props: {
           </label>
         ))}
       </div>
-    </fieldset>
+    </div>
   );
 }
 

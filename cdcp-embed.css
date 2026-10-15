@@ -127,8 +127,8 @@
 /* ---- choice groups: .cq-seg (2-up, and 2x2 when narrow), .cq-seg-4 and .cq-visit (lists) ---- */
 .cdcp .cq-row{display:flex;flex-direction:column;min-width:0}
 .cdcp .cq-row>.cq-seg{margin-top:auto}
-.cdcp .cq-row legend{display:flex;flex-direction:column;gap:1px;width:100%;margin-bottom:var(--s3)}
-.cdcp .cq-row legend>span:first-child{font-family:var(--c-display);font-size:var(--t-h);font-weight:500;line-height:1.25;letter-spacing:-.005em}
+.cdcp .cq-row>.cq-legend{display:flex;flex-direction:column;gap:1px;width:100%;margin-bottom:var(--s3)}
+.cdcp .cq-row>.cq-legend>span:first-child{font-family:var(--c-display);font-size:var(--t-h);font-weight:500;line-height:1.25;letter-spacing:-.005em}
 .cdcp .cq-infl{font-size:var(--t-m);line-height:1.35;opacity:.8}
 .cdcp .cq-seg,.cdcp .cq-visit{display:grid;border:1px solid var(--c-edge);background:var(--well);border-radius:var(--c-r);overflow:clip}
 .cdcp .cq-seg-2{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -314,7 +314,6 @@
   .cdcp[data-view="result"] .cq-sum{order:2;bottom:auto;top:var(--cdcp-sticky-top,0px)}
   .cdcp[data-view="result"] .cq-brk{order:3}
   .cdcp[data-view="result"] .cq-row-appt{order:5;--well:var(--c-paper);--sel:var(--c-tint);padding:var(--s4);background:var(--c-tint);border-block:1px solid var(--c-line)}
-  .cdcp[data-view="result"] .cq-row-appt>legend{float:left;width:100%}
   .cdcp[data-view="result"] .cq-act{order:4}
   .cdcp[data-view="result"] .cq-det{order:6}
   .cdcp[data-view="result"] .cq-rest{order:7}
