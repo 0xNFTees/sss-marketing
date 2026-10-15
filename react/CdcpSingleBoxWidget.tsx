@@ -15,7 +15,7 @@ import {
   useCallback, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type ReactNode,
 } from "react";
 import { AnimatePresence, animate, motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, Calendar, ChevronDown, ChevronLeft, ChevronRight, CircleCheck, Clock, FileText, Info, Mail, Pencil, Phone, ShieldCheck, Sparkles, Siren, User, Wallet } from "lucide-react";
+import { ArrowUpRight, Calendar, ChevronDown, ChevronLeft, ChevronRight, CircleCheck, Clock, FileText, Info, Mail, Pencil, Phone, PiggyBank, ShieldCheck, Sparkles, Siren, User, Wallet } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 
@@ -423,6 +423,10 @@ export const UI = {
   "chipFiled": { "yes": "Impôts : oui", "no": "Impôts : pas encore" },
   "applyLink": "Étape 1 : Faire la demande d’adhésion au RCSD (Santé Canada)",
   "applySub": "La carte RCSD arrive en 4 à 8 semaines.",
+  "haveCard": "J’ai déjà ma carte RCSD",
+  "noCardYet": "Pas encore de carte ? Voir l’étape 1",
+  "bookNow": "Réserver votre rendez-vous",
+  "save": "Vous économisez {n}",
   "bookSub": "Réserver dans 6 à 8 semaines aligne votre visite avec la réception de votre carte.",
   "pendH": "Estimez votre part d’une visite.",
   "pendS": "L’estimation tient compte du Régime canadien de soins dentaires (RCSD) et du guide tarifaire des dentistes du Québec (ACDQ).",
@@ -532,6 +536,10 @@ export const UI = {
   "chipFiled": { "yes": "Taxes filed", "no": "Taxes not filed yet" },
   "applyLink": "Step 1: Apply for CDCP membership (Health Canada)",
   "applySub": "Your CDCP card arrives in 4 to 8 weeks.",
+  "haveCard": "I already have my CDCP card",
+  "noCardYet": "No card yet? Back to step 1",
+  "bookNow": "Book your appointment",
+  "save": "You save {n}",
   "bookSub": "Booking 6 to 8 weeks out lines your visit up with your card’s arrival.",
   "pendH": "Estimate your share of a visit.",
   "pendS": "The estimate factors in the Canadian Dental Care Plan (CDCP) and the Quebec dentists' fee guide (ACDQ).",
@@ -609,7 +617,7 @@ export interface EmbeddableDentalCalculatorProps {
 /* ------------------------------------------------------------------------------------------------ helpers */
 const HEADER = { fr: "Calculateur dentaire", en: "Dental calculator" } as const;
 const nb = (s: string) => s.replace(/(\d) (?=\d)/g, "$1 ").replace(/ (%|\$)/g, " $1");
-const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ink)]";
+const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus,var(--ink))]";
 
 function withBookingParams(url: string, params: Record<string, string>) {
   try {
@@ -752,7 +760,7 @@ function Choice<V extends string>(props: {
 function Rise({ i, reduce, className, children }: { i: number; reduce?: boolean | null; className?: string; children: ReactNode }) {
   return (
     <motion.div className={className} initial={reduce ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
-      transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 26, delay: 0.08 + i * 0.07 }}>
+      transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 26, delay: 0.3 + i * 0.07 }}>
       {children}
     </motion.div>
   );
@@ -854,7 +862,8 @@ export function CdcpSingleBoxWidget({
     clearTimeout(advance.current);
     if (pointer.current) advance.current = setTimeout(() => setCur(null), 140);
   }, []);
-  const clear = () => { setA(EMPTY_ANSWERS); setCur(null); pointer.current = false; };
+  const [hasCard, setHasCard] = useState(false);
+  const clear = () => { setA(EMPTY_ANSWERS); setCur(null); setHasCard(false); pointer.current = false; };
   const goBack = () => {
     pointer.current = false;
     if (view) { const i = steps.indexOf(view); if (i > 0) setCur(steps[i - 1]); return; }
@@ -925,16 +934,14 @@ export function CdcpSingleBoxWidget({
     if (est.excluded) notes.push({ tone: "bad", text: U.excl });
   }
   const phoneHref = phone ? `tel:${phone.replace(/[^\d+]/g, "")}` : null;
-  const pill = `inline-flex min-h-11 items-center gap-1.5 rounded-full border border-[var(--line)] bg-[var(--tint)] px-3.5 font-semibold text-[var(--ink)] transition hover:border-[var(--p)] hover:bg-[var(--paper)] ${FOCUS}`;
-  const frontDesk = (phone || email) && (
-    <div className="rounded-xl border border-l-[3px] border-[var(--line)] border-l-[var(--a)] bg-[var(--paper)] px-4 py-3 text-sm leading-relaxed text-[var(--ink)]">
-      <p className="font-semibold">{L.skipPrompt}</p>
-      <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1.5">
-        {phoneHref && <a href={phoneHref} className={pill}><Phone className="size-4" aria-hidden />{L.skipCall}</a>}
-        {phoneHref && email ? <span>{L.skipOr}</span> : null}
-        {email && <a href={`mailto:${email}`} className={pill}><Mail className="size-4" aria-hidden />{phone ? L.skipMail : L.skipMail[0].toUpperCase() + L.skipMail.slice(1)}</a>}
-        <span>{phone && !email ? L.skipTailCall : L.skipTail}</span>
-      </p>
+  const contactBtn = `flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/30 px-3 py-2.5 text-sm font-semibold transition-all duration-150 hover:border-white/60 hover:bg-white/10 active:scale-[0.98] motion-reduce:transition-none motion-reduce:transform-none ${FOCUS}`;
+  const contactRow = (phone || email) && (
+    <div className="space-y-2">
+      <p className="text-center text-[13px] font-medium opacity-80">{L.skipPrompt}</p>
+      <div className={`grid gap-2 ${phoneHref && email ? "grid-cols-2" : "grid-cols-1"}`}>
+        {phoneHref && <a href={phoneHref} className={contactBtn}><Phone className="size-4" aria-hidden />{L.skipCall}</a>}
+        {email && <a href={`mailto:${email}`} className={contactBtn}><Mail className="size-4" aria-hidden /><span>{L.skipMail[0].toUpperCase() + L.skipMail.slice(1)}</span></a>}
+      </div>
     </div>
   );
   const ctaNode = (
@@ -945,16 +952,19 @@ export function CdcpSingleBoxWidget({
       {oc === "tax" && (<>
         <CtaLink href={L.craMyAccountUrl} external>{R.branchTaxFiling.primaryCta}</CtaLink>
         <CtaLink variant="secondary" href={book({ branch: "tax-filing", suggestedDate: weeksIso(4) })}>{R.branchTaxFiling.secondaryCta}</CtaLink></>)}
-      {oc === "qualified" && (<>
-        <div className="space-y-1.5 pb-3">
+      {oc === "qualified" && (hasCard ? (<>
+        <CtaLink href={book({ branch: "qualified", cdcpTier: tier ?? "", hasCard: "1" })}>{U.bookNow}</CtaLink>
+        <p className="pt-1 text-center"><button type="button" onClick={() => setHasCard(false)} className={`min-h-11 rounded-lg px-2 text-[13px] font-medium underline decoration-white/40 underline-offset-4 opacity-80 transition hover:opacity-100 ${FOCUS}`}>{U.noCardYet}</button></p></>) : (<>
+        <div className="space-y-1.5 pb-1">
           <a href={L.cdcpApplyUrl} target="_blank" rel="noopener noreferrer"
             className={`group flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/30 px-4 py-3 text-center text-sm font-semibold leading-snug transition-all duration-150 hover:border-white/60 hover:bg-white/10 active:scale-[0.99] motion-reduce:transition-none motion-reduce:transform-none ${FOCUS}`}>
             <FileText className="size-4 shrink-0 opacity-80" aria-hidden /><span>{U.applyLink}</span><ArrowUpRight className="size-4 shrink-0 transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
           </a>
           <p className="px-1 text-center text-xs leading-snug opacity-80">{U.applySub}</p>
+          <p className="text-center"><button type="button" onClick={() => setHasCard(true)} className={`min-h-11 rounded-lg px-2 text-[13px] font-medium underline decoration-white/40 underline-offset-4 opacity-90 transition hover:opacity-100 ${FOCUS}`}>{U.haveCard}</button></p>
         </div>
         <CtaLink href={book({ branch: "qualified", cdcpTier: tier ?? "", suggestedDate: weeksIso(7) })}>{R.branchQualified.step2Cta}</CtaLink>
-        <p className="px-1 pt-2 text-center text-xs leading-snug opacity-80">{U.bookSub}</p></>)}
+        <p className="px-1 pt-2 text-center text-xs leading-snug opacity-80">{U.bookSub}</p></>))}
     </div>
   );
   const covers = est && est.tierPct && (est.covered > 0 || !est.excluded);
@@ -982,6 +992,11 @@ export function CdcpSingleBoxWidget({
                 <CountUp value={est.patient} lang={lang} reduce={reduce} />
               </motion.span></p>
           </div>
+          {est.covered > 0 && (
+            <p className="inline-flex items-center gap-2 rounded-full border border-emerald-300/40 bg-emerald-300/15 px-3 py-1 text-[13px] font-semibold text-emerald-200">
+              <PiggyBank className="size-4" aria-hidden />{U.save.replace("{n}", plain(est.covered, lang))}
+            </p>
+          )}
           {est.fee > 0 && (<>
             <div aria-hidden className="relative flex h-2.5 overflow-hidden rounded-full bg-[var(--onpanel)]/90">
               <motion.div className="h-full bg-[var(--good-on-panel)]" initial={{ width: 0 }} animate={{ width: `${coveredPct}%` }} transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 120, damping: 24, delay: 0.15 }} />
@@ -998,6 +1013,7 @@ export function CdcpSingleBoxWidget({
       {est?.bad && <p className="text-[15px] leading-snug text-amber-300">{U.unavailable}</p>}
 
       <Rise i={3} reduce={reduce} className="relative">{ctaNode}</Rise>
+      {contactRow && <Rise i={4} reduce={reduce} className="relative">{contactRow}</Rise>}
       {oc === "tax" && showFigure && <p className="text-xs opacity-80">{U.whenIssued}</p>}
       {oc === "unconfirmed" && showFigure && <p className="text-xs opacity-80">{U.ifQualify}</p>}
       {showFigure && est && est.fee > 0 && est.patient === 0 && <p className="text-xs opacity-80">{U.full}</p>}
@@ -1025,7 +1041,6 @@ export function CdcpSingleBoxWidget({
         </Drawer>
       )}
       {oc === "insurance" && !!insurers?.length && <Drawer reduce={reduce} title={U.insurers}><p>{insurers.join(" · ")}</p></Drawer>}
-      {frontDesk}
       <button type="button" onClick={clear} className={`inline-flex min-h-11 items-center text-[13px] font-semibold underline underline-offset-4 opacity-80 hover:opacity-100 ${FOCUS}`}>{U.clear}</button>
     </motion.div>
   );
@@ -1055,8 +1070,13 @@ export function CdcpSingleBoxWidget({
 
   const stepN = view ? steps.indexOf(view) + 1 : steps.length;
   return (
-    <section ref={root} aria-label={U.label} style={themeVars(theme, stickyTop)}
-      className={`@container mx-auto w-full max-w-lg overflow-hidden rounded-3xl border shadow-2xl transition-colors duration-500 motion-reduce:transition-none ${dark ? "border-white/10 bg-[var(--panel)] text-[var(--onpanel)]" : "border-[var(--line)] bg-[var(--paper)] text-[var(--ink)]"} ${className}`}>
+    <section ref={root} aria-label={U.label} style={{ ...themeVars(theme, stickyTop), "--focus": dark ? "var(--onpanel)" : "var(--ink)" } as CSSProperties}
+      className={`@container relative isolate mx-auto w-full max-w-lg overflow-hidden rounded-3xl border bg-[var(--paper)] shadow-2xl transition-[color,border-color] duration-300 motion-reduce:transition-none ${dark ? "border-white/10 text-[var(--onpanel)] delay-300" : "border-[var(--line)] text-[var(--ink)]"} ${className}`}>
+      <AnimatePresence>
+        {dark && <motion.div key="wash" aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-[var(--panel)]"
+          initial={reduce ? false : { clipPath: "circle(0% at 50% 100%)" }} animate={{ clipPath: "circle(150% at 50% 100%)" }} exit={{ opacity: 0, transition: { duration: 0.25 } }}
+          transition={reduce ? { duration: 0 } : { duration: 0.75, ease: [0.22, 1, 0.36, 1] }} />}
+      </AnimatePresence>
       <div role="status" className="sr-only">{announce}</div>
       <AutoHeight reduce={reduce}>
         <div className="px-6 pt-4">
