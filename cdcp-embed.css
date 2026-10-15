@@ -198,7 +198,7 @@
 /* ---- motion: one duration scale, one easing ---- */
 @property --cov{syntax:"<percentage>";inherits:true;initial-value:0%}
 .cdcp{--dur-press:.1s;--dur-state:.16s;--dur-value:.26s;--ease:cubic-bezier(.2,.7,.2,1);transition:--cov .38s var(--ease)}
-@keyframes cq-tick{from{opacity:.2;transform:translateY(3px)}to{opacity:1;transform:none}}
+@keyframes cq-tick{from{opacity:.4}to{opacity:1}}
 .cdcp .cq-tick{animation:cq-tick var(--dur-value) var(--ease) both}
 .cdcp .cq-dl dd{font-variant-numeric:tabular-nums}
 /* controls: surfaces and edges ease; the label dips on press and returns on release */
@@ -275,7 +275,7 @@
 .cdcp .cq-status-in.cq-neutral .cq-pill{opacity:.75}
 
 .cdcp .cq-sw{display:inline-block;width:8px;height:8px;margin-right:var(--s2);background:var(--c-good);vertical-align:baseline}
-.cdcp .cq-basis,.cdcp .cq-bar,.cdcp .cq-prog{display:none}
+.cdcp .cq-basis,.cdcp .cq-bar,.cdcp .cq-prog,.cdcp .cq-trace{display:none}
 .cdcp .cq-big-empty{display:none}
 
 @container (min-width:680px){
@@ -324,4 +324,29 @@
 }
 @container (min-width:900px){
   .cdcp .cq-grid{grid-template-columns:minmax(340px,400px) minmax(0,1fr)}
+}
+
+/* ================= interaction refinements ================= */
+@container (min-width:680px){
+  /* the figure keeps its place as the state changes: the status block holds a steady height */
+  .cdcp .cq-status{min-height:12rem}
+  .cdcp .cq-sum:has(.cq-trace) .cq-sum-note{display:none}
+  .cdcp .cq-sum .cq-trace{display:block;margin-top:var(--s3);border-top:1px solid var(--c-line)}
+  .cdcp .cq-trace li+li{border-top:1px solid var(--c-line)}
+  .cdcp .cq-tr{display:grid;grid-template-columns:20px minmax(0,1fr) auto;align-items:center;column-gap:var(--s2);width:100%;min-height:var(--h);padding:var(--s2) var(--s1);text-align:left;cursor:pointer;
+    font-size:var(--t-m);transition:background-color var(--dur-state) var(--ease)}
+  .cdcp .cq-tr-n{display:inline-grid;place-items:center;width:20px;height:20px;border:1px solid var(--c-edge);border-radius:50%;font-size:var(--t-s);font-weight:600;line-height:1;font-variant-numeric:tabular-nums;
+    transition:background-color var(--dur-state) var(--ease),color var(--dur-state) var(--ease)}
+  .cdcp .cq-tr[data-done="1"] .cq-tr-n{background:var(--c-ink);border-color:var(--c-ink);color:var(--c-paper)}
+  .cdcp .cq-tr-q{opacity:.8}
+  .cdcp .cq-tr-a{font-weight:600;text-align:right}
+  .cdcp .cq-tr[data-done="0"] .cq-tr-a{font-weight:400;opacity:.6}
+  .cdcp .cq-tr.cq-on{background:var(--c-tint)}
+  .cdcp .cq-tr:focus-visible{outline:2px solid var(--c-ink);outline-offset:-2px}
+}
+@media (hover:hover){@container (min-width:680px){.cdcp .cq-tr:hover{background:var(--c-tint)}}}
+/* tier table: the ring sits on the focused row, not around the whole table */
+@container (min-width:680px){
+  .cdcp .cq-ctl .cq-seg-4:has(input:focus-visible){outline:0}
+  .cdcp .cq-ctl .cq-seg-4 .cq-opt:has(input:focus-visible){outline:2px solid var(--c-ink);outline-offset:-2px;z-index:2}
 }

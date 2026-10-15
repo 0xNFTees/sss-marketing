@@ -31,7 +31,7 @@
        covered = isCoveredByCDCP ? min(cdcpGridFee * tier%, acdqFee) : 0     you pay = acdqFee - covered  */
   var T = {
     fr: {label:"Admissibilité et coût au RCSD",
-      clear:"Effacer les réponses", st:{pending:"Incomplet",unconfirmed:"À confirmer",qualified:"Admissible selon vos réponses",income:"Non admissible",tax:"Déclaration requise",insurance:"Assurance privée"}, ins:"Assurance dentaire privée", insI:"Par un employeur, un régime privé ou un compte de gestion santé.", yes:"Oui", no:"Non",
+      clear:"Effacer les réponses", todo:"À indiquer", st:{none:"Aucune réponse",pending:"Incomplet",unconfirmed:"À confirmer",qualified:"Admissible selon vos réponses",income:"Non admissible",tax:"Déclaration requise",insurance:"Assurance privée"}, ins:"Assurance dentaire privée", insI:"Par un employeur, un régime privé ou un compte de gestion santé.", yes:"Oui", no:"Non",
       inc:"Revenu familial net rajusté", incI:"Selon votre dernière déclaration d’impôts.", incShort:["< 70 k","70–79 k","80–89 k","90 k +"], incPct:["100 %","60 %","40 %","0 %"],
       filed:"Déclaration d’impôts produite", filedI:"Vous et votre conjoint(e), le cas échéant, pour l’année précédente.", notYet:"Pas encore",
       appt:"Type de rendez-vous", apptI:"", pick:"Choisir…",
@@ -46,7 +46,7 @@
           emerg:["Urgence, mal de dent","Examen d’urgence, radiographie","Un traitement immédiat (obturation, canal, extraction) s’ajoute au tarif."],
           filling:["Carie, obturation","Obturation en composite sur une molaire (1 surface)","L’examen n’est pas inclus."],major:["Prothèse complète","Prothèse complète standard, une arcade","Frais de laboratoire en sus."]}},
     en: {label:"CDCP eligibility and cost",
-      clear:"Clear answers", st:{pending:"Incomplete",unconfirmed:"To confirm",qualified:"Eligible based on your answers",income:"Not eligible",tax:"Return required",insurance:"Private insurance"}, ins:"Private dental insurance", insI:"Through an employer, a private plan or a health spending account.", yes:"Yes", no:"No",
+      clear:"Clear answers", todo:"To answer", st:{none:"No answers yet",pending:"Incomplete",unconfirmed:"To confirm",qualified:"Eligible based on your answers",income:"Not eligible",tax:"Return required",insurance:"Private insurance"}, ins:"Private dental insurance", insI:"Through an employer, a private plan or a health spending account.", yes:"Yes", no:"No",
       inc:"Adjusted family net income", incI:"From your last tax return.", incShort:["< 70k","70–79k","80–89k","90k+"], incPct:["100%","60%","40%","0%"],
       filed:"Tax return filed", filedI:"You and your spouse or partner, if applicable, for the previous year.", notYet:"Not yet",
       appt:"Appointment type", apptI:"", pick:"Choose…",
@@ -226,7 +226,7 @@
     /* ---- render ---- */
     function statusBlock(kind,title,detail,state){
       var d=node("div","cq-status-in cq-"+kind);
-      if(state)d.appendChild(textNode("div","cq-pill",U.st[state]));
+      if(state)d.appendChild(textNode("div","cq-pill",U.st[state==="pending"&&!(A.ins||A.inc||A.filed||A.appt)?"none":state]));
       d.appendChild(textNode("div","cq-status-title",title));
       if(detail)d.appendChild(textNode("p","cq-status-detail",detail));return d;
     }
@@ -252,6 +252,8 @@
         if(sp&&sp!==document.body)sp.scrollTop+=d;else window.scrollBy(0,d);
       });
     });
+    ctl.addEventListener("focusin",function(e){var r=e.target.closest&&e.target.closest(".cq-row");focusKey=null;if(r)Object.keys(rows).forEach(function(k){if(rows[k]===r)focusKey=k;});markFocus();});
+    ctl.addEventListener("focusout",function(){focusKey=null;markFocus();});
     function fade(el){el.classList.remove("cq-fade");void el.offsetWidth;el.classList.add("cq-fade");el.addEventListener("animationend",function f(){el.classList.remove("cq-fade");el.removeEventListener("animationend",f);});}
     // dollars large, cents small and baseline-aligned (decimal separator and fraction only; the currency sign keeps its place)
     function setBig(v){
@@ -262,6 +264,29 @@
     function progress(){var req=["ins","inc"];if(A.inc!=="over90")req.push("filed");if(DATA)req.push("appt");var n=0;req.forEach(function(k){if(A[k])n++;});return {n:n,t:req.length};}
     // the empty figure keeps the shape of a real one (a dash where the dollars go), so the focal point never collapses
     function ghost(){var h="";nf.formatToParts(0).forEach(function(p){if(p.type==="integer")h+="\u2014";else if(p.type!=="decimal"&&p.type!=="fraction"&&p.type!=="group")h+=p.value;});return h;}
+    // the answers so far, mirroring the numbered questions beside them; each row jumps to its control
+    var ORDER=["ins","inc","filed","appt"],focusKey=null;
+    function ansText(k){
+      var v=A[k];if(!v)return null;
+      if(k==="ins")return v==="yes"?U.yes:U.no;
+      if(k==="inc")return nb(L.step2[v]);
+      if(k==="filed")return v==="yes"?U.yes:U.notYet;
+      return U.pk[v][0];
+    }
+    function markFocus(){var li=sSum.querySelectorAll(".cq-tr");for(var i=0;i<li.length;i++)li[i].classList.toggle("cq-on",li[i].getAttribute("data-k")===focusKey);}
+    function traceList(){
+      var ol=node("ol","cq-trace"),need=["ins","inc"];if(A.inc!=="over90")need.push("filed");if(DATA)need.push("appt");
+      need.forEach(function(k){
+        var t=ansText(k),li=node("li"),b=node("button","cq-tr");b.type="button";b.setAttribute("data-k",k);b.setAttribute("data-done",t?"1":"0");
+        b.appendChild(textNode("span","cq-tr-n",String(ORDER.indexOf(k)+1)));
+        b.appendChild(textNode("span","cq-tr-q",U[k]));
+        b.appendChild(textNode("span","cq-tr-a",t||U.todo));
+        b.addEventListener("click",function(){var f=rows[k]&&(rows[k].querySelector("input:checked")||rows[k].querySelector("input,select"));if(f)f.focus();});
+        if(last.ans&&last.ans[k]!==undefined&&last.ans[k]!==t)b.classList.add("cq-fade");
+        li.appendChild(b);ol.appendChild(li);
+      });
+      return ol;
+    }
     function renderSum(c,o){
       sSum.innerHTML="";
       sSum.hidden=false;
@@ -274,9 +299,9 @@
         var bar=node("div","cq-bar",'<i></i>');bar.setAttribute("aria-hidden","true");sSum.appendChild(bar);
       }else{
         bigEl.textContent=ghost();bigEl.classList.add("cq-big-empty");shown=0;last.oop=null;
-        var pr=progress(),pg=node("div","cq-prog");pg.setAttribute("aria-hidden","true");
-        for(var k=0;k<pr.t;k++)pg.appendChild(node("i",k<pr.n?"on":""));sSum.appendChild(pg);
+        var pr=progress();
         sSum.appendChild(textNode("p","cq-sum-note",c&&c.bad?U.unavailable:(missing().length?U.prog.replace("{n}",pr.n).replace("{t}",pr.t)+". "+U.remain+" "+missing().join(", ")+".":U.nopick)));
+        if(!(c&&c.bad))sSum.appendChild(traceList());
       }
     }
     function renderCostDetail(t,c,o){
@@ -371,6 +396,7 @@
       if(!sBrk.childNodes.length){last.fee=null;last.cov=null;}
       if(DATA&&sel)sel.setAttribute("aria-invalid",c&&c.bad?"true":"false");
       syncBar();
+      last.ans={};ORDER.forEach(function(k){last.ans[k]=ansText(k);});markFocus();
       var hasLed=sBrk.childNodes.length>0;
       if(last.oc!==null&&last.oc!==oc){fade(sRest);if(sDet.childNodes.length)fade(sDet);}   // a different outcome: its next steps ease in
       if(hasLed&&!last.led){fade(sBrk);fade(sDet);}                                         // ledger appears once the appointment is chosen

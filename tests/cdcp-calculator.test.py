@@ -153,6 +153,7 @@ with sync_playwright() as p:
     def snap():
         return pg.evaluate("""()=>{const r=document.querySelector('#quiz');const q=k=>{const e=r.querySelector('input[name$='+k+']:checked');return e?e.value:null};
           return {st:r.dataset.state,ins:q('ins'),inc:q('inc'),filed:q('filed'),appt:r.querySelector('select').value,big:r.querySelector('.cq-big')?.textContent||null,clear:!r.querySelector('.cq-clear').hidden}}""")
+    s_big=lambda:pg.evaluate("(document.querySelector('#quiz .cq-big')||{}).textContent||null")
     clk=lambda k,v: pg.dispatch_event(f'#quiz input[name$="{k}"][value="{v}"]',"click")
     s0=snap(); ok("behaviour: starts empty, nothing preselected",s0["ins"] is None and s0["inc"] is None and s0["filed"] is None and s0["appt"]=="" and not s0["clear"])
     pg.select_option("#quiz select",index=2); s1=snap(); ok("behaviour: appointment alone shows no share figure",s1["st"]=="pending" and (s1["big"] is None or s1["big"].replace("\xa0","").replace("$","").strip()=="—") and s1["clear"],str(s1))
@@ -162,6 +163,17 @@ with sync_playwright() as p:
     clk("inc","over90");clk("inc","band70");s5=snap(); ok("behaviour: filed answer survives income round-trip",s5["filed"]=="yes" and s5["big"]==s3["big"],str(s5))
     pg.click("#quiz .cq-clear");pg.wait_for_timeout(100);s6=snap(); ok("behaviour: clear resets every answer and hides itself",s6["ins"] is None and s6["inc"] is None and s6["filed"] is None and s6["appt"]=="" and s6["st"]=="pending" and not s6["clear"],str(s6))
     ok("behaviour: clear keeps keyboard focus in the controls",pg.evaluate("document.activeElement.closest('.cq-ctl')!==null"))
+
+    # 10c. result states mirror the answers: none -> some -> complete, without an unsupported figure
+    tr=lambda:pg.evaluate("[...document.querySelectorAll('#quiz .cq-tr')].map(x=>x.dataset.k+':'+x.dataset.done).join(',')")
+    pill=lambda:pg.evaluate("document.querySelector('#quiz .cq-pill')?.textContent")
+    ok("states: no answers -> every row to answer, own label",tr()=="ins:0,inc:0,filed:0,appt:0" and pill() in("Aucune réponse","No answers yet"),tr()+str(pill()))
+    clk("ins","no");ok("states: some answers -> row marked, still incomplete",tr().startswith("ins:1,inc:0") and pill() in("Incomplet","Incomplete"),tr()+str(pill()))
+    clk("inc","over90");ok("states: over90 drops the tax-return row (not applicable), ineligible label",tr()=="ins:1,inc:1,appt:0" and pill() in("Non admissible","Not eligible"),tr()+str(pill()))
+    clk("inc","band80");clk("filed","yes");ok("states: all but appointment -> no figure yet",s_big() is None or "—" in (s_big() or ""),str(s_big()))
+    pg.evaluate("document.querySelector('#quiz .cq-tr[data-k=appt]').click()");ok("states: a result row jumps to its control",pg.evaluate("document.activeElement.tagName")=="SELECT")
+    pg.select_option("#quiz select",index=1);ok("states: complete -> figure present, row list gone",pg.evaluate("!!document.querySelector('#quiz .cq-big:not(.cq-big-empty)')&&!document.querySelector('#quiz .cq-tr')"))
+    ok("states: complete answers kept after every change",snap()["inc"]=="band80" and snap()["filed"]=="yes")
 
     # 11. shipped data sanity
     data=pg.evaluate("window.CDCP_PROVINCES.QC.procedures")
