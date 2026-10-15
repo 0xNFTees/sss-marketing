@@ -152,7 +152,7 @@
     })();
 
     var rows={};
-    function legend(fs,label,infl){fs.appendChild(node("legend",null,'<span>'+esc(label)+'</span><span class="cq-infl">'+esc(infl)+'</span>'));}
+    function legend(fs,label){fs.appendChild(node("legend",null,'<span>'+esc(label)+'</span>'));}
     function seg(key,label,infl,options){
       var fs=node("fieldset","cq-row"+(options.length===4?" cq-row-wide":""));legend(fs,label,infl);
       var s=node("div","cq-seg cq-seg-"+options.length);
@@ -282,6 +282,7 @@
         if(DATA){renderSum(c,oc);}else{sSum.innerHTML="";sSum.hidden=true;}
         title=U.pendH;
         if(DATA&&c&&!c.bad)renderCostDetail(sDet,c,oc);
+        var rp=ctaRow();rp.appendChild(ctaLink(withBookingParams(BOOK,{branch:"pending",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sRest.appendChild(rp);
       }else if(oc==="insurance"){
         var R=L.results.branchInsurance;kind="good";title=R.headline;
         sStatus.appendChild(statusBlock("good",R.headline,R.microCopy));
@@ -304,6 +305,9 @@
           r5.appendChild(ctaLink(L.craMyAccountUrl,R5.primaryCta,{external:true}));
           r5.appendChild(ctaLink(withBookingParams(BOOK,{branch:"tax-filing",utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(4)}),R5.secondaryCta,{variant:"secondary"}));
           sRest.appendChild(r5);
+        }
+        if(oc==="unconfirmed"){
+          var ru=ctaRow();ru.appendChild(ctaLink(withBookingParams(BOOK,{branch:"unconfirmed",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sRest.appendChild(ru);
         }
         if(oc==="qualified"||oc==="unconfirmed"){
           sRest.appendChild(billingNotice(L.results.billingNoticeHeading,L.results.billingNoticeBody));
