@@ -779,24 +779,6 @@ function CountUp({ value, lang, reduce, className }: { value: number; lang: Lang
   return <Money value={v} lang={lang} className={className} />;
 }
 
-/** Animates the card's height to its content, so a screen swap resizes the frame instead of jumping. */
-function AutoHeight({ children, reduce }: { children: ReactNode; reduce?: boolean | null }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [h, setH] = useState<number | "auto">("auto");
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || typeof ResizeObserver === "undefined") return;
-    const ro = new ResizeObserver(() => setH(el.offsetHeight));
-    ro.observe(el); setH(el.offsetHeight);
-    return () => ro.disconnect();
-  }, []);
-  return (
-    <motion.div initial={false} animate={{ height: h }} transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 32 }} style={{ overflow: "hidden" }}>
-      <div ref={ref}>{children}</div>
-    </motion.div>
-  );
-}
-
 /* ------------------------------------------------------------------------------------------------ small parts */
 function Money({ value, lang, className = "" }: { value: number; lang: Lang; className?: string }) {
   const parts = useMemo(() => new Intl.NumberFormat(lang === "fr" ? "fr-CA" : "en-CA", { style: "currency", currency: "CAD", minimumFractionDigits: 2 }).formatToParts(value), [value, lang]);
@@ -937,7 +919,6 @@ function Drawer({ title, children, reduce }: { title: string; children: ReactNod
 
 /* ------------------------------------------------------------------------------------------------ main component */
 type Screen = Step | "appt" | "result";
-const ORDER: Record<Screen, number> = { ins: 0, inc: 1, filed: 2, appt: 3, result: 4 };
 
 export function CdcpSingleBoxWidget({
   lang = "fr", clinicName, procedures, bookingUrl = "/#contact", phone, email, insurers, theme, stickyTop,
@@ -951,7 +932,6 @@ export function CdcpSingleBoxWidget({
   const [cur, setCur] = useState<Step | null>(null);
   const root = useRef<HTMLElement>(null), stage = useRef<HTMLDivElement>(null);
   const pointer = useRef(false), advance = useRef<ReturnType<typeof setTimeout>>(undefined);
-  const last = useRef(0), dir = useRef(1);
 
   const steps = requiredSteps(a);
   const view: Step | null = cur && steps.includes(cur) ? cur : firstUnanswered(a);
@@ -961,7 +941,6 @@ export function CdcpSingleBoxWidget({
   const needAppt = hasFees && oc !== "insurance";
   const screen: Screen = view ?? (needAppt && !a.appt ? "appt" : "result");
   const dark = screen === "result";
-  if (ORDER[screen] !== last.current) { dir.current = ORDER[screen] > last.current ? 1 : -1; last.current = ORDER[screen]; }
 
   useEffect(() => { onChange?.({ answers: a, outcome: oc, estimate: est, province }); }, [a, oc, est, province, onChange]);
   useEffect(() => () => clearTimeout(advance.current), []);
@@ -1074,24 +1053,27 @@ export function CdcpSingleBoxWidget({
       {oc === "qualified" && (hasCard ? (<>
         <CtaLink href={book({ branch: "qualified", cdcpTier: tier ?? "", hasCard: "1" })}>{U.bookNow}</CtaLink>
         <p className="pt-1 text-center"><button type="button" onClick={() => setHasCard(false)} className={`min-h-11 rounded-lg px-2 text-[13px] font-medium underline decoration-white/40 underline-offset-4 opacity-80 transition hover:opacity-100 ${FOCUS}`}>{U.noCardYet}</button></p></>) : (<>
-        <div className="space-y-1.5 pb-1">
+        <div className="space-y-1 pb-1">
           <motion.a href={L.cdcpApplyUrl} target="_blank" rel="noopener noreferrer" whileTap={reduce ? undefined : { scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}
-            className={`group flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/30 px-4 py-3 text-center text-sm font-semibold leading-snug transition-[border-color,background-color] duration-150 hover:border-white/60 hover:bg-white/10 active:border-white/60 active:bg-white/10 motion-reduce:transition-none ${FOCUS}`}>
+            className={`group flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-white/30 px-4 py-2 text-center text-[13px] font-semibold leading-snug transition-[border-color,background-color] duration-150 hover:border-white/60 hover:bg-white/10 active:border-white/60 active:bg-white/10 motion-reduce:transition-none ${FOCUS}`}>
             <FileText className="size-4 shrink-0 opacity-80" aria-hidden /><span>{U.applyLink}</span><ArrowUpRight className="size-4 shrink-0 transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
           </motion.a>
-          <p className="px-1 text-center text-xs leading-snug opacity-80">{U.applySub}</p>
+          <p className="px-1 text-center text-[11px] leading-snug opacity-80">{U.applySub}</p>
           <p className="text-center"><button type="button" onClick={() => setHasCard(true)} className={`min-h-11 rounded-lg px-2 text-[13px] font-medium underline decoration-white/40 underline-offset-4 opacity-90 transition hover:opacity-100 ${FOCUS}`}>{U.haveCard}</button></p>
         </div>
         <CtaLink href={book({ branch: "qualified", cdcpTier: tier ?? "", suggestedDate: weeksIso(7) })}>{R.branchQualified.step2Cta}</CtaLink>
-        <p className="px-1 pt-2 text-center text-xs leading-snug opacity-80">{U.bookSub}</p></>))}
+        <p className="px-1 pt-1.5 text-center text-[11px] leading-snug opacity-80">{U.bookSub}</p></>))}
     </div>
   );
+  const fade = reduce ? { duration: 0 } : { duration: 0.15, ease: "easeOut" as const };
+  const swap = { initial: { opacity: 0, scale: reduce ? 1 : 0.98 }, animate: { opacity: 1, scale: 1 }, exit: { opacity: 0, scale: reduce ? 1 : 0.98 }, transition: fade };
+
   const covers = est && est.tierPct && (est.covered > 0 || !est.excluded);
 
   const tone = TONE[head.tone === "good" ? "good" : head.tone === "bad" ? "bad" : "warn"];
   const resultScreen = (
-    <motion.div key="result" initial={{ opacity: 0, scale: reduce ? 1 : 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: reduce ? 1 : 0.96 }}
-      transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 25 }} className="relative space-y-4 px-6 pb-5 pt-3">
+    <motion.div key="result" {...swap} className="absolute inset-0 flex flex-col">
+      <div className="relative min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain px-6 pb-3 pt-3">
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-64" style={{ background: `radial-gradient(70% 90% at 50% 0%, ${tone.glow}, transparent)` }} />
       <Rise i={0} reduce={reduce} className="relative space-y-2">
         <p className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold ${tone.chip}`}>
@@ -1131,7 +1113,6 @@ export function CdcpSingleBoxWidget({
       )}
       {est?.bad && <p className="text-[15px] leading-snug text-amber-300">{U.unavailable}</p>}
 
-      <Rise i={3} reduce={reduce} className="relative">{ctaNode}</Rise>
       {contactRow && <Rise i={4} reduce={reduce} className="relative">{contactRow}</Rise>}
       {oc === "tax" && showFigure && <p className="text-xs opacity-80">{U.whenIssued}</p>}
       {oc === "unconfirmed" && showFigure && <p className="text-xs opacity-80">{U.ifQualify}</p>}
@@ -1161,18 +1142,15 @@ export function CdcpSingleBoxWidget({
       )}
       {oc === "insurance" && !!insurers?.length && <Drawer reduce={reduce} title={U.insurers}><p>{insurers.join(" · ")}</p></Drawer>}
       <button type="button" onClick={clear} className={`inline-flex min-h-11 items-center text-[13px] font-semibold underline underline-offset-4 opacity-80 hover:opacity-100 ${FOCUS}`}>{U.clear}</button>
+      <div aria-hidden className="pointer-events-none sticky -bottom-3 -mx-6 h-8 shrink-0 bg-gradient-to-t from-[var(--panel)] to-transparent" />
+      </div>
+      {/* pinned: the action never scrolls away */}
+      <Rise i={3} reduce={reduce} className="relative shrink-0 px-6 pb-5 pt-2">{ctaNode}</Rise>
     </motion.div>
   );
 
-  const slide = {
-    enter: (d: number) => ({ x: reduce ? 0 : d * 40, opacity: 0 }),
-    center: { x: 0, opacity: 1 },
-    exit: (d: number) => ({ x: reduce ? 0 : -d * 40, opacity: 0 }),
-  };
-  const slideT = reduce ? { duration: 0 } : { type: "spring" as const, stiffness: 380, damping: 36 };
-
   const body = screen === "result" ? resultScreen : (
-    <motion.div key={screen} custom={dir.current} variants={slide} initial="enter" animate="center" exit="exit" transition={slideT} className="px-6 pb-6 pt-3">
+    <motion.div key={screen} {...swap} className="absolute inset-0 overflow-y-auto overscroll-contain px-6 pb-6 pt-3">
       {view && (<>
         {view === "ins" && <Choice name={`${uid}ins`} legend={U.ins} hint={U.insI} options={yn("ins")} value={a.ins} onChange={(v) => set("ins", v)} onPointer={onPointer} reduce={reduce} />}
         {view === "inc" && <Choice name={`${uid}inc`} legend={U.inc} hint={U.incI} options={incomeOptions} value={a.inc} onChange={(v) => set("inc", v)} onPointer={onPointer} reduce={reduce} columns={2} />}
@@ -1190,16 +1168,16 @@ export function CdcpSingleBoxWidget({
   const stepN = view ? steps.indexOf(view) + 1 : steps.length;
   return (
     <section ref={root} aria-label={U.label} style={{ ...themeVars(theme, stickyTop), "--focus": dark ? "var(--onpanel)" : "var(--ink)" } as CSSProperties}
-      className={`@container relative isolate mx-auto w-full max-w-lg overflow-hidden rounded-3xl border bg-[var(--paper)] shadow-2xl transition-[color,border-color] duration-300 motion-reduce:transition-none ${dark ? "border-white/10 text-[var(--onpanel)] delay-300" : "border-[var(--line)] text-[var(--ink)]"} ${className}`}>
+      className={`@container relative isolate mx-auto flex h-[620px] w-full max-w-md flex-col overflow-hidden rounded-3xl border bg-[var(--paper)] shadow-2xl transition-[color,border-color] duration-300 motion-reduce:transition-none ${dark ? "border-white/10 text-[var(--onpanel)] delay-300" : "border-[var(--line)] text-[var(--ink)]"} ${className}`}>
       <AnimatePresence>
         {dark && <motion.div key="wash" aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-[var(--panel)]"
           initial={reduce ? false : { clipPath: "circle(0% at 50% 100%)" }} animate={{ clipPath: "circle(150% at 50% 100%)" }} exit={{ opacity: 0, transition: { duration: 0.25 } }}
           transition={reduce ? { duration: 0 } : { duration: 0.75, ease: [0.22, 1, 0.36, 1] }} />}
       </AnimatePresence>
       <div role="status" className="sr-only">{announce}</div>
-      <AutoHeight reduce={reduce}>
-        <div className="px-6 pt-4">
-          <p className="text-xs font-semibold uppercase leading-snug tracking-wider text-balance opacity-65">{HEADER[lang]}{clinicName ? ` • ${clinicName}` : ""}</p>
+      <>
+        <div className="shrink-0 px-6 pt-4">
+          <p className="text-xs font-semibold uppercase leading-snug tracking-wider text-balance opacity-65">{HEADER[lang]}{clinicName && !dark ? ` • ${clinicName}` : ""}</p>
           {showProvinceSwitcher && !dark && (
             <label className="mt-3 block">
               <span className="mb-1 block text-[13px] font-medium opacity-75">{U.chooseProv}</span>
@@ -1213,16 +1191,16 @@ export function CdcpSingleBoxWidget({
             </label>
           )}
         </div>
-        <div className="flex min-h-11 items-center justify-between gap-3 px-4 pt-1">
+        <div className="flex min-h-11 shrink-0 items-center justify-between gap-3 px-4 pt-1">
           {canBack
             ? <button type="button" onClick={goBack} aria-label={L.back} className={`inline-flex min-h-11 items-center gap-1 rounded-lg px-2 text-[13px] font-semibold ${dark ? "hover:bg-white/10" : "hover:bg-[var(--tint)]"} ${FOCUS}`}><ChevronLeft className="size-5" aria-hidden /><span>{L.back}</span></button>
             : <span />}
           {view && <Dots n={stepN} t={steps.length} label={(a.ins ? U.qn : U.qn.replace(/ (sur|of) \{t\}/, "")).replace("{n}", String(stepN)).replace("{t}", String(steps.length))} />}
         </div>
-        <div ref={stage}>
-          <AnimatePresence mode="wait" initial={false} custom={dir.current}>{body}</AnimatePresence>
+        <div ref={stage} className="relative min-h-0 flex-1 overflow-hidden">
+          <AnimatePresence mode="wait" initial={false}>{body}</AnimatePresence>
         </div>
-      </AutoHeight>
+      </>
     </section>
   );
 }
