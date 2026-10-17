@@ -63,6 +63,9 @@ export const PROVINCE_NAME: Record<Province, Record<Lang, string>> = {
   NU: { fr: "Nunavut", en: "Nunavut" },
 };
 /** The fee guide each region is compared against the federal CDCP grid with. Territories use the clinic fee rates. */
+const GUIDE_CODE: Record<Province, string> = { QC: "ACDQ", ON: "ODA", BC: "BCDA", AB: "ADA", NS: "NSDA", NB: "NBDS", PE: "DAPEI", MB: "MDA", SK: "CDSS", NL: "NLDA", YT: "", NT: "", NU: "" };
+/** Dropdown text: the full name, then the fee guide used, e.g. "Ontario (ODA 2026)". */
+export const provinceOption = (pv: Province, lang: Lang) => `${PROVINCE_NAME[pv][lang]} (${GUIDE_CODE[pv] ? `${GUIDE_CODE[pv]} ` : ""}2026)`;
 export const PROVINCE_GUIDE: Record<Province, Record<Lang, string>> = {
   QC: { fr: "Guide ACDQ 2026", en: "ACDQ 2026 fee guide" },
   ON: { fr: "Guide ODA 2026", en: "ODA 2026 fee guide" },
@@ -81,35 +84,43 @@ export const PROVINCE_GUIDE: Record<Province, Record<Lang, string>> = {
 
 /** Ontario bundles, 2026: the dentist's fee (ODA fee guide) and the CDCP fee-schedule amount for the same visit.
  *  Source: supplied by SSS, NOT yet verified against the ODA guide or the CDCP Ontario schedule. Confirm with the clinic before go-live. */
+/** Québec bundle from the 17 Oct brief. NOT used by the estimate: Québec keeps the code-level ACDQ fee data (`procedures`), which is the verified source.
+ *  Kept for reference; it differs from what the fee codes produce. */
+export const QUEBEC_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
+  new: { oda: 352, cdcpGrid: 298 },
+  recall: { oda: 182, cdcpGrid: 168 },
+  emerg: { oda: 138, cdcpGrid: 98 },
+};
+
 export const ONTARIO_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
-  new: { oda: 423, cdcpGrid: 342 },
-  recall: { oda: 240, cdcpGrid: 190 },
-  emerg: { oda: 148, cdcpGrid: 102 },
+  new: { oda: 368, cdcpGrid: 312 },
+  recall: { oda: 194, cdcpGrid: 178 },
+  emerg: { oda: 146, cdcpGrid: 104 },
 };
 
 /** British Columbia bundles, 2026: BCDA fee guide vs CDCP schedule (`oda` holds the provincial guide fee). Supplied by SSS, NOT yet verified. */
 export const BC_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
-  new: { oda: 418, cdcpGrid: 326.1 },
-  recall: { oda: 187.9, cdcpGrid: 182.54 },
-  emerg: { oda: 137, cdcpGrid: 80.43 },
+  new: { oda: 361, cdcpGrid: 308 },
+  recall: { oda: 188, cdcpGrid: 172 },
+  emerg: { oda: 142, cdcpGrid: 102 },
 };
 
 /** Alberta bundles, 2026: ADA fee guide vs CDCP schedule. Supplied by SSS, NOT yet verified. */
 export const ALBERTA_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
-  new: { oda: 466.1, cdcpGrid: 421.52 },
-  recall: { oda: 255.55, cdcpGrid: 244.56 },
-  emerg: { oda: 191.15, cdcpGrid: 162.2 },
+  new: { oda: 382, cdcpGrid: 324 },
+  recall: { oda: 204, cdcpGrid: 186 },
+  emerg: { oda: 152, cdcpGrid: 110 },
 };
 /** Remaining provinces and territories, 2026 (provincial fee guide vs CDCP schedule). Supplied by SSS, NOT yet verified. */
 export const NOVA_SCOTIA_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
-  new: { oda: 296, cdcpGrid: 278 },
-  recall: { oda: 155, cdcpGrid: 173 },
-  emerg: { oda: 148, cdcpGrid: 100 },
+  new: { oda: 341, cdcpGrid: 292 },
+  recall: { oda: 168, cdcpGrid: 156 },
+  emerg: { oda: 132, cdcpGrid: 94 },
 };
 export const NEW_BRUNSWICK_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
-  new: { oda: 348, cdcpGrid: 296 },
-  recall: { oda: 171, cdcpGrid: 157.5 },
-  emerg: { oda: 140, cdcpGrid: 94 },
+  new: { oda: 338, cdcpGrid: 290 },
+  recall: { oda: 164, cdcpGrid: 152 },
+  emerg: { oda: 128, cdcpGrid: 92 },
 };
 export const PEI_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
   new: { oda: 334, cdcpGrid: 288 },
@@ -1072,8 +1083,8 @@ export function CdcpSingleBoxWidget({
 
   const tone = TONE[head.tone === "good" ? "good" : head.tone === "bad" ? "bad" : "warn"];
   const resultScreen = (
-    <motion.div key="result" {...swap} className="absolute inset-0 flex flex-col">
-      <div className="relative min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain px-6 pb-3 pt-3">
+    <motion.div key="result" {...swap} className="absolute inset-0 flex flex-col @3xl:grid @3xl:grid-cols-12">
+      <div className="relative min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain px-6 pb-3 pt-3 @3xl:col-span-7 @3xl:px-8">
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-64" style={{ background: `radial-gradient(70% 90% at 50% 0%, ${tone.glow}, transparent)` }} />
       <Rise i={0} reduce={reduce} className="relative space-y-2">
         <p className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold ${tone.chip}`}>
@@ -1145,12 +1156,13 @@ export function CdcpSingleBoxWidget({
       <div aria-hidden className="pointer-events-none sticky -bottom-3 -mx-6 h-8 shrink-0 bg-gradient-to-t from-[var(--panel)] to-transparent" />
       </div>
       {/* pinned: the action never scrolls away */}
-      <Rise i={3} reduce={reduce} className="relative shrink-0 px-6 pb-5 pt-2">{ctaNode}</Rise>
+      <Rise i={3} reduce={reduce} className="relative shrink-0 px-6 pb-5 pt-2 @3xl:col-span-5 @3xl:flex @3xl:flex-col @3xl:justify-center @3xl:border-l @3xl:border-white/10 @3xl:px-8 @3xl:pb-8">{ctaNode}</Rise>
     </motion.div>
   );
 
   const body = screen === "result" ? resultScreen : (
-    <motion.div key={screen} {...swap} className="absolute inset-0 overflow-y-auto overscroll-contain px-6 pb-6 pt-3">
+    <motion.div key={screen} {...swap} className="absolute inset-0 overflow-y-auto overscroll-contain px-6 pb-6 pt-3 @3xl:px-8">
+      <div className="mx-auto w-full max-w-md">
       {view && (<>
         {view === "ins" && <Choice name={`${uid}ins`} legend={U.ins} hint={U.insI} options={yn("ins")} value={a.ins} onChange={(v) => set("ins", v)} onPointer={onPointer} reduce={reduce} />}
         {view === "inc" && <Choice name={`${uid}inc`} legend={U.inc} hint={U.incI} options={incomeOptions} value={a.inc} onChange={(v) => set("inc", v)} onPointer={onPointer} reduce={reduce} columns={2} />}
@@ -1162,13 +1174,15 @@ export function CdcpSingleBoxWidget({
         )}
       </>)}
       {screen === "appt" && <><div className="mb-4">{chip(false)}</div><Choice name={`${uid}appt`} legend={U.appt} options={visitOptions} value={a.appt} onChange={(v) => set("appt", v)} onPointer={onPointer} reduce={reduce} /></>}
+      </div>
     </motion.div>
   );
 
   const stepN = view ? steps.indexOf(view) + 1 : steps.length;
   return (
+    <div className="@container mx-auto w-full max-w-md md:max-w-4xl">
     <section ref={root} aria-label={U.label} style={{ ...themeVars(theme, stickyTop), "--focus": dark ? "var(--onpanel)" : "var(--ink)" } as CSSProperties}
-      className={`@container relative isolate mx-auto flex h-[620px] w-full max-w-md flex-col overflow-hidden rounded-3xl border bg-[var(--paper)] shadow-2xl transition-[color,border-color] duration-300 motion-reduce:transition-none ${dark ? "border-white/10 text-[var(--onpanel)] delay-300" : "border-[var(--line)] text-[var(--ink)]"} ${className}`}>
+      className={`@container relative isolate flex h-[620px] max-h-[calc(100dvh-2rem)] w-full flex-col overflow-hidden rounded-3xl @3xl:h-[580px] border bg-[var(--paper)] shadow-2xl transition-[color,border-color] duration-300 motion-reduce:transition-none ${dark ? "border-white/10 text-[var(--onpanel)] delay-300" : "border-[var(--line)] text-[var(--ink)]"} ${className}`}>
       <AnimatePresence>
         {dark && <motion.div key="wash" aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-[var(--panel)]"
           initial={reduce ? false : { clipPath: "circle(0% at 50% 100%)" }} animate={{ clipPath: "circle(150% at 50% 100%)" }} exit={{ opacity: 0, transition: { duration: 0.25 } }}
@@ -1176,22 +1190,22 @@ export function CdcpSingleBoxWidget({
       </AnimatePresence>
       <div role="status" className="sr-only">{announce}</div>
       <>
-        <div className="shrink-0 px-6 pt-4">
-          <p className="text-xs font-semibold uppercase leading-snug tracking-wider text-balance opacity-65">{HEADER[lang]}{clinicName && !dark ? ` • ${clinicName}` : ""}</p>
+        <div className="shrink-0 px-6 pt-4 @3xl:px-8 @3xl:pt-6">
+          <p className="text-[11px] font-semibold uppercase leading-snug tracking-wider text-balance opacity-65 @3xl:text-xs">{HEADER[lang]}{clinicName && !dark ? ` • ${clinicName}` : ""}</p>
           {showProvinceSwitcher && !dark && (
-            <label className="mt-3 block">
+            <label className="mt-3 block @3xl:w-72">
               <span className="mb-1 block text-[13px] font-medium opacity-75">{U.chooseProv}</span>
               <span className="relative block">
                 <select value={province} onChange={(e) => setProvince(e.target.value as Province)}
                   className={`min-h-12 w-full cursor-pointer appearance-none rounded-2xl border-2 border-transparent bg-[color-mix(in_srgb,var(--ink)_6%,var(--paper))] py-2 pl-4 pr-10 text-[15px] font-semibold text-[var(--ink)] transition-colors duration-200 hover:border-[color-mix(in_srgb,var(--p)_40%,transparent)] ${FOCUS}`}>
-                  {PROVINCES.map((pv) => <option key={pv} value={pv}>{PROVINCE_NAME[pv][lang]}</option>)}
+                  {PROVINCES.map((pv) => <option key={pv} value={pv}>{provinceOption(pv, lang)}</option>)}
                 </select>
                 <ChevronDown aria-hidden className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 opacity-60" />
               </span>
             </label>
           )}
         </div>
-        <div className="flex min-h-11 shrink-0 items-center justify-between gap-3 px-4 pt-1">
+        <div className="flex min-h-11 shrink-0 items-center justify-between gap-3 px-4 pt-1 @3xl:px-6">
           {canBack
             ? <button type="button" onClick={goBack} aria-label={L.back} className={`inline-flex min-h-11 items-center gap-1 rounded-lg px-2 text-[13px] font-semibold ${dark ? "hover:bg-white/10" : "hover:bg-[var(--tint)]"} ${FOCUS}`}><ChevronLeft className="size-5" aria-hidden /><span>{L.back}</span></button>
             : <span />}
@@ -1202,6 +1216,7 @@ export function CdcpSingleBoxWidget({
         </div>
       </>
     </section>
+    </div>
   );
 }
 
