@@ -108,6 +108,7 @@
 /* result: back, state, figure, split, actions, call or write, what is included, fine print. Blocks rise in one after another. */
 .cdcp[data-view="result"] :is(.cq-status,.cq-sum,.cq-brk,.cq-act,.cq-contact,.cq-det){animation:cq-rise .5s var(--ease) both}
 .cdcp[data-view="result"] :is(.cq-ctl,.cq-ctl-in){display:contents}
+.cdcp[data-view="result"] .cq-title{order:-1;margin:var(--s4) var(--s5) 0}
 .cdcp[data-view="result"] .cq-stg-h{order:0;margin:0;padding:var(--s2) var(--s4) 0}
 .cdcp[data-view="result"] .cq-status{order:1;padding-top:var(--s2);animation-delay:.3s}
 .cdcp[data-view="result"] .cq-sum{order:2;padding-top:var(--s3);animation-delay:.37s}
@@ -247,9 +248,11 @@
 .cdcp .cq-matrix-item-note{font-size:var(--t-s);line-height:1.6;opacity:.8;border-left:2px solid var(--c-line);padding-left:var(--s3)}
 
 /* ---- stage: back + progress, the answer chip, the continue action ---- */
-.cdcp .cq-prov{position:relative;display:block;justify-self:end;max-width:100%}
-.cdcp .cq-prov::after{content:"\25BE";position:absolute;right:var(--s3);top:50%;transform:translateY(-50%);pointer-events:none;opacity:.6;font-size:var(--t-s)}
-.cdcp .cq-prov-s{appearance:none;min-height:var(--h);padding:0 var(--s5) 0 var(--s3);border:0;border-radius:var(--c-card-r);background:color-mix(in srgb,var(--c-ink) 6%,var(--c-paper));color:var(--c-ink);font:inherit;font-size:var(--t-s);font-weight:600;cursor:pointer}
+.cdcp .cq-title{margin:0;font-size:var(--t-s);font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.6}
+.cdcp .cq-prov{position:relative;display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:var(--h);padding:0 var(--s3) 0 var(--s4);border-radius:var(--c-card-r);background:color-mix(in srgb,var(--c-ink) 6%,var(--c-paper));cursor:pointer}
+.cdcp .cq-prov-l{font-size:var(--t-m);font-weight:500;opacity:.7}
+.cdcp .cq-prov::after{content:"\25BE";pointer-events:none;opacity:.6;font-size:var(--t-s);order:3}
+.cdcp .cq-prov-s{appearance:none;min-height:var(--h);padding:0 var(--s1) 0 var(--s2);margin-left:auto;border:0;background:transparent;color:var(--c-ink);font:inherit;font-size:var(--t-m);font-weight:600;cursor:pointer}
 .cdcp .cq-stg-h{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:var(--s5);margin-bottom:var(--s1)}
 .cdcp .cq-stg-n{display:inline-flex;align-items:center;gap:var(--s3);margin-left:auto;font-size:var(--t-s)}
 .cdcp .cq-stg-n b{font-weight:600}

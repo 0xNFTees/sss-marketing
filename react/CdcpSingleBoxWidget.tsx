@@ -513,6 +513,7 @@ export const UI = {
   "prog": "Réponses : {n} sur {t}",
   "estNote": "Estimation selon le guide tarifaire, pas une soumission.",
   "province": "Province",
+  "chooseProv": "Choisir une province",
   "share": "Votre part estimée",
     "total": "Coût total",
     "viewCalc": "Voir le calcul",
@@ -627,6 +628,7 @@ export const UI = {
   "prog": "{n} of {t} answered",
   "estNote": "Estimate from the fee guide, not a quote.",
   "province": "Province",
+  "chooseProv": "Choose province",
   "share": "Your estimated share",
     "total": "Total cost",
     "viewCalc": "See the calculation",
@@ -701,7 +703,7 @@ export interface EmbeddableDentalCalculatorProps {
 }
 
 /* ------------------------------------------------------------------------------------------------ helpers */
-const HEADER = { fr: "Calculateur dentaire", en: "Dental calculator" } as const;
+const HEADER = { fr: "Calculatrice RCSD", en: "CDCP Calculator" } as const;
 const nb = (s: string) => s.replace(/(\d) (?=\d)/g, "$1 ").replace(/ (%|\$)/g, " $1");
 const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus,var(--ink))]";
 
@@ -1167,19 +1169,19 @@ export function CdcpSingleBoxWidget({
       <div role="status" className="sr-only">{announce}</div>
       <AutoHeight reduce={reduce}>
         <div className="px-6 pt-4">
-          <div className="flex items-center justify-between gap-3">
-            <p className="min-w-0 truncate text-[11px] font-semibold uppercase tracking-wider opacity-60">{HEADER[lang]}{clinicName ? ` • ${clinicName}` : ""}</p>
-            {showProvinceSwitcher && !dark && (
-              <label className="relative shrink-0">
-                <span className="sr-only">{U.province}</span>
+          <p className="truncate text-[11px] font-semibold uppercase tracking-wider opacity-60">{HEADER[lang]}{clinicName ? ` • ${clinicName}` : ""}</p>
+          {showProvinceSwitcher && !dark && (
+            <label className={`mt-2 flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded-2xl bg-[color-mix(in_srgb,var(--ink)_6%,var(--paper))] pl-4 pr-3 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--focus,var(--ink))]`}>
+              <span className="text-[13px] font-medium opacity-70">{U.chooseProv}</span>
+              <span className="relative">
                 <select value={province} onChange={(e) => setProvince(e.target.value as Province)}
-                  className={`min-h-11 cursor-pointer appearance-none rounded-full bg-[color-mix(in_srgb,var(--ink)_7%,var(--paper))] py-1 pl-3.5 pr-8 text-[11px] font-semibold text-[var(--ink)] ${FOCUS}`}>
+                  className="min-h-11 cursor-pointer appearance-none bg-transparent py-1 pl-2 pr-6 text-[13px] font-semibold text-[var(--ink)] outline-none">
                   {PROVINCES.map((pv) => <option key={pv} value={pv}>{PROVINCE_LABEL[pv]}</option>)}
                 </select>
-                <ChevronDown aria-hidden className="pointer-events-none absolute right-3 top-1/2 size-3.5 -translate-y-1/2 opacity-60" />
-              </label>
-            )}
-          </div>
+                <ChevronDown aria-hidden className="pointer-events-none absolute right-0 top-1/2 size-4 -translate-y-1/2 opacity-60" />
+              </span>
+            </label>
+          )}
         </div>
         <div className="flex min-h-11 items-center justify-between gap-3 px-4 pt-1">
           {canBack

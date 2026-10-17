@@ -42,7 +42,7 @@
       tierUnconfirmed:"Palier RCSD : jusqu’à {n} %. Confirmez votre déclaration d’impôts.", whenIssued:"Montant estimé une fois la carte RCSD reçue.",
       pre:"Préautorisation du RCSD requise.", lab:"Frais de laboratoire en sus.", excl:"Non couvert par le RCSD.",
       ramq:"Enfants de moins de 10 ans : la RAMQ couvre déjà les soins de base.",
-      province:"Province",
+      province:"Province",chooseProv:"Choisir une province",title:"Calculatrice RCSD",
       disc:"Estimation seulement. Chaque clinique fixe ses tarifs. Limites annuelles et frais de laboratoire non inclus.", matrix:"Soins couverts, autorisation et exclusions", insurers:"Assureurs acceptés par la clinique :",
       pk:{new:["Nouveau patient","Examen complet, radiographies diagnostiques, nettoyage, fluorure"],recall:["Rappel et nettoyage","Examen périodique, nettoyage"],
           emerg:["Urgence, mal de dent","Examen d’urgence, radiographie","Un traitement immédiat (obturation, canal, extraction) s’ajoute au tarif."],}},
@@ -57,7 +57,7 @@
       tierUnconfirmed:"CDCP tier: up to {n}%. Confirm your tax filing.", whenIssued:"Estimated amount once your CDCP card is issued.",
       pre:"CDCP pre-authorization required.", lab:"Lab fee billed extra.", excl:"Not covered by CDCP.",
       ramq:"Children under 10: RAMQ already covers basic care.",
-      province:"Province",
+      province:"Province",chooseProv:"Choose province",title:"CDCP Calculator",
       disc:"Estimate only. Each clinic sets its own fees. Annual limits and lab fees not included.", matrix:"Covered care, authorization and exclusions", insurers:"Insurers accepted by the clinic:",
       pk:{new:["New patient","Complete exam, diagnostic X-rays, cleaning, fluoride"],recall:["Recall and cleaning","Periodic exam, cleaning"],
           emerg:["Emergency, toothache","Emergency exam, X-ray","Immediate treatment (filling, root canal, extraction) is extra."],}}
@@ -258,7 +258,7 @@
     function provBar(){
       if(!DATA||opts.switcher===false)return null;
       var w=node("label","cq-prov"),sel=node("select","cq-prov-s");
-      w.appendChild(node("span","cq-sr",esc(U.province)));
+      w.appendChild(node("span","cq-prov-l",esc(U.chooseProv)));
       PROVS.forEach(function(k){var o=node("option","",esc(PLABEL[k]));o.value=k;if(PROV===k)o.selected=true;sel.appendChild(o);});
       sel.addEventListener("change",function(){PROV=sel.value;update();renderCtl(false);});
       w.appendChild(sel);return w;
@@ -266,6 +266,7 @@
     function renderCtl(focus){
       clearTimeout(advT);var h0=root.offsetHeight;cin.innerHTML="";
       var sc=screen(),v=view(),r=required(),first=null;shownKey=null;nextBtn=null;
+      cin.appendChild(node("p","cq-title",esc(U.title)));
       if(sc!=="result"){var pb=provBar();if(pb)cin.appendChild(pb);}
       if(sc==="q"){
         shownKey=v;
