@@ -45,8 +45,9 @@ export const VISITS: readonly { id: VisitId; items: readonly (readonly [string, 
   { id: "emerg", items: [["01205", 1], ["02102", 1]] },
 ];
 
-export type Province = "QC" | "ON";
-export const PROVINCE_LABEL: Record<Province, string> = { QC: "QC (ACDQ)", ON: "ON (ODA)" };
+export type Province = "QC" | "ON" | "BC";
+export const PROVINCES: readonly Province[] = ["QC", "ON", "BC"];
+export const PROVINCE_LABEL: Record<Province, string> = { QC: "QC (ACDQ)", ON: "ON (ODA)", BC: "BC (BCDA)" };
 
 /** Ontario bundles, 2026: the dentist's fee (ODA fee guide) and the CDCP fee-schedule amount for the same visit.
  *  Source: supplied by SSS, NOT yet verified against the ODA guide or the CDCP Ontario schedule. Confirm with the clinic before go-live. */
@@ -55,6 +56,14 @@ export const ONTARIO_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cd
   recall: { oda: 240, cdcpGrid: 190 },
   emerg: { oda: 148, cdcpGrid: 102 },
 };
+
+/** British Columbia bundles, 2026: BCDA fee guide vs CDCP schedule (`oda` holds the provincial guide fee). Supplied by SSS, NOT yet verified. */
+export const BC_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
+  new: { oda: 418, cdcpGrid: 326.1 },
+  recall: { oda: 187.9, cdcpGrid: 182.54 },
+  emerg: { oda: 137, cdcpGrid: 80.43 },
+};
+const BUNDLES: Record<Exclude<Province, "QC">, typeof ONTARIO_APPOINTMENT_BUNDLES_2026> = { ON: ONTARIO_APPOINTMENT_BUNDLES_2026, BC: BC_APPOINTMENT_BUNDLES_2026 };
 
 export type Outcome = "pending" | "insurance" | "income" | "tax" | "qualified" | "unconfirmed";
 
@@ -93,9 +102,9 @@ export function estimate(a: Answers, byCode: ReadonlyMap<string, Procedure> | nu
   if (!visit) return null;
   const known = a.ins === "no" && !!a.inc;
   const tp = known && a.inc ? TIER_PCT[a.inc] ?? 0 : null;
-  if (province === "ON") {
+  if (province !== "QC") {
     // Same rule as Quebec (CDCP pays tier % of its schedule, never more than the fee), applied to the whole visit bundle.
-    const b = ONTARIO_APPOINTMENT_BUNDLES_2026[visit.id];
+    const b = BUNDLES[province][visit.id];
     const cov = known ? cents(Math.min(b.cdcpGrid * (tp ?? 0), b.oda)) : 0;
     return { visit: visit.id, bad: false, fee: b.oda, covered: cov, patient: cents(b.oda - cov), known, tierPct: tp, preAuth: false, lab: false, excluded: false };
   }
@@ -852,7 +861,7 @@ export function CdcpSingleBoxWidget({
   const L = LABELS[lang], U = UI[lang], uid = useId(), reduce = useReducedMotion();
   const byCode = useMemo(() => indexProcedures(procedures), [procedures]);
   const [province, setProvince] = useState<Province>(defaultProvince);
-  const hasFees = !!byCode || province === "ON";
+  const hasFees = !!byCode || province !== "QC";
   const [a, setA] = useState<Answers>({ ...EMPTY_ANSWERS, ...defaultAnswers });
   const [cur, setCur] = useState<Step | null>(null);
   const root = useRef<HTMLElement>(null), stage = useRef<HTMLDivElement>(null);
@@ -1109,7 +1118,7 @@ export function CdcpSingleBoxWidget({
             <p className="min-w-0 truncate text-[11px] font-semibold uppercase tracking-wider opacity-60">{HEADER[lang]}{clinicName ? ` • ${clinicName}` : ""}</p>
             {showProvinceSwitcher && !dark && (
               <div role="group" aria-label={U.province} className="flex shrink-0 rounded-full bg-[color-mix(in_srgb,var(--ink)_7%,var(--paper))] p-0.5">
-                {(["QC", "ON"] as const).map((pv) => (
+                {PROVINCES.map((pv) => (
                   <button key={pv} type="button" aria-pressed={province === pv} onClick={() => setProvince(pv)}
                     className={`relative min-h-8 rounded-full px-2.5 text-[11px] font-semibold transition-colors duration-150 before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-[''] ${province === pv ? "bg-[var(--paper)] text-[var(--ink)] shadow-sm" : "text-[var(--ink)] opacity-60 hover:opacity-100"} ${FOCUS}`}>
                     {PROVINCE_LABEL[pv]}
