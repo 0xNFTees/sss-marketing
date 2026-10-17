@@ -249,10 +249,10 @@
 
 /* ---- stage: back + progress, the answer chip, the continue action ---- */
 .cdcp .cq-title{margin:0;font-size:var(--t-s);font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.6}
-.cdcp .cq-prov{position:relative;display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:var(--h);padding:0 var(--s3) 0 var(--s4);border-radius:var(--c-card-r);background:color-mix(in srgb,var(--c-ink) 6%,var(--c-paper));cursor:pointer}
-.cdcp .cq-prov-l{font-size:var(--t-m);font-weight:500;opacity:.7}
-.cdcp .cq-prov::after{content:"\25BE";pointer-events:none;opacity:.6;font-size:var(--t-s);order:3}
-.cdcp .cq-prov-s{appearance:none;min-height:var(--h);padding:0 var(--s1) 0 var(--s2);margin-left:auto;border:0;background:transparent;color:var(--c-ink);font:inherit;font-size:var(--t-m);font-weight:600;cursor:pointer}
+.cdcp .cq-prov{position:relative;display:block}
+.cdcp .cq-prov-l{display:block;margin-bottom:var(--s1);font-size:var(--t-m);font-weight:500;opacity:.75}
+.cdcp .cq-prov::after{content:"\25BE";position:absolute;right:var(--s4);bottom:0;height:var(--h);display:grid;place-items:center;pointer-events:none;opacity:.6;font-size:var(--t-s)}
+.cdcp .cq-prov-s{appearance:none;display:block;width:100%;min-height:var(--h);padding:0 var(--s5) 0 var(--s4);border:0;border-radius:var(--c-card-r);background:color-mix(in srgb,var(--c-ink) 6%,var(--c-paper));color:var(--c-ink);font:inherit;font-size:var(--t-l);font-weight:600;cursor:pointer}
 .cdcp .cq-stg-h{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:var(--s5);margin-bottom:var(--s1)}
 .cdcp .cq-stg-n{display:inline-flex;align-items:center;gap:var(--s3);margin-left:auto;font-size:var(--t-s)}
 .cdcp .cq-stg-n b{font-weight:600}

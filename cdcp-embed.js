@@ -42,7 +42,7 @@
       tierUnconfirmed:"Palier RCSD : jusqu’à {n} %. Confirmez votre déclaration d’impôts.", whenIssued:"Montant estimé une fois la carte RCSD reçue.",
       pre:"Préautorisation du RCSD requise.", lab:"Frais de laboratoire en sus.", excl:"Non couvert par le RCSD.",
       ramq:"Enfants de moins de 10 ans : la RAMQ couvre déjà les soins de base.",
-      province:"Province",chooseProv:"Choisir une province",title:"Calculatrice RCSD",
+      province:"Province",chooseProv:"Choisir une province",title:"Régime canadien de soins dentaires",
       disc:"Estimation seulement. Chaque clinique fixe ses tarifs. Limites annuelles et frais de laboratoire non inclus.", matrix:"Soins couverts, autorisation et exclusions", insurers:"Assureurs acceptés par la clinique :",
       pk:{new:["Nouveau patient","Examen complet, radiographies diagnostiques, nettoyage, fluorure"],recall:["Rappel et nettoyage","Examen périodique, nettoyage"],
           emerg:["Urgence, mal de dent","Examen d’urgence, radiographie","Un traitement immédiat (obturation, canal, extraction) s’ajoute au tarif."],}},
@@ -57,7 +57,7 @@
       tierUnconfirmed:"CDCP tier: up to {n}%. Confirm your tax filing.", whenIssued:"Estimated amount once your CDCP card is issued.",
       pre:"CDCP pre-authorization required.", lab:"Lab fee billed extra.", excl:"Not covered by CDCP.",
       ramq:"Children under 10: RAMQ already covers basic care.",
-      province:"Province",chooseProv:"Choose province",title:"CDCP Calculator",
+      province:"Province",chooseProv:"Choose province",title:"Canadian Dental Care Plan",
       disc:"Estimate only. Each clinic sets its own fees. Annual limits and lab fees not included.", matrix:"Covered care, authorization and exclusions", insurers:"Insurers accepted by the clinic:",
       pk:{new:["New patient","Complete exam, diagnostic X-rays, cleaning, fluoride"],recall:["Recall and cleaning","Periodic exam, cleaning"],
           emerg:["Emergency, toothache","Emergency exam, X-ray","Immediate treatment (filling, root canal, extraction) is extra."],}}
@@ -128,6 +128,9 @@
     var nf=new Intl.NumberFormat(lang==="fr"?"fr-CA":"en-CA",{style:"currency",currency:"CAD",minimumFractionDigits:2});
     var DATA=(window.CDCP_PROVINCES||{}).QC,byCode={};
     var PROVS=["QC","ON","BC","AB","NS","NB","PE","MB","SK","NL","YT","NT","NU"],PLABEL={QC:"QC (ACDQ)",ON:"ON (ODA)",BC:"BC (BCDA)",AB:"AB (ADA)",NS:"NS (NSDA)",NB:"NB (NBDS)",PE:"PE (DAPEI)",MB:"MB (MDA)",SK:"SK (CDSS)",NL:"NL (NLDA)",YT:"YT",NT:"NT",NU:"NU"},PROV=PROVS.indexOf(opts.province)>=0?opts.province:"QC";
+    var PNAME={fr:{QC:"Québec",ON:"Ontario",BC:"Colombie-Britannique",AB:"Alberta",NS:"Nouvelle-Écosse",NB:"Nouveau-Brunswick",PE:"Île-du-Prince-Édouard",MB:"Manitoba",SK:"Saskatchewan",NL:"Terre-Neuve-et-Labrador",YT:"Yukon",NT:"Territoires du Nord-Ouest",NU:"Nunavut"},en:{QC:"Quebec",ON:"Ontario",BC:"British Columbia",AB:"Alberta",NS:"Nova Scotia",NB:"New Brunswick",PE:"Prince Edward Island",MB:"Manitoba",SK:"Saskatchewan",NL:"Newfoundland and Labrador",YT:"Yukon",NT:"Northwest Territories",NU:"Nunavut"}};
+    // the fee guide each region is compared against the CDCP grid with (territories use clinic fee rates)
+    var PGUIDE={fr:{QC:"Guide ACDQ 2026",ON:"Guide ODA 2026",BC:"Guide BCDA 2026",AB:"Guide ADA 2026",NS:"Guide NSDA 2026",NB:"Guide NBDS 2026",PE:"Guide DAPEI 2026",MB:"Guide MDA 2026",SK:"Guide CDSS 2026",NL:"Guide NLDA 2026",YT:"Tarifs 2026 : Yukon",NT:"Tarifs 2026 : Territoires du Nord-Ouest",NU:"Tarifs 2026 : Nunavut"},en:{QC:"ACDQ 2026 fee guide",ON:"ODA 2026 fee guide",BC:"BCDA 2026 fee guide",AB:"ADA 2026 fee guide",NS:"NSDA 2026 fee guide",NB:"NBDS 2026 fee guide",PE:"DAPEI 2026 fee guide",MB:"MDA 2026 fee guide",SK:"CDSS 2026 fee guide",NL:"NLDA 2026 fee guide",YT:"Yukon 2026 fee rates",NT:"Northwest Territories 2026 fee rates",NU:"Nunavut 2026 fee rates"}};
     // 2026 appointment bundles: f = provincial dentists' fee guide, g = CDCP fee schedule. Supplied by SSS, NOT yet verified (confirm with a clinic before go-live).
     var BUNDLES={ON:{new:{f:423,g:342},recall:{f:240,g:190},emerg:{f:148,g:102}},BC:{new:{f:418,g:326.1},recall:{f:187.9,g:182.54},emerg:{f:137,g:80.43}},AB:{new:{f:466.1,g:421.52},recall:{f:255.55,g:244.56},emerg:{f:191.15,g:162.2}},NS:{new:{f:296,g:278},recall:{f:155,g:173},emerg:{f:148,g:100}},NB:{new:{f:348,g:296},recall:{f:171,g:157.5},emerg:{f:140,g:94}},PE:{new:{f:334,g:288},recall:{f:161,g:154},emerg:{f:142,g:96}},MB:{new:{f:346.91,g:295.09},recall:{f:188.17,g:165.14},emerg:{f:130,g:92}},SK:{new:{f:321,g:278},recall:{f:151.8,g:142},emerg:{f:113,g:90}},NL:{new:{f:383.92,g:314},recall:{f:214.21,g:188},emerg:{f:145,g:100}},YT:{new:{f:462,g:382},recall:{f:226,g:202},emerg:{f:162,g:124}},NT:{new:{f:509,g:422},recall:{f:252,g:220},emerg:{f:176,g:134}},NU:{new:{f:544,g:454},recall:{f:270,g:234},emerg:{f:190,g:146}}};
     function HAS(){return !!DATA||PROV!=="QC";}
@@ -259,7 +262,7 @@
       if(!DATA||opts.switcher===false)return null;
       var w=node("label","cq-prov"),sel=node("select","cq-prov-s");
       w.appendChild(node("span","cq-prov-l",esc(U.chooseProv)));
-      PROVS.forEach(function(k){var o=node("option","",esc(PLABEL[k]));o.value=k;if(PROV===k)o.selected=true;sel.appendChild(o);});
+      PROVS.forEach(function(k){var o=node("option","",esc(PNAME[lang][k]));o.value=k;if(PROV===k)o.selected=true;sel.appendChild(o);});
       sel.addEventListener("change",function(){PROV=sel.value;update();renderCtl(false);});
       w.appendChild(sel);return w;
     }
@@ -404,7 +407,7 @@
       split.appendChild(node("div",null,'<dt>'+esc(U.paid)+'</dt><dd class="'+(c.cov?"cq-good-t":"cq-dim")+(tc?" cq-tick":"")+'">'+(c.known?(c.cov?"− ":"")+esc(nf.format(c.cov)):esc(U.byAnswers))+'</dd>'));
       if(c.known&&c.cov>0)sBrk.appendChild(textNode("p","cq-save",U.save.replace("{n}",nf.format(c.cov))));
       sBrk.appendChild(split);
-      sBrk.appendChild(textNode("p","cq-estnote",(c.known?nb(tierTxt)+" · ":"")+U.estNote));
+      sBrk.appendChild(textNode("p","cq-estnote",(c.known?nb(tierTxt)+" · ":"")+U.estNote+" · "+PGUIDE[lang][PROV]+" / "+(lang==="fr"?"grille du RCSD":"CDCP grid")));
       t.appendChild(secLabel("limits"));
       t.appendChild(node("p","cq-incl","<b>"+esc(U.incl)+"</b>"+(lang==="fr"?" : ":": ")+esc(U.pk[c.pk.id][1])));
       var notes=[];
