@@ -65,7 +65,7 @@
   --dur-press:.1s;--dur-state:.16s;--dur-value:.26s;--ease:cubic-bezier(.2,.7,.2,1);
   --tr-surface:background-color var(--dur-state) var(--ease),border-color var(--dur-state) var(--ease),box-shadow var(--dur-state) var(--ease),opacity var(--dur-state) var(--ease);
   transition:--cov .38s var(--ease),background-color .5s var(--ease),color .5s var(--ease),border-color .5s var(--ease);
-  display:flex;flex-direction:column;height:620px;box-sizing:border-box;width:100%;max-width:32rem;margin-inline:auto;min-width:0;container-type:inline-size;
+  display:flex;flex-direction:column;height:620px;box-sizing:border-box;width:100%;max-width:56rem;margin-inline:auto;min-width:0;container-type:inline-size;
   position:relative;isolation:isolate;background:var(--c-paper);color:var(--c-ink);border:1px solid var(--c-line);border-radius:var(--c-r);overflow:clip;
   font-family:var(--c-font);font-size:var(--t-l);font-weight:400;font-style:normal;line-height:1.5;letter-spacing:normal;
   text-align:left;text-transform:none;text-indent:0;word-spacing:normal;-webkit-text-size-adjust:100%;
@@ -119,6 +119,13 @@
 .cdcp[data-view="result"] .cq-rest{order:7;padding-top:var(--s4)}
 .cdcp[data-view="result"] .cq-clear{order:8;margin:0 var(--s5) var(--s3);min-height:var(--h)}
 .cdcp[data-view="result"] .cq-grid{padding-bottom:0}
+
+/* ============ 3b wide frame (set by the widget when its own box is >= 720px): questions stay centred; the result is two columns, details left, the two steps pinned right */
+.cdcp[data-wide]{height:580px}
+.cdcp[data-wide] .cq-ctl-in{max-width:30rem;margin-inline:auto}
+.cdcp[data-wide][data-view="result"] .cq-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr);column-gap:0;grid-auto-flow:row;background:linear-gradient(to right,transparent calc(58.333% - 1px),color-mix(in srgb,var(--c-line) 70%,transparent) 0 58.333%,transparent 0)}
+.cdcp[data-wide][data-view="result"] .cq-grid>*{grid-column:1}
+.cdcp[data-wide][data-view="result"] .cq-act{grid-column:2;grid-row:1/span 12;align-self:stretch;position:static;display:flex;flex-direction:column;justify-content:center;padding:var(--s5);background:transparent;box-shadow:none}
 
 /* ============ 4 text roles ============ */
 .cdcp .cq-sec{margin:0 0 var(--s2);font-size:var(--t-s);font-weight:600;letter-spacing:.04em;opacity:.62}        /* section label: quiet */

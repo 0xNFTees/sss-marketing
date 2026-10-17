@@ -271,13 +271,13 @@ with sync_playwright() as p:
           return {view:e.dataset.view,w:t.width,primaryW:pb.width,primaryBottom:pb.bottom-t.top,btns:bs.length,dr,split:e.querySelector('.cq-split').innerText.replace(/\\s+/g,' '),splitVisible:e.querySelector('.cq-split').getClientRects().length>0,
             noticeInDrawer:!!e.querySelector('.cq-rest details .cq-billing-notice'),noticeOutside:!!e.querySelector('.cq-det .cq-billing-notice'),
             order:[y('.cq-status'),y('.cq-sum'),y('.cq-brk'),y('.cq-act'),y('.cq-det'),y('.cq-rest')],controls:e.querySelectorAll('.cq-row').length,dark:getComputedStyle(e).backgroundColor}}""")
-        ok(f"result@{w}: the card is one column no wider than 32rem, controls gone",r["view"]=="result" and r["w"]<=512.5 and r["controls"]==0,str(r))
-        ok(f"result@{w}: the primary action is full width and within the first 900px",r["primaryW"]>r["w"]-64 and r["primaryBottom"]<900,str(r))
+        ok(f"result@{w}: the card is no wider than 56rem, controls gone",r["view"]=="result" and r["w"]<=896.5 and r["controls"]==0,str(r))
+        ok(f"result@{w}: the primary action is full width (one column) or pinned in the right column (wide), within the first 900px",(r["primaryW"]>r["w"]-64 or r["w"]>=720) and r["primaryBottom"]<900,str(r))
         ok(f"result@{w}: the secondary action is a text link (two calls to action in all)",r["btns"]==2,str(r["btns"]))
         ok(f"result@{w}: one fine-print drawer, closed, holding the coverage matrix",[d[0] for d in r["dr"]]==["Avis de transparence tarifaire"] and not r["dr"][0][1] and r["dr"][0][2],str(r["dr"]))
         ok(f"result@{w}: the notice lives in the drawer",r["noticeInDrawer"] and not r["noticeOutside"])
         ok(f"result@{w}: the split is visible: cost | paid by the plan","344,00" in r["split"] and "268,00" in r["split"] and r["splitVisible"],r["split"])
-        ok(f"result@{w}: reading order is state, figure, split, actions, inclusions, drawer",r["order"]==sorted(r["order"]),str(r["order"]))
+        ok(f"result@{w}: reading order is state, figure, split, actions, inclusions, drawer (wide: actions sit in the right column, the rest read top to bottom)",(r["order"]==sorted(r["order"])) if r["w"]<720 else (r["order"][:3]==sorted(r["order"][:3]) and r["order"][4:]==sorted(r["order"][4:])),str(r["order"]))
         ok(f"result@{w}: the card is on the dark surface",r["dark"] not in("rgb(255, 255, 255)","rgba(0, 0, 0, 0)"),r["dark"])
     pg.set_viewport_size({"width":390,"height":844})
     pg.evaluate(MNT,[390,{"ins":"no","inc":"under70","filed":"yes","appt":None}]);pg.wait_for_timeout(500)

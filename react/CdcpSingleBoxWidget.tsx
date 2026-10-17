@@ -93,34 +93,34 @@ export const QUEBEC_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdc
 };
 
 export const ONTARIO_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
-  new: { oda: 368, cdcpGrid: 312 },
-  recall: { oda: 194, cdcpGrid: 178 },
-  emerg: { oda: 146, cdcpGrid: 104 },
+  new: { oda: 423, cdcpGrid: 342 },
+  recall: { oda: 240, cdcpGrid: 190 },
+  emerg: { oda: 148, cdcpGrid: 102 },
 };
 
 /** British Columbia bundles, 2026: BCDA fee guide vs CDCP schedule (`oda` holds the provincial guide fee). Supplied by SSS, NOT yet verified. */
 export const BC_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
-  new: { oda: 361, cdcpGrid: 308 },
-  recall: { oda: 188, cdcpGrid: 172 },
-  emerg: { oda: 142, cdcpGrid: 102 },
+  new: { oda: 418, cdcpGrid: 326.1 },
+  recall: { oda: 187.9, cdcpGrid: 182.54 },
+  emerg: { oda: 137, cdcpGrid: 80.43 },
 };
 
 /** Alberta bundles, 2026: ADA fee guide vs CDCP schedule. Supplied by SSS, NOT yet verified. */
 export const ALBERTA_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
-  new: { oda: 382, cdcpGrid: 324 },
-  recall: { oda: 204, cdcpGrid: 186 },
-  emerg: { oda: 152, cdcpGrid: 110 },
+  new: { oda: 466.1, cdcpGrid: 421.52 },
+  recall: { oda: 255.55, cdcpGrid: 244.56 },
+  emerg: { oda: 191.15, cdcpGrid: 162.2 },
 };
 /** Remaining provinces and territories, 2026 (provincial fee guide vs CDCP schedule). Supplied by SSS, NOT yet verified. */
 export const NOVA_SCOTIA_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
-  new: { oda: 341, cdcpGrid: 292 },
-  recall: { oda: 168, cdcpGrid: 156 },
-  emerg: { oda: 132, cdcpGrid: 94 },
+  new: { oda: 296, cdcpGrid: 278 },
+  recall: { oda: 155, cdcpGrid: 173 },
+  emerg: { oda: 148, cdcpGrid: 100 },
 };
 export const NEW_BRUNSWICK_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
-  new: { oda: 338, cdcpGrid: 290 },
-  recall: { oda: 164, cdcpGrid: 152 },
-  emerg: { oda: 128, cdcpGrid: 92 },
+  new: { oda: 348, cdcpGrid: 296 },
+  recall: { oda: 171, cdcpGrid: 157.5 },
+  emerg: { oda: 140, cdcpGrid: 94 },
 };
 export const PEI_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
   new: { oda: 334, cdcpGrid: 288 },

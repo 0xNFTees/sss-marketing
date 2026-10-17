@@ -142,6 +142,7 @@
 
     root.innerHTML="";root.className="cdcp cq";
     root.setAttribute("role","group");root.setAttribute("aria-label",U.label);
+    if(window.ResizeObserver){var wideOn=function(){var w=root.getBoundingClientRect().width;if(w>=720)root.setAttribute("data-wide","");else root.removeAttribute("data-wide");};wideOn();new ResizeObserver(wideOn).observe(root);}
     var grid=node("div","cq-grid"),ctl=node("div","cq-ctl"),sStatus=node("div","cq-status"),sSum=node("div","cq-sum"),sAct=node("div","cq-act"),sBrk=node("div","cq-brk"),sDet=node("div","cq-det"),sRest=node("div","cq-rest"),cin=node("div","cq-ctl-in");ctl.appendChild(cin);
     var sr=node("div","cq-sr");sr.setAttribute("role","status");
     [ctl,sStatus,sSum,sAct,sBrk,sDet,sRest].forEach(function(n){grid.appendChild(n);});root.appendChild(grid);root.appendChild(sr);
