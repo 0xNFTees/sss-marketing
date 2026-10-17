@@ -159,13 +159,13 @@ with sync_playwright() as p:
         pg.locator(f'#quiz input[name$="{k}"][value="{v}"]').click(force=True);pg.wait_for_timeout(450)
     def snap():
         return pg.evaluate("""()=>{const r=document.querySelector('#quiz'),vis=s=>[...r.querySelectorAll(s)].filter(e=>e.getClientRects().length).length;
-          return {view:r.dataset.view,st:r.dataset.state,fs:r.querySelectorAll('.cq-ctl .cq-row').length,sel:r.querySelectorAll('select').length,
+          return {view:r.dataset.view,st:r.dataset.state,fs:r.querySelectorAll('.cq-ctl .cq-row').length,sel:r.querySelectorAll('select:not(.cq-prov-s)').length,
             checked:[...r.querySelectorAll('.cq-ctl input:checked')].map(i=>i.value).join(','),
             chip:[...r.querySelectorAll('.cq-sumrow')].map(b=>b.dataset.k).join(','),
             big:(r.querySelector('.cq-big:not(.cq-big-empty)')||{}).textContent||null,clear:!!r.querySelector('.cq-clear')&&!r.querySelector('.cq-clear').hidden,
             resultVisible:vis('.cq-status')+vis('.cq-sum')+vis('.cq-act')+vis('.cq-rest'),ctlVisible:vis('.cq-ctl .cq-row'),
             pill:(r.querySelector('.cq-pill')||{}).textContent}}""")
-    s0=snap(); ok("stage: starts on question 1, nothing preselected, one question shown, no dropdown, no result blocks on screen",s0["view"]=="ins" and s0["checked"]=="" and s0["fs"]==1 and s0["sel"]==0 and not s0["clear"] and s0["resultVisible"]==0,str(s0))
+    s0=snap(); ok("stage: starts on question 1, nothing preselected, one question shown, no dropdown for the questions (the province picker is the one select), no result blocks on screen",s0["view"]=="ins" and s0["checked"]=="" and s0["fs"]==1 and s0["sel"]==0 and not s0["clear"] and s0["resultVisible"]==0,str(s0))
     ans("ins","no");s1=snap(); ok("stage: a click answers and advances",s1["view"]=="inc" and s1["st"]=="pending" and s1["big"] is None and s1["resultVisible"]==0,str(s1))
     ans("inc","band70");s2=snap(); ok("stage: income answered -> tax return asked, still no result on screen",s2["view"]=="filed" and s2["st"]=="unconfirmed" and s2["resultVisible"]==0,str(s2))
     ans("filed","yes");s3=snap(); ok("stage: three answers -> the appointment picker (no figure, no booking action yet)",s3["view"]=="appt" and s3["st"]=="qualified" and s3["big"] is None and s3["fs"]==1 and s3["checked"]=="" and s3["chip"]=="ins,inc,filed" and s3["resultVisible"]==0,str(s3))

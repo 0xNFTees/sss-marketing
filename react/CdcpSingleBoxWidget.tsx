@@ -45,9 +45,9 @@ export const VISITS: readonly { id: VisitId; items: readonly (readonly [string, 
   { id: "emerg", items: [["01205", 1], ["02102", 1]] },
 ];
 
-export type Province = "QC" | "ON" | "BC" | "AB";
-export const PROVINCES: readonly Province[] = ["QC", "ON", "BC", "AB"];
-export const PROVINCE_LABEL: Record<Province, string> = { QC: "QC (ACDQ)", ON: "ON (ODA)", BC: "BC (BCDA)", AB: "AB (ADA)" };
+export type Province = "QC" | "ON" | "BC" | "AB" | "NS" | "NB" | "PE" | "MB" | "SK" | "NL" | "YT" | "NT" | "NU";
+export const PROVINCES: readonly Province[] = ["QC", "ON", "BC", "AB", "NS", "NB", "PE", "MB", "SK", "NL", "YT", "NT", "NU"];
+export const PROVINCE_LABEL: Record<Province, string> = { QC: "QC (ACDQ)", ON: "ON (ODA)", BC: "BC (BCDA)", AB: "AB (ADA)", NS: "NS (NSDA)", NB: "NB (NBDS)", PE: "PE (DAPEI)", MB: "MB (MDA)", SK: "SK (CDSS)", NL: "NL (NLDA)", YT: "YT", NT: "NT", NU: "NU" };
 
 /** Ontario bundles, 2026: the dentist's fee (ODA fee guide) and the CDCP fee-schedule amount for the same visit.
  *  Source: supplied by SSS, NOT yet verified against the ODA guide or the CDCP Ontario schedule. Confirm with the clinic before go-live. */
@@ -70,7 +70,53 @@ export const ALBERTA_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cd
   recall: { oda: 255.55, cdcpGrid: 244.56 },
   emerg: { oda: 191.15, cdcpGrid: 162.2 },
 };
-const BUNDLES: Record<Exclude<Province, "QC">, typeof ONTARIO_APPOINTMENT_BUNDLES_2026> = { ON: ONTARIO_APPOINTMENT_BUNDLES_2026, BC: BC_APPOINTMENT_BUNDLES_2026, AB: ALBERTA_APPOINTMENT_BUNDLES_2026 };
+/** Remaining provinces and territories, 2026 (provincial fee guide vs CDCP schedule). Supplied by SSS, NOT yet verified. */
+export const NOVA_SCOTIA_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
+  new: { oda: 296, cdcpGrid: 278 },
+  recall: { oda: 155, cdcpGrid: 173 },
+  emerg: { oda: 148, cdcpGrid: 100 },
+};
+export const NEW_BRUNSWICK_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
+  new: { oda: 348, cdcpGrid: 296 },
+  recall: { oda: 171, cdcpGrid: 157.5 },
+  emerg: { oda: 140, cdcpGrid: 94 },
+};
+export const PEI_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
+  new: { oda: 334, cdcpGrid: 288 },
+  recall: { oda: 161, cdcpGrid: 154 },
+  emerg: { oda: 142, cdcpGrid: 96 },
+};
+export const MANITOBA_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
+  new: { oda: 346.91, cdcpGrid: 295.09 },
+  recall: { oda: 188.17, cdcpGrid: 165.14 },
+  emerg: { oda: 130, cdcpGrid: 92 },
+};
+export const SASKATCHEWAN_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
+  new: { oda: 321, cdcpGrid: 278 },
+  recall: { oda: 151.8, cdcpGrid: 142 },
+  emerg: { oda: 113, cdcpGrid: 90 },
+};
+export const NEWFOUNDLAND_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
+  new: { oda: 383.92, cdcpGrid: 314 },
+  recall: { oda: 214.21, cdcpGrid: 188 },
+  emerg: { oda: 145, cdcpGrid: 100 },
+};
+export const YUKON_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
+  new: { oda: 462, cdcpGrid: 382 },
+  recall: { oda: 226, cdcpGrid: 202 },
+  emerg: { oda: 162, cdcpGrid: 124 },
+};
+export const NWT_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
+  new: { oda: 509, cdcpGrid: 422 },
+  recall: { oda: 252, cdcpGrid: 220 },
+  emerg: { oda: 176, cdcpGrid: 134 },
+};
+export const NUNAVUT_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
+  new: { oda: 544, cdcpGrid: 454 },
+  recall: { oda: 270, cdcpGrid: 234 },
+  emerg: { oda: 190, cdcpGrid: 146 },
+};
+const BUNDLES: Record<Exclude<Province, "QC">, typeof ONTARIO_APPOINTMENT_BUNDLES_2026> = { ON: ONTARIO_APPOINTMENT_BUNDLES_2026, BC: BC_APPOINTMENT_BUNDLES_2026, AB: ALBERTA_APPOINTMENT_BUNDLES_2026, NS: NOVA_SCOTIA_APPOINTMENT_BUNDLES_2026, NB: NEW_BRUNSWICK_APPOINTMENT_BUNDLES_2026, PE: PEI_APPOINTMENT_BUNDLES_2026, MB: MANITOBA_APPOINTMENT_BUNDLES_2026, SK: SASKATCHEWAN_APPOINTMENT_BUNDLES_2026, NL: NEWFOUNDLAND_APPOINTMENT_BUNDLES_2026, YT: YUKON_APPOINTMENT_BUNDLES_2026, NT: NWT_APPOINTMENT_BUNDLES_2026, NU: NUNAVUT_APPOINTMENT_BUNDLES_2026 };
 
 export type Outcome = "pending" | "insurance" | "income" | "tax" | "qualified" | "unconfirmed";
 
@@ -1124,14 +1170,14 @@ export function CdcpSingleBoxWidget({
           <div className="flex items-center justify-between gap-3">
             <p className="min-w-0 truncate text-[11px] font-semibold uppercase tracking-wider opacity-60">{HEADER[lang]}{clinicName ? ` • ${clinicName}` : ""}</p>
             {showProvinceSwitcher && !dark && (
-              <div role="group" aria-label={U.province} className="flex shrink-0 rounded-full bg-[color-mix(in_srgb,var(--ink)_7%,var(--paper))] p-0.5">
-                {PROVINCES.map((pv) => (
-                  <button key={pv} type="button" aria-pressed={province === pv} onClick={() => setProvince(pv)}
-                    className={`relative min-h-8 rounded-full px-2 text-[11px] font-semibold transition-colors duration-150 before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-[''] ${province === pv ? "bg-[var(--paper)] text-[var(--ink)] shadow-sm" : "text-[var(--ink)] opacity-60 hover:opacity-100"} ${FOCUS}`}>
-                    {PROVINCE_LABEL[pv]}
-                  </button>
-                ))}
-              </div>
+              <label className="relative shrink-0">
+                <span className="sr-only">{U.province}</span>
+                <select value={province} onChange={(e) => setProvince(e.target.value as Province)}
+                  className={`min-h-11 cursor-pointer appearance-none rounded-full bg-[color-mix(in_srgb,var(--ink)_7%,var(--paper))] py-1 pl-3.5 pr-8 text-[11px] font-semibold text-[var(--ink)] ${FOCUS}`}>
+                  {PROVINCES.map((pv) => <option key={pv} value={pv}>{PROVINCE_LABEL[pv]}</option>)}
+                </select>
+                <ChevronDown aria-hidden className="pointer-events-none absolute right-3 top-1/2 size-3.5 -translate-y-1/2 opacity-60" />
+              </label>
             )}
           </div>
         </div>
