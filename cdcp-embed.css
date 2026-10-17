@@ -244,6 +244,9 @@
 .cdcp .cq-matrix-item-note{font-size:var(--t-s);line-height:1.6;opacity:.8;border-left:2px solid var(--c-line);padding-left:var(--s3)}
 
 /* ---- stage: back + progress, the answer chip, the continue action ---- */
+.cdcp .cq-prov{display:flex;justify-self:end;gap:var(--s0);padding:var(--s0);border-radius:var(--c-r);background:var(--c-hover)}
+.cdcp .cq-prov-b{min-height:var(--h);padding:0 var(--s3);border-radius:var(--c-r);font-size:var(--t-s);font-weight:600;color:var(--c-ink);opacity:.65;transition:var(--tr-surface)}
+.cdcp .cq-prov-b[aria-pressed="true"]{background:var(--c-paper);opacity:1;box-shadow:0 1px 2px color-mix(in srgb,var(--c-ink) 22%,transparent)}
 .cdcp .cq-stg-h{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:var(--s5);margin-bottom:var(--s1)}
 .cdcp .cq-stg-n{display:inline-flex;align-items:center;gap:var(--s3);margin-left:auto;font-size:var(--t-s)}
 .cdcp .cq-stg-n b{font-weight:600}

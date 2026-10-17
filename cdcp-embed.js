@@ -42,6 +42,7 @@
       tierUnconfirmed:"Palier RCSD : jusqu’à {n} %. Confirmez votre déclaration d’impôts.", whenIssued:"Montant estimé une fois la carte RCSD reçue.",
       pre:"Préautorisation du RCSD requise.", lab:"Frais de laboratoire en sus.", excl:"Non couvert par le RCSD.",
       ramq:"Enfants de moins de 10 ans : la RAMQ couvre déjà les soins de base.",
+      province:"Province",
       disc:"Estimation seulement. Chaque clinique fixe ses tarifs. Limites annuelles et frais de laboratoire non inclus.", matrix:"Soins couverts, autorisation et exclusions", insurers:"Assureurs acceptés par la clinique :",
       pk:{new:["Nouveau patient","Examen complet, radiographies diagnostiques, nettoyage, fluorure"],recall:["Rappel et nettoyage","Examen périodique, nettoyage"],
           emerg:["Urgence, mal de dent","Examen d’urgence, radiographie","Un traitement immédiat (obturation, canal, extraction) s’ajoute au tarif."],}},
@@ -56,6 +57,7 @@
       tierUnconfirmed:"CDCP tier: up to {n}%. Confirm your tax filing.", whenIssued:"Estimated amount once your CDCP card is issued.",
       pre:"CDCP pre-authorization required.", lab:"Lab fee billed extra.", excl:"Not covered by CDCP.",
       ramq:"Children under 10: RAMQ already covers basic care.",
+      province:"Province",
       disc:"Estimate only. Each clinic sets its own fees. Annual limits and lab fees not included.", matrix:"Covered care, authorization and exclusions", insurers:"Insurers accepted by the clinic:",
       pk:{new:["New patient","Complete exam, diagnostic X-rays, cleaning, fluoride"],recall:["Recall and cleaning","Periodic exam, cleaning"],
           emerg:["Emergency, toothache","Emergency exam, X-ray","Immediate treatment (filling, root canal, extraction) is extra."],}}
@@ -124,11 +126,16 @@
     lang=lang==="fr"?"fr":"en";
     var L=CDCP_LABELS[lang],U=T[lang],id=++uid,BOOK=opts.bookingUrl||L.bookingUrl;
     var nf=new Intl.NumberFormat(lang==="fr"?"fr-CA":"en-CA",{style:"currency",currency:"CAD",minimumFractionDigits:2});
-    var DATA=(window.CDCP_PROVINCES||{})[opts.province||"QC"],byCode={};
+    var DATA=(window.CDCP_PROVINCES||{}).QC,byCode={};
+    var PROVS=["QC","ON","BC"],PLABEL={QC:"QC (ACDQ)",ON:"ON (ODA)",BC:"BC (BCDA)"},PROV=PROVS.indexOf(opts.province)>=0?opts.province:"QC";
+    // 2026 appointment bundles: f = provincial dentists' fee guide, g = CDCP fee schedule. Supplied by SSS, NOT yet verified (confirm with a clinic before go-live).
+    var BUNDLES={ON:{new:{f:423,g:342},recall:{f:240,g:190},emerg:{f:148,g:102}},BC:{new:{f:418,g:326.1},recall:{f:187.9,g:182.54},emerg:{f:137,g:80.43}}};
+    function HAS(){return !!DATA||PROV!=="QC";}
     if(DATA&&DATA.procedures)DATA.procedures.forEach(function(p){byCode[p.code]=p;});else DATA=null;
+    if(!DATA)PROV="QC";
     // The appointment input exists only when fee data is loaded; otherwise this is the eligibility-only tool.
     var A=(SAVED&&SAVED.get(root))||{ins:null,inc:null,filed:null,appt:null};
-    if(!DATA)A.appt=null;
+    if(!HAS())A.appt=null;
 
     root.innerHTML="";root.className="cdcp cq";
     root.setAttribute("role","group");root.setAttribute("aria-label",U.label);
@@ -201,7 +208,7 @@
       Object.keys(A).forEach(function(k){A[k]=null;});cur=null;hold=false;haveCard=false;
       update();renderCtl("force");
     });
-    function needAppt(){return !!DATA&&A.ins==="no";}
+    function needAppt(){return HAS()&&A.ins==="no";}
     // one screen at a time: a question, the appointment picker, then the result
     function screen(){if(view()!==null)return "q";return needAppt()&&(!A.appt||hold)?"appt":"result";}
     function chipText(k){return k==="ins"?U.chipIns[A.ins]:k==="inc"?U.incShort[INCOME_KEYS.indexOf(A.inc)]:U.chipFiled[A.filed];}
@@ -237,9 +244,19 @@
       var ft=node("div","cq-stg-f");nextBtn=node("button","cq-next",esc(U.cont)+' <span aria-hidden="true">→</span>');nextBtn.type="button";nextBtn.disabled=!enabled;
       nextBtn.addEventListener("click",onNext);ft.appendChild(nextBtn);return ft;
     }
+    function provBar(){
+      if(!DATA||opts.switcher===false)return null;
+      var w=node("div","cq-prov");w.setAttribute("role","group");w.setAttribute("aria-label",U.province);
+      PROVS.forEach(function(k){
+        var b=node("button","cq-prov-b",esc(PLABEL[k]));b.type="button";b.setAttribute("aria-pressed",PROV===k?"true":"false");
+        b.addEventListener("click",function(){if(PROV===k)return;PROV=k;update();renderCtl(false);});w.appendChild(b);
+      });
+      return w;
+    }
     function renderCtl(focus){
       clearTimeout(advT);var h0=root.offsetHeight;cin.innerHTML="";
       var sc=screen(),v=view(),r=required(),first=null;shownKey=null;nextBtn=null;
+      if(sc!=="result"){var pb=provBar();if(pb)cin.appendChild(pb);}
       if(sc==="q"){
         shownKey=v;
         var n=r.indexOf(v)+1,t=totalQ(),ticks="";
@@ -283,7 +300,12 @@
     function validFee(v){return typeof v==="number"&&isFinite(v)&&v>=0;}   // reject NaN, Infinity and negatives from bad data
     function cost(id){
       var p=null;PK.forEach(function(x){if(x.id===(id||A.appt))p=x;});
-      if(!p||!DATA)return null;
+      if(!p||!HAS())return null;
+      if(PROV!=="QC"){
+        var bd=BUNDLES[PROV][p.id];if(!bd)return null;
+        var kn=(A.ins==="no"&&!!A.inc),tq=kn?(TIER_PCT[A.inc]||0):null,cv=kn?Math.round(Math.min(bd.g*tq,bd.f)*100)/100:0;
+        return {pk:p,fee:bd.f,cov:cv,known:kn,oop:Math.round((bd.f-cv)*100)/100,pre:false,lab:false,excl:false,tp:tq};
+      }
       var fee=0,cov=0,pre=false,lab=false,excl=false,known=(A.ins==="no"&&!!A.inc),tp=known?(TIER_PCT[A.inc]||0):null;
       for(var i=0;i<p.items.length;i++){
         var c=byCode[p.items[i][0]],q=p.items[i][1];
@@ -301,7 +323,7 @@
       if(A.ins!=="yes"){
         if(!A.inc)m.push(U.inc);
         if(A.inc!=="over90"&&!A.filed)m.push(U.filed);
-        if(DATA&&!A.appt)m.push(U.appt);
+        if(HAS()&&!A.appt)m.push(U.appt);
       }
       return m;
     }
@@ -357,7 +379,7 @@
         var bar=node("div","cq-bar",'<i></i>');bar.setAttribute("aria-hidden","true");sSum.appendChild(bar);
       }else{
         bigEl.textContent=ghost();bigEl.classList.add("cq-big-empty");shown=0;last.oop=null;
-        sSum.appendChild(textNode("p","cq-sum-note",c&&c.bad?U.unavailable:(DATA&&!A.appt?U.pickVisit:U.nopick)));
+        sSum.appendChild(textNode("p","cq-sum-note",c&&c.bad?U.unavailable:(HAS()&&!A.appt?U.pickVisit:U.nopick)));
       }
     }
     function secLabel(k){return textNode("p","cq-sec",U.sec[k]);}
@@ -393,23 +415,23 @@
       if(oc==="pending"){
         var rem=missing();
         sStatus.appendChild(statusBlock("neutral",U.pendH,U.pendS,"pending"));
-        if(DATA){renderSum(c,oc);}else{sSum.innerHTML="";sSum.hidden=true;}
+        if(HAS()){renderSum(c,oc);}else{sSum.innerHTML="";sSum.hidden=true;}
         title=U.pendH;
-        if(DATA&&c&&!c.bad)renderCostDetail(sDet,c,oc);
-        var rp=ctaRow();rp.appendChild(ctaLink(withBookingParams(BOOK,{branch:"pending",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta,{variant:"secondary"}));sAct.appendChild(rp);
+        if(HAS()&&c&&!c.bad)renderCostDetail(sDet,c,oc);
+        var rp=ctaRow();rp.appendChild(ctaLink(withBookingParams(BOOK,{branch:"pending",utm_source:"cdcp-calculator",province:PROV}),L.results.branchIncome.primaryCta,{variant:"secondary"}));sAct.appendChild(rp);
       }else if(oc==="insurance"){
         var R=L.results.branchInsurance;kind="good";title=R.headline;
         sStatus.appendChild(statusBlock("good",R.headline,R.microCopy,"insurance"));
         sSum.innerHTML="";sSum.hidden=true;
-        var row=ctaRow();row.appendChild(ctaLink(withBookingParams(BOOK,{branch:"insurance",utm_source:"cdcp-calculator"}),R.primaryCta));sAct.appendChild(row);
+        var row=ctaRow();row.appendChild(ctaLink(withBookingParams(BOOK,{branch:"insurance",utm_source:"cdcp-calculator",province:PROV}),R.primaryCta));sAct.appendChild(row);
         insurersBlock(sRest,R);
       }else{
         if(oc==="income"){var R2=L.results.branchIncome;title=R2.headline;sStatus.appendChild(statusBlock("bad",R2.headline,R2.microCopy,"income"));}
         else if(oc==="tax"){var R3=L.results.branchTaxFiling;title=R3.headline;sStatus.appendChild(statusBlock("warn",R3.headline,R3.microCopy,"tax"));}
         else if(oc==="qualified"){title=nb(L.results["tier"+tier+"Badge"]);sStatus.appendChild(statusBlock("good",title,"","qualified"));}
         else{title=U.tierUnconfirmed.replace("{n}",Math.round(TIER_PCT[A.inc]*100));sStatus.appendChild(statusBlock("warn",nb(title),"","unconfirmed"));}
-        if(DATA)renderSum(c,oc);else{sSum.innerHTML="";sSum.hidden=true;}
-        if(DATA&&c&&!c.bad&&c.known){
+        if(HAS())renderSum(c,oc);else{sSum.innerHTML="";sSum.hidden=true;}
+        if(HAS()&&c&&!c.bad&&c.known){
           if(oc==="tax")sSum.appendChild(textNode("p","cq-sum-note",U.whenIssued));
           else if(oc==="unconfirmed")sSum.appendChild(textNode("p","cq-sum-note",U.ifQualify));
           if(c.fee>0&&c.oop===0)sSum.appendChild(textNode("p","cq-sum-note",U.full));
@@ -417,15 +439,15 @@
         renderCostDetail(sDet,c,oc);
         // calls to action
         if(oc==="income"){
-          var r4=ctaRow();r4.appendChild(ctaLink(withBookingParams(BOOK,{branch:"income",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sAct.appendChild(r4);
+          var r4=ctaRow();r4.appendChild(ctaLink(withBookingParams(BOOK,{branch:"income",utm_source:"cdcp-calculator",province:PROV}),L.results.branchIncome.primaryCta));sAct.appendChild(r4);
         }else if(oc==="tax"){
           var R5=L.results.branchTaxFiling,r5=ctaRow();
           r5.appendChild(ctaLink(L.craMyAccountUrl,R5.primaryCta,{external:true}));
-          r5.appendChild(ctaLink(withBookingParams(BOOK,{branch:"tax-filing",utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(4)}),R5.secondaryCta,{variant:"secondary"}));
+          r5.appendChild(ctaLink(withBookingParams(BOOK,{branch:"tax-filing",utm_source:"cdcp-calculator",province:PROV,suggestedDate:addWeeksIso(4)}),R5.secondaryCta,{variant:"secondary"}));
           sAct.appendChild(r5);
         }
         if(oc==="unconfirmed"){
-          var ru=ctaRow();ru.appendChild(ctaLink(withBookingParams(BOOK,{branch:"unconfirmed",utm_source:"cdcp-calculator"}),L.results.branchIncome.primaryCta));sAct.appendChild(ru);
+          var ru=ctaRow();ru.appendChild(ctaLink(withBookingParams(BOOK,{branch:"unconfirmed",utm_source:"cdcp-calculator",province:PROV}),L.results.branchIncome.primaryCta));sAct.appendChild(ru);
         }
         if(oc==="qualified"||oc==="unconfirmed"){
         }
@@ -433,20 +455,20 @@
           var r6=ctaRow(),lk=function(label,on){var bt=node("button","cq-linkbtn",esc(label));bt.type="button";bt.addEventListener("click",function(){haveCard=on;update();var f=sAct.querySelector(on?".cq-cta-btn-primary":".cq-linkbtn");if(f)f.focus();});return bt;};
           if(haveCard){
             // already holds the card: book straight away, no suggested wait
-            r6.appendChild(ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:tier,utm_source:"cdcp-calculator",hasCard:"1"}),U.bookNow));
+            r6.appendChild(ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:tier,utm_source:"cdcp-calculator",province:PROV,hasCard:"1"}),U.bookNow));
             r6.appendChild(lk(U.noCardYet,false));
           }else{
             // a two-step path: apply for the card, then book
             r6.appendChild(ctaLink(L.cdcpApplyUrl,U.applyLink,{external:true,variant:"outline"}));
             r6.appendChild(textNode("p","cq-cta-note",U.applySub));
             r6.appendChild(lk(U.haveCard,true));
-            r6.appendChild(ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:tier,utm_source:"cdcp-calculator",suggestedDate:addWeeksIso(7)}),U.step2));
+            r6.appendChild(ctaLink(withBookingParams(BOOK,{branch:"qualified",cdcpTier:tier,utm_source:"cdcp-calculator",province:PROV,suggestedDate:addWeeksIso(7)}),U.step2));
             r6.appendChild(textNode("p","cq-cta-note",U.bookSub));
           }
           sAct.appendChild(r6);
         }
         var fine=[],tn=[];
-        if(oc==="qualified"||oc==="unconfirmed")fine.push(U.ramq);
+        if(oc==="qualified"||oc==="unconfirmed")if(PROV==="QC")fine.push(U.ramq);
         if(c&&!c.bad)fine.push(U.disc);
         if(oc==="qualified")fine.push(L.results.sourceNote);
         if(oc==="qualified"||oc==="unconfirmed")tn.push(billingNotice(L.results.billingNoticeHeading,L.results.billingNoticeBody));
