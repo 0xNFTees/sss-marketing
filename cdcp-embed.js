@@ -171,11 +171,22 @@
     function view(){return cur&&required().indexOf(cur)>=0?cur:autoStep();}
     function totalQ(){return A.ins==="yes"?1:(A.inc==="over90"?2:3);}
     function legend(fs,label,hint){fs.setAttribute("role","radiogroup");fs.setAttribute("aria-labelledby",id+"lg"+fs.getAttribute("data-k"));var lg=node("div","cq-legend",'<span>'+esc(label)+'</span>'+(hint?'<span class="cq-infl">'+esc(hint)+'</span>':''));lg.id=id+"lg"+fs.getAttribute("data-k");fs.appendChild(lg);}
+    // lucide icon paths (ISC licence), drawn inline so the widget needs no icon font or request
+    var IC={shield:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+      user:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+      file:'<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>',
+      clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+      wallet:'<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>',
+      sparkles:'<path d="M9.94 14.06 8 20l-1.94-5.94L0 12l6.06-2.06L8 4l1.94 5.94L16 12z" transform="translate(4 0)"/><path d="M20 3v4M22 5h-4"/>',
+      cal:'<path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
+      siren:'<path d="M7 18v-6a5 5 0 1 1 10 0v6"/><path d="M5 21a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1z"/><path d="M21 12h1M18.5 4.5 18 5M2 12h1M12 2v1M4.93 4.93l.7.7"/>'};
+    function ico(n){return '<i class="cq-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+IC[n]+'</svg></i>';}
+    function optHtml(icon,t,sm){return ico(icon)+'<span class="cq-ot"><span>'+esc(t)+'</span>'+(sm?'<small>'+esc(sm)+'</small>':'')+'</span>';}
     function optionsFor(k){
-      if(k==="ins")return {label:U.ins,hint:U.insI,items:[{v:"yes",t:U.yes,aria:L.step1.yes,html:"<span>"+esc(U.yes)+"</span>"},{v:"no",t:U.no,aria:L.step1.no,html:"<span>"+esc(U.no)+"</span>"}]};
-      if(k==="filed")return {label:U.filed,hint:U.filedI,items:[{v:"yes",t:U.yes,aria:L.step3.yes,html:"<span>"+esc(U.yes)+"</span>"},{v:"no",t:U.notYet,aria:L.step3.no,html:"<span>"+esc(U.notYet)+"</span>"}]};
-      if(k==="inc")return {label:U.inc,hint:U.incI,items:INCOME_KEYS.map(function(x){return {v:x,t:L.step2[x],aria:L.step2[x],html:"<span>"+esc(nb(L.step2[x]))+"</span>"};})};
-      return {label:U.appt,hint:U.apptI,items:PK.map(function(p){return {v:p.id,t:U.pk[p.id][0],aria:U.pk[p.id][0]+". "+U.pk[p.id][1],html:"<span>"+esc(U.pk[p.id][0])+"</span><small>"+esc(U.pk[p.id][1])+"</small>"};})};
+      if(k==="ins")return {label:U.ins,hint:U.insI,items:[{v:"yes",t:U.yes,aria:L.step1.yes,html:optHtml("shield",U.yes)},{v:"no",t:U.no,aria:L.step1.no,html:optHtml("user",U.no)}]};
+      if(k==="filed")return {label:U.filed,hint:U.filedI,items:[{v:"yes",t:U.yes,aria:L.step3.yes,html:optHtml("file",U.yes)},{v:"no",t:U.notYet,aria:L.step3.no,html:optHtml("clock",U.notYet)}]};
+      if(k==="inc")return {label:U.inc,hint:U.incI,items:INCOME_KEYS.map(function(x){return {v:x,t:L.step2[x],aria:L.step2[x],html:optHtml("wallet",nb(L.step2[x]))};})};
+      return {label:U.appt,hint:U.apptI,items:PK.map(function(p){return {v:p.id,t:U.pk[p.id][0],aria:U.pk[p.id][0]+". "+U.pk[p.id][1],html:optHtml(p.id==="new"?"sparkles":p.id==="recall"?"cal":"siren",U.pk[p.id][0],U.pk[p.id][1])};})};
     }
     function fieldset(k){
       var d=optionsFor(k),fs=node("div","cq-row cq-row-"+k);fs.setAttribute("data-k",k);legend(fs,d.label,d.hint);
