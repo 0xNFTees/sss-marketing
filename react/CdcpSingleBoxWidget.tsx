@@ -45,6 +45,17 @@ export const VISITS: readonly { id: VisitId; items: readonly (readonly [string, 
   { id: "emerg", items: [["01205", 1], ["02102", 1]] },
 ];
 
+export type Province = "QC" | "ON";
+export const PROVINCE_LABEL: Record<Province, string> = { QC: "QC (ACDQ)", ON: "ON (ODA)" };
+
+/** Ontario bundles, 2026: the dentist's fee (ODA fee guide) and the CDCP fee-schedule amount for the same visit.
+ *  Source: supplied by SSS, NOT yet verified against the ODA guide or the CDCP Ontario schedule. Confirm with the clinic before go-live. */
+export const ONTARIO_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
+  new: { oda: 423, cdcpGrid: 342 },
+  recall: { oda: 240, cdcpGrid: 190 },
+  emerg: { oda: 148, cdcpGrid: 102 },
+};
+
 export type Outcome = "pending" | "insurance" | "income" | "tax" | "qualified" | "unconfirmed";
 
 /** The questions that decide eligibility, in order. The visit type is not one of them. */
@@ -77,11 +88,18 @@ export interface Estimate {
 const valid = (v: unknown): v is number => typeof v === "number" && Number.isFinite(v) && v >= 0;
 const cents = (n: number) => Math.round(n * 100) / 100;
 
-export function estimate(a: Answers, byCode: ReadonlyMap<string, Procedure> | null): Estimate | null {
+export function estimate(a: Answers, byCode: ReadonlyMap<string, Procedure> | null, province: Province = "QC"): Estimate | null {
   const visit = VISITS.find((v) => v.id === a.appt);
-  if (!visit || !byCode) return null;
+  if (!visit) return null;
   const known = a.ins === "no" && !!a.inc;
   const tp = known && a.inc ? TIER_PCT[a.inc] ?? 0 : null;
+  if (province === "ON") {
+    // Same rule as Quebec (CDCP pays tier % of its schedule, never more than the fee), applied to the whole visit bundle.
+    const b = ONTARIO_APPOINTMENT_BUNDLES_2026[visit.id];
+    const cov = known ? cents(Math.min(b.cdcpGrid * (tp ?? 0), b.oda)) : 0;
+    return { visit: visit.id, bad: false, fee: b.oda, covered: cov, patient: cents(b.oda - cov), known, tierPct: tp, preAuth: false, lab: false, excluded: false };
+  }
+  if (!byCode) return null;
   let fee = 0, cov = 0, pre = false, lab = false, excl = false;
   for (const [code, qty] of visit.items) {
     const c = byCode.get(code);
@@ -432,6 +450,7 @@ export const UI = {
   "pendS": "L’estimation tient compte du Régime canadien de soins dentaires (RCSD) et du guide tarifaire des dentistes du Québec (ACDQ).",
   "prog": "Réponses : {n} sur {t}",
   "estNote": "Estimation selon le guide tarifaire, pas une soumission.",
+  "province": "Province",
   "share": "Votre part estimée",
     "total": "Coût total",
     "viewCalc": "Voir le calcul",
@@ -545,6 +564,7 @@ export const UI = {
   "pendS": "The estimate factors in the Canadian Dental Care Plan (CDCP) and the Quebec dentists' fee guide (ACDQ).",
   "prog": "{n} of {t} answered",
   "estNote": "Estimate from the fee guide, not a quote.",
+  "province": "Province",
   "share": "Your estimated share",
     "total": "Total cost",
     "viewCalc": "See the calculation",
@@ -610,8 +630,12 @@ export interface EmbeddableDentalCalculatorProps {
   /** Height of a fixed host header, so the pinned figure sits below it. */
   stickyTop?: number | string;
   defaultAnswers?: Partial<Answers>;
+  /** Starting province. Default "QC". */
+  defaultProvince?: Province;
+  /** Show the QC | ON switcher on the question screens. Default true. */
+  showProvinceSwitcher?: boolean;
   className?: string;
-  onChange?: (s: { answers: Answers; outcome: Outcome; estimate: Estimate | null }) => void;
+  onChange?: (s: { answers: Answers; outcome: Outcome; estimate: Estimate | null; province?: Province }) => void;
 }
 
 /* ------------------------------------------------------------------------------------------------ helpers */
@@ -823,11 +847,12 @@ const ORDER: Record<Screen, number> = { ins: 0, inc: 1, filed: 2, appt: 3, resul
 
 export function CdcpSingleBoxWidget({
   lang = "fr", clinicName, procedures, bookingUrl = "/#contact", phone, email, insurers, theme, stickyTop,
-  defaultAnswers, className = "", onChange,
+  defaultAnswers, defaultProvince = "QC", showProvinceSwitcher = true, className = "", onChange,
 }: EmbeddableDentalCalculatorProps) {
   const L = LABELS[lang], U = UI[lang], uid = useId(), reduce = useReducedMotion();
   const byCode = useMemo(() => indexProcedures(procedures), [procedures]);
-  const hasFees = !!byCode;
+  const [province, setProvince] = useState<Province>(defaultProvince);
+  const hasFees = !!byCode || province === "ON";
   const [a, setA] = useState<Answers>({ ...EMPTY_ANSWERS, ...defaultAnswers });
   const [cur, setCur] = useState<Step | null>(null);
   const root = useRef<HTMLElement>(null), stage = useRef<HTMLDivElement>(null);
@@ -837,14 +862,14 @@ export function CdcpSingleBoxWidget({
   const steps = requiredSteps(a);
   const view: Step | null = cur && steps.includes(cur) ? cur : firstUnanswered(a);
   const oc = outcome(a);
-  const est = useMemo(() => (oc === "insurance" ? null : estimate(a, byCode)), [a, oc, byCode]);
+  const est = useMemo(() => (oc === "insurance" ? null : estimate(a, byCode, province)), [a, oc, byCode, province]);
   const showFigure = !!est && !est.bad && est.known;
   const needAppt = hasFees && oc !== "insurance";
   const screen: Screen = view ?? (needAppt && !a.appt ? "appt" : "result");
   const dark = screen === "result";
   if (ORDER[screen] !== last.current) { dir.current = ORDER[screen] > last.current ? 1 : -1; last.current = ORDER[screen]; }
 
-  useEffect(() => { onChange?.({ answers: a, outcome: oc, estimate: est }); }, [a, oc, est, onChange]);
+  useEffect(() => { onChange?.({ answers: a, outcome: oc, estimate: est, province }); }, [a, oc, est, province, onChange]);
   useEffect(() => () => clearTimeout(advance.current), []);
   // a new screen: keyboard users land on its first control, and the card is brought back into view if it was scrolled off
   const mounted = useRef(false);
@@ -885,7 +910,7 @@ export function CdcpSingleBoxWidget({
       default: return { title: U.pendH, detail: U.pendS, tone: "neutral", label: U.st.none };
     }
   })();
-  const book = (extra: Record<string, string>) => withBookingParams(bookingUrl, { utm_source: "cdcp-calculator", ...extra });
+  const book = (extra: Record<string, string>) => withBookingParams(bookingUrl, { utm_source: "cdcp-calculator", province, ...extra });
   const announce = screen !== "result" ? "" : `${head.title}${showFigure && est ? `. ${U.cost} ${plain(est.fee, lang)}, ${U.paid} ${plain(est.covered, lang)}. ${U.share} ${plain(est.patient, lang)}` : ""}`;
 
   /* ----- setup screens ----- */
@@ -1028,7 +1053,7 @@ export function CdcpSingleBoxWidget({
       {(oc === "qualified" || oc === "unconfirmed" || (est && !est.bad)) && (
         <Drawer reduce={reduce} title={R.billingNoticeHeading}>
           {(oc === "qualified" || oc === "unconfirmed") && <p className="border-l-2 border-[var(--a)] pl-3"><b>{R.billingNoticeHeading}.</b> {R.billingNoticeBody}</p>}
-          {(oc === "qualified" || oc === "unconfirmed") && <p className="opacity-85">{U.ramq}</p>}
+          {province === "QC" && (oc === "qualified" || oc === "unconfirmed") && <p className="opacity-85">{U.ramq}</p>}
           {est && !est.bad && <p className="opacity-85">{U.disc}</p>}
           {oc === "qualified" && <p className="opacity-85">{R.sourceNote}</p>}
           {(oc === "qualified" || oc === "unconfirmed") && ([["standard", R.coverageMatrix.standard], ["major", R.coverageMatrix.major], ["excluded", R.coverageMatrix.excluded]] as const).map(([k, m]) => (
@@ -1080,7 +1105,19 @@ export function CdcpSingleBoxWidget({
       <div role="status" className="sr-only">{announce}</div>
       <AutoHeight reduce={reduce}>
         <div className="px-6 pt-4">
-          <p className="truncate text-[11px] font-semibold uppercase tracking-wider opacity-60">{HEADER[lang]}{clinicName ? ` • ${clinicName}` : ""}</p>
+          <div className="flex items-center justify-between gap-3">
+            <p className="min-w-0 truncate text-[11px] font-semibold uppercase tracking-wider opacity-60">{HEADER[lang]}{clinicName ? ` • ${clinicName}` : ""}</p>
+            {showProvinceSwitcher && !dark && (
+              <div role="group" aria-label={U.province} className="flex shrink-0 rounded-full bg-[color-mix(in_srgb,var(--ink)_7%,var(--paper))] p-0.5">
+                {(["QC", "ON"] as const).map((pv) => (
+                  <button key={pv} type="button" aria-pressed={province === pv} onClick={() => setProvince(pv)}
+                    className={`relative min-h-8 rounded-full px-2.5 text-[11px] font-semibold transition-colors duration-150 before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-[''] ${province === pv ? "bg-[var(--paper)] text-[var(--ink)] shadow-sm" : "text-[var(--ink)] opacity-60 hover:opacity-100"} ${FOCUS}`}>
+                    {PROVINCE_LABEL[pv]}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         <div className="flex min-h-11 items-center justify-between gap-3 px-4 pt-1">
           {canBack
