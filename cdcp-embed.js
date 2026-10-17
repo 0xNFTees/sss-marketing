@@ -267,7 +267,7 @@
       w.appendChild(sel);return w;
     }
     function renderCtl(focus){
-      clearTimeout(advT);var h0=root.offsetHeight;cin.innerHTML="";
+      clearTimeout(advT);cin.innerHTML="";grid.scrollTop=0;
       var sc=screen(),v=view(),r=required(),first=null;shownKey=null;nextBtn=null;
       cin.appendChild(node("p","cq-title",esc(U.title)));
       if(sc!=="result"){var pb=provBar();if(pb)cin.appendChild(pb);}
@@ -301,8 +301,6 @@
       // screen change: the frame resizes to its new content and the new screen slides (or, for the result, springs) in
       var rank=sc==="q"?r.indexOf(v):sc==="appt"?3:4,key=sc+(v||"");
       if(lastScr!==null&&lastScr!==key){
-        var h1=root.offsetHeight;
-        if(!REDUCE_MOTION&&h0&&h1!==h0&&root.animate)root.animate([{height:h0+"px"},{height:h1+"px"}],{duration:300,easing:"cubic-bezier(.2,.7,.2,1)"});
         enter(sc==="result"?"cq-reveal":rank>=lastRank?"cq-in-f":"cq-in-b");
       }
       lastScr=key;lastRank=rank;
