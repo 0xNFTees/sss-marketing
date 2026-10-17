@@ -45,9 +45,9 @@ export const VISITS: readonly { id: VisitId; items: readonly (readonly [string, 
   { id: "emerg", items: [["01205", 1], ["02102", 1]] },
 ];
 
-export type Province = "QC" | "ON" | "BC";
-export const PROVINCES: readonly Province[] = ["QC", "ON", "BC"];
-export const PROVINCE_LABEL: Record<Province, string> = { QC: "QC (ACDQ)", ON: "ON (ODA)", BC: "BC (BCDA)" };
+export type Province = "QC" | "ON" | "BC" | "AB";
+export const PROVINCES: readonly Province[] = ["QC", "ON", "BC", "AB"];
+export const PROVINCE_LABEL: Record<Province, string> = { QC: "QC (ACDQ)", ON: "ON (ODA)", BC: "BC (BCDA)", AB: "AB (ADA)" };
 
 /** Ontario bundles, 2026: the dentist's fee (ODA fee guide) and the CDCP fee-schedule amount for the same visit.
  *  Source: supplied by SSS, NOT yet verified against the ODA guide or the CDCP Ontario schedule. Confirm with the clinic before go-live. */
@@ -63,7 +63,14 @@ export const BC_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGri
   recall: { oda: 187.9, cdcpGrid: 182.54 },
   emerg: { oda: 137, cdcpGrid: 80.43 },
 };
-const BUNDLES: Record<Exclude<Province, "QC">, typeof ONTARIO_APPOINTMENT_BUNDLES_2026> = { ON: ONTARIO_APPOINTMENT_BUNDLES_2026, BC: BC_APPOINTMENT_BUNDLES_2026 };
+
+/** Alberta bundles, 2026: ADA fee guide vs CDCP schedule. Supplied by SSS, NOT yet verified. */
+export const ALBERTA_APPOINTMENT_BUNDLES_2026: Record<VisitId, { oda: number; cdcpGrid: number }> = {
+  new: { oda: 466.1, cdcpGrid: 421.52 },
+  recall: { oda: 255.55, cdcpGrid: 244.56 },
+  emerg: { oda: 191.15, cdcpGrid: 162.2 },
+};
+const BUNDLES: Record<Exclude<Province, "QC">, typeof ONTARIO_APPOINTMENT_BUNDLES_2026> = { ON: ONTARIO_APPOINTMENT_BUNDLES_2026, BC: BC_APPOINTMENT_BUNDLES_2026, AB: ALBERTA_APPOINTMENT_BUNDLES_2026 };
 
 export type Outcome = "pending" | "insurance" | "income" | "tax" | "qualified" | "unconfirmed";
 
@@ -1120,7 +1127,7 @@ export function CdcpSingleBoxWidget({
               <div role="group" aria-label={U.province} className="flex shrink-0 rounded-full bg-[color-mix(in_srgb,var(--ink)_7%,var(--paper))] p-0.5">
                 {PROVINCES.map((pv) => (
                   <button key={pv} type="button" aria-pressed={province === pv} onClick={() => setProvince(pv)}
-                    className={`relative min-h-8 rounded-full px-2.5 text-[11px] font-semibold transition-colors duration-150 before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-[''] ${province === pv ? "bg-[var(--paper)] text-[var(--ink)] shadow-sm" : "text-[var(--ink)] opacity-60 hover:opacity-100"} ${FOCUS}`}>
+                    className={`relative min-h-8 rounded-full px-2 text-[11px] font-semibold transition-colors duration-150 before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-[''] ${province === pv ? "bg-[var(--paper)] text-[var(--ink)] shadow-sm" : "text-[var(--ink)] opacity-60 hover:opacity-100"} ${FOCUS}`}>
                     {PROVINCE_LABEL[pv]}
                   </button>
                 ))}

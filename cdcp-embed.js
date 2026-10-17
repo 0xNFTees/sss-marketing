@@ -127,9 +127,9 @@
     var L=CDCP_LABELS[lang],U=T[lang],id=++uid,BOOK=opts.bookingUrl||L.bookingUrl;
     var nf=new Intl.NumberFormat(lang==="fr"?"fr-CA":"en-CA",{style:"currency",currency:"CAD",minimumFractionDigits:2});
     var DATA=(window.CDCP_PROVINCES||{}).QC,byCode={};
-    var PROVS=["QC","ON","BC"],PLABEL={QC:"QC (ACDQ)",ON:"ON (ODA)",BC:"BC (BCDA)"},PROV=PROVS.indexOf(opts.province)>=0?opts.province:"QC";
+    var PROVS=["QC","ON","BC","AB"],PLABEL={QC:"QC (ACDQ)",ON:"ON (ODA)",BC:"BC (BCDA)",AB:"AB (ADA)"},PROV=PROVS.indexOf(opts.province)>=0?opts.province:"QC";
     // 2026 appointment bundles: f = provincial dentists' fee guide, g = CDCP fee schedule. Supplied by SSS, NOT yet verified (confirm with a clinic before go-live).
-    var BUNDLES={ON:{new:{f:423,g:342},recall:{f:240,g:190},emerg:{f:148,g:102}},BC:{new:{f:418,g:326.1},recall:{f:187.9,g:182.54},emerg:{f:137,g:80.43}}};
+    var BUNDLES={ON:{new:{f:423,g:342},recall:{f:240,g:190},emerg:{f:148,g:102}},BC:{new:{f:418,g:326.1},recall:{f:187.9,g:182.54},emerg:{f:137,g:80.43}},AB:{new:{f:466.1,g:421.52},recall:{f:255.55,g:244.56},emerg:{f:191.15,g:162.2}}};
     function HAS(){return !!DATA||PROV!=="QC";}
     if(DATA&&DATA.procedures)DATA.procedures.forEach(function(p){byCode[p.code]=p;});else DATA=null;
     if(!DATA)PROV="QC";
