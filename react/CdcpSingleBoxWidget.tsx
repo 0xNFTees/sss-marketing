@@ -47,7 +47,37 @@ export const VISITS: readonly { id: VisitId; items: readonly (readonly [string, 
 
 export type Province = "QC" | "ON" | "BC" | "AB" | "NS" | "NB" | "PE" | "MB" | "SK" | "NL" | "YT" | "NT" | "NU";
 export const PROVINCES: readonly Province[] = ["QC", "ON", "BC", "AB", "NS", "NB", "PE", "MB", "SK", "NL", "YT", "NT", "NU"];
-export const PROVINCE_LABEL: Record<Province, string> = { QC: "QC (ACDQ)", ON: "ON (ODA)", BC: "BC (BCDA)", AB: "AB (ADA)", NS: "NS (NSDA)", NB: "NB (NBDS)", PE: "PE (DAPEI)", MB: "MB (MDA)", SK: "SK (CDSS)", NL: "NL (NLDA)", YT: "YT", NT: "NT", NU: "NU" };
+export const PROVINCE_NAME: Record<Province, Record<Lang, string>> = {
+  QC: { fr: "Québec", en: "Quebec" },
+  ON: { fr: "Ontario", en: "Ontario" },
+  BC: { fr: "Colombie-Britannique", en: "British Columbia" },
+  AB: { fr: "Alberta", en: "Alberta" },
+  NS: { fr: "Nouvelle-Écosse", en: "Nova Scotia" },
+  NB: { fr: "Nouveau-Brunswick", en: "New Brunswick" },
+  PE: { fr: "Île-du-Prince-Édouard", en: "Prince Edward Island" },
+  MB: { fr: "Manitoba", en: "Manitoba" },
+  SK: { fr: "Saskatchewan", en: "Saskatchewan" },
+  NL: { fr: "Terre-Neuve-et-Labrador", en: "Newfoundland and Labrador" },
+  YT: { fr: "Yukon", en: "Yukon" },
+  NT: { fr: "Territoires du Nord-Ouest", en: "Northwest Territories" },
+  NU: { fr: "Nunavut", en: "Nunavut" },
+};
+/** The fee guide each region is compared against the federal CDCP grid with. Territories use the clinic fee rates. */
+export const PROVINCE_GUIDE: Record<Province, Record<Lang, string>> = {
+  QC: { fr: "Guide ACDQ 2026", en: "ACDQ 2026 fee guide" },
+  ON: { fr: "Guide ODA 2026", en: "ODA 2026 fee guide" },
+  BC: { fr: "Guide BCDA 2026", en: "BCDA 2026 fee guide" },
+  AB: { fr: "Guide ADA 2026", en: "ADA 2026 fee guide" },
+  NS: { fr: "Guide NSDA 2026", en: "NSDA 2026 fee guide" },
+  NB: { fr: "Guide NBDS 2026", en: "NBDS 2026 fee guide" },
+  PE: { fr: "Guide DAPEI 2026", en: "DAPEI 2026 fee guide" },
+  MB: { fr: "Guide MDA 2026", en: "MDA 2026 fee guide" },
+  SK: { fr: "Guide CDSS 2026", en: "CDSS 2026 fee guide" },
+  NL: { fr: "Guide NLDA 2026", en: "NLDA 2026 fee guide" },
+  YT: { fr: "Tarifs 2026 : Yukon", en: "Yukon 2026 fee rates" },
+  NT: { fr: "Tarifs 2026 : Territoires du Nord-Ouest", en: "Northwest Territories 2026 fee rates" },
+  NU: { fr: "Tarifs 2026 : Nunavut", en: "Nunavut 2026 fee rates" },
+};
 
 /** Ontario bundles, 2026: the dentist's fee (ODA fee guide) and the CDCP fee-schedule amount for the same visit.
  *  Source: supplied by SSS, NOT yet verified against the ODA guide or the CDCP Ontario schedule. Confirm with the clinic before go-live. */
@@ -703,7 +733,7 @@ export interface EmbeddableDentalCalculatorProps {
 }
 
 /* ------------------------------------------------------------------------------------------------ helpers */
-const HEADER = { fr: "Calculatrice RCSD", en: "CDCP Calculator" } as const;
+const HEADER = { fr: "Régime canadien de soins dentaires", en: "Canadian Dental Care Plan" } as const;
 const nb = (s: string) => s.replace(/(\d) (?=\d)/g, "$1 ").replace(/ (%|\$)/g, " $1");
 const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus,var(--ink))]";
 
@@ -1095,7 +1125,7 @@ export function CdcpSingleBoxWidget({
               <div className="pr-3"><dt className="flex items-center gap-1.5 opacity-75"><span aria-hidden className="size-2 rounded-full bg-white/40" />{U.cost}</dt><dd className="mt-0.5 text-base font-bold">{plain(est.fee, lang)}</dd></div>
               <div className="pl-4"><dt className="flex items-center gap-1.5 opacity-75"><span aria-hidden className="size-2 rounded-full bg-[var(--good-on-panel)]" />{U.paid}</dt><dd className="mt-0.5 text-base font-bold text-[var(--good-on-panel)]">{est.covered ? "− " : ""}{plain(est.covered, lang)}</dd></div>
             </dl>
-            <p className="text-xs leading-snug opacity-75">{nb(covers ? U.grid.replace("{n}", String(Math.round((est.tierPct ?? 0) * 100))) : est.tierPct ? U.noCover : U.noelig)} · {U.estNote}</p>
+            <p className="text-xs leading-snug opacity-75">{nb(covers ? U.grid.replace("{n}", String(Math.round((est.tierPct ?? 0) * 100))) : est.tierPct ? U.noCover : U.noelig)} · {U.estNote} · {PROVINCE_GUIDE[province][lang]} / {lang === "fr" ? "grille du RCSD" : "CDCP grid"}</p>
           </>)}
         </Rise>
       )}
@@ -1169,16 +1199,16 @@ export function CdcpSingleBoxWidget({
       <div role="status" className="sr-only">{announce}</div>
       <AutoHeight reduce={reduce}>
         <div className="px-6 pt-4">
-          <p className="truncate text-[11px] font-semibold uppercase tracking-wider opacity-60">{HEADER[lang]}{clinicName ? ` • ${clinicName}` : ""}</p>
+          <p className="text-xs font-semibold uppercase leading-snug tracking-wider text-balance opacity-65">{HEADER[lang]}{clinicName ? ` • ${clinicName}` : ""}</p>
           {showProvinceSwitcher && !dark && (
-            <label className={`mt-2 flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded-2xl bg-[color-mix(in_srgb,var(--ink)_6%,var(--paper))] pl-4 pr-3 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--focus,var(--ink))]`}>
-              <span className="text-[13px] font-medium opacity-70">{U.chooseProv}</span>
-              <span className="relative">
+            <label className="mt-3 block">
+              <span className="mb-1 block text-[13px] font-medium opacity-75">{U.chooseProv}</span>
+              <span className="relative block">
                 <select value={province} onChange={(e) => setProvince(e.target.value as Province)}
-                  className="min-h-11 cursor-pointer appearance-none bg-transparent py-1 pl-2 pr-6 text-[13px] font-semibold text-[var(--ink)] outline-none">
-                  {PROVINCES.map((pv) => <option key={pv} value={pv}>{PROVINCE_LABEL[pv]}</option>)}
+                  className={`min-h-12 w-full cursor-pointer appearance-none rounded-2xl border-2 border-transparent bg-[color-mix(in_srgb,var(--ink)_6%,var(--paper))] py-2 pl-4 pr-10 text-[15px] font-semibold text-[var(--ink)] transition-colors duration-200 hover:border-[color-mix(in_srgb,var(--p)_40%,transparent)] ${FOCUS}`}>
+                  {PROVINCES.map((pv) => <option key={pv} value={pv}>{PROVINCE_NAME[pv][lang]}</option>)}
                 </select>
-                <ChevronDown aria-hidden className="pointer-events-none absolute right-0 top-1/2 size-4 -translate-y-1/2 opacity-60" />
+                <ChevronDown aria-hidden className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 opacity-60" />
               </span>
             </label>
           )}
