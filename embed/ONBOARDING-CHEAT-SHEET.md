@@ -2,7 +2,7 @@
 
 For the call. Goal: calculator live on their site before the call ends.
 
-**Prep (before the call, 2 min):** fill both snippets in `snippet.html` with their clinic name, brand hex, booking URL, phone, language, and province. Paste the finished snippets somewhere you can copy from instantly. Have the demo open at `https://sss.marketing/embed/demo.html`.
+**Prep (before the call, 2 min):** open `https://sss.marketing/embed/kit.html`, fill in their clinic name, brand hex, booking URL, phone, language, and province — it generates both snippets with a copy button and a live preview. Keep that tab open through the call.
 
 **Opening line:** "Share your screen, open your website editor, and we'll have it live in about a minute."
 
