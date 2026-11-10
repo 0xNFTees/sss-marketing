@@ -199,7 +199,6 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
 }
 :focus-visible{outline:1px solid var(--tan);outline-offset:3px}
 </style>
-<link rel="stylesheet" href="/cdcp-embed.css?v=fa2c2ae3">
 </head>
 <body>
 
@@ -238,7 +237,7 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
         <p style="font-family:var(--body);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--tan);margin-bottom:6px">Vérification gratuite</p>
         <h3 style="font-family:var(--display);font-weight:500;font-size:clamp(22px,2.6vw,28px);letter-spacing:-0.015em;margin-bottom:8px">Vérifiez votre couverture RCSD en 60 secondes</h3>
         <p style="font-family:var(--body);font-size:14px;color:var(--ink);opacity:.75;margin-bottom:20px">Quatre courtes questions. Aucun compte, aucune attente.</p>
-      <div id="quizRoot"></div>
+      <div id="quizRoot"><cdcp-calculator data-lang="fr" data-province="QC" data-primary-color="#1C1812" data-clinic-name="Notre clinique dentaire" data-booking-url="/#contact"></cdcp-calculator></div>
       <div class="demo-cta">
         <p>Ce calculateur fait partie du forfait standard sur le site de chaque client SSS — ce n'est pas une maquette.</p>
         <a href="/#contact" class="cta-nav">Obtenez cet outil sur votre site<span class="cta-arrow">&#8594;</span></a>
@@ -340,10 +339,6 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
   document.querySelectorAll(".fade-in").forEach(function(el){io.observe(el);});
 })();
 </script>
-<script src="/cdcp-estimator-data.js?v=d5533ae8"></script>
-<script src="/cdcp-embed.js?v=fa2c2ae3"></script>
-<script>
-mountCdcpQuiz(document.getElementById("quizRoot"),"fr",{demo:true});
-</script>
+<script src="/embed/index.js?v=d2917502" defer></script>
 </body>
 </html>

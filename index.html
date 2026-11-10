@@ -1085,7 +1085,6 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 /* sss.marketing brand mapping for the embeddable calculator (see EMBED.md) */
 .cdcp{--cdcp-brand:var(--ink);--cdcp-on-brand:var(--paper);--cdcp-ink:var(--ink);--cdcp-paper:var(--paper);--cdcp-tint:var(--surface-a);--cdcp-accent:var(--tan);--cdcp-line:var(--rule);--cdcp-good:#2f6b35;--cdcp-bad:#b3261e;--cdcp-warn:#8a4f1c;--cdcp-font:var(--body);--cdcp-display:var(--display)}
 </style>
-<link rel="stylesheet" href="/cdcp-embed.css?v=fa2c2ae3">
 </head>
 <body>
 
@@ -1601,8 +1600,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   </svg>
 </button>
 
-<script src="/cdcp-estimator-data.js?v=d5533ae8"></script>
-<script src="/cdcp-embed.js?v=fa2c2ae3"></script>
+<script src="/embed/index.js?v=d2917502" defer></script>
 <script>
 (function(){
   const i18n = {
@@ -1691,7 +1689,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     detailEl.innerHTML=html;detailEl.classList.add("open");
     detailEl.classList.toggle("has-quiz",id==='s5');
     document.getElementById("svcDetailClose").addEventListener("click",closeSvc);
-    if(id==='s5'&&window.mountCdcpQuiz)window.mountCdcpQuiz(document.getElementById('cdcpQuizHome'),lang,{demo:true});
+    if(id==='s5'){var cq=document.createElement('cdcp-calculator');cq.setAttribute('data-lang',lang);cq.setAttribute('data-province','QC');cq.setAttribute('data-primary-color','#1C1812');cq.setAttribute('data-clinic-name',lang==='fr'?'Notre clinique dentaire':'Our Dental Clinic');cq.setAttribute('data-booking-url','/#contact');document.getElementById('cdcpQuizHome').appendChild(cq);}
   }
   function closeSvc(){
     detailEl.classList.remove("open");

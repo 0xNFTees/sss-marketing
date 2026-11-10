@@ -199,7 +199,6 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
 }
 :focus-visible{outline:1px solid var(--tan);outline-offset:3px}
 </style>
-<link rel="stylesheet" href="/cdcp-embed.css?v=fa2c2ae3">
 </head>
 <body>
 
@@ -238,7 +237,7 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
         <p style="font-family:var(--body);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--tan);margin-bottom:6px">Free eligibility check</p>
         <h3 style="font-family:var(--display);font-weight:500;font-size:clamp(22px,2.6vw,28px);letter-spacing:-0.015em;margin-bottom:8px">Check your CDCP coverage in 60 seconds</h3>
         <p style="font-family:var(--body);font-size:14px;color:var(--ink);opacity:.75;margin-bottom:20px">Four quick questions. No account, no waiting.</p>
-      <div id="quizRoot"></div>
+      <div id="quizRoot"><cdcp-calculator data-lang="en" data-province="QC" data-primary-color="#1C1812" data-clinic-name="Our Dental Clinic" data-booking-url="/#contact"></cdcp-calculator></div>
       <div class="demo-cta">
         <p>This calculator is a standard build on every SSS dental client's site — not a mockup.</p>
         <a href="/#contact" class="cta-nav">Get this on your site<span class="cta-arrow">&#8594;</span></a>
@@ -330,10 +329,6 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
   document.querySelectorAll(".fade-in").forEach(function(el){io.observe(el);});
 })();
 </script>
-<script src="/cdcp-estimator-data.js?v=d5533ae8"></script>
-<script src="/cdcp-embed.js?v=fa2c2ae3"></script>
-<script>
-mountCdcpQuiz(document.getElementById("quizRoot"),"en",{demo:true});
-</script>
+<script src="/embed/index.js?v=d2917502" defer></script>
 </body>
 </html>
