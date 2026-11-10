@@ -11,7 +11,7 @@ The calculator lets your patients check their Canadian Dental Care Plan (CDCP) e
 You received a snippet that looks like this:
 
 ```html
-<script src="https://[YOUR-VERCEL-PROJECT].vercel.app/index.js" defer></script>
+<script src="https://sss.marketing/embed/index.js" defer></script>
 
 <cdcp-calculator
   data-clinic-name="Maple Valley Dental"
@@ -56,11 +56,11 @@ Serving both languages? Paste the block twice — once with `data-lang="en"` on 
 3. Paste the whole snippet and click outside the block.
 4. Save. (The calculator appears on the live page — Squarespace sometimes shows a placeholder in the editor preview. Business plan or higher is required for code blocks.)
 
-### Wix
-1. In the editor, click **Add Elements (+)** → **Embed Code** → **Embed HTML**.
-2. Click **Enter Code**, paste the whole snippet, and click **Apply**.
-3. Drag the frame tall and wide enough for the calculator (about 600 × 900 px works well — it will scroll inside the frame if it's too small).
-4. Publish.
+### Wix / GoDaddy / Weebly
+These builders work best with the **iframe version** of the snippet (it's the second block in the file you received — it resizes itself automatically, so there are never scrollbars):
+1. In Wix: **Add Elements (+)** → **Embed Code** → **Embed HTML** → **Enter Code**, paste the iframe snippet, **Apply**.
+2. Drag the element to roughly 700px tall and full content width.
+3. Publish.
 
 ### Webflow
 Add an **Embed** element where you want the calculator, paste the snippet, save, and publish.
@@ -86,6 +86,9 @@ No. Answers live only in the visitor's browser while the page is open. Nothing i
 
 **What do the dollar figures mean?**
 They're estimates comparing your province's 2026 dentist fee guide with the federal CDCP Dental Benefit Grid for three common visits. They're labelled as estimates, not quotes, and patients are told to ask for a written estimate.
+
+**My page builder strips out code / the calculator doesn't show.**
+Use the iframe version of the snippet instead — it works anywhere an embed is allowed. If it still doesn't show, send us the page link.
 
 **Something's not working.**
 Reply to the email this came in and include a link to the page — we'll sort it out.

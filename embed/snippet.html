@@ -1,19 +1,49 @@
-<!-- ============================================================
-     CDCP Calculator — paste this whole block where the calculator
-     should appear on your website. Edit ONLY the data-… lines.
-     ============================================================ -->
-<script src="https://[YOUR-VERCEL-PROJECT].vercel.app/index.js" defer></script>
+<!-- ================================================================
+     CDCP CALCULATOR — CLIENT EMBED SNIPPETS
+     Two ways to install. Pick ONE. Edit only the data-/URL values.
+     ================================================================ -->
+
+
+<!-- ────────────────────────────────────────────────────────────────
+     SNIPPET 1 · WEB COMPONENT (preferred)
+     For: WordPress (Gutenberg/Elementor Custom HTML), Webflow Embed,
+     Squarespace Code block, Shopify Custom Liquid, any HTML site.
+     ──────────────────────────────────────────────────────────────── -->
+<script src="https://sss.marketing/embed/index.js" defer></script>
 
 <cdcp-calculator
   data-clinic-name="Maple Valley Dental"
   data-primary-color="#0F766E"
-  data-booking-url="https://www.mapleValleydental.com/book"
+  data-booking-url="https://www.maplevalleydental.com/book"
   data-phone="+1 555 555 5555"
   data-lang="en"
   data-province="ON">
 </cdcp-calculator>
 
-<!-- data-lang:     "en" or "fr"
-     data-province: QC ON BC AB NS NB PE MB SK NL YT NT NU (pre-selects the estimate's fee guide)
-     data-phone:    optional — remove the line to hide the call button
-     Already live today (no Vercel needed): https://sss.marketing/embed/index.js -->
+
+<!-- ────────────────────────────────────────────────────────────────
+     SNIPPET 2 · AUTO-RESIZING IFRAME (fallback)
+     For: Wix, GoDaddy, Weebly, or WordPress setups whose security
+     plugins strip <script> tags. The 3-line listener below grows the
+     iframe to fit the calculator, so there is never an inner scrollbar.
+     Configuration travels in the URL (values must be URL-encoded;
+     the # of a hex color is written %23).
+     ──────────────────────────────────────────────────────────────── -->
+<iframe id="cdcp-frame"
+  src="https://sss.marketing/embed/frame.html?clinic=Maple%20Valley%20Dental&color=%230F766E&booking=https%3A%2F%2Fwww.maplevalleydental.com%2Fbook&phone=%2B1%20555%20555%205555&lang=en&province=ON"
+  style="width:100%;border:0;height:620px" title="CDCP calculator" loading="lazy"></iframe>
+<script>
+  addEventListener("message", function (e) {
+    if (e.data && e.data.type === "cdcp-resize") document.getElementById("cdcp-frame").style.height = e.data.height + "px";
+  });
+</script>
+
+
+<!-- Parameters (same meaning in both snippets)
+     clinic name ......... shown in the calculator's header and booking card
+     primary color ....... your brand hex (Snippet 2: write # as %23)
+     booking url ......... where "Book an appointment" sends patients
+     phone ............... adds a click-to-call button; omit to hide it
+     lang ................ en | fr
+     province ............ QC ON BC AB NS NB PE MB SK NL YT NT NU
+     Live demo: https://sss.marketing/embed/demo.html -->

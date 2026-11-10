@@ -1,0 +1,64 @@
+<!doctype html>
+<!-- Engine B: the CDCP calculator as a standalone page, for iframes and
+     script-blocking CMSs (Wix, GoDaddy, Weebly, locked-down WordPress).
+     It wraps the exact same <cdcp-calculator> component as Engine A,
+     configured by URL query parameters, and reports its height to the
+     parent page so the iframe never shows an internal scrollbar.
+
+     Parameters: ?clinic=&color=%230F766E&booking=&phone=&lang=en|fr&province=ON
+     Resize events: postMessage({ type: "cdcp-resize", height }) to the parent. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>CDCP Calculator</title>
+<style>
+  html, body { margin: 0; padding: 0; background: transparent; }
+  body { padding: 2px 0 6px; } /* room for the card's shadow inside the frame */
+  cdcp-calculator { display: block; }
+</style>
+</head>
+<body>
+<script>
+(function () {
+  var q = new URLSearchParams(location.search);
+  var el = document.createElement("cdcp-calculator");
+  var map = {
+    clinic: "data-clinic-name",
+    color: "data-primary-color",
+    booking: "data-booking-url",
+    phone: "data-phone",
+    lang: "data-lang",
+    province: "data-province"
+  };
+  Object.keys(map).forEach(function (k) {
+    var v = q.get(k);
+    if (v) el.setAttribute(map[k], v);
+  });
+  if (q.get("lang")) document.documentElement.lang = q.get("lang") === "fr" ? "fr" : "en";
+  document.body.appendChild(el);
+
+  // Zero-cutoff mechanism: report our height to the parent page whenever
+  // anything changes size — answering a question, expanding the result,
+  // rotating a phone. The parent listener resizes the iframe to match.
+  var last = 0;
+  function report() {
+    var h = Math.ceil(document.documentElement.getBoundingClientRect().height) + 8;
+    if (h !== last && h > 0) {
+      last = h;
+      try { parent.postMessage({ type: "cdcp-resize", height: h }, "*"); } catch (e) {}
+    }
+  }
+  if (window.ResizeObserver) {
+    new ResizeObserver(report).observe(document.documentElement);
+    new ResizeObserver(report).observe(el);
+  }
+  el.addEventListener("cdcp-rendered", function () { setTimeout(report, 50); });
+  window.addEventListener("resize", report);
+  window.addEventListener("load", function () { report(); setTimeout(report, 300); });
+})();
+</script>
+<script src="index.js"></script>
+</body>
+</html>
