@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>CDCP Widget — Onboarding Kit (internal)</title>
+<style>
+  :root { --bg:#191b14; --panel:#22251c; --line:#3a3d31; --cream:#efeadb; --dim:#b7b3a4; --ok:#b9e4c9; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--cream); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; line-height:1.5; }
+  .wrap { max-width:74rem; margin:0 auto; padding:24px 20px 60px; }
+  h1 { font-size:22px; font-weight:750; letter-spacing:-.01em; }
+  .lede { color:var(--dim); font-size:13.5px; margin:6px 0 24px; }
+  .lede a { color:var(--cream); }
+  .cols { display:grid; grid-template-columns: 340px 1fr; gap:24px; align-items:start; }
+  @media (max-width: 880px){ .cols { grid-template-columns:1fr; } }
+  form { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:18px; position:sticky; top:16px; }
+  label { display:block; font-size:12px; font-weight:650; color:var(--dim); margin:12px 0 4px; }
+  label:first-child { margin-top:0; }
+  input, select { width:100%; font:inherit; font-size:14px; color:var(--cream); background:var(--bg); border:1px solid var(--line); border-radius:9px; padding:10px 11px; min-height:42px; }
+  input:focus-visible, select:focus-visible, button:focus-visible { outline:2px solid var(--cream); outline-offset:1px; }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .swatch { display:flex; gap:8px; align-items:center; }
+  .swatch input[type=color] { width:46px; padding:2px; height:42px; cursor:pointer; }
+  .out { display:flex; flex-direction:column; gap:18px; }
+  .block { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:16px 18px; }
+  .block-h { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:8px; }
+  .block-h b { font-size:14px; font-weight:700; }
+  .block-h small { color:var(--dim); font-size:12px; }
+  button.copy { font:inherit; font-size:12.5px; font-weight:650; color:var(--bg); background:var(--cream); border:0; border-radius:999px; padding:8px 16px; min-height:36px; cursor:pointer; }
+  button.copy.done { background:var(--ok); }
+  textarea { width:100%; font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; color:var(--cream); background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:12px; min-height:120px; resize:vertical; white-space:pre; }
+  .preview { background:#eceee9; border-radius:16px; padding:clamp(14px,3vw,30px); }
+  .preview-note { font-size:12px; color:var(--dim); margin-bottom:10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>CDCP Widget — Onboarding Kit</h1>
+  <p class="lede">Internal tool. Fill in the clinic, copy the snippet they need, done — encoding is handled for you.
+     Call steps: <a href="https://github.com/0xNFTees/sss-marketing/blob/main/embed/ONBOARDING-CHEAT-SHEET.md">cheat sheet</a> ·
+     client guide to send after: <a href="https://github.com/0xNFTees/sss-marketing/blob/main/embed/CLINIC-GUIDE.md">CLINIC-GUIDE</a> ·
+     public demo: <a href="demo.html">demo.html</a></p>
+
+  <div class="cols">
+    <form onsubmit="return false">
+      <label for="f-name">Clinic name</label>
+      <input id="f-name" value="Maple Valley Dental" autocomplete="off">
+      <label for="f-color">Brand color</label>
+      <div class="swatch">
+        <input type="color" id="f-color" value="#0F766E" aria-label="Brand color picker">
+        <input id="f-colorhex" value="#0F766E" autocomplete="off" aria-label="Brand color hex">
+      </div>
+      <label for="f-booking">Booking URL</label>
+      <input id="f-booking" value="https://" autocomplete="off" inputmode="url">
+      <label for="f-phone">Phone (blank = no call button)</label>
+      <input id="f-phone" value="" autocomplete="off" inputmode="tel" placeholder="+1 555 555 5555">
+      <div class="row2">
+        <div>
+          <label for="f-lang">Language</label>
+          <select id="f-lang"><option value="en">English</option><option value="fr">Français</option></select>
+        </div>
+        <div>
+          <label for="f-prov">Province</label>
+          <select id="f-prov"></select>
+        </div>
+      </div>
+    </form>
+
+    <div class="out">
+      <div class="block">
+        <div class="block-h">
+          <div><b>Snippet 1 — Web component</b> <small>WordPress · Webflow · Squarespace · Shopify · HTML</small></div>
+          <button type="button" class="copy" data-for="out-wc">Copy</button>
+        </div>
+        <textarea id="out-wc" readonly spellcheck="false" aria-label="Web component snippet"></textarea>
+      </div>
+
+      <div class="block">
+        <div class="block-h">
+          <div><b>Snippet 2 — Auto-resizing iframe</b> <small>Wix · GoDaddy · Weebly · script-blocking WordPress</small></div>
+          <button type="button" class="copy" data-for="out-if">Copy</button>
+        </div>
+        <textarea id="out-if" readonly spellcheck="false" aria-label="Iframe snippet"></textarea>
+      </div>
+
+      <div class="preview">
+        <p class="preview-note">Live preview — exactly what their visitors get.</p>
+        <div id="mount"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="index.js"></script>
+<script>
+(function () {
+  var PROVS = { QC:"Quebec", ON:"Ontario", BC:"British Columbia", AB:"Alberta", NS:"Nova Scotia", NB:"New Brunswick", PE:"Prince Edward Island", MB:"Manitoba", SK:"Saskatchewan", NL:"Newfoundland and Labrador", YT:"Yukon", NT:"Northwest Territories", NU:"Nunavut" };
+  var ps = document.getElementById("f-prov");
+  Object.keys(PROVS).forEach(function (k) {
+    var o = document.createElement("option"); o.value = k; o.textContent = k + " — " + PROVS[k];
+    if (k === "ON") o.selected = true;
+    ps.appendChild(o);
+  });
+
+  var $ = function (id) { return document.getElementById(id); };
+  var BASE = "https://sss.marketing/embed/";
+
+  function cfg() {
+    var hex = $("f-colorhex").value.trim();
+    if (!/^#?[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/.test(hex)) hex = "#0F766E";
+    if (hex[0] !== "#") hex = "#" + hex;
+    return {
+      name: $("f-name").value.trim() || "Our Dental Clinic",
+      color: hex,
+      booking: $("f-booking").value.trim().replace(/^https:\/\/$/, ""),
+      phone: $("f-phone").value.trim(),
+      lang: $("f-lang").value,
+      prov: $("f-prov").value
+    };
+  }
+
+  function wcSnippet(c) {
+    var lines = [
+      '<script src="' + BASE + 'index.js" defer><\/script>',
+      "",
+      "<cdcp-calculator",
+      '  data-clinic-name="' + c.name.replace(/"/g, "&quot;") + '"',
+      '  data-primary-color="' + c.color + '"'
+    ];
+    if (c.booking) lines.push('  data-booking-url="' + c.booking.replace(/"/g, "&quot;") + '"');
+    if (c.phone) lines.push('  data-phone="' + c.phone.replace(/"/g, "&quot;") + '"');
+    lines.push('  data-lang="' + c.lang + '"');
+    lines.push('  data-province="' + c.prov + '">');
+    lines.push("</cdcp-calculator>");
+    return lines.join("\n");
+  }
+
+  function ifSnippet(c) {
+    var q = ["clinic=" + encodeURIComponent(c.name), "color=" + encodeURIComponent(c.color)];
+    if (c.booking) q.push("booking=" + encodeURIComponent(c.booking));
+    if (c.phone) q.push("phone=" + encodeURIComponent(c.phone));
+    q.push("lang=" + c.lang, "province=" + c.prov);
+    return [
+      '<iframe id="cdcp-frame"',
+      '  src="' + BASE + "frame.html?" + q.join("&") + '"',
+      '  style="width:100%;border:0;height:620px" title="CDCP calculator" loading="lazy"></iframe>',
+      "<script>",
+      '  addEventListener("message", function (e) {',
+      '    if (e.data && e.data.type === "cdcp-resize") document.getElementById("cdcp-frame").style.height = e.data.height + "px";',
+      "  });",
+      "<\/script>"
+    ].join("\n");
+  }
+
+  var mount = $("mount"), t;
+  function update() {
+    var c = cfg();
+    $("out-wc").value = wcSnippet(c);
+    $("out-if").value = ifSnippet(c);
+    clearTimeout(t);
+    t = setTimeout(function () {
+      mount.textContent = "";
+      var el = document.createElement("cdcp-calculator");
+      el.setAttribute("data-clinic-name", c.name);
+      el.setAttribute("data-primary-color", c.color);
+      if (c.booking) el.setAttribute("data-booking-url", c.booking);
+      if (c.phone) el.setAttribute("data-phone", c.phone);
+      el.setAttribute("data-lang", c.lang);
+      el.setAttribute("data-province", c.prov);
+      mount.appendChild(el);
+    }, 250);
+  }
+
+  ["f-name","f-colorhex","f-booking","f-phone"].forEach(function (id) { $(id).addEventListener("input", update); });
+  ["f-lang","f-prov"].forEach(function (id) { $(id).addEventListener("change", update); });
+  $("f-color").addEventListener("input", function () { $("f-colorhex").value = $("f-color").value.toUpperCase(); update(); });
+  $("f-colorhex").addEventListener("input", function () {
+    var v = $("f-colorhex").value.trim();
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) $("f-color").value = v;
+  });
+
+  document.querySelectorAll("button.copy").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var ta = $(b.getAttribute("data-for"));
+      ta.select();
+      var done = function () { b.textContent = "Copied"; b.classList.add("done"); setTimeout(function () { b.textContent = "Copy"; b.classList.remove("done"); }, 1400); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ta.value).then(done, function () { document.execCommand("copy"); done(); });
+      else { document.execCommand("copy"); done(); }
+    });
+  });
+
+  update();
+})();
+</script>
+</body>
+</html>
