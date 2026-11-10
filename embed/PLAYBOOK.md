@@ -19,7 +19,7 @@ One page. Everything lives at `sss.marketing/embed/` and in the repo folder `emb
 
 **2 · Two minutes before the call** → open `kit.html`, fill in clinic name, brand color (eyedrop it from their site), booking URL, phone, language, province. Leave the tab open.
 
-**3 · On the call** (cheat sheet open in a second tab) → they share screen → you paste the snippet from kit.html → live before the call ends → verify on their phone. Then the real agenda: you've just watched their website workflow — talk about what else SSS does.
+**3 · On the call** (cheat sheet open in a second tab) → they share screen → they create the page (Step 0 of the cheat sheet: new page titled CDCP or RCSD, slug /cdcp or /rcsd), you paste the snippet from kit.html into it → live before the call ends → verify on their phone. Then the real agenda: you've just watched their website workflow — talk about what else SSS does.
 
 **4 · Within the hour** → follow-up email (template below) with their exact snippet + the clinic guide. They now have your work on their homepage with your badge on it.
 

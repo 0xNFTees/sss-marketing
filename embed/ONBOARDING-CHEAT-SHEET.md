@@ -8,6 +8,14 @@ For the call. Goal: calculator live on their site before the call ends.
 
 ---
 
+## Step 0 — create the page (the snippet fills a page, it doesn't create one)
+Before pasting, make the page the calculator will live on — ~30 seconds in any CMS:
+1. New page, titled to match the site's language: **"CDCP"** (English) or **"RCSD"** (French). WordPress: Pages → Add New · Wix: Menus & Pages → + Add Page · Squarespace: Pages → + · Webflow: Pages panel → + · GoDaddy: Website → Add Page · Shopify: Online Store → Pages → Add.
+2. Set the URL slug to **/cdcp** or **/rcsd**.
+3. Optional one-line intro above the widget, then paste the snippet (per the steps below).
+4. Confirm the page appears in the site menu (most builders add it automatically — check), then publish.
+Pasting into an existing page works too (a "Services" page, a homepage section) — the widget is just an element. A dedicated /cdcp or /rcsd page is better: it's linkable from Google Business Profile and can rank for "dentiste RCSD / CDCP dentist + city".
+
 ## If they use WordPress
 1. Edit the target page → click **+** → search **Custom HTML** → paste **Snippet 1**.
 2. **Preview** → **Update**. Done.
