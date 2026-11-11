@@ -86,6 +86,9 @@ with sync_playwright() as p:
         ok(path + ": QC pre-selected", widget(pg).evaluate("el=>el.shadowRoot.querySelector('#cdcp-prov').value") == "QC")
         ok(path + ": powered-by badge links to sss.marketing with utm",
            widget(pg).evaluate("el=>{const a=el.shadowRoot.querySelector('.sss');return a&&a.href.includes('sss.marketing')&&a.href.includes('utm_source=cdcp_widget')}"))
+        rn = widget(pg).evaluate("el=>{const c=el.shadowRoot.querySelector('.renew');return c?c.textContent:''}")
+        ok(path + ": annual renewal card on the result (June 1 / June 30 / 1-833 line)",
+           ("1\u2011833\u2011537\u20114342" in rn) and (("June 1" in rn and "June 30" in rn) if lang == "en" else ("1er juin" in rn and "30 juin" in rn)), rn[:160])
         ok(path + ": no page errors", not errs, errs)
         if lang == "en":
             # full province × visit × tier math grid through the UI (39 cells at tier 100 + spot tiers)
@@ -132,6 +135,7 @@ with sync_playwright() as p:
     widget(pg).evaluate("el=>{const g=[...el.shadowRoot.querySelectorAll('.ghost')];g[g.length-1].click()}"); pg.wait_for_timeout(250)
     run_flow(pg, [1, 0, 0, 1])
     ok("/cdcp: unfiled-taxes branch asks to file", "file your tax return" in sh_text(pg).lower())
+    ok("/cdcp: unfiled-taxes branch reminds existing members to renew", "renew before June 1" in sh_text(pg))
     pg.close()
 
     # ---- homepage: service card s5 opens the calculator ----

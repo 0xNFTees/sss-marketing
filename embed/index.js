@@ -117,6 +117,12 @@
       applyT: "Apply for your CDCP card",
       applyS: "Takes about 10 minutes on canada.ca. The card arrives in 4–8 weeks.",
       applyCta: "Apply on canada.ca",
+      renewT: "Renew every year, before June 1",
+      renewS: "Coverage runs July 1 to June 30. It does not renew on its own.",
+      renewSteps: ["File your tax return", "Receive your Notice of Assessment", "Renew by June 1"],
+      renewWarn: "Miss the deadline and coverage ends June 30. Care received during the gap is not reimbursed, so you pay the full fee at the front desk.",
+      renewHow: "Renew in My Service Canada Account or call 1‑833‑537‑4342. Renewing is always free.",
+      renewMember: "Already a CDCP member? The same rule applies every year: file your taxes, then renew before June 1, or coverage ends June 30.",
       bookT: function (c) { return "Book at " + c; },
       bookS: "Booking 6–8 weeks out lines your visit up with your card's arrival.",
       ctaBook: "Book an appointment",
@@ -181,6 +187,12 @@
       applyT: "Demandez votre carte RCSD",
       applyS: "Environ 10 minutes sur canada.ca. La carte arrive en 4 à 8 semaines.",
       applyCta: "Faire la demande sur canada.ca",
+      renewT: "Renouvelez chaque année, avant le 1er juin",
+      renewS: "La couverture va du 1er juillet au 30 juin. Elle ne se renouvelle pas toute seule.",
+      renewSteps: ["Produisez votre déclaration d'impôts", "Recevez votre avis de cotisation", "Renouvelez avant le 1er juin"],
+      renewWarn: "Sans renouvellement, la couverture prend fin le 30 juin. Les soins reçus pendant l'interruption ne sont pas remboursés : vous payez le plein tarif à la réception.",
+      renewHow: "Renouvelez dans Mon dossier Service Canada ou au 1‑833‑537‑4342. Le renouvellement est toujours gratuit.",
+      renewMember: "Déjà membre du RCSD ? La règle s'applique chaque année : produisez vos impôts, puis renouvelez avant le 1er juin, sinon la couverture prend fin le 30 juin.",
       bookT: function (c) { return "Réservez chez " + c; },
       bookS: "Réserver dans 6 à 8 semaines aligne votre visite avec la réception de votre carte.",
       ctaBook: "Prendre rendez-vous",
@@ -294,6 +306,16 @@
     ".act{border:1px solid var(--line);border-radius:12px;padding:14px 15px;margin-bottom:10px}" +
     ".act b{display:block;font-size:14.5px;font-weight:700;margin-bottom:2px}" +
     ".act p{font-size:12.5px;color:var(--mut);margin-bottom:11px}" +
+    ".renew{background:var(--tint);border-color:color-mix(in srgb,var(--p) 28%,var(--line))}" +
+    ".renew-h{display:flex;align-items:center;gap:8px;margin-bottom:2px}" +
+    ".renew-h svg{width:16px;height:16px;flex:none;color:var(--pd)}" +
+    ".renew-h b{margin:0}" +
+    ".renew ol{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0 11px;counter-reset:rs}" +
+    ".renew li{counter-increment:rs;font-size:12px;font-weight:600;line-height:1.35;background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:8px 9px}" +
+    ".renew li::before{content:counter(rs);display:block;font-size:11px;font-weight:800;color:var(--pd);margin-bottom:2px;font-variant-numeric:tabular-nums}" +
+    "@media(max-width:400px){.renew ol{grid-template-columns:1fr}}" +
+    ".renew .warn{color:var(--ink);font-weight:550}" +
+    ".renew .how{margin-bottom:0}" +
     ".ctas{display:flex;flex-wrap:wrap;gap:9px}" +
     ".cta{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:11px 18px;border-radius:10px;font-size:14px;font-weight:650;text-decoration:none;text-align:center;flex:1 1 auto}" +
     ".cta.p{background:var(--p);color:var(--onp)}" +
@@ -412,6 +434,9 @@
         fileA.target = "_blank"; fileA.rel = "noopener noreferrer";
         acts.appendChild(fileA);
         screen.appendChild(acts);
+        var rm = el("p", "fine", T.renewMember);
+        rm.style.marginTop = "14px";
+        screen.appendChild(rm);
       }
       if (d.book) screen.appendChild(this._clinicActions(true));
       screen.appendChild(this._restart());
@@ -570,7 +595,26 @@
     a1.appendChild(w1);
     screen.appendChild(a1);
     screen.appendChild(this._clinicActions(false));
+    screen.appendChild(this._renewCard());
     screen.appendChild(this._restart());
+  };
+
+  // Annual renewal: the second-year "you forgot to renew" problem, explained before it happens.
+  CdcpCalculator.prototype._renewCard = function () {
+    var T = STR[this._cfg.lang], el = this._el.bind(this);
+    var card = el("div", "act renew");
+    var h = el("div", "renew-h");
+    h.innerHTML = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M2 6.5h12M5.5 1.5v3M10.5 1.5v3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M6 10l1.4 1.4L10.2 8.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    h.appendChild(el("b", null, T.renewT));
+    card.appendChild(h);
+    card.appendChild(el("p", null, T.renewS));
+    var ol = el("ol");
+    ol.setAttribute("aria-label", T.renewT);
+    T.renewSteps.forEach(function (s) { ol.appendChild(el("li", null, s)); });
+    card.appendChild(ol);
+    card.appendChild(el("p", "warn", T.renewWarn));
+    card.appendChild(el("p", "how", T.renewHow));
+    return card;
   };
 
   // The clinic conversion card: name, booking button, click-to-call.

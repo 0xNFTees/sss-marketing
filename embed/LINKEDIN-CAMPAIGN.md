@@ -239,6 +239,35 @@
 
 ---
 
+## Seasonal post — Renewal season (run mid-April; repost mid-May, two weeks before the deadline)
+
+**Target:** front desk, office managers, coordinators. **Trigger:** dread of a scene they already know is coming.
+**Strategic purpose:** owns the CDCP's *second-year* problem: patients who were covered last year and lapse because they didn't renew. Positions the calculator as a tool that keeps patients covered, not just one that converts them. Sits outside the 1–9 sequence; it runs on the calendar.
+
+> July is coming. So is the scene at your front desk.
+>
+> "But I had the CDCP last year."
+> They did. They didn't renew.
+>
+> CDCP coverage doesn't roll over. Every spring, each member has to:
+> File their tax return.
+> Wait for the Notice of Assessment.
+> Renew before June 1.
+>
+> Miss it and coverage ends June 30. Care received during the gap isn't reimbursed. The patient pays the full fee, at your counter, in front of the waiting room.
+>
+> Nobody told them. That's the whole problem.
+>
+> The free CDCP calculator we install on clinic websites now tells every eligible patient this before it costs them anything: three steps, the June 1 deadline, the June 30 cliff.
+>
+> Remind your patients this week. And DM me "CDCP" if you'd rather your website did it all year.
+
+**CTA:** DM "CDCP". First comment: demo link. Second founder comment: *"Front desks: what's your renewal reminder system right now?"*
+**Graphic headline:** `File. Wait for the NOA. Renew by June 1. Every year.`
+**Visual:** the widget's renewal card, cropped (calendar icon + the three steps). FR version: `Produisez. Recevez l'avis. Renouvelez avant le 1er juin. Chaque année.`
+
+---
+
 ## Operating notes
 
 - **First comment, every post:** `Try it as a patient would → https://sss.marketing/embed/demo.html` (post 4: add `?lang=fr`).
