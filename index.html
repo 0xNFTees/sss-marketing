@@ -1734,27 +1734,29 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     // ── Availability data ────────────────────────────────────────────────────
     // dayOfWeek: 0=Sun,1=Mon,2=Tue,3=Wed,4=Thu,5=Fri,6=Sat
     var SLOTS = {
-      0: ['11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30'],
-      1: ['12:00','12:30','13:00','13:30'],
-      2: ['12:00','12:30','13:00','13:30'],
-      3: ['12:00','12:30','13:00','13:30'],
-      4: ['10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30'],
-      5: ['10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30'],
-      6: ['11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30']
+      // Fallback only (used when the booking API is off). Mirrors the server policy:
+      // Mon/Tue/Thu/Fri afternoons 14:00-17:30; Wednesday + weekends closed.
+      0: [],
+      1: ['14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30'],
+      2: ['14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30'],
+      3: [],
+      4: ['14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30'],
+      5: ['14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30'],
+      6: []
     };
 
     // ── Constant business-hours skeleton ─────────────────────────────────────
-    // 14 rows from 10:00 to 16:30. The envelope contains every operating
+    // 16 rows from 10:00 to 17:30. The envelope contains every operating
     // window with modest framing. Closed slots inside the envelope (e.g.
     // 10:00 on Mon when ops start at 12:00) render as structural placeholders.
     var BUSINESS_HOURS_TIMES = (function(){
       var arr=[], h, m;
-      for(h=10; h<17; h++){
+      for(h=10; h<18; h++){
         for(m=0; m<60; m+=30){
           arr.push((h<10?'0'+h:h)+':'+(m===0?'00':m));
         }
       }
-      return arr; // ['10:00','10:30',...,'16:30'] — 14 rows
+      return arr; // ['10:00','10:30',...,'17:30'] — 16 rows
     })();
 
     function pad(n){return n<10?'0'+n:n}
