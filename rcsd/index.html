@@ -18,8 +18,8 @@
 <link rel="shortcut icon" href="/favicon.ico">
 
 <link rel="preload" as="image" href="/logo-nav.png">
-<link rel="preload" as="font" type="font/otf" href="/fonts/RhymesTextMedium.otf" crossorigin>
-<link rel="preload" as="font" type="font/otf" href="/fonts/ABCWalterAlte-Roentgentherapie.otf" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/newsreader-latin-opsz-normal.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/hanken-grotesk-latin-wght-normal.woff2" crossorigin>
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="SSS">
@@ -41,18 +41,19 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-{"@type":"Question","name":"Suis-je admissible au RCSD?","acceptedAnswer":{"@type":"Answer","text":"Trois conditions, toutes requises : aucun accès à une assurance dentaire privée, un revenu familial net rajusté sous 90 000 $, et une déclaration de revenus canadienne produite pour vous — et votre conjoint(e), le cas échéant — pour l'année précédente."}},
-{"@type":"Question","name":"Quel revenu met fin à la couverture RCSD?","acceptedAnswer":{"@type":"Answer","text":"Moins de 70 000 $ couvre jusqu'à 100 %. De 70 000 $ à 79 999 $ couvre jusqu'à 60 %. De 80 000 $ à 89 999 $ couvre jusqu'à 40 %. 90 000 $ ou plus n'est pas admissible."}},
-{"@type":"Question","name":"Le RCSD couvre-t-il les implants ou l'Invisalign?","acceptedAnswer":{"@type":"Answer","text":"Non. Les implants et l'orthodontie — y compris l'Invisalign — sont exclus à tous les niveaux de revenu, sans exception clinique."}},
-{"@type":"Question","name":"Quand puis-je faire une demande ou renouveler?","acceptedAnswer":{"@type":"Answer","text":"La principale période de renouvellement s'étend de la mi-avril au début juin chaque année. La manquer signifie aucun remboursement rétroactif — mais les nouvelles demandes de première inscription sont acceptées en continu toute l'année."}},
-{"@type":"Question","name":"Combien le RCSD fait-il économiser aux patients?","acceptedAnswer":{"@type":"Answer","text":"Environ 900 $ par année en moyenne, selon les chiffres du programme fédéral d'avril 2026, pour plus de 6,5 millions de Canadiens inscrits."}}
+{"@type":"Question","name":"Suis-je admissible au RCSD ?","acceptedAnswer":{"@type":"Answer","text":"Trois conditions, toutes requises : aucun accès à une assurance dentaire privée, un revenu familial net rajusté sous 90 000 $, et une déclaration de revenus canadienne produite pour vous (et votre conjoint(e), le cas échéant) pour l'année précédente."}},
+{"@type":"Question","name":"Quel revenu met fin à la couverture RCSD ?","acceptedAnswer":{"@type":"Answer","text":"Moins de 70 000 $ couvre jusqu'à 100 %. De 70 000 $ à 79 999 $ couvre jusqu'à 60 %. De 80 000 $ à 89 999 $ couvre jusqu'à 40 %. 90 000 $ ou plus n'est pas admissible."}},
+{"@type":"Question","name":"Le RCSD couvre-t-il les implants ou l'Invisalign ?","acceptedAnswer":{"@type":"Answer","text":"Non. Les implants et l'orthodontie, y compris l'Invisalign, sont exclus à tous les niveaux de revenu, sans exception clinique."}},
+{"@type":"Question","name":"Quand puis-je faire une demande ou renouveler ?","acceptedAnswer":{"@type":"Answer","text":"La principale période de renouvellement s'étend de la mi-avril au début juin chaque année. La manquer signifie aucun remboursement rétroactif. Les nouvelles demandes de première inscription sont acceptées en continu toute l'année."}},
+{"@type":"Question","name":"Combien le RCSD fait-il économiser aux patients ?","acceptedAnswer":{"@type":"Answer","text":"Environ 900 $ par année en moyenne, selon les chiffres du programme fédéral d'avril 2026, pour plus de 6,5 millions de Canadiens inscrits."}}
   ]
 }
 </script>
 
 <style>
-@font-face{font-family:'RhymesText';src:url('/fonts/RhymesTextMedium.otf') format('opentype');font-weight:500;font-style:normal;font-display:swap}
-@font-face{font-family:'ABCWalter';src:url('/fonts/ABCWalterAlte-Roentgentherapie.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
+/* Fonts and tokens shared with the homepage and /tarifs (Nov 2026 system; SIL OFL, see /fonts/OFL-*.txt) */
+@font-face{font-family:'Newsreader';src:url('/fonts/newsreader-latin-opsz-normal.woff2') format('woff2');font-weight:200 800;font-style:normal;font-display:swap}
+@font-face{font-family:'Hanken Grotesk';src:url('/fonts/hanken-grotesk-latin-wght-normal.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
 
 :root{
   --paper:#fefae0;
@@ -61,154 +62,179 @@
   --sage:#ccd5ae;
   --tan:#d4a373;
   --ink:#1c1812;
+  --forest:#1b3b36;
+  --tan-deep:#875320;
 
-  --display:'RhymesText','Palatino Linotype',Georgia,serif;
-  --body:'ABCWalter',Helvetica,Arial,sans-serif;
+  --ink-2:rgba(28,24,18,0.78);
+  --paper-2:rgba(254,250,224,0.78);
+  --rule:rgba(28,24,18,0.16);
+  --rule-soft:rgba(28,24,18,0.10);
+  --rule-on-forest:rgba(254,250,224,0.22);
+
+  --display:'Newsreader','Iowan Old Style','Palatino Linotype',Georgia,serif;
+  --body:'Hanken Grotesk','Helvetica Neue',Arial,sans-serif;
 
   --ease:cubic-bezier(0.16,1,0.3,1);
   --nav-h:72px;
   --container:1240px;
   --gutter:40px;
-  --section-y:clamp(96px,12vw,160px);
-
-  --rule:rgba(28,24,18,0.15);
-  --rule-soft:rgba(28,24,18,0.10);
-
-  --good:#4d7c4a;
-  --warn:#a3672c;
+  --section-y:clamp(88px,10vw,144px);
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;font-size:16px;scroll-padding-top:100px}
-body{background:var(--paper);color:var(--ink);font-family:var(--body);font-weight:400;line-height:1.6;letter-spacing:0.005em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
+html{scroll-behavior:smooth;font-size:16px;scroll-padding-top:96px;-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;font-weight:400;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 button{font:inherit;background:none;border:none;cursor:pointer;color:inherit;padding:0}
 ul{list-style:none}
-::selection{background:var(--tan);color:var(--paper)}
+::selection{background:var(--sage);color:var(--ink)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+footer :focus-visible,.demo-cta :focus-visible{outline-color:var(--paper)}
 .container{max-width:var(--container);margin:0 auto;padding:0 var(--gutter)}
 .vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.skip-link{position:absolute;top:-100px;left:8px;z-index:200;background:var(--ink);color:var(--paper);font-family:var(--body);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;padding:12px 18px;transition:top .25s var(--ease)}
-.skip-link:focus{top:8px;outline:1px solid var(--tan);outline-offset:2px}
+.label{font-family:var(--body);font-size:12px;font-weight:500;line-height:1.4;letter-spacing:0.16em;text-transform:uppercase;color:var(--tan-deep)}
+.skip-link{position:absolute;top:-100px;left:8px;z-index:200;background:var(--ink);color:var(--paper);font-size:14px;padding:12px 18px;transition:top .2s var(--ease)}
+.skip-link:focus{top:8px}
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(254,250,224,0.92);backdrop-filter:saturate(1.1) blur(8px);-webkit-backdrop-filter:saturate(1.1) blur(8px);border-bottom:1px solid transparent;padding:20px 0;transition:padding .35s var(--ease),border-color .35s var(--ease),background .35s var(--ease)}
-nav.scrolled{padding:14px 0;border-bottom-color:var(--tan);background:rgba(254,250,224,0.96)}
+/* NAV (as on the homepage) */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(254,250,224,0.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid transparent;padding:18px 0;transition:padding .3s var(--ease),border-color .3s var(--ease)}
+nav.scrolled{padding:12px 0;border-bottom-color:var(--rule)}
 .nav-inner{max-width:var(--container);margin:0 auto;padding:0 var(--gutter);display:flex;align-items:center;justify-content:space-between;gap:32px}
 .nav-logo{display:flex;align-items:center;height:30px;line-height:1}
 .nav-logo img{display:block;height:100%;width:auto}
-.nav-logo:hover{opacity:0.68}
-nav.scrolled .nav-logo{height:26px}
+.nav-links{display:flex;align-items:center;gap:32px;margin-left:auto}
+.nav-links a{font-size:15px;color:var(--ink-2);padding:6px 0;border-bottom:1px solid transparent;transition:color .2s var(--ease),border-color .2s var(--ease)}
+.nav-links a:hover{color:var(--ink);border-bottom-color:var(--tan)}
 .nav-right{display:flex;align-items:center;gap:22px}
-.nav-lang-link{font-family:var(--body);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink);opacity:0.55;padding:4px 2px;border-bottom:1px solid transparent;transition:opacity .2s var(--ease),border-color .2s var(--ease)}
-.nav-lang-link:hover{opacity:1;border-color:var(--tan)}
-.cta-nav{display:inline-flex;align-items:center;background:var(--ink);color:var(--paper);font-family:var(--body);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;padding:11px 20px;transition:background .25s var(--ease)}
-.cta-nav:hover{background:var(--tan);color:var(--ink)}
+.nav-lang-link{font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-2);padding:8px 4px;border-bottom:1px solid transparent;transition:color .2s var(--ease),border-color .2s var(--ease)}
+.nav-lang-link:hover{color:var(--ink);border-bottom-color:var(--tan)}
+
+/* BUTTONS (as on the homepage) */
+.cta-nav,.cta-primary{font-family:var(--body);font-weight:500;line-height:1.2;color:var(--paper);background:var(--forest);display:inline-flex;align-items:center;gap:12px;transition:background-color .25s var(--ease)}
+.cta-nav{font-size:14px;padding:11px 18px;white-space:nowrap}
+.cta-primary{font-size:16px;padding:17px 26px}
+.cta-nav:hover,.cta-primary:hover{background:var(--ink)}
+.cta-arrow{display:inline-block;transition:transform .25s var(--ease)}
+.cta-primary:hover .cta-arrow{transform:translateX(4px)}
 
 /* HERO */
-.hero{position:relative;min-height:72vh;padding-top:calc(var(--nav-h) + 72px);padding-bottom:96px;display:flex;align-items:center;background:var(--paper)}
-.hero-left{max-width:840px}
-.eyebrow{font-family:var(--body);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--tan);margin-bottom:32px;display:flex;align-items:center;gap:14px}
-.eyebrow::before{content:'';width:32px;height:1px;background:var(--tan);display:inline-block;flex-shrink:0}
-.hero h1{font-family:var(--display);font-weight:500;font-size:clamp(38px,5.6vw,68px);line-height:1.08;letter-spacing:-0.02em;color:var(--ink);margin-bottom:28px}
-.hero h1 em{font-style:normal;color:var(--tan)}
-.hero-sub{font-family:var(--body);font-size:17px;line-height:1.6;color:var(--ink);opacity:0.78;max-width:620px}
+.hero{position:relative;padding:calc(var(--nav-h) + clamp(56px,7vw,104px)) 0 clamp(64px,7vw,104px);background:var(--paper)}
+.hero-left{max-width:860px}
+.eyebrow{display:block;margin-bottom:28px}
+.hero h1{font-family:var(--display);font-weight:500;font-size:clamp(38px,5.2vw,72px);line-height:1.04;letter-spacing:-0.025em;color:var(--ink);margin-bottom:28px;text-wrap:balance}
+.hero h1 em{font-style:normal;color:var(--tan-deep)}
+.hero-sub{font-size:clamp(17px,1.4vw,20px);line-height:1.55;color:var(--ink-2);max-width:34em}
 
 /* SECTION SCAFFOLD */
 .section{position:relative;padding:var(--section-y) 0}
 .section--paper{background:var(--paper)}
 .section--surface-a{background:var(--surface-a)}
 .section--surface-b{background:var(--surface-b)}
-.section-rule{position:absolute;top:0;left:0;right:0;height:1px;background:var(--tan);opacity:0.55}
-.section-head{display:flex;align-items:baseline;gap:16px;margin-bottom:48px;font-family:var(--body);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink);opacity:0.72}
-.section-head .num{color:var(--tan);font-feature-settings:"tnum" 1}
-.section-head .sep{width:24px;height:1px;background:var(--ink);opacity:0.25;display:inline-block}
-.section-title{font-family:var(--display);font-weight:500;font-size:clamp(30px,3.8vw,48px);line-height:1.08;letter-spacing:-0.015em;color:var(--ink);max-width:680px;margin-bottom:24px}
-.section-lede{font-family:var(--body);font-size:16px;line-height:1.7;color:var(--ink);opacity:0.78;max-width:600px;margin-bottom:40px}
+.section-rule{position:absolute;top:0;left:0;right:0;height:1px;background:var(--rule)}
+.section-head{display:flex;align-items:center;gap:14px;margin-bottom:40px;font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink)}
+.section-head .num{color:var(--tan-deep);font-variant-numeric:tabular-nums}
+.section-head .sep{width:24px;height:1px;background:var(--tan);display:inline-block}
+.section-title{font-family:var(--display);font-weight:500;font-size:clamp(32px,4vw,56px);line-height:1.05;letter-spacing:-0.02em;color:var(--ink);max-width:16em;margin-bottom:24px;text-wrap:balance}
+.section-lede{font-size:17px;line-height:1.6;color:var(--ink-2);max-width:36em;margin-bottom:40px}
 
-/* CRITERIA GRID (reused pattern) */
-.criteria-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule);border-left:1px solid var(--rule)}
-.criteria-cell{padding:32px 28px 36px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:12px}
-.criteria-label{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan)}
-.criteria-value{font-family:var(--display);font-weight:500;font-size:clamp(18px,1.9vw,22px);line-height:1.3;letter-spacing:-0.01em;color:var(--ink)}
-.criteria-note{font-family:var(--body);font-size:13.5px;line-height:1.6;color:var(--ink);opacity:0.75}
-.criteria-close{margin-top:40px;font-family:var(--body);font-size:14px;line-height:1.7;color:var(--ink);opacity:0.65;max-width:640px}
+/* CRITERIA */
+.criteria-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--tan)}
+.criteria-cell{padding:28px 28px 32px 0;border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:10px}
+.criteria-cell + .criteria-cell{padding-left:28px;border-left:1px solid var(--rule-soft)}
+.criteria-label{font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--tan-deep)}
+.criteria-value{font-family:var(--display);font-weight:500;font-size:clamp(20px,2vw,24px);line-height:1.25;letter-spacing:-0.01em;color:var(--ink)}
+.criteria-note{font-size:15px;line-height:1.55;color:var(--ink-2)}
+.criteria-close{margin-top:36px;font-size:15px;line-height:1.6;color:var(--ink-2);max-width:40em}
 
-/* SAGE CALLOUT (reused pattern) */
-.sage-block{background:var(--sage);padding:clamp(32px,4vw,48px)}
-.sage-block .sage-eyebrow{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--ink);opacity:0.6;margin-bottom:16px}
-.sage-block .sage-lead{font-family:var(--display);font-weight:500;font-size:clamp(20px,2.2vw,26px);line-height:1.3;letter-spacing:-0.01em;max-width:760px;margin-bottom:14px}
-.sage-block p{font-family:var(--body);font-size:15px;line-height:1.75;color:var(--ink);max-width:720px}
+/* SAGE CALLOUT */
+.sage-block{background:var(--sage);padding:clamp(32px,4.5vw,64px)}
+.sage-block .sage-eyebrow{font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink);margin-bottom:16px}
+.sage-block .sage-lead{font-family:var(--display);font-weight:500;font-size:clamp(24px,2.6vw,34px);line-height:1.15;letter-spacing:-0.015em;max-width:24em;margin-bottom:16px}
+.sage-block p{font-size:17px;line-height:1.6;color:var(--ink);max-width:40em}
 
 /* CALCULATOR */
-.cdcp{--cdcp-brand:var(--ink);--cdcp-on-brand:var(--paper);--cdcp-ink:var(--ink);--cdcp-paper:var(--paper);--cdcp-tint:var(--surface-a);--cdcp-accent:var(--tan);--cdcp-line:var(--rule);--cdcp-good:#2f6b35;--cdcp-bad:#b3261e;--cdcp-warn:#8a4f1c;--cdcp-font:var(--body);--cdcp-display:var(--display);--cdcp-sticky-top:112px}
-@media(min-width:681px){.cdcp{--cdcp-sticky-top:88px}}
 .quiz-wrap{max-width:none}
-.quiz-demo-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink);opacity:0.55;margin-bottom:20px}
-.quiz-demo-tag::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--tan)}
+.quiz-demo-tag{display:block;font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--tan-deep);margin-bottom:24px}
+.calc-kicker{display:block;margin-bottom:8px}
+.calc-title{font-family:var(--display);font-weight:500;font-size:clamp(24px,2.6vw,32px);line-height:1.15;letter-spacing:-0.015em;margin-bottom:8px}
+.calc-sub{font-size:16px;color:var(--ink-2);margin-bottom:24px}
 
-.demo-cta{margin-top:28px;padding:24px 28px;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
-.demo-cta p{font-family:var(--display);font-weight:500;font-size:clamp(16px,1.8vw,19px);line-height:1.3;letter-spacing:-0.005em;max-width:420px}
-.demo-cta .cta-nav{background:var(--tan);color:var(--ink);flex-shrink:0;transition:background .25s var(--ease),transform .2s var(--ease)}
-.demo-cta .cta-nav:hover{background:var(--paper);transform:translateY(-1px)}
-.cta-arrow{display:inline-block;margin-left:8px;transition:transform .2s var(--ease)}
-.cta-nav:hover .cta-arrow{transform:translateX(3px)}
+.demo-cta{margin-top:32px;padding:clamp(24px,3vw,36px);background:var(--forest);color:var(--paper);display:flex;align-items:center;justify-content:space-between;gap:20px 32px;flex-wrap:wrap}
+.demo-cta p{font-family:var(--display);font-weight:500;font-size:clamp(20px,2vw,26px);line-height:1.25;letter-spacing:-0.01em;max-width:22em}
+.demo-cta .cta-primary{background:var(--paper);color:var(--forest);flex-shrink:0}
+.demo-cta .cta-primary:hover{background:var(--surface-b)}
 
 /* FAQ */
 .faq{border-top:1px solid var(--rule)}
-.faq details{border-bottom:1px solid var(--rule);padding:22px 0}
-.faq summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:20px;font-family:var(--display);font-weight:500;font-size:clamp(16px,1.8vw,19px);letter-spacing:-0.008em;color:var(--ink)}
+.faq details{border-bottom:1px solid var(--rule)}
+.faq summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 0;min-height:44px;font-family:var(--display);font-weight:500;font-size:clamp(19px,1.8vw,22px);line-height:1.3;letter-spacing:-0.008em;color:var(--ink)}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:'+';font-family:var(--body);font-size:20px;color:var(--tan);flex-shrink:0;transition:transform .25s var(--ease)}
+.faq summary::after{content:'+';font-family:var(--body);font-size:22px;line-height:1;color:var(--tan-deep);flex-shrink:0;transition:transform .25s var(--ease)}
 .faq details[open] summary::after{transform:rotate(45deg)}
-.faq .faq-a{margin-top:14px;font-family:var(--body);font-size:14.5px;line-height:1.7;color:var(--ink);opacity:0.8;max-width:680px}
+.faq .faq-a{padding:0 40px 24px 0;font-size:16px;line-height:1.6;color:var(--ink-2);max-width:40em}
 
-/* FOOTER */
-footer{background:var(--paper);padding:64px 0 48px;position:relative}
-.footer-rule{position:absolute;top:0;left:0;right:0;height:1px;background:var(--tan);opacity:0.55}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;padding-bottom:40px;border-bottom:1px solid var(--rule-soft)}
-.footer-brand-mark{display:block;height:52px;line-height:1;margin-bottom:16px}
-.footer-brand-mark img{display:block;height:100%;width:auto}
-.footer-brand-tag{font-family:var(--body);font-size:13px;line-height:1.65;color:var(--ink);opacity:0.7;max-width:320px}
-.footer-col-label{font-family:var(--body);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--tan);margin-bottom:14px}
-.footer-col ul{display:flex;flex-direction:column;gap:10px}
-.footer-col a{font-family:var(--body);font-size:13.5px;color:var(--ink);opacity:0.75}
-.footer-col a:hover{opacity:1;text-decoration:underline}
-.footer-legal{margin-top:28px;font-family:var(--body);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink);opacity:0.5}
+/* FOOTER (as on the homepage: the forest anchor) */
+footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:56px;padding-bottom:56px;border-bottom:1px solid var(--rule-on-forest)}
+.footer-brand-mark{display:block;height:52px;line-height:1;margin-bottom:18px}
+.footer-brand-mark img{display:block;height:100%;width:auto;filter:brightness(0) invert(1);opacity:0.94}
+.footer-brand-tag{font-family:var(--display);font-size:20px;line-height:1.3;color:var(--paper);max-width:16em}
+.footer-col-label{font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--tan);margin-bottom:16px}
+.footer-col ul{display:flex;flex-direction:column;gap:8px}
+.footer-col a{font-size:15px;color:var(--paper-2);border-bottom:1px solid transparent;transition:color .2s var(--ease),border-color .2s var(--ease)}
+.footer-col a:hover{color:var(--paper);border-bottom-color:var(--tan)}
+.footer-legal{margin-top:28px;font-size:14px;color:var(--paper-2)}
 
-.fade-in{opacity:0;transform:translateY(14px);transition:opacity 1.0s var(--ease),transform 1.0s var(--ease)}
+.fade-in{opacity:0;transform:translateY(14px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
 .fade-in.visible{opacity:1;transform:translateY(0)}
 .fade-in.d1{transition-delay:.06s}
 .fade-in.d2{transition-delay:.14s}
 .fade-in.d3{transition-delay:.22s}
 
-@media(max-width:960px){
-  .container,.nav-inner{padding:0 24px}
-  .hero{padding-top:calc(var(--nav-h) + 48px);padding-bottom:64px}
+@media(max-width:1024px){
+  .nav-links{display:none}
   .criteria-grid{grid-template-columns:1fr}
-  .footer-grid{grid-template-columns:1fr;gap:32px}
-  .demo-cta{flex-direction:column;align-items:flex-start}
+  .criteria-cell,.criteria-cell + .criteria-cell{padding:24px 0 26px;border-left:none}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:40px}
+  .footer-grid > div:first-child{grid-column:1 / -1}
 }
-@media(max-width:680px){
-  :root{--gutter:20px;--section-y:64px}
-  .hero h1{font-size:clamp(30px,8vw,44px)}
+@media(max-width:760px){
+  :root{--gutter:22px}
+  body{font-size:16px}
+  .nav-inner{gap:14px}
+  .nav-right{gap:12px}
+  .nav-logo{height:24px}
+  .demo-cta{flex-direction:column;align-items:flex-start}
+  .demo-cta .cta-primary{width:100%;justify-content:center}
+  .footer-grid{grid-template-columns:1fr;gap:36px;padding-bottom:40px}
+  .footer-col a{display:inline-flex;align-items:center;min-height:44px}
+  .footer-col ul{gap:0}
+}
+@media(max-width:380px){
+  .nav-lang-link{display:none}
+  .cta-nav{padding:10px 14px}
 }
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:0.001ms !important;transition-duration:0.001ms !important}
   .fade-in{opacity:1;transform:none}
   html{scroll-behavior:auto}
 }
-:focus-visible{outline:1px solid var(--tan);outline-offset:3px}
 </style>
 </head>
 <body>
 
 <a class="skip-link" href="#main-content">Passer au contenu</a>
 
-<nav id="nav" aria-label="En-tête du site">
+<nav id="nav" aria-label="Principale">
   <div class="nav-inner">
     <a href="/" class="nav-logo" aria-label="SSS">
       <img src="/logo-nav.png" srcset="/logo-nav.png 1x, /logo-nav@2x.png 2x, /logo-nav@3x.png 3x" alt="SSS" width="74" height="30" fetchpriority="high" loading="eager" decoding="async">
     </a>
+    <div class="nav-links">
+      <a href="/#services">Méthode</a>
+      <a href="/tarifs/">Tarifs</a>
+      <a href="/#team">Équipe</a>
+    </div>
     <div class="nav-right">
       <a class="nav-lang-link" href="/cdcp/" hreflang="en">English (CDCP)</a>
       <a href="/#contact" class="cta-nav">L'installer gratuitement</a>
@@ -220,7 +246,7 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
 <header class="hero" id="top">
   <div class="container">
     <div class="hero-left">
-      <p class="eyebrow fade-in d1">Démo en direct</p>
+      <p class="eyebrow label fade-in d1">Démo en direct</p>
       <h1 class="fade-in d2">6,5 millions de Canadiens ont une couverture RCSD.<br><em>Essayez l'outil qui les transforme en patients.</em></h1>
       <p class="hero-sub fade-in d3">Voici le calculateur d'admissibilité RCSD que nous installons gratuitement sur les sites de cliniques dentaires. Répondez comme le ferait un patient, puis imaginez-le sur votre site.</p>
     </div>
@@ -233,14 +259,14 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
     <div class="section-head fade-in"><span class="num">01</span><span class="sep"></span><span>Le calculateur</span></div>
     <h2 class="vh" id="calcTitle">Le calculateur</h2>
     <div class="quiz-wrap fade-in">
-      <div class="quiz-demo-tag">Outil patient — ce que verrait un visiteur sur votre site</div>
-        <p style="font-family:var(--body);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--tan);margin-bottom:6px">Vérification gratuite</p>
-        <h3 style="font-family:var(--display);font-weight:500;font-size:clamp(22px,2.6vw,28px);letter-spacing:-0.015em;margin-bottom:8px">Vérifiez votre couverture RCSD en 60 secondes</h3>
-        <p style="font-family:var(--body);font-size:14px;color:var(--ink);opacity:.75;margin-bottom:20px">Quatre courtes questions. Aucun compte, aucune attente.</p>
-      <div id="quizRoot"><cdcp-calculator data-lang="fr" data-province="QC" data-primary-color="#1C1812" data-clinic-name="Notre clinique dentaire" data-booking-url="/#contact"></cdcp-calculator></div>
+      <div class="quiz-demo-tag">Ce que vos patients voient sur votre site</div>
+        <p class="label calc-kicker">Vérification gratuite</p>
+        <h3 class="calc-title">Vérifiez votre couverture RCSD en 60 secondes</h3>
+        <p class="calc-sub">Quatre courtes questions. Aucun compte, aucune attente.</p>
+      <div id="quizRoot"><cdcp-calculator data-lang="fr" data-province="QC" data-primary-color="#1B3B36" data-clinic-name="Notre clinique dentaire" data-booking-url="/#contact"></cdcp-calculator></div>
       <div class="demo-cta">
         <p>Gratuit pour toute clinique dentaire au Canada. Installé sur votre site en un appel de 30 minutes.</p>
-        <a href="/#contact" class="cta-nav">L'obtenir gratuitement<span class="cta-arrow">&#8594;</span></a>
+        <a href="/#contact" class="cta-primary">L'obtenir gratuitement<span class="cta-arrow" aria-hidden="true">&#8594;</span></a>
       </div>
     </div>
   </div>
@@ -249,11 +275,11 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
 <section class="section section--paper" id="eligibility" aria-labelledby="eligTitle">
   <div class="section-rule"></div>
   <div class="container">
-    <div class="section-head fade-in"><span class="num">02</span><span class="sep"></span><span>Ce qui est réellement admissible</span></div>
+    <div class="section-head fade-in"><span class="num">02</span><span class="sep"></span><span>Ce qui est admissible</span></div>
     <h2 class="section-title fade-in d1" id="eligTitle">Trois conditions. Aucune exception.</h2>
-    <p class="section-lede fade-in d2">L'admissibilité au RCSD n'est pas une question de jugement — ce sont trois conditions fédérales, vérifiées dans l'ordre.</p>
-    <div class="criteria-grid"><div class="criteria-cell fade-in"><div class="criteria-label">Aucune couverture privée</div><div class="criteria-value">Une seule des trois disqualifie</div><p class="criteria-note">Un régime d'employeur, une assurance privée ou un compte de gestion santé couvrant le dentaire — un seul de ces éléments met fin à l'admissibilité, peu importe le revenu.</p></div><div class="criteria-cell fade-in"><div class="criteria-label">Revenu</div><div class="criteria-value">Moins de 90 000 $</div><p class="criteria-note">Revenu familial net rajusté, selon la dernière déclaration de revenus. La couverture descend de 100 % à 60 % puis 40 % à mesure que le revenu augmente sous ce plafond.</p></div><div class="criteria-cell fade-in"><div class="criteria-label">Déclaration produite</div><div class="criteria-value">Vous, et votre conjoint(e)</div><p class="criteria-note">Pour l'année d'imposition précédente. Aucune déclaration à l'ARC signifie aucune couverture, peu importe la faiblesse du revenu.</p></div></div>
-    <p class="criteria-close fade-in">Ce ne sont pas des seuils que SSS ou une clinique peut négocier — c'est une politique fédérale, vérifiée sur canada.ca le 2026-09-15.</p>
+    <p class="section-lede fade-in d2">L'admissibilité au RCSD repose sur trois conditions fédérales, vérifiées dans l'ordre.</p>
+    <div class="criteria-grid"><div class="criteria-cell fade-in"><div class="criteria-label">Aucune couverture privée</div><div class="criteria-value">Une seule des trois disqualifie</div><p class="criteria-note">Un régime d'employeur, une assurance privée ou un compte de gestion santé couvrant le dentaire : un seul de ces éléments met fin à l'admissibilité, peu importe le revenu.</p></div><div class="criteria-cell fade-in"><div class="criteria-label">Revenu</div><div class="criteria-value">Moins de 90 000 $</div><p class="criteria-note">Revenu familial net rajusté, selon la dernière déclaration de revenus. La couverture descend de 100 % à 60 % puis 40 % à mesure que le revenu augmente sous ce plafond.</p></div><div class="criteria-cell fade-in"><div class="criteria-label">Déclaration produite</div><div class="criteria-value">Vous, et votre conjoint(e)</div><p class="criteria-note">Pour l'année d'imposition précédente. Aucune déclaration à l'ARC signifie aucune couverture, peu importe la faiblesse du revenu.</p></div></div>
+    <p class="criteria-close fade-in">Ce sont des règles fédérales, vérifiées sur canada.ca le 2026-09-15. Aucune clinique ne peut les modifier.</p>
     
   </div>
 </section>
@@ -265,7 +291,7 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
     <div class="sage-block fade-in">
       <div class="sage-eyebrow">Question fréquente au Québec</div>
       <h2 class="sage-lead" id="ramqTitle">La RAMQ et le RCSD ne sont pas la même chose.</h2>
-      <p>La RAMQ continue de couvrir la chirurgie buccale en milieu hospitalier et les soins de base pour les enfants de moins de 10 ans. Le RCSD prend le relais pour les adultes, les aînés et les enfants de 10 ans et plus. Les deux régimes ne se chevauchent pas — et beaucoup de patients confondent les deux au téléphone, ce qui fait de cette clarification l'une des sections les plus utiles d'une page RCSD au Québec.</p>
+      <p>La RAMQ continue de couvrir la chirurgie buccale en milieu hospitalier et les soins de base pour les enfants de moins de 10 ans. Le RCSD prend le relais pour les adultes, les aînés et les enfants de 10 ans et plus. Les deux régimes ne se chevauchent pas, et beaucoup de patients les confondent au téléphone.</p>
     </div>
   </div>
 </section>
@@ -275,37 +301,36 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
   <div class="container">
     <div class="section-head fade-in"><span class="num">03</span><span class="sep"></span><span>Calendrier</span></div>
     <h2 class="section-title section-title--tight fade-in d1" id="renewalTitle">Le renouvellement est un rendez-vous annuel, pas une inscription unique.</h2>
-    <p class="section-lede fade-in d2" style="margin-bottom:0">La période de renouvellement 2026 s'est déroulée du 15 avril au 1er juin — les patients qui l'ont manquée se retrouvent avec un trou de couverture, sans remboursement rétroactif. Les nouvelles demandes de première inscription sont acceptées en continu toute l'année; la prochaine période de renouvellement ouvre au printemps 2027.</p>
+    <p class="section-lede fade-in d2" style="margin-bottom:0">La période de renouvellement 2026 s'est déroulée du 15 avril au 1er juin. Les patients qui l'ont manquée se retrouvent avec un trou de couverture, sans remboursement rétroactif. Les nouvelles demandes de première inscription sont acceptées en continu toute l'année; la prochaine période de renouvellement ouvre au printemps 2027.</p>
   </div>
 </section>
 
 <section class="section section--paper" id="faq" aria-labelledby="faqTitle">
   <div class="section-rule"></div>
   <div class="container">
-    <div class="section-head fade-in"><span class="num">04</span><span class="sep"></span><span>Ce que les patients demandent vraiment</span></div>
-    <h2 class="section-title fade-in d1" id="faqTitle">Des réponses directes, structurées pour la recherche.</h2>
-    <div class="faq fade-in d2"><details><summary>Suis-je admissible au RCSD?<span class="vh">Afficher la réponse</span></summary><div class="faq-a">Trois conditions, toutes requises : aucun accès à une assurance dentaire privée, un revenu familial net rajusté sous 90 000 $, et une déclaration de revenus canadienne produite pour vous — et votre conjoint(e), le cas échéant — pour l'année précédente.</div></details>
-<details><summary>Quel revenu met fin à la couverture RCSD?<span class="vh">Afficher la réponse</span></summary><div class="faq-a">Moins de 70 000 $ couvre jusqu'à 100 %. De 70 000 $ à 79 999 $ couvre jusqu'à 60 %. De 80 000 $ à 89 999 $ couvre jusqu'à 40 %. 90 000 $ ou plus n'est pas admissible.</div></details>
-<details><summary>Le RCSD couvre-t-il les implants ou l'Invisalign?<span class="vh">Afficher la réponse</span></summary><div class="faq-a">Non. Les implants et l'orthodontie — y compris l'Invisalign — sont exclus à tous les niveaux de revenu, sans exception clinique.</div></details>
-<details><summary>Quand puis-je faire une demande ou renouveler?<span class="vh">Afficher la réponse</span></summary><div class="faq-a">La principale période de renouvellement s'étend de la mi-avril au début juin chaque année. La manquer signifie aucun remboursement rétroactif — mais les nouvelles demandes de première inscription sont acceptées en continu toute l'année.</div></details>
-<details><summary>Combien le RCSD fait-il économiser aux patients?<span class="vh">Afficher la réponse</span></summary><div class="faq-a">Environ 900 $ par année en moyenne, selon les chiffres du programme fédéral d'avril 2026, pour plus de 6,5 millions de Canadiens inscrits.</div></details></div>
+    <div class="section-head fade-in"><span class="num">04</span><span class="sep"></span><span>Ce que les patients demandent</span></div>
+    <h2 class="section-title fade-in d1" id="faqTitle">Les réponses que votre réception donne chaque jour.</h2>
+    <div class="faq fade-in d2"><details><summary>Suis-je admissible au RCSD ?<span class="vh">Afficher la réponse</span></summary><div class="faq-a">Trois conditions, toutes requises : aucun accès à une assurance dentaire privée, un revenu familial net rajusté sous 90 000 $, et une déclaration de revenus canadienne produite pour vous (et votre conjoint(e), le cas échéant) pour l'année précédente.</div></details>
+<details><summary>Quel revenu met fin à la couverture RCSD ?<span class="vh">Afficher la réponse</span></summary><div class="faq-a">Moins de 70 000 $ couvre jusqu'à 100 %. De 70 000 $ à 79 999 $ couvre jusqu'à 60 %. De 80 000 $ à 89 999 $ couvre jusqu'à 40 %. 90 000 $ ou plus n'est pas admissible.</div></details>
+<details><summary>Le RCSD couvre-t-il les implants ou l'Invisalign ?<span class="vh">Afficher la réponse</span></summary><div class="faq-a">Non. Les implants et l'orthodontie, y compris l'Invisalign, sont exclus à tous les niveaux de revenu, sans exception clinique.</div></details>
+<details><summary>Quand puis-je faire une demande ou renouveler ?<span class="vh">Afficher la réponse</span></summary><div class="faq-a">La principale période de renouvellement s'étend de la mi-avril au début juin chaque année. La manquer signifie aucun remboursement rétroactif. Les nouvelles demandes de première inscription sont acceptées en continu toute l'année.</div></details>
+<details><summary>Combien le RCSD fait-il économiser aux patients ?<span class="vh">Afficher la réponse</span></summary><div class="faq-a">Environ 900 $ par année en moyenne, selon les chiffres du programme fédéral d'avril 2026, pour plus de 6,5 millions de Canadiens inscrits.</div></details></div>
   </div>
 </section>
 
 </main>
 
 <footer>
-  <div class="footer-rule"></div>
   <div class="container">
     <div class="footer-grid">
       <div>
         <div class="footer-brand-mark"><img src="/logo-mark.png" srcset="/logo-mark.png 1x, /logo-mark@2x.png 2x, /logo-mark@3x.png 3x" alt="SSS" width="148" height="61" loading="lazy" decoding="async"></div>
-        <p class="footer-brand-tag">Marketing dentaire. Search-first.</p>
+        <p class="footer-brand-tag">Marketing dentaire, mesuré au fauteuil.</p>
       </div>
       <div class="footer-col">
         <div class="footer-col-label">Navigation</div>
         <ul>
-          <li><a href="/#services">Services</a></li>
+          <li><a href="/#services">Méthode</a></li>
           <li><a href="/tarifs/">Tarifs</a></li>
           <li><a href="/cdcp/">English (CDCP)</a></li>
         </ul>
@@ -314,11 +339,11 @@ footer{background:var(--paper);padding:64px 0 48px;position:relative}
         <div class="footer-col-label">Contact</div>
         <ul>
           <li><a href="mailto:info@sss.marketing">info@sss.marketing</a></li>
-          <li><a href="/#contact">Réserver un audit</a></li>
+          <li><a href="/#contact">Réserver un appel</a></li>
         </ul>
       </div>
     </div>
-    <div class="footer-legal">© 2026 SSS Marketing. Tous droits réservés.</div>
+    <div class="footer-legal">© 2026 SSS Marketing. Tous droits réservés. Mesure d'audience anonyme, sans témoins.</div>
   </div>
 </footer>
 
