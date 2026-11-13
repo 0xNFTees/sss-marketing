@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tarifs | SSS Marketing dentaire</title>
+<meta name="description" content="450 $ par mois, par clinique. Mise en service de 500 $. Calculateur RCSD gratuit, installé pendant un appel de 30 minutes.">
+<link rel="canonical" href="https://sss.marketing/tarifs/">
+<link rel="alternate" hreflang="fr-CA" href="https://sss.marketing/tarifs/">
+<link rel="alternate" hreflang="en-CA" href="https://sss.marketing/tarifs/?lang=en">
+<link rel="alternate" hreflang="x-default" href="https://sss.marketing/tarifs/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Tarifs | SSS Marketing dentaire">
+<meta property="og:description" content="450 $ par mois, par clinique. Calculateur RCSD gratuit.">
+<meta property="og:url" content="https://sss.marketing/tarifs/">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/newsreader-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/hanken-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Newsreader';src:url('/fonts/newsreader-latin-opsz-normal.woff2') format('woff2');font-weight:200 800;font-style:normal;font-display:swap}
+@font-face{font-family:'Hanken Grotesk';src:url('/fonts/hanken-grotesk-latin-wght-normal.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+
+:root{
+  --paper:#fefae0;
+  --surface-a:#e9edc9;
+  --sage:#ccd5ae;
+  --tan:#d4a373;
+  --tan-deep:#875320;
+  --ink:#1c1812;
+  --forest:#1b3b36;
+  --ink-soft:rgba(28,24,18,.74);
+  --rule:rgba(28,24,18,.16);
+  --display:'Newsreader','Palatino Linotype',Georgia,serif;
+  --body:'Hanken Grotesk',Helvetica,Arial,sans-serif;
+  --container:1120px;
+  --gutter:clamp(20px,4vw,40px);
+  --section-y:clamp(64px,9vw,120px);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-weight:400;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+a{color:inherit}
+img{display:block;max-width:100%}
+:focus-visible{outline:2px solid var(--forest);outline-offset:3px}
+.on-forest :focus-visible{outline-color:var(--paper)}
+.container{max-width:var(--container);margin:0 auto;padding:0 var(--gutter)}
+.skip{position:absolute;left:-9999px;top:0;background:var(--forest);color:var(--paper);padding:12px 18px;font-size:14px;z-index:10}
+.skip:focus{left:var(--gutter);top:12px}
+
+/* label voice: 12px, 500, tracked caps */
+.label{font-family:var(--body);font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--tan-deep)}
+.rule{height:1px;background:var(--tan);border:0}
+
+/* nav */
+.nav{border-bottom:1px solid var(--rule)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:72px}
+.nav-right{display:flex;align-items:center;gap:clamp(12px,3vw,28px)}
+.lang{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+.lang a{text-decoration:none;color:var(--ink-soft);padding:10px 2px}
+.lang a[aria-current="true"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--ink)}
+.lang span{color:var(--ink-soft)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:13px 24px;background:var(--forest);color:var(--paper);font-family:var(--body);font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;text-align:center;transition:background .25s ease}
+.btn:hover{background:var(--ink)}
+.btn--nav{min-height:44px;padding:10px 18px;font-size:12px}
+.btn--paper{background:var(--paper);color:var(--forest)}
+.btn--paper:hover{background:var(--sage)}
+.textlink{font-size:15px;font-weight:500;text-decoration:underline;text-decoration-color:var(--tan);text-underline-offset:5px;text-decoration-thickness:1px}
+.textlink:hover{text-decoration-color:var(--ink)}
+
+/* hero */
+.hero{padding:clamp(56px,8vw,104px) 0 clamp(40px,6vw,72px)}
+.hero h1{font-family:var(--display);font-weight:500;font-size:clamp(38px,6.2vw,76px);line-height:1.04;letter-spacing:-.02em;margin-top:18px;max-width:14ch}
+.hero p:not(.label){margin-top:22px;font-size:clamp(17px,1.6vw,19px);color:var(--ink-soft);max-width:44ch}
+
+/* sections */
+.section{padding:var(--section-y) 0}
+.section-head{display:flex;align-items:baseline;gap:14px;margin-bottom:clamp(28px,4vw,48px)}
+.section-head .num{font-family:var(--display);font-size:15px;color:var(--tan-deep)}
+h2{font-family:var(--display);font-weight:500;font-size:clamp(28px,3.6vw,44px);line-height:1.1;letter-spacing:-.015em}
+
+/* 01 package */
+.plan{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(32px,6vw,88px);align-items:start}
+.price{font-family:var(--display);font-weight:500;font-size:clamp(88px,15vw,176px);line-height:.9;letter-spacing:-.04em;font-variant-numeric:lining-nums;white-space:nowrap}
+.price small{font-size:.42em;letter-spacing:-.02em;margin-left:.08em}
+.price small:first-child,.tier-price small:first-child{margin-left:0;margin-right:.06em}
+.price-unit{margin-top:18px}
+.plan-lede{margin-top:20px;font-size:17px;color:var(--ink-soft);max-width:30ch}
+.plan .btn{margin-top:28px}
+.ledger{border-top:1px solid var(--tan)}
+.ledger-row{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:24px;row-gap:4px;padding:20px 0;border-bottom:1px solid var(--rule)}
+.ledger-row dt{align-self:center}
+.ledger-row .val{font-family:var(--display);font-weight:500;font-size:clamp(22px,2.4vw,28px);line-height:1.15;letter-spacing:-.01em;text-align:right;font-variant-numeric:lining-nums}
+.ledger-row .note{grid-column:1 / -1;font-size:15px;color:var(--ink-soft)}
+
+.included{margin-top:clamp(56px,8vw,96px)}
+.levers{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(24px,4vw,56px);border-top:1px solid var(--tan);margin-top:20px}
+.levers li{padding:22px 0 24px;border-bottom:1px solid var(--rule)}
+.levers .n{font-family:var(--display);font-size:15px;color:var(--tan-deep);font-variant-numeric:lining-nums}
+.levers h3{font-family:var(--display);font-weight:500;font-size:21px;line-height:1.2;letter-spacing:-.005em;margin-top:8px}
+.levers p{margin-top:6px;font-size:15px;color:var(--ink-soft)}
+
+/* 02 calculator */
+.calc{background:var(--surface-a)}
+.calc-intro{max-width:48ch;margin-top:16px;font-size:17px;color:var(--ink-soft)}
+.tiers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,3vw,32px);margin-top:clamp(32px,5vw,56px)}
+.tier{background:var(--paper);padding:clamp(24px,3.4vw,40px);display:flex;flex-direction:column;border-top:1px solid var(--tan)}
+.tier-price{font-family:var(--display);font-weight:500;font-size:clamp(52px,7vw,84px);line-height:1;letter-spacing:-.03em;margin-top:14px;font-variant-numeric:lining-nums;white-space:nowrap}
+.tier-price small{font-size:.34em;letter-spacing:0;margin-left:.2em}
+.tier-sub{margin-top:10px;font-size:15px;font-weight:500}
+.tier ul{list-style:none;margin-top:22px;border-top:1px solid var(--rule)}
+.tier li{padding:11px 0;border-bottom:1px solid var(--rule);font-size:15.5px}
+.tier-foot{margin-top:auto;padding-top:28px;display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px}
+
+/* 03 add-ons */
+.addons{border-top:1px solid var(--tan);max-width:820px}
+.addon{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 24px;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--rule)}
+.addon h3{font-family:var(--display);font-weight:500;font-size:21px;line-height:1.25}
+.addon .val{font-family:var(--display);font-size:21px;text-align:right;font-variant-numeric:lining-nums;white-space:nowrap}
+.addon p{grid-column:1 / -1;font-size:15px;color:var(--ink-soft)}
+
+/* close + footer: the one forest block */
+.on-forest{background:var(--forest);color:var(--paper)}
+.close{padding:clamp(64px,9vw,120px) 0}
+.close .label{color:var(--tan)}
+.close h2{margin-top:16px;font-size:clamp(34px,5vw,60px);max-width:16ch}
+.close p:not(.label){margin-top:20px;font-size:18px;max-width:44ch;color:rgba(254,250,224,.86)}
+.close .btn{margin-top:32px}
+.footer{border-top:1px solid var(--tan);padding:32px 0 40px}
+.footer-inner{display:flex;flex-wrap:wrap;gap:16px 40px;justify-content:space-between;align-items:baseline;font-size:14px}
+.footer-brand{font-family:var(--display);font-size:20px}
+.footer nav{display:flex;flex-wrap:wrap;gap:8px 28px}
+.footer a,.footer nav span{text-decoration:none;padding:6px 0}
+.footer a:hover{text-decoration:underline;text-underline-offset:4px}
+.footer-legal{margin-top:20px;font-size:13px;color:rgba(254,250,224,.78)}
+
+@media (max-width:860px){
+  .plan{grid-template-columns:1fr}
+  .levers{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tiers{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .levers{grid-template-columns:1fr}
+  .btn--nav{padding:10px 14px;letter-spacing:.08em}
+  .nav-logo img{width:62px;height:auto}
+  .tier-foot .btn{width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-en="Skip to content">Aller au contenu</a>
+
+<nav class="nav" aria-label="Principal">
+  <div class="container nav-inner">
+    <a class="nav-logo" href="/" data-home aria-label="SSS Marketing, accueil">
+      <img src="/logo-nav.png" srcset="/logo-nav.png 1x, /logo-nav@2x.png 2x, /logo-nav@3x.png 3x" alt="SSS" width="74" height="30">
+    </a>
+    <div class="nav-right">
+      <div class="lang" role="group" aria-label="Langue / Language">
+        <a href="/tarifs/" hreflang="fr" lang="fr" id="lang-fr" aria-current="true">FR</a>
+        <span aria-hidden="true">/</span>
+        <a href="/tarifs/?lang=en" hreflang="en" lang="en" id="lang-en">EN</a>
+      </div>
+      <a class="btn btn--nav" href="/#contact" data-book data-en="Book a call">Réserver un appel</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+<header class="hero">
+  <div class="container">
+    <p class="label" data-en="Pricing">Tarifs</p>
+    <h1 data-en="One plan. One price. Per clinic.">Un forfait. Un prix. Par clinique.</h1>
+    <p data-en="What you pay. What is included. What is extra.">Ce que vous payez. Ce qui est inclus. Ce qui est en sus.</p>
+  </div>
+</header>
+
+<section class="section" aria-labelledby="plan-title" style="padding-top:0">
+  <div class="container">
+    <hr class="rule" style="margin-bottom:clamp(32px,5vw,56px)">
+    <div class="section-head">
+      <span class="num">01</span>
+      <h2 class="label" id="plan-title" data-en="The plan">Le forfait</h2>
+    </div>
+
+    <div class="plan">
+      <div>
+        <p class="price" data-en="<small>$</small>450">450<small>&nbsp;$</small></p>
+        <p class="label price-unit" data-en="per month · per clinic">par mois · par clinique</p>
+        <p class="plan-lede" data-en="Six growth levers. One monthly report. One number that matters: the occupied chair.">Six leviers de croissance. Un rapport mensuel. Un seul chiffre qui compte&nbsp;: le fauteuil occupé.</p>
+        <a class="btn" href="/#contact" data-book data-en="Book a 30-min call">Réserver un appel de 30 min</a>
+      </div>
+
+      <dl class="ledger">
+        <div class="ledger-row">
+          <dt class="label" data-en="Setup">Mise en service</dt>
+          <dd class="val" data-en="$500">500&nbsp;$</dd>
+          <dd class="note" data-en="One time, per clinic.">Une seule fois, par clinique.</dd>
+        </div>
+        <div class="ledger-row">
+          <dt class="label" data-en="Google ad budget">Budget publicitaire Google</dt>
+          <dd class="val" data-en="Extra">En sus</dd>
+          <dd class="note" data-en="Your budget, billed at cost. No markup.">Votre budget, facturé au coût. Aucune majoration.</dd>
+        </div>
+        <div class="ledger-row">
+          <dt class="label" data-en="Term">Engagement</dt>
+          <dd class="val" data-en="3 months">3 mois</dd>
+          <dd class="note" data-en="Then month to month, with 30 days' notice.">Ensuite au mois, avec un préavis de 30 jours.</dd>
+        </div>
+        <div class="ledger-row">
+          <dt class="label" data-en="Billing">Facturation</dt>
+          <dd class="val" data-en="In advance">À l'avance</dd>
+          <dd class="note" data-en="Every month. One invoice per clinic.">Chaque mois. Une facture par clinique.</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="included">
+      <p class="label" data-en="Included in the plan">Inclus dans le forfait</p>
+      <ol class="levers">
+        <li><span class="n">01</span><h3 data-en="Google Ads: Search and Performance Max">Google Ads&nbsp;: Search et Performance Max</h3><p data-en="The patient who is searching right now.">Le patient qui cherche maintenant.</p></li>
+        <li><span class="n">02</span><h3 data-en="Google Business Profile">Fiche d'établissement Google</h3><p data-en="Your profile, and your place on the map.">Votre fiche, et votre place sur la carte.</p></li>
+        <li><span class="n">03</span><h3 data-en="Call tracking and monthly report">Suivi d'appels et rapport mensuel</h3><p data-en="Every call counted. One report a month.">Chaque appel compté. Un rapport par mois.</p></li>
+        <li><span class="n">04</span><h3 data-en="Google Ads: Display">Google Ads&nbsp;: Display</h3><p data-en="Visual ads in your area.">Des annonces visuelles dans votre secteur.</p></li>
+        <li><span class="n">05</span><h3 data-en="CDCP calculator">Calculateur RCSD</h3><p data-en="On your site, in your clinic's colours.">Sur votre site, aux couleurs de la clinique.</p></li>
+        <li><span class="n">06</span><h3 data-en="Google reviews by NFC">Avis Google par NFC</h3><p data-en="One pad at the front desk.">Une plaquette au comptoir.</p></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="section calc" aria-labelledby="calc-title">
+  <div class="container">
+    <div class="section-head">
+      <span class="num">02</span>
+      <p class="label" data-en="The CDCP calculator, on its own">Le calculateur RCSD, seul</p>
+    </div>
+    <h2 id="calc-title" data-en="Start here. It's free.">Commencez ici. C'est gratuit.</h2>
+    <p class="calc-intro" data-en="Four questions. The patient sees their tier, their real share to pay, and a button to your booking page. It is the one product you can take without the plan.">Quatre questions. Le patient voit son palier, sa vraie part à payer, et un bouton vers votre prise de rendez-vous. C'est le seul produit offert sans le forfait.</p>
+
+    <div class="tiers">
+      <article class="tier" aria-labelledby="tier-free">
+        <h3 class="label" id="tier-free" data-en="Free">Gratuit</h3>
+        <p class="tier-price" data-en="<small>$</small>0">0<small>&nbsp;$</small></p>
+        <p class="tier-sub" data-en="Installed during one 30-minute call.">Installé pendant un appel de 30 minutes.</p>
+        <ul>
+          <li data-en="Your colours, your clinic's name">Vos couleurs, le nom de votre clinique</li>
+          <li data-en="Your booking link">Votre lien de prise de rendez-vous</li>
+          <li data-en="English or French">En français ou en anglais</li>
+          <li data-en="The “Powered by SSS” badge stays on">Le badge «&nbsp;Propulsé par SSS&nbsp;» reste affiché</li>
+        </ul>
+        <div class="tier-foot">
+          <a class="btn" href="/#contact" data-book data-en="Book the free install">Réserver l'installation gratuite</a>
+          <a class="textlink" href="/rcsd/" data-demo data-en="Try the demo">Essayer la démo</a>
+        </div>
+      </article>
+
+      <article class="tier" aria-labelledby="tier-custom">
+        <h3 class="label" id="tier-custom" data-en="Custom">Sur mesure</h3>
+        <p class="tier-price" data-en="<small>$</small>50<small>/ month</small>">50<small>&nbsp;$ / mois</small></p>
+        <p class="tier-sub" data-en="Plus $150 for setup, one time.">Plus 150&nbsp;$ de mise en service, une seule fois.</p>
+        <ul>
+          <li data-en="Set to your own fee schedule">Ajusté à votre propre grille d'honoraires</li>
+          <li data-en="Fee guide reviewed every year">Guide tarifaire révisé chaque année</li>
+          <li data-en="Onboarding for your team">Mise en route avec votre équipe</li>
+          <li data-en="Month to month, no term">Au mois, sans engagement</li>
+        </ul>
+        <div class="tier-foot">
+          <a class="textlink" href="/#contact" data-book data-en="Talk about it on a call">En parler pendant un appel</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="addons-title">
+  <div class="container">
+    <div class="section-head">
+      <span class="num">03</span>
+      <h2 class="label" id="addons-title" data-en="Add-ons">En complément</h2>
+    </div>
+    <div class="addons">
+      <div class="addon">
+        <h3 data-en="Website redesign">Refonte de site web</h3>
+        <span class="val" data-en="about $1,000">environ 1&nbsp;000&nbsp;$</span>
+      </div>
+      <div class="addon">
+        <h3 data-en="Landing page">Page d'atterrissage</h3>
+        <span class="val" data-en="about $500">environ 500&nbsp;$</span>
+      </div>
+      <div class="addon">
+        <h3 data-en="Custom video advertising">Publicité vidéo sur mesure</h3>
+        <span class="val" data-en="on request">sur demande</span>
+        <p data-en="For established clinics.">Pour les cliniques établies.</p>
+      </div>
+      <div class="addon">
+        <h3 data-en="Multi-location SEO">SEO multi-succursales</h3>
+        <span class="val" data-en="on request">sur demande</span>
+        <p data-en="For groups of three locations or more.">Pour les groupes de trois succursales et plus.</p>
+      </div>
+      <div class="addon">
+        <h3 data-en="Clinic groups">Groupes de cliniques</h3>
+        <a class="val textlink" href="mailto:info@sss.marketing" style="font-family:var(--display);font-size:21px">info@sss.marketing</a>
+        <p data-en="The price is per clinic. For a group, write to us.">Le prix est par clinique. Pour un groupe, écrivez-nous.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="on-forest">
+  <section class="close" aria-labelledby="close-title">
+    <div class="container">
+      <p class="label" data-en="30 minutes · Google Meet · free">30 minutes · Google Meet · gratuit</p>
+      <h2 id="close-title" data-en="Start with the calculator.">Commencez par le calculateur.</h2>
+      <p data-en="One call. The calculator goes live on your site. Then we look at your Google presence, if you want to.">Un appel. Le calculateur est en ligne sur votre site. On regarde ensuite votre présence Google, si vous le voulez.</p>
+      <a class="btn btn--paper" href="/#contact" data-book data-en="Book the free install">Réserver l'installation gratuite</a>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-brand">SSS Marketing</span>
+        <nav aria-label="Pied de page">
+          <a href="/" data-home data-en="Home">Accueil</a>
+          <a href="/rcsd/" data-demo data-en="CDCP calculator">Calculateur RCSD</a>
+          <a href="mailto:info@sss.marketing">info@sss.marketing</a>
+          <span data-en="Montreal, QC">Montréal, QC</span>
+        </nav>
+      </div>
+      <p class="footer-legal" data-en="© 2026 SSS Marketing. All rights reserved. Prices in Canadian dollars.">© 2026 SSS Marketing. Tous droits réservés. Prix en dollars canadiens.</p>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get("lang") !== "en") return;
+  var d = document;
+  d.documentElement.lang = "en-CA";
+  d.title = "Pricing | SSS Dental Marketing";
+  var set = function (sel, attr, val) { var el = d.querySelector(sel); if (el) el.setAttribute(attr, val); };
+  set('meta[name="description"]', "content", "$450 per month, per clinic. $500 setup. Free CDCP calculator, installed during one 30-minute call.");
+  set('meta[property="og:title"]', "content", "Pricing | SSS Dental Marketing");
+  set('meta[property="og:description"]', "content", "$450 per month, per clinic. Free CDCP calculator.");
+  set('meta[property="og:url"]', "content", "https://sss.marketing/tarifs/?lang=en");
+  set('link[rel="canonical"]', "href", "https://sss.marketing/tarifs/?lang=en");
+  d.querySelectorAll("[data-en]").forEach(function (el) { el.innerHTML = el.getAttribute("data-en"); });
+  d.querySelectorAll("[data-book]").forEach(function (el) { el.setAttribute("href", "/?lang=en#contact"); });
+  d.querySelectorAll("[data-home]").forEach(function (el) { el.setAttribute("href", "/?lang=en"); });
+  d.querySelectorAll("[data-demo]").forEach(function (el) { el.setAttribute("href", "/cdcp/"); });
+  set(".nav", "aria-label", "Main");
+  set(".footer nav", "aria-label", "Footer");
+  set(".nav-logo", "aria-label", "SSS Marketing, home");
+  d.getElementById("lang-fr").removeAttribute("aria-current");
+  d.getElementById("lang-en").setAttribute("aria-current", "true");
+})();
+</script>
+</body>
+</html>

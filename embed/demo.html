@@ -39,6 +39,21 @@
     background: var(--bg2); border: 1px solid var(--line); border-radius: 22px;
   }
   .stage-note { text-align: center; font-size: 12.5px; color: var(--cream-dim); margin-bottom: 18px; }
+  .offer {
+    margin: 0 0 30px; padding: clamp(20px, 4vw, 36px);
+    border: 1px solid var(--line); border-radius: 22px;
+    display: flex; flex-wrap: wrap; gap: 20px 40px; align-items: center; justify-content: space-between;
+  }
+  .offer-text { flex: 1 1 22rem; max-width: 36rem; }
+  .offer h2 { font-size: clamp(20px, 3vw, 26px); line-height: 1.2; letter-spacing: -.01em; font-weight: 750; }
+  .offer p { margin-top: 10px; color: var(--cream-dim); font-size: 15px; }
+  .offer-btn {
+    display: inline-flex; align-items: center; min-height: 48px; padding: 12px 26px;
+    background: var(--cream); color: var(--bg); border-radius: 999px;
+    font-size: 15px; font-weight: 700; text-decoration: none; white-space: nowrap;
+  }
+  .offer-btn:hover { background: var(--accent); }
+  .offer-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   footer { padding: 8px 0 42px; display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: space-between; color: var(--cream-dim); font-size: 12.5px; }
   footer a { color: var(--cream); text-decoration: underline; text-underline-offset: 3px; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
@@ -64,8 +79,16 @@
     <div id="mount"></div>
   </div>
 
+  <section class="offer" aria-labelledby="t-offer-h">
+    <div class="offer-text">
+      <h2 id="t-offer-h">Put this on your clinic's website. Free.</h2>
+      <p id="t-offer-p">One 30-minute call with whoever manages your website. The install takes about 15 minutes: your colours, your clinic's name, your booking link, English or French. A small "Powered by SSS" badge stays on. That's the whole deal.</p>
+    </div>
+    <a class="offer-btn" id="t-offer-btn" href="https://sss.marketing/?lang=en&utm_source=cdcp_demo&utm_medium=web&utm_campaign=install_cta#contact">Book the free install</a>
+  </section>
+
   <footer>
-    <span id="t-foot">Want this on your clinic's website, free? DM us on LinkedIn or visit sss.marketing.</span>
+    <span id="t-foot">Prefer to message first? DM us "CDCP" on LinkedIn.</span>
     <a href="https://sss.marketing?utm_source=cdcp_demo&utm_medium=web&utm_campaign=powered_by">sss.marketing</a>
   </footer>
 </div>
@@ -78,14 +101,22 @@
       h1: "The CDCP calculator your patients wish your website had.",
       sub: "Eligibility, co-pay tiers, and the fee-guide gap — explained to your patients on your own website, in your clinic's colors. Embeds in any CMS in minutes.",
       note: "Live demo — configured for a fictional clinic. Answer the questions as a patient would.",
-      foot: "Want this on your clinic's website, free? DM us on LinkedIn or visit sss.marketing.",
+      foot: "Prefer to message first? DM us \"CDCP\" on LinkedIn.",
+      offerH: "Put this on your clinic's website. Free.",
+      offerP: "One 30-minute call with whoever manages your website. The install takes about 15 minutes: your colours, your clinic's name, your booking link, English or French. A small \"Powered by SSS\" badge stays on. That's the whole deal.",
+      offerBtn: "Book the free install",
+      offerUrl: "https://sss.marketing/?lang=en&utm_source=cdcp_demo&utm_medium=web&utm_campaign=install_cta#contact",
       clinic: "Harbourview Dental", province: "ON"
     },
     fr: {
       h1: "Le calculateur RCSD que vos patients cherchent sur votre site.",
       sub: "Admissibilité, quote-parts et écart du guide tarifaire — expliqués à vos patients sur votre propre site, aux couleurs de votre clinique. S'intègre à tout CMS en quelques minutes.",
       note: "Démo en direct — configurée pour une clinique fictive. Répondez comme un patient le ferait.",
-      foot: "Vous voulez l'outil sur le site de votre clinique, gratuitement ? Écrivez-nous sur LinkedIn ou visitez sss.marketing.",
+      foot: "Vous préférez écrire d'abord ? Envoyez-nous « RCSD » sur LinkedIn.",
+      offerH: "Mettez-le sur le site de votre clinique. Gratuitement.",
+      offerP: "Un appel de 30 minutes avec la personne qui gère votre site. L'installation prend environ 15 minutes : vos couleurs, le nom de votre clinique, votre lien de prise de rendez-vous, en français ou en anglais. Le petit badge « Propulsé par SSS » reste affiché. C'est tout.",
+      offerBtn: "Réserver l'installation gratuite",
+      offerUrl: "https://sss.marketing/?utm_source=cdcp_demo&utm_medium=web&utm_campaign=install_cta#contact",
       clinic: "Clinique Dentaire Rive-Douce", province: "QC"
     }
   };
@@ -97,6 +128,10 @@
     document.getElementById("t-sub").textContent = c.sub;
     document.getElementById("t-note").textContent = c.note;
     document.getElementById("t-foot").textContent = c.foot;
+    document.getElementById("t-offer-h").textContent = c.offerH;
+    document.getElementById("t-offer-p").textContent = c.offerP;
+    document.getElementById("t-offer-btn").textContent = c.offerBtn;
+    document.getElementById("t-offer-btn").href = c.offerUrl;
     document.getElementById("btn-en").setAttribute("aria-pressed", lang === "en" ? "true" : "false");
     document.getElementById("btn-fr").setAttribute("aria-pressed", lang === "fr" ? "true" : "false");
     mount.textContent = "";
