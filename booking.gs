@@ -43,21 +43,23 @@ const CONFIG = {
 
   TIMEZONE: 'America/Montreal',
 
-  // Per-day-of-week working hours (0=Sun..6=Sat). Mirrors the homepage UI.
-  // { start, end } are 24h hour numbers; end is exclusive of the last slot's end.
-  // e.g. start:11, end:15 → slots 11:00, 11:30, 12:00, 12:30, 13:00, 13:30, 14:00, 14:30.
-  WORKING_HOURS_BY_DOW: {
-    0: { start: 11, end: 15 },   // Sun
-    1: { start: 12, end: 14 },   // Mon
-    2: { start: 12, end: 14 },   // Tue
-    3: { start: 12, end: 14 },   // Wed
-    4: { start: 10, end: 17 },   // Thu
-    5: { start: 10, end: 17 },   // Fri
-    6: { start: 11, end: 15 },   // Sat
-  },
-  WORKING_DAYS: [0, 1, 2, 3, 4, 5, 6],
+  // Bookable weekdays (0=Sun..6=Sat). Mon, Tue, Thu, Fri only.
+  // Wednesday (3) is closed all day; weekends are closed.
+  WORKING_DAYS: [1, 2, 4, 5],
 
-  // Slot cadence and audit duration.
+  // Afternoons are the main availability window: every 30-min slot from
+  // AFTERNOON_START up to (but not including) AFTERNOON_END_HOUR:00.
+  // 14:00 -> 18:00 means slots 14:00, 14:30 ... 17:30 (each is a 30-min call).
+  AFTERNOON_START: '14:00',
+  AFTERNOON_END_HOUR: 18,
+
+  // Mornings read as mostly booked. Only these slots can ever open, and each
+  // one opens on roughly 30% of days (stable per date, so the page never
+  // changes between refreshes). Set MORNING_OPEN_PERCENT to 0 to close mornings.
+  MORNING_POOL: ['10:30', '11:00', '11:30'],
+  MORNING_OPEN_PERCENT: 30,
+
+  // Slot cadence and call duration.
   SLOT_MINUTES:     30,
   DURATION_MINUTES: 30,
 
@@ -146,7 +148,7 @@ function jsonOut_(obj) {
  *     to a calendar (Working Location, Birthday, Tasks, Out-of-office in
  *     some configurations) that would otherwise lock out every slot in a day.
  *     If a full-day block is intended, the operator should remove the day
- *     from WORKING_DAYS or temporarily shrink WORKING_HOURS_BY_DOW.
+ *     from WORKING_DAYS.
  *   - Events the deploying user has declined do NOT block. They've said no
  *     to that meeting, so they're effectively free at that time.
  */
@@ -196,27 +198,60 @@ function getAvailability_(startStr, endStr) {
     const dayDate = parseTzDate_(cursorYmd, '12:00', tz); // midday avoids DST edges
     if (dayDate > latest) break;
 
-    const dow = Number(Utilities.formatDate(dayDate, tz, 'u')) % 7; // 0=Sun..6=Sat
-    const hours = CONFIG.WORKING_HOURS_BY_DOW && CONFIG.WORKING_HOURS_BY_DOW[dow];
-    if (CONFIG.WORKING_DAYS.indexOf(dow) !== -1 && hours) {
-      const slots = [];
-      const startMin = hours.start * 60;
-      const endMin   = hours.end   * 60;
-      for (let mins = startMin; mins + CONFIG.DURATION_MINUTES <= endMin; mins += CONFIG.SLOT_MINUTES) {
-        const h = Math.floor(mins / 60), m = mins % 60;
-        const slotStr = pad2_(h) + ':' + pad2_(m);
-        const slotStart = parseTzDate_(cursorYmd, slotStr, tz);
-        const slotEnd   = new Date(slotStart.getTime() + CONFIG.DURATION_MINUTES * 60 * 1000);
-        if (slotStart < earliest) continue;
-        if (slotStart > latest) break;
-        if (overlaps_(events, slotStart, slotEnd)) continue;
-        slots.push(slotStr);
-      }
-      if (slots.length) result[cursorYmd] = slots;
+    const slots = [];
+    const candidates = allowedSlotsForDate_(cursorYmd);
+    for (let i = 0; i < candidates.length; i++) {
+      const slotStr = candidates[i];
+      const slotStart = parseTzDate_(cursorYmd, slotStr, tz);
+      const slotEnd   = new Date(slotStart.getTime() + CONFIG.DURATION_MINUTES * 60 * 1000);
+      if (slotStart < earliest) continue;
+      if (slotStart > latest) break;
+      if (overlaps_(events, slotStart, slotEnd)) continue;
+      slots.push(slotStr);
     }
+    if (slots.length) result[cursorYmd] = slots;
     cursorYmd = addOneDay_(cursorYmd);
   }
   return result;
+}
+
+/**
+ * The ONLY slots that may ever be offered or booked on a given date (YYYY-MM-DD),
+ * before real calendar conflicts are applied. Both getAvailability_ and book_
+ * use this, so the site can never offer a slot the server would refuse (or
+ * accept a slot the site never showed). Closed days return [].
+ */
+function allowedSlotsForDate_(ymd) {
+  const tz = CONFIG.TIMEZONE;
+  const dayDate = parseTzDate_(ymd, '12:00', tz); // midday avoids DST edges
+  const dow = Number(Utilities.formatDate(dayDate, tz, 'u')) % 7; // 0=Sun..6=Sat
+  if (CONFIG.WORKING_DAYS.indexOf(dow) === -1) return [];
+
+  const out = [];
+
+  // Morning: a few stable, pseudo-random openings.
+  CONFIG.MORNING_POOL.forEach(function(slot){
+    if (stableHash_(ymd + '|' + slot) % 100 < CONFIG.MORNING_OPEN_PERCENT) out.push(slot);
+  });
+
+  // Afternoon: every 30-min slot in the window.
+  const parts = CONFIG.AFTERNOON_START.split(':');
+  const startMin = Number(parts[0]) * 60 + Number(parts[1]);
+  const endMin = CONFIG.AFTERNOON_END_HOUR * 60;
+  for (let mins = startMin; mins + CONFIG.DURATION_MINUTES <= endMin; mins += CONFIG.SLOT_MINUTES) {
+    out.push(pad2_(Math.floor(mins / 60)) + ':' + pad2_(mins % 60));
+  }
+  return out;
+}
+
+/** Small deterministic string hash (same input -> same number, always). */
+function stableHash_(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0);
 }
 
 function overlaps_(events, start, end) {
@@ -252,7 +287,10 @@ function debugEvents_(startStr, endStr) {
   if (!cal) return { error: 'no_calendar' };
   const rangeStart = parseTzDate_(startStr, '00:00', tz);
   const rangeEnd   = parseTzDate_(endStr,   '23:59', tz);
-  const all = cal.getEvents(rangeStart, rangeEnd);
+  let all = cal.getEvents(rangeStart, rangeEnd);
+  (CONFIG.EXTRA_BUSY_CALENDAR_IDS || []).forEach(function(id){
+    try { const extra = CalendarApp.getCalendarById(id); if (extra) all = all.concat(extra.getEvents(rangeStart, rangeEnd)); } catch (_) {}
+  });
   const NO_STATUS = (CalendarApp.GuestStatus && CalendarApp.GuestStatus.NO) || null;
   const out = all.map(function(ev){
     let allDay = false, myStatus = null;
@@ -288,12 +326,16 @@ function book_(body) {
   const dateS  = String(body.date   || '').trim();
   const slotS  = String(body.slot   || '').trim();
   const lang   = body.lang === 'en' ? 'en' : 'fr';
-  const duration = Math.max(5, Math.min(120, parseInt(body.duration || CONFIG.DURATION_MINUTES, 10)));
+  // Always a 30-minute call, whatever the page or caller sends.
+  const duration = CONFIG.DURATION_MINUTES;
 
   if (!name || !email || !dateS || !slotS) return { error: 'missing_fields' };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: 'invalid_email' };
   if (!isYmd_(dateS))                            return { error: 'invalid_date' };
   if (!/^\d{2}:\d{2}$/.test(slotS))              return { error: 'invalid_slot' };
+
+  // Only slots we actually offer (closed days / hidden slots are refused).
+  if (allowedSlotsForDate_(dateS).indexOf(slotS) === -1) return { error: 'slot_taken' };
 
   const cal = resolveCalendar_();
   if (!cal) return { error: 'no_calendar' };
