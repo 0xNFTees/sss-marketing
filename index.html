@@ -4,25 +4,25 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#fefae0">
-<title>SSS — Acquisition de patients dentaires</title>
-<meta name="description" content="Agence marketing dentaire. Six leviers Google, un forfait par clinique.">
+<title>SSS | Acquisition de patients pour cliniques dentaires</title>
+<meta name="description" content="Agence marketing qui ne fait que du dentaire. Calculateur RCSD gratuit pour votre site. Six leviers de croissance, 450 $ par mois par clinique.">
 <meta name="format-detection" content="telephone=no">
 
+<!-- French is the default document. English is the same page at ?lang=en. -->
 <link rel="canonical" href="https://sss.marketing/">
 <link rel="alternate" hreflang="fr-CA" href="https://sss.marketing/">
-<link rel="alternate" hreflang="en-CA" href="https://sss.marketing/">
+<link rel="alternate" hreflang="en-CA" href="https://sss.marketing/?lang=en">
 <link rel="alternate" hreflang="x-default" href="https://sss.marketing/">
 
 <!-- Favicons -->
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="icon" href="logo.png" type="image/png" sizes="32x32">
-<link rel="apple-touch-icon" sizes="180x180" href="logo.png">
-<link rel="shortcut icon" href="logo.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon.png">
 
 <!-- Resource hints: preload above-the-fold assets -->
 <link rel="preload" as="image" href="logo-nav.png">
-<link rel="preload" as="font" type="font/otf" href="./fonts/RhymesTextMedium.otf" crossorigin>
-<link rel="preload" as="font" type="font/otf" href="./fonts/ABCWalterAlte-Roentgentherapie.otf" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="./fonts/newsreader-latin-opsz-normal.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="./fonts/hanken-grotesk-latin-wght-normal.woff2" crossorigin>
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
@@ -30,18 +30,17 @@
 <meta property="og:locale" content="fr_CA">
 <meta property="og:locale:alternate" content="en_CA">
 <meta property="og:url" content="https://sss.marketing/">
-<meta property="og:title" content="SSS — Acquisition de patients dentaires">
-<meta property="og:description" content="Agence marketing dentaire. Six leviers Google, un forfait par clinique.">
+<meta property="og:title" content="SSS | Acquisition de patients pour cliniques dentaires">
+<meta property="og:description" content="Agence marketing qui ne fait que du dentaire. Calculateur RCSD gratuit pour votre site. Six leviers de croissance, 450 $ par mois par clinique.">
 <meta property="og:image" content="https://sss.marketing/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="SSS — Acquisition de patients dentaires">
+<meta property="og:image:alt" content="SSS. Un patient entre par Google. Ou il n'entre pas.">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="https://sss.marketing/">
-<meta name="twitter:title" content="SSS — Acquisition de patients dentaires">
-<meta name="twitter:description" content="Agence marketing dentaire. Six leviers Google, un forfait par clinique.">
+<meta name="twitter:title" content="SSS | Acquisition de patients pour cliniques dentaires">
+<meta name="twitter:description" content="Agence marketing qui ne fait que du dentaire. Calculateur RCSD gratuit pour votre site. Six leviers de croissance, 450 $ par mois par clinique.">
 <meta name="twitter:image" content="https://sss.marketing/og-image.png">
 
 <!-- JSON-LD · ProfessionalService schema -->
@@ -52,7 +51,7 @@
   "name": "SSS Marketing",
   "alternateName": "SSS",
   "url": "https://sss.marketing/",
-  "description": "Agence marketing dentaire spécialisée. Six leviers Google, un forfait par clinique.",
+  "description": "Agence marketing qui ne fait que du dentaire. Six leviers de croissance, un forfait par clinique.",
   "areaServed": [
     { "@type": "Country", "name": "Canada" },
     { "@type": "AdministrativeArea", "name": "Quebec" }
@@ -66,24 +65,32 @@
     "Google Ads Performance Max",
     "Google Business Profile",
     "Local SEO",
-    "Data Analytics",
+    "Call tracking",
     "Dental Marketing"
   ],
+  "makesOffer": {
+    "@type": "Offer",
+    "name": "Forfait mensuel par clinique",
+    "price": "450",
+    "priceCurrency": "CAD",
+    "description": "Gestion Google par clinique, facturée au mois. Le budget publicitaire Google est en sus, facturé au coût."
+  },
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
     "name": "Dental Marketing Services",
     "itemListElement": [
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Google Ads — Search and Performance Max", "description": "Performance Max campaigns run by operators." }},
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Google Ads: Search and Performance Max", "description": "Search and Performance Max campaigns for dental clinics." }},
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Google Ads: Display", "description": "Display campaigns targeted by area." }},
       { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Google Business Profile", "description": "Local SEO and profile management." }},
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Google reviews by NFC pad", "description": "Front-desk NFC pad linked to the clinic's Google profile." }},
       { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Call tracking and monthly report", "description": "One tracked number per clinic and a monthly report." }},
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Per-clinic price ranges", "description": "Approximate clinic prices shown against federal and provincial fee guides." }},
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "CDCP Interactive Conversion Engine", "description": "Bilingual CDCP/RCSD eligibility routing and booking tool." }}
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "CDCP interactive conversion engine", "description": "Bilingual CDCP/RCSD eligibility routing and booking tool." }}
     ]
   }
 }
 </script>
 
-<!-- JSON-LD · FAQPage -->
+<!-- JSON-LD · FAQPage (generated from the visible FAQ section) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -91,18 +98,59 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Quel est le forfait mensuel ?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Un forfait mensuel par clinique pour la gestion Google, sans engagement. La calculatrice RCSD est en option. La publicité Google est facturée directement par Google. Tarifs sur demande : info@sss.marketing." }
+      "name": "Le calculateur RCSD est-il vraiment gratuit ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui. Il s'installe pendant un appel de 30 minutes avec la personne qui gère votre site. Le badge « Propulsé par SSS » reste affiché."
+      }
     },
     {
       "@type": "Question",
-      "name": "Combien de temps avant que les campagnes soient en ligne ?",
-      "acceptedAnswer": { "@type": "Answer", "text": "14 jours. Audit en 30 minutes, plan stratégique, mise en ligne. Résultats mesurables dès le premier mois." }
+      "name": "Combien ça coûte ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "450 $ par mois, par clinique. La mise en service est facturée une seule fois. Le budget publicitaire Google est en sus, facturé au coût."
+      }
     },
     {
       "@type": "Question",
-      "name": "Qu'est-ce qui est inclus dans le forfait ?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Performance Max géré par SSS, fiche Google Business Profile, suivi d'appels, rapport mensuel, tableau de bord par clinique et plaquette NFC pour les avis Google. Calculatrice RCSD et fourchettes de prix par clinique en complément." }
+      "name": "Qu'est-ce qui est inclus dans le forfait ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Les campagnes Search, Display et Performance Max, la fiche d'établissement Google, le suivi d'appels, le rapport mensuel, le tableau de bord par clinique et la plaquette NFC pour les avis. Le calculateur RCSD est gratuit, avec ou sans forfait."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Y a-t-il un contrat à long terme ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Non. Trois mois au départ, puis au mois, avec un préavis de 30 jours."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Combien de temps avant que les campagnes soient en ligne ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "14 jours. L'audit prend 30 minutes, le plan suit, puis la mise en ligne. La mesure commence dès le premier mois."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Faut-il se filmer ou publier sur les réseaux sociaux ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Non. Le travail se fait sur Google : la recherche, la carte, la fiche et les avis. Vous restez dentiste."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Travaillez-vous avec les groupes de cliniques ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui. Le forfait et la facture sont établis clinique par clinique. Pour les groupes de trois succursales et plus, une architecture SEO multi-succursales s'ajoute sur demande."
+      }
     }
   ]
 }
@@ -110,442 +158,374 @@
 
 <!-- Plausible Analytics removed in local preview -->
 
+<noscript><style>.fade-in{opacity:1!important;transform:none!important}</style></noscript>
 <style>
-/* ========== FONTS ========== */
-@font-face{font-family:'RhymesText';src:url('./fonts/RhymesTextMedium.otf') format('opentype');font-weight:500;font-style:normal;font-display:swap}
-@font-face{font-family:'ABCWalter';src:url('./fonts/ABCWalterAlte-Roentgentherapie.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
+/* ========== FONTS (SIL Open Font License, see /fonts/OFL-*.txt) ========== */
+@font-face{font-family:'Newsreader';src:url('./fonts/newsreader-latin-opsz-normal.woff2') format('woff2');font-weight:200 800;font-style:normal;font-display:swap}
+@font-face{font-family:'Newsreader';src:url('./fonts/newsreader-latin-wght-italic.woff2') format('woff2');font-weight:200 800;font-style:italic;font-display:swap}
+@font-face{font-family:'Hanken Grotesk';src:url('./fonts/hanken-grotesk-latin-wght-normal.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
 
 /* ========== TOKENS ========== */
 :root{
+  /* Pillar 3 palette */
   --paper:#fefae0;
   --surface-a:#e9edc9;
   --surface-b:#faedcd;
   --sage:#ccd5ae;
-  --tan:#d4a373;
+  --tan:#d4a373;      /* rules, borders, large numerals on forest. Never small text on light. */
   --ink:#1c1812;
+  /* Nov 2026 amendment */
+  --forest:#1b3b36;   /* the one dark anchor: primary CTA, close panel, footer */
+  --tan-deep:#875320; /* labels and accent text on light surfaces (6:1 on paper) */
 
-  --display:'RhymesText','Palatino Linotype',Georgia,serif;
-  --body:'ABCWalter',Helvetica,Arial,sans-serif;
+  --ink-2:rgba(28,24,18,0.74);
+  --paper-2:rgba(254,250,224,0.78);
+  --rule:rgba(28,24,18,0.16);
+  --rule-soft:rgba(28,24,18,0.10);
+  --rule-on-forest:rgba(254,250,224,0.22);
+
+  --display:'Newsreader','Iowan Old Style','Palatino Linotype',Georgia,serif;
+  --body:'Hanken Grotesk','Helvetica Neue',Arial,sans-serif;
 
   --ease:cubic-bezier(0.16,1,0.3,1);
   --nav-h:72px;
   --container:1240px;
   --gutter:40px;
-
-  --section-y:clamp(96px,12vw,160px);
-
-  --rule:rgba(28,24,18,0.15);
-  --rule-soft:rgba(28,24,18,0.10);
+  --col-gap:32px;
+  --section-y:clamp(88px,10vw,144px);
 }
 
 /* ========== RESET / BASE ========== */
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;font-size:16px;scroll-padding-top:100px}
+html{scroll-behavior:smooth;font-size:16px;scroll-padding-top:96px;-webkit-text-size-adjust:100%}
 body{
   background:var(--paper);
   color:var(--ink);
   font-family:var(--body);
+  font-size:17px;
   font-weight:400;
   line-height:1.6;
-  letter-spacing:0.005em;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   overflow-x:hidden;
 }
 a{color:inherit;text-decoration:none}
 button{font:inherit;background:none;border:none;cursor:pointer;color:inherit;padding:0}
-ul{list-style:none}
-::selection{background:var(--tan);color:var(--paper)}
+ul,ol{list-style:none}
+h1,h2,h3{font-family:var(--display);font-weight:400;font-optical-sizing:auto}
+::selection{background:var(--forest);color:var(--paper)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.final :focus-visible,footer :focus-visible{outline-color:var(--paper)}
 
 .container{max-width:var(--container);margin:0 auto;padding:0 var(--gutter)}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--col-gap)}
+
+/* Label voice: tracked caps of the body face. Always above a title. */
+.label{
+  font-family:var(--body);font-size:12px;font-weight:500;line-height:1.4;
+  letter-spacing:0.16em;text-transform:uppercase;color:var(--tan-deep);
+}
+.vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* ========== NAV ========== */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  background:rgba(254,250,224,0.92);
-  backdrop-filter:saturate(1.1) blur(8px);
-  -webkit-backdrop-filter:saturate(1.1) blur(8px);
+  background:rgba(254,250,224,0.94);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   border-bottom:1px solid transparent;
-  padding:20px 0;
-  transition:padding .35s var(--ease),border-color .35s var(--ease),background .35s var(--ease);
+  padding:18px 0;
+  transition:padding .3s var(--ease),border-color .3s var(--ease);
 }
-nav.scrolled{padding:14px 0;border-bottom-color:var(--tan);background:rgba(254,250,224,0.96)}
+nav.scrolled{padding:12px 0;border-bottom-color:var(--rule)}
 .nav-inner{
   max-width:var(--container);margin:0 auto;padding:0 var(--gutter);
   display:flex;align-items:center;justify-content:space-between;gap:32px;
 }
-.nav-logo{
-  display:flex;align-items:center;
-  height:30px;
-  line-height:1;
-  transition:opacity .25s var(--ease);
-}
-.nav-logo img{
-  display:block;
-  height:100%;
-  width:auto;
-}
-.nav-logo:hover{opacity:0.68}
-nav.scrolled .nav-logo{height:26px}
-.nav-right{display:flex;align-items:center;gap:24px}
+.nav-logo{display:flex;align-items:center;height:30px;line-height:1}
+.nav-logo img{display:block;height:100%;width:auto}
+.nav-links{display:flex;align-items:center;gap:32px;margin-left:auto}
+.nav-links a{font-size:15px;color:var(--ink-2);padding:6px 0;border-bottom:1px solid transparent;transition:color .2s var(--ease),border-color .2s var(--ease)}
+.nav-links a:hover{color:var(--ink);border-bottom-color:var(--tan)}
+.nav-right{display:flex;align-items:center;gap:22px}
 
-.lang-switch{display:inline-flex;align-items:center;gap:8px;padding:8px 4px}
+.lang-switch{display:inline-flex;align-items:center;gap:6px}
 .lang-btn{
-  font-family:var(--body);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;
-  color:var(--ink);opacity:0.4;padding:4px 2px;cursor:pointer;
-  transition:opacity .25s var(--ease),color .25s var(--ease);
-  position:relative;
+  font-family:var(--body);font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--ink-2);padding:8px 4px;position:relative;transition:color .2s var(--ease);
 }
-.lang-btn:hover{opacity:0.85}
-.lang-btn.active{opacity:1;color:var(--ink)}
-.lang-btn.active::after{
-  content:'';position:absolute;left:2px;right:2px;bottom:-2px;height:1px;background:var(--tan);
-}
-.lang-sep{
-  font-family:var(--body);font-size:11px;color:var(--ink);opacity:0.25;
-}
+.lang-btn:hover{color:var(--ink)}
+.lang-btn.active{color:var(--ink)}
+.lang-btn.active::after{content:'';position:absolute;left:4px;right:4px;bottom:3px;height:1px;background:var(--ink)}
+.lang-sep{font-size:12px;color:var(--ink-2)}
 
 .skip-link{
   position:absolute;top:-100px;left:8px;z-index:200;
-  background:var(--ink);color:var(--paper);
-  font-family:var(--body);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;
-  padding:12px 18px;
-  transition:top .25s var(--ease);
+  background:var(--ink);color:var(--paper);font-size:14px;padding:12px 18px;
+  transition:top .2s var(--ease);
 }
-.skip-link:focus{top:8px;outline:1px solid var(--tan);outline-offset:2px}
+.skip-link:focus{top:8px}
 
-.cta-nav{
-  font-family:var(--body);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;
-  color:var(--paper);background:var(--ink);padding:13px 22px;
-  position:relative;overflow:hidden;display:inline-block;transition:color .3s var(--ease);
+/* ========== BUTTONS ========== */
+.cta-primary,.cta-nav{
+  font-family:var(--body);font-weight:500;line-height:1.2;
+  color:var(--paper);background:var(--forest);
+  display:inline-flex;align-items:center;gap:12px;
+  transition:background-color .25s var(--ease);
 }
-.cta-nav::before{
-  content:'';position:absolute;inset:0;background:var(--tan);
-  transform:translateY(101%);transition:transform .4s var(--ease);z-index:0;
-}
-.cta-nav span{position:relative;z-index:1}
-.cta-nav:hover::before{transform:translateY(0)}
+.cta-primary{font-size:16px;padding:17px 26px}
+.cta-nav{font-size:14px;padding:11px 18px;white-space:nowrap}
+.cta-primary:hover,.cta-nav:hover{background:var(--ink)}
+.cta-primary svg{flex-shrink:0;transition:transform .25s var(--ease)}
+.cta-primary:hover svg{transform:translateX(4px)}
+.final .cta-primary{background:var(--paper);color:var(--forest)}
+.final .cta-primary:hover{background:var(--surface-b)}
 
 /* ========== HERO ========== */
 .hero{
-  position:relative;min-height:100vh;
-  padding-top:calc(var(--nav-h) + 80px);padding-bottom:120px;
-  display:flex;align-items:center;background:var(--paper);
+  background:var(--paper);
+  padding:calc(var(--nav-h) + clamp(56px,7vw,104px)) 0 0;
 }
-.hero-left{max-width:780px}
-
-.eyebrow{
-  font-family:var(--body);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;
-  color:var(--tan);margin-bottom:40px;display:flex;align-items:center;gap:14px;
-}
-.eyebrow::before{content:'';width:32px;height:1px;background:var(--tan);display:inline-block;flex-shrink:0}
-
+.hero-grid{align-items:end}
+.hero-copy{grid-column:1 / span 8}
+.hero-sheet{grid-column:9 / span 4}
+.hero-copy > .label{display:block;margin-bottom:28px}
 .hero h1{
-  font-family:var(--display);font-weight:500;
-  font-size:clamp(48px,7.5vw,104px);line-height:1.02;letter-spacing:-0.025em;
-  color:var(--ink);margin-bottom:36px;
+  font-size:clamp(42px,6.3vw,90px);line-height:1.0;letter-spacing:-0.025em;
+  color:var(--ink);margin-bottom:32px;
 }
-.hero h1 em{
-  font-style:normal;color:var(--tan);
-  display:inline-block;position:relative;
-}
-.hero-sub{font-family:var(--body);font-size:18px;line-height:1.6;color:var(--ink);opacity:0.78;max-width:540px;margin-bottom:48px}
-.hero-cta-row{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+.hero h1 span{display:block;text-wrap:balance}
+.hero h1 .h1-b{color:var(--tan-deep)}
+.hero-sub{font-size:clamp(17px,1.4vw,20px);line-height:1.55;color:var(--ink-2);max-width:34em;margin-bottom:40px}
+.hero-cta-row{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.hero-cta-note{font-size:15px;color:var(--ink-2)}
 
-.cta-primary{
-  font-family:var(--body);font-size:13px;letter-spacing:0.2em;text-transform:uppercase;
-  color:var(--paper);background:var(--tan);padding:18px 32px;
-  display:inline-flex;align-items:center;gap:14px;position:relative;overflow:hidden;
+/* Day sheet: one clinic day, set like a printed appointment book */
+.sheet{border-top:1px solid var(--ink)}
+.sheet-head{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--rule)}
+.sheet-head .label:last-child{color:var(--ink-2)}
+.sheet-row{
+  display:grid;grid-template-columns:58px 1fr;gap:14px;align-items:baseline;
+  padding:10px 0;border-bottom:1px solid var(--rule-soft);font-size:15px;line-height:1.35;
 }
-.cta-primary::before{
-  content:'';position:absolute;inset:0;background:var(--ink);
-  transform:translateY(101%);transition:transform .4s var(--ease);
+.sheet-time{font-family:var(--display);font-size:17px;font-variant-numeric:tabular-nums lining-nums;color:var(--ink)}
+.sheet-row.is-open .sheet-time{color:var(--tan-deep)}
+.sheet-row.is-open .sheet-what{display:flex;align-items:center;gap:12px}
+.sheet-row.is-open .sheet-what::after{content:'';flex:1;border-top:1px dashed var(--tan)}
+.sheet-row.is-open .sheet-what span{
+  font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--tan-deep);
 }
-.cta-primary span,.cta-primary svg{position:relative;z-index:1;transition:transform .3s var(--ease)}
-.cta-primary:hover::before{transform:translateY(0)}
-.cta-primary:hover svg{transform:translateX(6px)}
-.cta-meta{font-family:var(--body);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink);opacity:0.55}
+.sheet-note{font-family:var(--display);font-size:20px;line-height:1.3;letter-spacing:-0.005em;margin-top:18px;max-width:20em}
+.sheet-caption{display:block;margin-top:10px;color:var(--ink-2)}
 
-/* ========== SCROLL CUE (persistent · fixed · idle-aware · hairline glyph) ========== */
-.vh{
-  position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
-  clip:rect(0,0,0,0);white-space:nowrap;border:0;
+/* Facts ledger */
+.facts{
+  margin-top:clamp(56px,7vw,96px);
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  border-top:1px solid var(--rule);
 }
-.scroll-cue{
-  position:fixed;bottom:32px;left:50%;
-  transform:translateX(-50%) translateY(6px);
-  z-index:50;
-  display:flex;align-items:center;justify-content:center;
-  width:44px;height:60px;
-  padding:0;background:transparent;border:none;cursor:pointer;
-  color:var(--ink);opacity:0;pointer-events:none;
-  transition:opacity .55s var(--ease),transform .55s var(--ease),color .35s var(--ease);
+.fact{padding:26px 24px 32px 0;border-right:1px solid var(--rule-soft)}
+.fact + .fact{padding-left:24px}
+.fact:last-child{border-right:none;padding-right:0}
+.fact-num{
+  font-family:var(--display);font-size:clamp(34px,3.6vw,50px);line-height:1;letter-spacing:-0.02em;
+  font-variant-numeric:lining-nums;white-space:nowrap;
 }
-.scroll-cue.visible{
-  opacity:0.55;
-  pointer-events:auto;
-  transform:translateX(-50%) translateY(0);
-}
-.scroll-cue:hover,.scroll-cue:focus-visible{
-  opacity:1;
-  color:var(--tan);
-}
-.scroll-cue-icon{
-  display:block;
-  animation:scrollGlyph 2.4s var(--ease) infinite;
-}
-@keyframes scrollGlyph{
-  0%{transform:translateY(-3px)}
-  50%{transform:translateY(3px)}
-  100%{transform:translateY(-3px)}
-}
-@media (prefers-reduced-motion: reduce){
-  .scroll-cue-icon{animation:none}
-}
+.fact-text{font-size:15px;line-height:1.45;color:var(--ink-2);margin-top:10px;max-width:22ch}
 
 /* ========== SECTION SCAFFOLD ========== */
 .section{position:relative;padding:var(--section-y) 0}
 .section--paper{background:var(--paper)}
 .section--surface-a{background:var(--surface-a)}
 .section--surface-b{background:var(--surface-b)}
-.section--sage{background:var(--sage)}
-
-.section-rule{position:absolute;top:0;left:0;right:0;height:1px;background:var(--tan);opacity:0.55}
+.section-rule{position:absolute;top:0;left:0;right:0;height:1px;background:var(--rule)}
 
 .section-head{
-  display:flex;align-items:baseline;gap:16px;margin-bottom:64px;
-  font-family:var(--body);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;
-  color:var(--ink);opacity:0.72;
+  display:flex;align-items:center;gap:14px;margin-bottom:clamp(40px,5vw,64px);
+  font-family:var(--body);font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--ink-2);
 }
-.section-head .num{color:var(--tan);font-feature-settings:"tnum" 1}
-.section-head .sep{width:24px;height:1px;background:var(--ink);opacity:0.25;display:inline-block}
+.section-head .num{color:var(--tan-deep);font-variant-numeric:tabular-nums}
+.section-head .sep{width:24px;height:1px;background:var(--tan);display:inline-block}
+.h2{font-size:clamp(32px,4vw,56px);line-height:1.05;letter-spacing:-0.02em;color:var(--ink);text-wrap:balance}
 
-/* ========== PROBLEM ========== */
-.problem-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:32px;align-items:start}
-.problem-stmt{
-  grid-column:span 12;display:grid;grid-template-columns:80px 1fr;gap:24px;
-  padding:48px 0;border-top:1px solid var(--rule);
+/* ========== 01 · PROBLEM ========== */
+.problem-head{grid-column:1 / span 5}
+.problem-head .h2 span{display:block}
+.problem-head .h2 span + span{margin-top:0.35em}
+.problem-list{grid-column:7 / span 6}
+.problem-item{
+  display:grid;grid-template-columns:44px 1fr;gap:8px;
+  padding:28px 0 30px;border-top:1px solid var(--rule);
 }
-.problem-stmt:last-child{border-bottom:1px solid var(--rule)}
-.problem-stmt-num{font-family:var(--body);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--tan);padding-top:14px}
-.problem-stmt-body{font-family:var(--display);font-weight:500;font-size:clamp(26px,3.2vw,38px);line-height:1.18;letter-spacing:-0.015em;color:var(--ink)}
-.problem-stmt-body .quietly{display:block;font-family:var(--body);font-size:16px;line-height:1.65;letter-spacing:0;color:var(--ink);opacity:0.7;margin-top:18px;max-width:640px}
+.problem-item:last-child{border-bottom:1px solid var(--rule)}
+.problem-item .label{padding-top:8px}
+.problem-item h3{font-size:clamp(22px,2.1vw,28px);line-height:1.2;letter-spacing:-0.01em;font-weight:400;text-wrap:balance}
+.problem-item p{font-size:16px;line-height:1.6;color:var(--ink-2);margin-top:10px;max-width:34em}
 
-/* ========== SERVICES ========== */
-.services-head{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:end;margin-bottom:80px}
-.services-title{font-family:var(--display);font-weight:500;font-size:clamp(36px,4.6vw,60px);line-height:1.04;letter-spacing:-0.02em;color:var(--ink);max-width:480px}
-.services-intro{font-family:var(--body);font-size:15px;line-height:1.65;color:var(--ink);opacity:0.72;max-width:380px;justify-self:end}
+/* ========== 02 · METHOD (six levers in four stages) ========== */
+.method-head{align-items:end;margin-bottom:clamp(40px,5vw,64px)}
+.method-title{grid-column:1 / span 6}
+.method-intro{grid-column:8 / span 5;font-size:17px;line-height:1.6;color:var(--ink-2);max-width:30em}
 
-.services-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule)}
+.stage{padding:36px 0 40px;border-top:1px solid var(--rule);align-items:start}
+.stage-meta{grid-column:1 / span 4}
+.stage-meta .label{display:block;margin-bottom:14px;font-variant-numeric:tabular-nums}
+.stage-name{font-size:clamp(28px,3vw,42px);line-height:1.05;letter-spacing:-0.02em}
+.stage-text{font-size:16px;line-height:1.6;color:var(--ink-2);margin-top:14px;max-width:26em}
+.stage-levers{grid-column:6 / span 7}
+
 .svc{
-  padding:36px 28px 40px 0;border-bottom:1px solid var(--rule);
-  display:flex;flex-direction:column;gap:14px;position:relative;
-  transition:background-color .35s var(--ease),padding-left .35s var(--ease);
-  cursor:pointer;background:transparent;text-align:left;width:100%;
+  display:grid;grid-template-columns:1fr auto;column-gap:24px;row-gap:6px;align-items:start;
+  width:100%;text-align:left;padding:22px 0;border-top:1px solid var(--rule-soft);
+  cursor:pointer;background:transparent;
 }
-.svc:not(:nth-child(3n)){border-right:1px solid var(--rule-soft);padding-right:36px}
-.svc:last-child{border-right:none}
-.svc:hover{background-color:rgba(212,163,115,0.06)}
-.svc.active{background-color:rgba(212,163,115,0.10);padding-left:14px}
-.svc-num{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan);display:flex;align-items:center;justify-content:space-between}
-.svc-toggle{
-  width:14px;height:14px;position:relative;display:inline-block;opacity:0.45;
-  transition:opacity .3s var(--ease),transform .3s var(--ease);
+.stage-levers .svc:first-child{border-top:none;padding-top:4px}
+.svc-name{
+  grid-column:1;font-family:var(--display);font-weight:400;font-size:clamp(21px,1.9vw,25px);
+  line-height:1.2;letter-spacing:-0.01em;color:var(--ink);
+  text-decoration:underline;text-decoration-color:transparent;text-decoration-thickness:1px;text-underline-offset:6px;
+  transition:text-decoration-color .2s var(--ease);
 }
-.svc-toggle::before,.svc-toggle::after{
-  content:'';position:absolute;left:50%;top:50%;background:var(--ink);
-  transform:translate(-50%,-50%);
-}
-.svc-toggle::before{width:10px;height:1px}
-.svc-toggle::after{width:1px;height:10px;transition:transform .3s var(--ease)}
-.svc:hover .svc-toggle,.svc.active .svc-toggle{opacity:1}
-.svc.active .svc-toggle::after{transform:translate(-50%,-50%) scaleY(0)}
-.svc-name{font-family:var(--display);font-weight:500;font-size:23px;line-height:1.2;letter-spacing:-0.01em;color:var(--ink)}
-.svc-desc{font-family:var(--body);font-size:13px;line-height:1.6;color:var(--ink);opacity:0.7;margin-top:auto;padding-top:18px;max-width:260px}
+.svc:hover .svc-name,.svc.active .svc-name{text-decoration-color:var(--tan)}
+.svc-desc{grid-column:1;font-size:16px;line-height:1.55;color:var(--ink-2);max-width:34em}
 .svc-detail-cue{
-  font-family:var(--body);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;
-  color:var(--tan);margin-top:14px;
-  opacity:0;transform:translateY(-4px);
-  transition:opacity .25s var(--ease),transform .25s var(--ease);
+  grid-column:2;grid-row:1 / span 2;align-self:center;
+  display:inline-flex;align-items:center;gap:12px;
+  font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--tan-deep);
+  white-space:nowrap;
 }
-.svc:hover .svc-detail-cue,.svc.active .svc-detail-cue,.svc:focus-visible .svc-detail-cue{
-  opacity:1;transform:translateY(0);
-}
-.svc--core::before{
-  content:'';position:absolute;top:18px;right:24px;
-  width:6px;height:6px;border-radius:50%;background:var(--tan);
-}
-.svc--core:not(:nth-child(3n))::before{right:36px}
+.svc-toggle{width:14px;height:14px;position:relative;display:inline-block;flex-shrink:0}
+.svc-toggle::before,.svc-toggle::after{content:'';position:absolute;left:50%;top:50%;background:var(--ink);transform:translate(-50%,-50%)}
+.svc-toggle::before{width:12px;height:1px}
+.svc-toggle::after{width:1px;height:12px;transition:transform .25s var(--ease)}
+.svc.active .svc-toggle::after{transform:translate(-50%,-50%) scaleY(0)}
 
 .svc-detail{
-  margin-top:0;border-bottom:1px solid var(--rule);
-  max-height:0;overflow:hidden;
-  transition:max-height .55s var(--ease),margin-top .35s var(--ease),padding .35s var(--ease);
-  padding:0;
+  max-height:0;overflow:hidden;padding:0;background:var(--surface-b);
+  transition:max-height .5s var(--ease),padding .3s var(--ease);
 }
-.svc-detail.open{max-height:1200px;margin-top:0;padding:56px 0 64px}
-/* s5's drawer now also carries the embedded calculator (see renderSvcDetail):
-   its qualified-branch result (badge + ring + billing notice + matrix +
-   3-step funnel) measures ~2.3-2.4kpx tall with the original 3 descriptive
-   blocks above it, well past the 1200px cap every other card's text-only
-   content fits inside. #svcDetail.has-quiz.open (id+2 classes) outranks the
-   plain .svc-detail.open class rule above on specificity, so only s5 gets
-   the taller cap; s1-s4/s6 keep exactly the 1200px they already had. */
+.svc-detail.open{max-height:1200px;padding:44px 32px 48px}
+/* The CDCP lever (s5) also carries the embedded calculator, which is much
+   taller than the text-only drawers. Only that drawer gets the higher cap. */
 #svcDetail.has-quiz.open{max-height:2800px}
-.svc-detail-head{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;margin-bottom:48px}
-.svc-detail-title{font-family:var(--display);font-weight:500;font-size:clamp(28px,3.4vw,40px);line-height:1.08;letter-spacing:-0.02em;color:var(--ink);max-width:640px}
-.svc-detail-lede{font-family:var(--body);font-size:14px;line-height:1.6;color:var(--ink);opacity:0.7;max-width:340px;text-align:right;justify-self:end}
-.svc-detail-blocks{display:grid;grid-template-columns:repeat(3,1fr);gap:48px;border-top:1px solid var(--rule);padding-top:40px}
-.svc-detail-block-label{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan);margin-bottom:20px}
-.svc-detail-block ul{display:flex;flex-direction:column;gap:14px}
-.svc-detail-block li{
-  font-family:var(--body);font-size:14px;line-height:1.55;color:var(--ink);opacity:0.85;
-  padding-left:18px;position:relative;
-}
-.svc-detail-block li::before{
-  content:'';position:absolute;left:0;top:0.6em;width:8px;height:1px;background:var(--tan);
-}
+.svc-detail-head{display:grid;grid-template-columns:1fr 1fr;gap:var(--col-gap);align-items:end;margin-bottom:32px}
+.svc-detail-title{font-size:clamp(26px,2.8vw,36px);line-height:1.1;letter-spacing:-0.02em}
+.svc-detail-lede{font-size:16px;line-height:1.55;color:var(--ink-2);max-width:30em}
+.svc-detail-blocks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--col-gap);border-top:1px solid var(--rule);padding-top:28px}
+.svc-detail-block-label{font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--tan-deep);margin-bottom:14px}
+.svc-detail-block ul{display:flex;flex-direction:column;gap:10px}
+.svc-detail-block li{font-size:16px;line-height:1.5;color:var(--ink);padding-left:20px;position:relative}
+.svc-detail-block li::before{content:'';position:absolute;left:0;top:0.72em;width:10px;height:1px;background:var(--tan-deep)}
 .svc-detail-close{
-  margin-top:40px;font-family:var(--body);font-size:10px;letter-spacing:0.24em;
-  text-transform:uppercase;color:var(--ink);opacity:0.55;cursor:pointer;
-  display:inline-flex;align-items:center;gap:10px;transition:opacity .25s var(--ease),color .25s var(--ease);
+  margin-top:32px;display:inline-flex;align-items:center;gap:8px;
+  font-size:14px;color:var(--ink-2);border-bottom:1px solid var(--rule);padding-bottom:2px;
+  transition:color .2s var(--ease),border-color .2s var(--ease);
 }
-.svc-detail-close:hover{opacity:1;color:var(--tan)}
-.svc-detail-close::before{content:'×';font-size:18px;line-height:1;display:inline-block}
+.svc-detail-close:hover{color:var(--ink);border-bottom-color:var(--ink)}
+.quiz-wrap{margin-top:40px;border-top:1px solid var(--rule);padding-top:28px}
+.quiz-demo-tag{display:block;font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--tan-deep);margin-bottom:20px}
 
-/* ----- Services · Specimen system (per Pillar 3 motif #1: hairline rule promoted to subject) ----- */
-.svc-specimen{width:100%;padding-top:4px;user-select:none;pointer-events:none}
-.svc-specimen svg{width:100%;height:auto;display:block;overflow:visible}
-.svc-rule{height:1px;background:var(--tan);opacity:0.7}
-
-.sp-search .caret{animation:sssCaretBlink 1.6s ease-in-out infinite}
-@keyframes sssCaretBlink{0%,40%,100%{opacity:1}60%,90%{opacity:0.15}}
-.sp-search .loupe{transition:transform .55s var(--ease)}
-.svc:hover .sp-search .loupe,.svc:focus-visible .sp-search .loupe,.svc.active .sp-search .loupe{transform:translate(-30px,14px)}
-.svc:hover .sp-search .caret,.svc:focus-visible .sp-search .caret,.svc.active .sp-search .caret{animation:none;opacity:0;transition:opacity .25s}
-
-.sp-local .ring{transform-origin:140px 50px;transform-box:fill-box}
-.svc:hover .sp-local .r1,.svc:focus-visible .sp-local .r1,.svc.active .sp-local .r1{animation:sssRipple .9s var(--ease) forwards}
-.svc:hover .sp-local .r2,.svc:focus-visible .sp-local .r2,.svc.active .sp-local .r2{animation:sssRipple .9s var(--ease) .12s forwards}
-.svc:hover .sp-local .r3,.svc:focus-visible .sp-local .r3,.svc.active .sp-local .r3{animation:sssRipple .9s var(--ease) .24s forwards}
-@keyframes sssRipple{0%{transform:scale(0.85);opacity:0.7}100%{transform:scale(1.2);opacity:0}}
-
-.sp-data .node{transition:fill .3s var(--ease)}
-.svc:hover .sp-data .n1,.svc:focus-visible .sp-data .n1,.svc.active .sp-data .n1{animation:sssLightFill .6s ease-out .1s forwards}
-.svc:hover .sp-data .n2,.svc:focus-visible .sp-data .n2,.svc.active .sp-data .n2{animation:sssLightFill .6s ease-out .22s forwards}
-.svc:hover .sp-data .n3,.svc:focus-visible .sp-data .n3,.svc.active .sp-data .n3{animation:sssLightFill .6s ease-out .34s forwards}
-.svc:hover .sp-data .chair-rect,.svc:focus-visible .sp-data .chair-rect,.svc.active .sp-data .chair-rect{animation:sssLightStroke .6s ease-out .46s forwards}
-@keyframes sssLightFill{0%{fill:rgba(212,163,115,0)}100%{fill:rgba(212,163,115,1)}}
-@keyframes sssLightStroke{0%{stroke:rgba(28,24,18,0.65)}100%{stroke:rgba(212,163,115,1)}}
-
-.sp-display .fill-a{transition:opacity .35s var(--ease)}
-.sp-display .fill-b{opacity:0;transition:opacity .35s var(--ease) .2s}
-.svc:hover .sp-display .fill-a,.svc:focus-visible .sp-display .fill-a,.svc.active .sp-display .fill-a{opacity:0;transition:opacity .35s var(--ease)}
-.svc:hover .sp-display .fill-b,.svc:focus-visible .sp-display .fill-b,.svc.active .sp-display .fill-b{opacity:1}
-
-.sp-cdcp .cdcp-branch{stroke-dasharray:90;stroke-dashoffset:90;transition:stroke-dashoffset .5s var(--ease)}
-.sp-cdcp .cdcp-node{transition:fill .3s var(--ease),stroke .3s var(--ease)}
-.sp-cdcp .cdcp-check{stroke-dasharray:32;stroke-dashoffset:32;transition:stroke-dashoffset .4s var(--ease) .4s}
-.svc:hover .sp-cdcp .b1,.svc:focus-visible .sp-cdcp .b1,.svc.active .sp-cdcp .b1{stroke-dashoffset:0}
-.svc:hover .sp-cdcp .b2,.svc:focus-visible .sp-cdcp .b2,.svc.active .sp-cdcp .b2{stroke-dashoffset:0;transition-delay:.1s}
-.svc:hover .sp-cdcp .b3,.svc:focus-visible .sp-cdcp .b3,.svc.active .sp-cdcp .b3{stroke-dashoffset:0;transition-delay:.2s}
-.svc:hover .sp-cdcp .n2,.svc:focus-visible .sp-cdcp .n2,.svc.active .sp-cdcp .n2{fill:var(--tan);stroke:var(--tan);transition-delay:.3s}
-.svc:hover .sp-cdcp .cdcp-check,.svc:focus-visible .sp-cdcp .cdcp-check,.svc.active .sp-cdcp .cdcp-check{stroke-dashoffset:0;transition-delay:.4s}
-
-.sp-nfc .tap-dot{animation:sssNfcPulse 1.8s ease-in-out infinite;transform-origin:66px 50px;transform-box:fill-box}
-.sp-nfc .wave{opacity:0;transition:opacity .35s var(--ease)}
-.sp-nfc .star polygon{transition:fill .45s var(--ease) .3s,stroke .45s var(--ease) .3s}
-.svc:hover .sp-nfc .w1,.svc:focus-visible .sp-nfc .w1,.svc.active .sp-nfc .w1{opacity:0.85;transition-delay:0s}
-.svc:hover .sp-nfc .w2,.svc:focus-visible .sp-nfc .w2,.svc.active .sp-nfc .w2{opacity:0.7;transition-delay:0.12s}
-.svc:hover .sp-nfc .w3,.svc:focus-visible .sp-nfc .w3,.svc.active .sp-nfc .w3{opacity:0.55;transition-delay:0.24s}
-.svc:hover .sp-nfc .star polygon,.svc:focus-visible .sp-nfc .star polygon,.svc.active .sp-nfc .star polygon{fill:#d4a373;stroke:#d4a373}
-@keyframes sssNfcPulse{0%,100%{opacity:1}50%{opacity:0.45}}
-
-@media (prefers-reduced-motion:reduce){
-  .sp-search .caret,.sp-nfc .tap-dot{animation:none}
-  .svc:hover .svc-specimen *,.svc:focus-visible .svc-specimen *,.svc.active .svc-specimen *{animation:none!important;transition:none!important;transform:none!important}
+/* Start-up band: audit, plan, live */
+.onramp{padding-top:40px;border-top:1px solid var(--ink);align-items:start}
+.onramp-meta{grid-column:1 / span 4}
+.onramp-meta .label{display:block;margin-bottom:12px}
+.onramp-meta p{font-size:16px;line-height:1.6;color:var(--ink-2);max-width:24em}
+.onramp-steps{grid-column:6 / span 7;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--col-gap)}
+.step-anchor{
+  font-family:var(--display);font-size:clamp(40px,4.4vw,62px);line-height:1;letter-spacing:-0.03em;
+  font-variant-numeric:lining-nums;white-space:nowrap;
 }
-
-/* ========== ADD-ONS ========== */
-.addon-grid{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--rule)}
-.addon{padding:36px 40px 40px 0;border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:14px}
-.addon:first-child{border-right:1px solid var(--rule-soft);padding-right:40px}
-@media (max-width:720px){
-  .addon-grid{grid-template-columns:1fr}
-  .addon:first-child{border-right:none;padding-right:0}
+.step-anchor small{
+  font-family:var(--body);font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--tan-deep);margin-left:8px;
 }
+.step-title{font-family:var(--body);font-size:16px;font-weight:600;line-height:1.3;margin-top:16px}
+.step-desc{font-size:15px;line-height:1.55;color:var(--ink-2);margin-top:6px}
 
-/* ========== PRICING ========== */
-.pricing-statement{font-family:var(--display);font-weight:500;font-size:clamp(44px,8vw,110px);line-height:.98;letter-spacing:-0.03em;color:var(--ink);max-width:12em;text-wrap:balance}
-.pricing-mail{font-size:14px;color:var(--ink);border-bottom:1px solid var(--tan);padding-bottom:2px;text-decoration:none}
-.pricing-stage{display:grid;grid-template-columns:1fr;justify-items:center;padding:24px 0 56px;text-align:center}
-.pricing-eyebrow{font-family:var(--body);font-size:11px;letter-spacing:0.26em;text-transform:uppercase;color:var(--tan);margin-bottom:32px}
-.pricing-numeral{font-family:var(--display);font-weight:500;font-size:clamp(140px,22vw,280px);line-height:0.86;letter-spacing:-0.05em;color:var(--ink);display:inline-flex;align-items:flex-start}
-.pricing-numeral sup{font-size:0.32em;font-weight:500;color:var(--tan);margin-left:6px;margin-top:0.18em;letter-spacing:0}
-.pricing-mo{font-family:var(--body);font-size:12px;letter-spacing:0.26em;text-transform:uppercase;color:var(--ink);opacity:0.65;margin-top:18px}
-.pricing-divider{width:48px;height:1px;background:var(--tan);margin:48px auto}
-.pricing-facts{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--rule)}
-.pricing-fact{padding:36px 28px;border-right:1px solid var(--rule-soft);display:flex;flex-direction:column;gap:14px}
-.pricing-fact:last-child{border-right:none}
-.pricing-fact-label{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan)}
-.pricing-fact-value{font-family:var(--display);font-weight:500;font-size:22px;line-height:1.15;letter-spacing:-0.01em;color:var(--ink)}
-.pricing-fact-note{font-family:var(--body);font-size:12px;line-height:1.55;color:var(--ink);opacity:0.7}
-.pricing-foot{margin-top:64px;display:flex;justify-content:center;align-items:center;gap:28px;flex-wrap:wrap}
-
-/* ========== PROCESS ========== */
-.process-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--rule)}
-.process-step{padding:48px 36px 56px 0;border-right:1px solid var(--rule-soft);display:flex;flex-direction:column;gap:20px}
-.process-step:last-child{border-right:none;padding-right:0}
-.process-step:not(:first-child){padding-left:36px}
-.process-step-num{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan)}
-.process-step-anchor{font-family:var(--display);font-weight:500;font-size:clamp(44px,5.6vw,72px);line-height:0.95;letter-spacing:-0.03em;color:var(--ink)}
-.process-step-anchor small{font-size:0.32em;font-family:var(--body);letter-spacing:0.2em;text-transform:uppercase;color:var(--tan);font-weight:400;margin-left:12px;vertical-align:0.85em}
-.process-step-title{font-family:var(--display);font-weight:500;font-size:22px;line-height:1.2;letter-spacing:-0.01em;color:var(--ink);margin-top:6px}
-.process-step-desc{font-family:var(--body);font-size:14px;line-height:1.62;color:var(--ink);opacity:0.78;margin-top:auto;padding-top:18px;max-width:300px}
-
-/* ========== EDITORIAL BREAK · Filter line between Pricing and Process ========== */
-/* Not a section. Reuses Pillar 3 motif #1: hairline rule promoted to subject. */
-.break{
-  background:var(--paper);
-  padding:clamp(72px,9vw,108px) 0;
-  position:relative;
-  text-align:center;
+/* ========== 03 · PRICING ========== */
+.pricing-lead{grid-column:1 / span 5}
+.pricing-numeral{
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(92px,13vw,196px);line-height:0.84;letter-spacing:-0.045em;
+  font-variant-numeric:lining-nums;color:var(--ink);white-space:nowrap;
 }
-.break-rule{position:absolute;top:0;left:0;right:0;height:1px;background:var(--tan);opacity:0.55}
+.pricing-mo{display:block;margin-top:24px}
+.pricing-statement{font-size:clamp(24px,2.4vw,32px);line-height:1.15;letter-spacing:-0.015em;margin-top:28px;max-width:14em}
+.pricing-foot{margin-top:36px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.pricing-mail{font-size:15px;color:var(--ink);border-bottom:1px solid var(--tan);padding-bottom:2px}
+.pricing-mail:hover{border-bottom-color:var(--ink)}
+
+.pricing-ledger{grid-column:7 / span 6}
+.ledger-row{
+  display:grid;grid-template-columns:minmax(0,5fr) minmax(0,9fr);gap:8px 24px;
+  padding:22px 0 24px;border-top:1px solid var(--rule);
+}
+.ledger-row .label{padding-top:7px}
+.ledger-value{font-family:var(--display);font-size:22px;line-height:1.2;letter-spacing:-0.01em}
+.ledger-note{font-size:15px;line-height:1.55;color:var(--ink-2);margin-top:6px}
+.ledger-row--beyond{border-top-color:var(--ink)}
+.ledger-list li{padding:10px 0;border-top:1px solid var(--rule-soft)}
+.ledger-list li:first-child{border-top:none;padding-top:0}
+.ledger-list li:last-child{padding-bottom:0}
+
+/* ========== EDITORIAL BREAK ========== */
+.break{background:var(--paper);padding:clamp(64px,8vw,104px) 0;position:relative}
+.break-rule{position:absolute;top:0;left:0;right:0;height:1px;background:var(--rule)}
 .break-line{
-  font-family:var(--display);font-weight:500;font-style:italic;
-  font-size:clamp(28px,3.6vw,46px);line-height:1.15;letter-spacing:-0.018em;
-  color:var(--ink);max-width:780px;margin:0 auto;
+  font-family:var(--display);font-weight:400;font-style:italic;
+  font-size:clamp(28px,3.8vw,52px);line-height:1.12;letter-spacing:-0.015em;
+  color:var(--ink);text-wrap:balance;
 }
+.break-grid{align-items:end}
+.break-line{grid-column:1 / span 7}
+.fit{grid-column:9 / span 4}
+.fit .label{display:block;margin-bottom:12px}
+.fit-list li{font-size:16px;line-height:1.5;color:var(--ink);padding:12px 0;border-top:1px solid var(--rule)}
+.fit-list li:last-child{border-bottom:1px solid var(--rule)}
 
-/* ========== TEAM ========== */
-.team-head{margin-bottom:72px}
-.team-title{font-family:var(--display);font-weight:500;font-size:clamp(36px,4.6vw,60px);line-height:1.04;letter-spacing:-0.02em;color:var(--ink);max-width:580px}
-.team-sub{font-family:var(--body);font-size:16px;line-height:1.7;color:var(--ink);opacity:0.78;max-width:560px;margin-top:24px}
-.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:56px;border-top:1px solid var(--rule);padding-top:56px}
-.team-card{display:flex;flex-direction:column;gap:0;position:relative;padding-left:32px}
-.team-card::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--tan);opacity:0.5;
+/* ========== 04 · TEAM ========== */
+.team-head{align-items:end;margin-bottom:clamp(40px,5vw,64px)}
+.team-title{grid-column:1 / span 6}
+.team-sub{grid-column:8 / span 5;font-size:17px;line-height:1.6;color:var(--ink-2);max-width:30em}
+.team-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--col-gap)}
+.team-card{border-top:1px solid var(--ink);padding-top:22px}
+.team-role{display:block;margin-bottom:14px}
+.team-name{font-size:clamp(28px,2.8vw,38px);line-height:1.08;letter-spacing:-0.02em}
+.team-bio{font-size:16px;line-height:1.6;color:var(--ink-2);margin-top:14px;max-width:26em}
+
+/* ========== 05 · FAQ ========== */
+.faq-title{grid-column:1 / span 5;font-size:clamp(28px,3.2vw,44px)}
+.faq-list{grid-column:7 / span 6}
+.faq-item{border-top:1px solid var(--rule)}
+.faq-item:last-child{border-bottom:1px solid var(--rule)}
+.faq-item summary{
+  list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;
+  padding:22px 0;font-family:var(--display);font-size:clamp(20px,1.8vw,24px);line-height:1.25;letter-spacing:-0.01em;
 }
-.team-meta{display:flex;flex-direction:column;gap:14px}
-.team-role{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan)}
-.team-name{font-family:var(--display);font-weight:500;font-size:clamp(32px,3.2vw,44px);line-height:1.05;letter-spacing:-0.02em;color:var(--ink)}
-.team-bio{font-family:var(--body);font-size:14px;line-height:1.75;color:var(--ink);opacity:0.82;max-width:440px;margin-top:14px}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item[open] .svc-toggle::after{transform:translate(-50%,-50%) scaleY(0)}
+.faq-item p{font-size:16px;line-height:1.6;color:var(--ink-2);padding:0 40px 24px 0;max-width:36em}
 
-/* ========== CLOSE PANEL (Sage signature → bridges to calendar) ========== */
-.final{
-  position:relative;background:var(--sage);
-  padding:clamp(96px,12vw,144px) 0 clamp(64px,8vw,96px);
-  text-align:center;
+/* ========== 06 · CLOSE (forest) ========== */
+.final{position:relative;background:var(--forest);color:var(--paper);padding:clamp(88px,10vw,136px) 0}
+.final .section-head{color:var(--paper-2)}
+.final .section-head .num{color:var(--tan)}
+.final-grid{align-items:end}
+.final-main{grid-column:1 / span 7}
+.final-title{font-size:clamp(36px,5vw,72px);line-height:1.02;letter-spacing:-0.025em;color:var(--paper);text-wrap:balance}
+.final-sub{font-size:18px;line-height:1.55;color:var(--paper-2);margin-top:24px}
+.final-cta{margin-top:36px}
+.final-aside{grid-column:9 / span 4}
+.final-aside .label{display:block;color:var(--tan);margin-bottom:14px}
+.audit-list li{
+  display:grid;grid-template-columns:36px 1fr;align-items:baseline;
+  padding:14px 0;border-top:1px solid var(--rule-on-forest);
+  font-family:var(--display);font-size:21px;line-height:1.25;color:var(--paper);
 }
-.final-rule{position:absolute;top:0;left:0;right:0;height:1px;background:var(--ink);opacity:0.15}
-.final-title{font-family:var(--display);font-weight:500;font-size:clamp(40px,6vw,84px);line-height:1.02;letter-spacing:-0.025em;color:var(--ink);max-width:780px;margin:0 auto 28px}
-.final-sub{font-family:var(--body);font-size:16px;line-height:1.7;color:var(--ink);opacity:0.78;max-width:480px;margin:0 auto}
-/* Section-head inside the centered .final stays left-aligned (editorial counter against centered title) */
-.section-head--close{text-align:left;margin-bottom:48px}
+.audit-list li:last-child{border-bottom:1px solid var(--rule-on-forest)}
+.audit-list .n{font-family:var(--body);font-size:12px;font-weight:500;letter-spacing:0.16em;color:var(--tan)}
 
-/* ========== CLOSE + BOOK ========== */
-
+/* ========== BOOKING (carried over; tokens, sizes and contrast adjusted) ========== */
 /* ── Booking flow wrapper (centered, max-width matches former 8fr column) ── */
 .contact-flow{
   display:flex;flex-direction:column;gap:0;min-width:0;
@@ -564,16 +544,16 @@ nav.scrolled .nav-logo{height:26px}
 }
 .booking-nav-controls{display:flex;align-items:center;gap:20px}
 .booking-nav-month{
-  font-family:var(--body);font-size:10px;letter-spacing:0.26em;text-transform:uppercase;
-  color:var(--ink);opacity:0.45;
+  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--ink);opacity:0.74;
 }
 .booking-nav-btn{
   width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;
   background:none;border:none;cursor:pointer;color:var(--ink);opacity:0.55;
   transition:opacity .25s var(--ease),color .25s var(--ease);padding:0;
 }
-.booking-nav-btn:hover{opacity:1;color:var(--tan)}
-.booking-nav-btn:focus-visible{outline:1px solid var(--tan);outline-offset:3px}
+.booking-nav-btn:hover{opacity:1;color:var(--tan-deep)}
+.booking-nav-btn:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 
 /* ── Calendar anchor offset (clears the fixed nav) ── */
 #contact{scroll-margin-top:calc(var(--nav-h) + 24px)}
@@ -581,8 +561,8 @@ nav.scrolled .nav-logo{height:26px}
 /* ── Today eyebrow ── */
 .booking-today-eyebrow{
   display:inline-flex;align-items:center;gap:12px;
-  font-family:var(--body);font-size:10px;letter-spacing:0.26em;text-transform:uppercase;
-  color:var(--tan);margin-bottom:18px;min-height:14px;
+  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--tan-deep);margin-bottom:18px;min-height:14px;
 }
 .booking-today-eyebrow::before{
   content:'';width:18px;height:1px;background:var(--tan);display:inline-block;flex-shrink:0;
@@ -594,15 +574,15 @@ nav.scrolled .nav-logo{height:26px}
   border:1px solid var(--rule-soft);
 }
 .booking-view-btn{
-  font-family:var(--body);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;
-  background:transparent;border:none;color:var(--ink);opacity:0.55;
+  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+  background:transparent;border:none;color:var(--ink);opacity:0.74;
   padding:8px 14px;cursor:pointer;line-height:1;
   transition:color .25s var(--ease),background-color .25s var(--ease),opacity .25s var(--ease);
 }
 .booking-view-btn + .booking-view-btn{border-left:1px solid var(--rule-soft)}
-.booking-view-btn:hover{opacity:1;color:var(--tan)}
-.booking-view-btn.is-active{background:var(--tan);color:var(--paper);opacity:1}
-.booking-view-btn:focus-visible{outline:1px solid var(--tan);outline-offset:2px}
+.booking-view-btn:hover{opacity:1;color:var(--tan-deep)}
+.booking-view-btn.is-active{background:var(--forest);color:var(--paper);opacity:1}
+.booking-view-btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 
 /* ── Single-day view ── */
 .booking-day{
@@ -629,10 +609,10 @@ nav.scrolled .nav-logo{height:26px}
   font-feature-settings:"tnum" 1,"lnum" 1;
 }
 .booking-day-title .booking-day-weekday{color:var(--ink)}
-.booking-day-title .booking-day-num{color:var(--tan);margin-left:8px}
+.booking-day-title .booking-day-num{color:var(--tan-deep);margin-left:8px}
 .booking-day-meta{
-  font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;
-  color:var(--ink);opacity:0.6;text-align:right;
+  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--ink);opacity:0.74;text-align:right;
 }
 .booking-day-slots{
   display:grid;
@@ -642,7 +622,7 @@ nav.scrolled .nav-logo{height:26px}
 }
 .booking-slot.booking-slot--day{
   min-height:56px;padding:0 12px;
-  font-size:14px;
+  font-size:15px;
   background:var(--paper);
   border:none;
 }
@@ -651,13 +631,13 @@ nav.scrolled .nav-logo{height:26px}
 .booking-slot.booking-slot--day.is-busy::after{left:14px;right:14px}
 .booking-day-empty{
   padding:48px 28px;
-  font-family:var(--body);font-size:10px;letter-spacing:0.26em;text-transform:uppercase;
-  color:var(--ink);opacity:0.45;text-align:center;
+  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--ink);opacity:0.74;text-align:center;
 }
 
 /* ── Week-grid · today column wash (sage, signature surface) ── */
 .booking-col-head.is-today{
-  background:linear-gradient(to bottom,rgba(204,213,174,0.22),var(--paper));
+  background:var(--surface-a);
 }
 
 /* ── Refined hover lead on standard slot ── */
@@ -691,24 +671,24 @@ nav.scrolled .nav-logo{height:26px}
   width:14px;height:1px;background:var(--tan);
 }
 .booking-col-dayname{
-  font-family:var(--body);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;
-  color:var(--ink);opacity:0.45;
+  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--ink);opacity:0.74;
 }
 .booking-col-daynum{
   font-family:var(--display);font-weight:500;font-size:17px;line-height:1;
   letter-spacing:-0.02em;color:var(--ink);
   font-feature-settings:"tnum" 1,"lnum" 1;
 }
-.booking-col-head.is-today .booking-col-daynum{color:var(--tan)}
+.booking-col-head.is-today .booking-col-daynum{color:var(--tan-deep)}
 
 /* ── Slot buttons · 3 states: available / selected / busy ── */
 /* Fixed row height enforces visual rhythm — same skeleton every day, every week. */
 .booking-slot{
   display:flex;align-items:center;justify-content:center;
-  width:100%;min-height:28px;padding:0 4px;
+  width:100%;min-height:32px;padding:0 4px;
   border:none;border-bottom:1px solid var(--rule-soft);
   background:var(--paper);
-  font-family:var(--display);font-weight:500;font-size:12px;line-height:1;
+  font-family:var(--display);font-weight:500;font-size:14px;line-height:1;
   letter-spacing:-0.005em;color:var(--ink);
   font-feature-settings:"tnum" 1,"lnum" 1;
   cursor:pointer;text-align:center;position:relative;
@@ -724,11 +704,11 @@ nav.scrolled .nav-logo{height:26px}
 }
 .booking-slot:hover:not(.is-busy):not(.is-selected)::before{width:2px}
 .booking-slot:hover:not(.is-busy):not(.is-selected){background:rgba(212,163,115,0.06)}
-.booking-slot:focus-visible{outline:1px solid var(--tan);outline-offset:-1px;z-index:1}
+.booking-slot:focus-visible{outline:2px solid var(--ink);outline-offset:-1px;z-index:1}
 
 /* State 2 · Selected */
 .booking-slot.is-selected{
-  background:var(--tan);color:var(--paper);cursor:default;
+  background:var(--forest);color:var(--paper);cursor:default;
 }
 .booking-slot.is-selected::before{display:none}
 .booking-slot.is-selected .booking-slot-check{display:block}
@@ -770,8 +750,8 @@ nav.scrolled .nav-logo{height:26px}
 }
 .booking-confirm-summary{}
 .booking-confirm-eyebrow{
-  font-family:var(--body);font-size:10px;letter-spacing:0.26em;text-transform:uppercase;
-  color:var(--tan);margin-bottom:14px;display:block;
+  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--tan-deep);margin-bottom:14px;display:block;
 }
 .booking-confirm-datetime{
   font-family:var(--display);font-weight:500;
@@ -779,39 +759,39 @@ nav.scrolled .nav-logo{height:26px}
   letter-spacing:-0.02em;color:var(--ink);margin-bottom:14px;
 }
 .booking-confirm-meta{
-  font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;
-  color:var(--ink);opacity:0.6;margin-bottom:20px;
+  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--ink);opacity:0.74;margin-bottom:20px;
 }
 .booking-confirm-desc{
-  font-family:var(--body);font-size:13px;line-height:1.58;
+  font-family:var(--body);font-size:15px;line-height:1.58;
   color:var(--ink);opacity:0.74;margin-bottom:20px;max-width:300px;
 }
 .booking-confirm-reset{
-  font-family:var(--body);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;
-  color:var(--ink);opacity:0.55;
+  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--ink);opacity:0.74;
   background:none;border:none;border-bottom:1px solid var(--rule);
   padding:2px 0;cursor:pointer;
   transition:opacity .25s var(--ease),color .25s var(--ease),border-color .25s var(--ease);
 }
-.booking-confirm-reset:hover{opacity:1;color:var(--tan);border-bottom-color:var(--tan)}
+.booking-confirm-reset:hover{opacity:1;color:var(--tan-deep);border-bottom-color:var(--tan)}
 .booking-confirm-cta-panel{
   background:var(--sage);
   padding:40px 36px 36px;
 }
 .booking-confirm-cta-eyebrow{
-  font-family:var(--body);font-size:10px;letter-spacing:0.26em;text-transform:uppercase;
+  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
   color:var(--ink);opacity:0.7;margin-bottom:16px;display:block;
 }
 .booking-confirm-cta-copy{
-  font-family:var(--body);font-size:14px;line-height:1.62;
+  font-family:var(--body);font-size:15px;line-height:1.62;
   color:var(--ink);opacity:0.84;margin-bottom:28px;max-width:300px;
 }
 .booking-confirm-strip{
   margin-top:20px;
-  font-family:var(--body);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
-  color:var(--ink);opacity:0.5;display:flex;gap:16px;flex-wrap:wrap;align-items:center;
+  font-family:var(--body);font-size:12px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--ink);opacity:0.74;display:flex;gap:16px;flex-wrap:wrap;align-items:center;
 }
-.booking-confirm-strip-sep{color:var(--tan);opacity:0.7}
+.booking-confirm-strip-sep{color:var(--tan-deep);opacity:0.7}
 
 /* Booking form fields (rendered when API URL is configured) */
 .booking-form{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
@@ -819,17 +799,17 @@ nav.scrolled .nav-logo{height:26px}
 @media (max-width:680px){.booking-form-row{grid-template-columns:1fr}}
 .booking-field{display:flex;flex-direction:column;gap:5px}
 .booking-field label{
-  font-family:var(--body);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;
+  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
   color:var(--ink);opacity:0.7;
 }
 .booking-field input,.booking-field textarea{
-  font-family:var(--body);font-size:14px;line-height:1.5;color:var(--ink);
+  font-family:var(--body);font-size:15px;line-height:1.5;color:var(--ink);
   background:var(--paper);border:1px solid rgba(28,24,18,0.18);
   padding:10px 12px;border-radius:0;outline:none;
   transition:border-color .2s var(--ease),background .2s var(--ease);
 }
 .booking-field input:focus,.booking-field textarea:focus{
-  border-color:var(--tan);background:#fff;
+  border-color:var(--ink);background:#fffdf0;
 }
 .booking-field textarea{resize:vertical;min-height:64px}
 .booking-field.is-error input,.booking-field.is-error textarea{border-color:#a8261c}
@@ -846,7 +826,7 @@ nav.scrolled .nav-logo{height:26px}
 .booking-success.is-visible{display:block}
 .booking-confirm-summary.is-hidden,.booking-confirm-cta-panel.is-hidden{display:none}
 .booking-success-eyebrow{
-  font-family:var(--body);font-size:10px;letter-spacing:0.26em;text-transform:uppercase;
+  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
   color:var(--ink);opacity:0.7;margin-bottom:12px;display:block;
 }
 .booking-success-title{
@@ -854,7 +834,7 @@ nav.scrolled .nav-logo{height:26px}
   margin:0 0 12px;line-height:1.3;
 }
 .booking-success-meta{
-  font-family:var(--body);font-size:14px;line-height:1.6;color:var(--ink);opacity:0.84;
+  font-family:var(--body);font-size:15px;line-height:1.6;color:var(--ink);opacity:0.84;
   margin-bottom:22px;
 }
 
@@ -865,108 +845,6 @@ nav.scrolled .nav-logo{height:26px}
 }
 .booking-iframe-wrap:focus-within{
   position:static;width:auto;height:auto;clip:auto;white-space:normal;
-}
-
-/* ── Post-booking timeline ── */
-/* ========== FOOTER ========== */
-footer{background:var(--paper);padding:80px 0 56px;position:relative}
-.footer-rule{position:absolute;top:0;left:0;right:0;height:1px;background:var(--tan);opacity:0.55}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:64px;padding-bottom:64px;border-bottom:1px solid var(--rule-soft)}
-.footer-brand-mark{
-  display:block;
-  height:61px;
-  line-height:1;
-  margin-bottom:18px;
-}
-.footer-brand-mark img{
-  display:block;height:100%;width:auto;
-}
-.footer-brand-tag{font-family:var(--body);font-size:13px;line-height:1.65;color:var(--ink);opacity:0.7;max-width:340px}
-.footer-col-label{font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--tan);margin-bottom:18px}
-.footer-col ul{display:flex;flex-direction:column;gap:10px}
-.footer-col a,.footer-col span{font-family:var(--body);font-size:13px;color:var(--ink);opacity:0.82;transition:color .25s var(--ease),opacity .25s var(--ease)}
-.footer-col a:hover{color:var(--tan);opacity:1}
-.footer-legal{
-  margin-top:32px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;
-  font-family:var(--body);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
-  color:var(--ink);opacity:0.55;
-}
-
-/* ========== FADE-INS ========== */
-.fade-in{opacity:0;transform:translateY(14px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease)}
-.fade-in.visible{opacity:1;transform:translateY(0)}
-.fade-in.d1{transition-delay:.08s}
-.fade-in.d2{transition-delay:.18s}
-.fade-in.d3{transition-delay:.28s}
-.fade-in.d4{transition-delay:.38s}
-.fade-in.d5{transition-delay:.48s}
-
-/* ========== RESPONSIVE ========== */
-@media(max-width:1024px){
-  .services-grid{grid-template-columns:repeat(2,1fr)}
-  .svc:not(:nth-child(3n)){border-right:none;padding-right:28px}
-  .svc:not(:nth-child(2n)){border-right:1px solid var(--rule-soft);padding-right:36px}
-  .svc-detail-blocks{grid-template-columns:1fr;gap:32px}
-  .pricing-facts{grid-template-columns:repeat(2,1fr)}
-  .pricing-fact{border-bottom:1px solid var(--rule-soft)}
-  .pricing-fact:nth-child(2n){border-right:none}
-  .pricing-fact:nth-last-child(-n+2){border-bottom:none}
-  .process-steps{grid-template-columns:1fr}
-  .process-step{border-right:none;border-bottom:1px solid var(--rule-soft);padding:40px 0}
-  .process-step:not(:first-child){padding-left:0}
-  .process-step:last-child{border-bottom:none}
-  .team-grid{grid-template-columns:repeat(2,1fr);gap:56px}
-  .booking-confirm{grid-template-columns:1fr;gap:32px}
-  .footer-grid{grid-template-columns:1fr 1fr;gap:48px}
-}
-@media(max-width:960px){
-  .container,.nav-inner{padding:0 28px}
-  .hero{padding-top:calc(var(--nav-h) + 56px);padding-bottom:96px}
-  .hero h1{font-size:clamp(40px,10.5vw,72px)}
-  .hero-sub{font-size:16px}
-  .services-head{grid-template-columns:1fr;gap:24px}
-  .services-intro{justify-self:start}
-  .svc-detail-head{grid-template-columns:1fr;gap:18px}
-  .svc-detail-lede{text-align:left;justify-self:start}
-}
-@media(max-width:680px){
-  :root{--gutter:22px;--section-y:80px}
-  .nav-inner{gap:14px}
-  .cta-nav{padding:11px 16px;font-size:11px;letter-spacing:0.14em}
-  .lang-btn{font-size:10px;letter-spacing:0.16em}
-  .lang-sep{font-size:10px}
-  .nav-logo{height:24px}
-  nav.scrolled .nav-logo{height:22px}
-  .hero-cta-row{gap:18px}
-  .cta-primary{padding:16px 24px;font-size:12px}
-  .eyebrow{margin-bottom:32px}
-  .hero h1{margin-bottom:28px}
-  .hero-sub{margin-bottom:36px}
-  .section-head{margin-bottom:48px}
-  .problem-stmt{grid-template-columns:1fr;gap:14px;padding:36px 0}
-  .problem-stmt-num{padding-top:0}
-  .services-grid{grid-template-columns:1fr}
-  .svc{border-right:none !important;padding-right:0 !important;padding:28px 0 32px}
-  .svc.active{padding-left:0}
-  .pricing-facts{grid-template-columns:1fr}
-  .pricing-fact{border-right:none;border-bottom:1px solid var(--rule-soft)}
-  .pricing-fact:last-child{border-bottom:none}
-  .team-grid{grid-template-columns:1fr;gap:48px}
-  /* Booking mobile */
-  /* Grid + day view → mobile day-picker + slot-list */
-  .booking-nav{flex-direction:column;align-items:flex-start;gap:12px;padding-bottom:16px}
-  .booking-nav-controls{flex-wrap:wrap;row-gap:10px;column-gap:14px}
-  .booking-view-switch{order:99}
-  .booking-grid{display:none}
-  .booking-day{display:none !important}
-  .booking-mobile-picker{display:flex}
-  .booking-today-eyebrow{font-size:9px;letter-spacing:0.22em;gap:10px;margin-bottom:14px}
-  .booking-confirm{padding:28px 0 0;margin-top:24px}
-  .booking-confirm-cta-panel{padding:28px 24px 24px}
-  .booking-confirm-strip{flex-direction:column;gap:6px}
-  .booking-confirm-strip-sep{display:none}
-  .footer-grid{grid-template-columns:1fr;gap:40px;padding-bottom:48px}
-  .footer-legal{flex-direction:column;align-items:flex-start;gap:12px}
 }
 
 /* ========== MOBILE DAY-PICKER ========== */
@@ -991,10 +869,10 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   background:var(--paper);
   transition:background-color .25s var(--ease),color .25s var(--ease);
 }
-.booking-mobile-day.is-selected{background:var(--tan)}
+.booking-mobile-day.is-selected{background:var(--forest)}
 .booking-mobile-day-name{
-  font-family:var(--body);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;
-  color:var(--ink);opacity:0.45;
+  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--ink);opacity:0.74;
 }
 .booking-mobile-day.is-selected .booking-mobile-day-name{color:var(--paper);opacity:0.8}
 .booking-mobile-day-num{
@@ -1002,7 +880,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   letter-spacing:-0.02em;color:var(--ink);
   font-feature-settings:"tnum" 1,"lnum" 1;
 }
-.booking-mobile-day.is-today .booking-mobile-day-num{color:var(--tan)}
+.booking-mobile-day.is-today .booking-mobile-day-num{color:var(--tan-deep)}
 .booking-mobile-day.is-selected .booking-mobile-day-num{color:var(--paper)}
 .booking-mobile-day.is-selected.is-today .booking-mobile-day-num{color:var(--paper)}
 .booking-mobile-slots{
@@ -1033,7 +911,7 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 .booking-mobile-slot:hover:not(.is-busy):not(.is-selected){background:rgba(212,163,115,0.06)}
 
 /* State 2 · Selected */
-.booking-mobile-slot.is-selected{background:var(--tan);color:var(--paper)}
+.booking-mobile-slot.is-selected{background:var(--forest);color:var(--paper)}
 .booking-mobile-slot.is-selected::before{display:none}
 .booking-mobile-slot-check{display:none;position:relative;z-index:1}
 .booking-mobile-slot.is-selected .booking-mobile-slot-check{display:block}
@@ -1053,44 +931,172 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 
 .booking-mobile-empty{
   padding:32px 20px;
-  font-family:var(--body);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;
-  color:var(--ink);opacity:0.4;text-align:center;
+  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--ink);opacity:0.74;text-align:center;
+}
+
+
+/* collapsed booking form must not be reachable by keyboard */
+.booking-confirm-wrap{visibility:hidden}
+.booking-confirm-wrap.is-open{visibility:visible}
+.booking-confirm-strip{letter-spacing:0.06em;gap:6px 12px}
+.booking-privacy{font-size:14px;line-height:1.5;color:var(--ink-2);margin-top:16px;max-width:36em}
+
+/* ========== FOOTER (forest) ========== */
+footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:56px;padding-bottom:56px;border-bottom:1px solid var(--rule-on-forest)}
+.footer-brand-mark{display:block;height:52px;line-height:1;margin-bottom:18px}
+.footer-brand-mark img{display:block;height:100%;width:auto;filter:brightness(0) invert(1);opacity:0.94}
+.footer-brand-tag{font-family:var(--display);font-size:20px;line-height:1.3;color:var(--paper);max-width:16em}
+.footer-col-label{font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--tan);margin-bottom:16px}
+.footer-col ul{display:flex;flex-direction:column;gap:8px}
+.footer-col a,.footer-col span{font-size:15px;color:var(--paper-2)}
+.footer-col a{border-bottom:1px solid transparent;transition:color .2s var(--ease),border-color .2s var(--ease)}
+.footer-col a:hover{color:var(--paper);border-bottom-color:var(--tan)}
+.footer-legal{margin-top:28px;font-size:14px;color:var(--paper-2)}
+
+/* ========== MOTION: one short fade, nothing loops ========== */
+.fade-in{opacity:0;transform:translateY(8px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.fade-in.visible{opacity:1;transform:none}
+.fade-in.d1{transition-delay:.06s}
+.fade-in.d2{transition-delay:.12s}
+.fade-in.d3{transition-delay:.18s}
+.fade-in.d4{transition-delay:.24s}
+
+/* ========== RESPONSIVE ========== */
+@media(max-width:1024px){
+  .nav-links{display:none}
+  .hero-copy{grid-column:1 / -1}
+  .hero-sheet{grid-column:1 / span 8;margin-top:56px}
+  .problem-head,.problem-list{grid-column:1 / -1}
+  .problem-list{margin-top:40px}
+  .method-title,.method-intro,.team-title,.team-sub{grid-column:1 / -1}
+  .method-intro,.team-sub{margin-top:20px}
+  .stage-meta{grid-column:1 / span 5}
+  .stage-levers{grid-column:6 / span 7}
+  .onramp-meta{grid-column:1 / -1;margin-bottom:28px}
+  .onramp-steps{grid-column:1 / -1}
+  .pricing-lead,.pricing-ledger{grid-column:1 / -1}
+  .pricing-ledger{margin-top:56px}
+  .break-line,.fit{grid-column:1 / -1}
+  .fit{margin-top:40px;max-width:520px}
+  .faq-title,.faq-list{grid-column:1 / -1}
+  .faq-list{margin-top:36px}
+  .final-main,.final-aside{grid-column:1 / -1}
+  .final-aside{margin-top:48px;max-width:420px}
+  .svc-detail-blocks{grid-template-columns:1fr;gap:28px}
+  .svc-detail-head{grid-template-columns:1fr;gap:14px}
+  .booking-confirm{grid-template-columns:1fr;gap:32px}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:40px}
+  .footer-grid > div:first-child{grid-column:1 / -1}
+}
+@media(max-width:760px){
+  :root{--gutter:22px;--col-gap:20px}
+  body{font-size:16px}
+  .nav-inner{gap:14px}
+  .nav-right{gap:12px}
+  .nav-logo{height:24px}
+  .hero-sheet{grid-column:1 / -1;margin-top:48px}
+  .hero-cta-row{gap:14px}
+  .cta-primary{padding:16px 22px}
+  .facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fact{padding:22px 16px 24px 0}
+  .fact + .fact{padding-left:16px}
+  .fact:nth-child(2n){border-right:none;padding-right:0}
+  .fact:nth-child(2n+1){padding-left:0}
+  .fact:nth-child(n+3){border-top:1px solid var(--rule-soft)}
+  .problem-item{grid-template-columns:32px 1fr}
+  .stage{padding:32px 0}
+  .stage-meta,.stage-levers{grid-column:1 / -1}
+  .stage-levers{margin-top:24px;border-top:1px solid var(--rule-soft)}
+  .stage-levers .svc:first-child{padding-top:22px}
+  .svc-detail-cue span[data-i]{display:none}
+  .svc-detail.open{padding:32px 20px 36px;margin:0 -22px}
+  .onramp-steps{grid-template-columns:1fr;gap:0}
+  .onramp-step{display:grid;grid-template-columns:120px 1fr;column-gap:16px;align-items:baseline;padding:18px 0;border-top:1px solid var(--rule-soft)}
+  .onramp-step .step-anchor{grid-row:1 / span 2}
+  .step-title{margin-top:0}
+  .ledger-row{grid-template-columns:1fr}
+  .ledger-row .label{padding-top:0}
+  .team-grid{grid-template-columns:1fr;gap:36px}
+  .footer-grid{grid-template-columns:1fr;gap:36px;padding-bottom:40px}
+}
+@media(max-width:680px){
+  /* Booking: week grid and day view give way to the mobile day-picker */
+  .booking-nav{flex-direction:column;align-items:flex-start;gap:12px;padding-bottom:16px}
+  .booking-nav-controls{flex-wrap:wrap;row-gap:10px;column-gap:14px}
+  .booking-view-switch{order:99}
+  .booking-grid{display:none}
+  .booking-day{display:none !important}
+  .booking-mobile-picker{display:flex}
+  .booking-confirm{padding:28px 0 0;margin-top:24px}
+  .booking-confirm-cta-panel{padding:28px 22px 24px}
+  .booking-confirm-strip{flex-direction:column;gap:6px;align-items:flex-start}
+  .booking-confirm-strip-sep{display:none}
+}
+@media(max-width:380px){
+  .lang-switch{gap:2px}
+  .cta-nav{padding:10px 14px}
 }
 
 /* ========== A11Y ========== */
 @media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important}
   .fade-in{opacity:1;transform:none}
 }
-:focus-visible{outline:1px solid var(--tan);outline-offset:4px}
 
 /* ========== PRINT ========== */
 @media print{
-  *{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}
-  body{background:#fff !important;font-size:11pt;line-height:1.5}
-  nav,.scroll-cue,.svc-toggle,.svc-detail-cue,.svc-specimen,.svc-rule,.cta-nav,.cta-primary,
-  .final,.contact-embed,.skip-link,.lang-switch,.svc-detail-close{display:none !important}
-  .hero{min-height:auto;padding:0 0 24pt 0}
-  .section{padding:24pt 0;page-break-inside:avoid}
-  .section-rule{display:none}
+  *{background:transparent !important;color:#000 !important}
+  body{font-size:11pt;line-height:1.5}
+  nav,.skip-link,.cta-nav,.cta-primary,.svc-detail-cue,.svc-detail-close,#contact{display:none !important}
+  .hero{padding:0 0 24pt}
+  .section,.final{padding:24pt 0;page-break-inside:avoid}
+  .fade-in{opacity:1 !important;transform:none !important}
   h1,h2,h3{page-break-after:avoid}
-  .services-grid{grid-template-columns:1fr 1fr !important;border-color:#999 !important}
-  .svc{border-color:#999 !important;page-break-inside:avoid}
-  .svc--core::before{background:#000 !important}
   .pricing-numeral{font-size:60pt !important}
-  a[href^="http"]::after,a[href^="mailto:"]::after{content:" (" attr(href) ")";font-size:9pt;color:#666 !important}
   .container{max-width:100%;padding:0 12pt}
-  footer{padding:24pt 0 0 0;border-top:1pt solid #000}
+  footer{padding:24pt 0 0;border-top:1pt solid #000}
 }
 /* sss.marketing brand mapping for the embeddable calculator (see EMBED.md) */
 .cdcp{--cdcp-brand:var(--ink);--cdcp-on-brand:var(--paper);--cdcp-ink:var(--ink);--cdcp-paper:var(--paper);--cdcp-tint:var(--surface-a);--cdcp-accent:var(--tan);--cdcp-line:var(--rule);--cdcp-good:#2f6b35;--cdcp-bad:#b3261e;--cdcp-warn:#8a4f1c;--cdcp-font:var(--body);--cdcp-display:var(--display)}
+/* ========== FREE CALCULATOR OFFER (paper canvas, one sage panel) ========== */
+.offer{background:var(--paper);padding:clamp(56px,7vw,104px) 0 var(--section-y)}
+.offer-panel{background:var(--sage);padding:clamp(32px,4.5vw,72px);align-items:start;row-gap:44px}
+.offer-copy{grid-column:1 / span 6}
+.offer-demo{grid-column:7 / span 6}
+.offer-copy .label,.offer-demo .quiz-demo-tag{display:block;color:var(--ink);margin-bottom:20px}
+.offer-title{margin-bottom:24px}
+.offer-lede{font-size:clamp(17px,1.3vw,19px);line-height:1.55;color:var(--ink-2);max-width:30em}
+.offer-facts{list-style:none;margin-top:28px;border-top:1px solid var(--rule)}
+.offer-facts li{padding:12px 0;border-bottom:1px solid var(--rule);font-size:16px;line-height:1.45}
+.offer-deal{margin:24px 0 32px;font-size:15px;line-height:1.55;color:var(--ink-2);max-width:32em}
+.offer-calc{min-height:440px}
+.hero-try{font-size:15px;color:var(--ink);border-bottom:1px solid var(--tan);padding-bottom:2px}
+.hero-try:hover{border-bottom-color:var(--ink)}
+.booking-field select{
+  font-family:var(--body);font-size:15px;line-height:1.5;color:var(--ink);
+  background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%231c1812' stroke-width='1.2'/%3E%3C/svg%3E") no-repeat right 12px center;
+  border:1px solid rgba(28,24,18,0.18);padding:10px 34px 10px 12px;border-radius:0;outline:none;
+  -webkit-appearance:none;appearance:none;min-height:44px;
+  transition:border-color .2s var(--ease);
+}
+.booking-field select:focus{border-color:var(--ink)}
+@media(max-width:1024px){
+  .offer-copy,.offer-demo{grid-column:1 / -1}
+}
+@media(max-width:760px){
+  .offer-panel{margin:0 -22px;padding:40px 22px 44px}
+  .offer-calc{min-height:480px}
+}
 </style>
 </head>
 <body>
 
 <a class="skip-link" href="#main-content" data-i="skipLink">Aller au contenu</a>
 
-<nav id="nav">
+<nav id="nav" aria-label="Principale">
   <div class="nav-inner">
     <a href="#top" class="nav-logo" aria-label="SSS">
       <img src="logo-nav.png"
@@ -1101,14 +1107,19 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
            loading="eager"
            decoding="async">
     </a>
+    <div class="nav-links">
+      <a href="#services" data-i="navMethod">Méthode</a>
+      <a href="#pricing" data-i="navPricing">Forfait</a>
+      <a href="#team" data-i="navTeam">Équipe</a>
+    </div>
     <div class="nav-right">
-      <div class="lang-switch" role="group" aria-label="Language">
+      <div class="lang-switch" role="group" aria-label="Langue / Language">
         <button class="lang-btn active" data-lang="fr" type="button" aria-pressed="true">FR</button>
         <span class="lang-sep" aria-hidden="true">/</span>
         <button class="lang-btn" data-lang="en" type="button" aria-pressed="false">EN</button>
       </div>
-      <a href="#contact" class="cta-nav">
-        <span data-i="cta">Réserver un audit de 30 min</span>
+      <a href="#calculateur" class="cta-nav">
+        <span data-i="cta">Calculateur gratuit</span>
       </a>
     </div>
   </div>
@@ -1117,108 +1128,244 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 <main id="main-content">
 <header class="hero" id="top">
   <div class="container">
-    <div class="hero-left">
-      <div class="eyebrow fade-in d1" data-i="eyebrow">Acquisition de patients dentaires</div>
-      <h1 class="fade-in d2"><span data-i="heroTitle">Marketing dentaire. Par des opérateurs.</span><br><em data-i="heroTitleAccent">Un fauteuil occupé.</em></h1>
-      <p class="hero-sub fade-in d3" data-i="heroSub">Un seul indicateur compte. Mesuré au fauteuil.</p>
-      <div class="hero-cta-row fade-in d4">
-        <a href="#contact" class="cta-primary">
-          <span data-i="heroCta">Réserver un audit de 30 min</span>
-          <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
-          </svg>
-        </a>
+    <div class="grid hero-grid">
+      <div class="hero-copy">
+        <span class="label fade-in" data-i="eyebrow">Acquisition de patients dentaires</span>
+        <h1 class="fade-in d1"><span class="h1-a" data-i="heroTitle">Un patient entre par Google.</span> <span class="h1-b" data-i="heroTitleAccent">Ou il n'entre pas.</span></h1>
+        <p class="hero-sub fade-in d2" data-i="heroSub">Une agence qui ne fait que du dentaire. Commencez par le calculateur RCSD : installé sur votre site, gratuitement, pendant un appel de 30 minutes.</p>
+        <div class="hero-cta-row fade-in d3">
+          <a href="#contact" class="cta-primary">
+            <span data-i="heroCta">Réserver l'installation gratuite</span>
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
+            </svg>
+          </a>
+          <a class="hero-try" href="#calculateur" data-i="heroTry">Essayer le calculateur</a>
+          <span class="hero-cta-note" data-i="heroCtaNote">Gratuit. Sur Google Meet. Sans engagement.</span>
+        </div>
+      </div>
+
+      <!-- Illustrative day sheet: the brand's appointment-book motif. Not client data. -->
+      <figure class="hero-sheet sheet fade-in d2">
+        <div class="sheet-head">
+          <span class="label" data-i="sheetDay">Un mardi</span>
+          <span class="label" data-i="sheetChair">Fauteuil 2</span>
+        </div>
+        <ol>
+          <li class="sheet-row"><span class="sheet-time">8:00</span><span class="sheet-what" data-i="sheetR1">Examen et nettoyage</span></li>
+          <li class="sheet-row"><span class="sheet-time">9:00</span><span class="sheet-what" data-i="sheetR2">Nouveau patient, examen complet</span></li>
+          <li class="sheet-row is-open"><span class="sheet-time">10:00</span><span class="sheet-what"><span data-i="sheetOpen">Libre</span></span></li>
+          <li class="sheet-row"><span class="sheet-time">11:00</span><span class="sheet-what" data-i="sheetR3">Urgence, douleur</span></li>
+          <li class="sheet-row is-open"><span class="sheet-time">13:00</span><span class="sheet-what"><span data-i="sheetOpen">Libre</span></span></li>
+          <li class="sheet-row"><span class="sheet-time">14:00</span><span class="sheet-what" data-i="sheetR4">Couronne, préparation</span></li>
+          <li class="sheet-row is-open"><span class="sheet-time">15:00</span><span class="sheet-what"><span data-i="sheetOpen">Libre</span></span></li>
+          <li class="sheet-row"><span class="sheet-time">16:00</span><span class="sheet-what" data-i="sheetR5">Examen et nettoyage</span></li>
+        </ol>
+        <figcaption>
+          <p class="sheet-note" data-i="sheetNote">Trois plages libres. Le loyer, lui, couvre la journée entière.</p>
+          <span class="label sheet-caption" data-i="sheetCaption">Illustration</span>
+        </figcaption>
+      </figure>
+    </div>
+
+    <div class="facts fade-in">
+      <div class="fact">
+        <div class="fact-num">3</div>
+        <p class="fact-text" data-i="fact1">Associés, tous encore en clinique.</p>
+      </div>
+      <div class="fact">
+        <div class="fact-num" data-i="fact2Num">100 %</div>
+        <p class="fact-text" data-i="fact2">Dentaire. Aucun autre secteur.</p>
+      </div>
+      <div class="fact">
+        <div class="fact-num">6</div>
+        <p class="fact-text" data-i="fact3">Leviers de croissance, un seul forfait.</p>
+      </div>
+      <div class="fact">
+        <div class="fact-num" data-i="priceNum">450 $</div>
+        <p class="fact-text" data-i="fact4">Par mois, par clinique.</p>
       </div>
     </div>
   </div>
 </header>
 
-<!-- 01 · PROBLEM · Surface B -->
-<section class="section section--surface-b" id="problem">
-  <div class="section-rule"></div>
+<!-- Free calculator offer · Paper canvas, one sage panel -->
+<section class="offer" id="calculateur" aria-labelledby="offerTitle">
   <div class="container">
-    <div class="section-head fade-in">
-      <span class="num">01</span><span class="sep"></span>
-      <span data-i="problemLabel">Le problème</span>
-    </div>
-    <div class="problem-grid">
-      <div class="problem-stmt fade-in d1">
-        <div class="problem-stmt-num">i</div>
-        <p class="problem-stmt-body" data-i="prob1">Les agences traditionnelles vendent de la visibilité. Nous générons des patients.</p>
+    <div class="grid offer-panel">
+      <div class="offer-copy fade-in">
+        <span class="label" data-i="offerLabel">Gratuit pour les cliniques dentaires</span>
+        <h2 class="h2 offer-title" id="offerTitle" data-i="offerTitle">Le calculateur RCSD. Sur votre site. Gratuit.</h2>
+        <p class="offer-lede" data-i="offerLede">« Suis-je admissible au RCSD, et combien vais-je payer ? » Votre réception répond à cette question au téléphone. Votre site peut y répondre à sa place.</p>
+        <ul class="offer-facts">
+          <li data-i="offerFact1">Quatre questions. Moins d'une minute.</li>
+          <li data-i="offerFact2">Vos couleurs, le nom de votre clinique.</li>
+          <li data-i="offerFact3">En français ou en anglais.</li>
+          <li data-i="offerFact4">Un bouton vers votre prise de rendez-vous.</li>
+        </ul>
+        <p class="offer-deal" data-i="offerDeal">Le prix : un appel de 30 minutes avec la personne qui gère votre site. Le badge « Propulsé par SSS » reste affiché. C'est tout.</p>
+        <a href="#contact" class="cta-primary">
+          <span data-i="offerCta">Réserver l'installation gratuite</span>
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
+          </svg>
+        </a>
       </div>
-      <div class="problem-stmt fade-in d2">
-        <div class="problem-stmt-num">ii</div>
-        <p class="problem-stmt-body" data-i="prob2">La plupart des agences ne comprennent pas pourquoi quelqu'un cherche « dentiste d'urgence » à 22h. Nous, oui.</p>
+      <div class="offer-demo fade-in d1">
+        <span class="quiz-demo-tag" data-i="offerDemoTag">Essayez-le comme un patient</span>
+        <div class="offer-calc" id="cdcpOfferMount"></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 02 · SERVICES · Paper -->
+<!-- 01 · PROBLEM · Surface B -->
+<section class="section section--surface-b" id="problem">
+  <div class="container">
+    <div class="section-head fade-in">
+      <span class="num">01</span><span class="sep"></span>
+      <span data-i="problemLabel">Le constat</span>
+    </div>
+    <div class="grid">
+      <div class="problem-head fade-in">
+        <h2 class="h2"><span data-i="problemTitleA">Vos fauteuils vides ne sont pas un problème de budget.</span> <span data-i="problemTitleB">C'est un problème de canaux.</span></h2>
+      </div>
+      <div class="problem-list">
+        <div class="problem-item fade-in">
+          <span class="label" aria-hidden="true">i</span>
+          <div>
+            <h3 data-i="prob1">22 h. Quelqu'un cherche « dentiste d'urgence ».</h3>
+            <p data-i="prob1Body">Votre clinique apparaît, ou c'est celle d'à côté. Le patient ne compare pas longtemps.</p>
+          </div>
+        </div>
+        <div class="problem-item fade-in d1">
+          <span class="label" aria-hidden="true">ii</span>
+          <div>
+            <h3 data-i="prob2">Le téléphone sonne. Personne ne sait pourquoi.</h3>
+            <p data-i="prob2Body">Sans suivi d'appels, impossible de dire quelle annonce a rempli quel fauteuil, ni laquelle n'a rien donné.</p>
+          </div>
+        </div>
+        <div class="problem-item fade-in d2">
+          <span class="label" aria-hidden="true">iii</span>
+          <div>
+            <h3 data-i="prob3">La facture arrive chaque mois. Le rapport, non.</h3>
+            <p data-i="prob3Body">Un mandat mensuel se défend avec des chiffres mensuels : les appels, leur provenance, ce qu'ils ont coûté.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 · METHOD · Paper · six levers arranged as four stages -->
 <section class="section section--paper" id="services">
-  <div class="section-rule"></div>
   <div class="container">
     <div class="section-head fade-in">
       <span class="num">02</span><span class="sep"></span>
-      <span data-i="servicesLabel">Services</span>
+      <span data-i="servicesLabel">La méthode</span>
     </div>
-    <div class="services-head">
-      <h2 class="services-title fade-in d1" data-i="servicesTitle">Six leviers. Un forfait clair.</h2>
-      <p class="services-intro fade-in d2" data-i="servicesIntro">Opéré en interne. Mesuré mensuellement.</p>
-    </div>
-
-    <div class="services-grid" id="servicesGrid">
-      <button class="svc svc--core fade-in d1" type="button" data-svc="s1" aria-expanded="false">
-        <div class="svc-num"><span>01 / Google</span><span class="svc-toggle" aria-hidden="true"></span></div>
-        <div class="svc-specimen" aria-hidden="true"><svg class="sp-search" viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg"><line x1="40" y1="58" x2="200" y2="58" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1" stroke-linecap="round"/><line class="caret" x1="200" y1="48" x2="200" y2="68" stroke="#d4a373" stroke-width="1.5" stroke-linecap="round"/><g class="loupe"><circle cx="225" cy="42" r="14" fill="none" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1"/><line x1="235" y1="52" x2="248" y2="65" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1" stroke-linecap="round"/><circle cx="225" cy="42" r="2.2" fill="#d4a373"/></g></svg></div>
-        <div class="svc-rule"></div>
-        <h3 class="svc-name" data-i="svc1Name">Google Ads — Search et Performance Max</h3>
-        <p class="svc-desc" data-i="svc1Desc">Géré par des opérateurs. Jamais laissé en pilote automatique.</p>
-        <span class="svc-detail-cue" data-i="svcDetailCue">+ Voir les livrables</span>
-      </button>
-      <button class="svc svc--core fade-in d2" type="button" data-svc="s2" aria-expanded="false">
-        <div class="svc-num"><span>02 / Local</span><span class="svc-toggle" aria-hidden="true"></span></div>
-        <div class="svc-specimen" aria-hidden="true"><svg class="sp-local" viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg"><g stroke="#1c1812" stroke-opacity="0.07" stroke-width="0.5"><line x1="40" y1="20" x2="240" y2="20"/><line x1="40" y1="40" x2="240" y2="40"/><line x1="40" y1="60" x2="240" y2="60"/><line x1="40" y1="80" x2="240" y2="80"/><line x1="60" y1="10" x2="60" y2="90"/><line x1="100" y1="10" x2="100" y2="90"/><line x1="140" y1="10" x2="140" y2="90"/><line x1="180" y1="10" x2="180" y2="90"/><line x1="220" y1="10" x2="220" y2="90"/></g><circle class="ring r1" cx="140" cy="50" r="20" fill="none" stroke="#1c1812" stroke-opacity="0.45" stroke-width="1"/><circle class="ring r2" cx="140" cy="50" r="32" fill="none" stroke="#1c1812" stroke-opacity="0.35" stroke-width="1"/><circle class="ring r3" cx="140" cy="50" r="44" fill="none" stroke="#1c1812" stroke-opacity="0.22" stroke-width="1"/><line x1="140" y1="50" x2="140" y2="64" stroke="#1c1812" stroke-opacity="0.7" stroke-width="1.25" stroke-linecap="round"/><circle cx="140" cy="46" r="4.5" fill="#d4a373"/></svg></div>
-        <div class="svc-rule"></div>
-        <h3 class="svc-name" data-i="svc2Name">Google Business Profile</h3>
-        <p class="svc-desc" data-i="svc2Desc">Premier sur la carte. Profil défendu.</p>
-        <span class="svc-detail-cue" data-i="svcDetailCue">+ Voir les livrables</span>
-      </button>
-      <button class="svc svc--core fade-in d3" type="button" data-svc="s3" aria-expanded="false">
-        <div class="svc-num"><span>03 / Data</span><span class="svc-toggle" aria-hidden="true"></span></div>
-        <div class="svc-specimen" aria-hidden="true"><svg class="sp-data" viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg"><text x="40" y="60" font-family="RhymesText, 'Palatino Linotype', Georgia, serif" font-size="26" fill="#d4a373">$</text><line x1="64" y1="52" x2="200" y2="52" stroke="#1c1812" stroke-opacity="0.4" stroke-width="1" stroke-dasharray="2 4" stroke-linecap="round"/><circle class="node n1" cx="98" cy="52" r="3.2" fill="rgba(212,163,115,0)" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1"/><circle class="node n2" cx="132" cy="52" r="3.2" fill="rgba(212,163,115,0)" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1"/><circle class="node n3" cx="166" cy="52" r="3.2" fill="rgba(212,163,115,0)" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1"/><rect class="chair-rect" x="206" y="44" width="24" height="16" rx="2" fill="none" stroke="#1c1812" stroke-opacity="0.65" stroke-width="1"/><rect class="chair-head" x="212" y="36" width="12" height="8" rx="1.5" fill="none" stroke="#1c1812" stroke-opacity="0.65" stroke-width="1"/></svg></div>
-        <div class="svc-rule"></div>
-        <h3 class="svc-name" data-i="svc3Name">Suivi d’appels &amp; rapport mensuel</h3>
-        <p class="svc-desc" data-i="svc3Desc">Chaque dollar tracé au fauteuil.</p>
-        <span class="svc-detail-cue" data-i="svcDetailCue">+ Voir les livrables</span>
-      </button>
-      <button class="svc fade-in d1" type="button" data-svc="s4" aria-expanded="false">
-        <div class="svc-num"><span>04 / Display</span><span class="svc-toggle" aria-hidden="true"></span></div>
-        <div class="svc-specimen" aria-hidden="true"><svg class="sp-display" viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg"><g stroke="#1c1812" stroke-opacity="0.5" stroke-width="0.8" fill="none"><rect x="50" y="22" width="28" height="16"/><rect x="84" y="22" width="28" height="16"/><rect x="118" y="22" width="28" height="16"/><rect x="152" y="22" width="28" height="16"/><rect x="186" y="22" width="28" height="16"/><rect x="50" y="44" width="28" height="16"/><rect x="84" y="44" width="28" height="16"/><rect x="118" y="44" width="28" height="16"/><rect x="152" y="44" width="28" height="16"/><rect x="186" y="44" width="28" height="16"/><rect x="50" y="66" width="28" height="16"/><rect x="84" y="66" width="28" height="16"/><rect x="118" y="66" width="28" height="16"/><rect x="152" y="66" width="28" height="16"/><rect x="186" y="66" width="28" height="16"/></g><rect class="fill-a" x="152" y="44" width="28" height="16" fill="#d4a373"/><rect class="fill-b" x="84" y="22" width="28" height="16" fill="#d4a373"/></svg></div>
-        <div class="svc-rule"></div>
-        <h3 class="svc-name" data-i="svc4Name">Google Ads — Display</h3>
-        <p class="svc-desc" data-i="svc4Desc">Présence ciblée. Mesurable.</p>
-        <span class="svc-detail-cue" data-i="svcDetailCue">+ Voir les livrables</span>
-      </button>
-      <button class="svc fade-in d2" type="button" data-svc="s5" aria-expanded="false">
-        <div class="svc-num"><span data-i="svc5Num">05 / RCSD</span><span class="svc-toggle" aria-hidden="true"></span></div>
-        <div class="svc-specimen" aria-hidden="true"><svg class="sp-cdcp" viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg"><circle cx="46" cy="50" r="4" fill="#1c1812" fill-opacity="0.55"/><path class="cdcp-branch b1" d="M50 50 C 90 50, 110 26, 150 22" fill="none" stroke="#1c1812" stroke-opacity="0.5" stroke-width="1"/><path class="cdcp-branch b2" d="M50 50 C 90 50, 110 50, 150 50" fill="none" stroke="#1c1812" stroke-opacity="0.5" stroke-width="1"/><path class="cdcp-branch b3" d="M50 50 C 90 50, 110 74, 150 78" fill="none" stroke="#1c1812" stroke-opacity="0.5" stroke-width="1"/><circle class="cdcp-node n1" cx="150" cy="22" r="4" fill="none" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1"/><circle class="cdcp-node n2" cx="150" cy="50" r="4" fill="none" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1"/><circle class="cdcp-node n3" cx="150" cy="78" r="4" fill="none" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1"/><line x1="164" y1="50" x2="220" y2="50" stroke="#1c1812" stroke-opacity="0.18" stroke-width="1"/><path class="cdcp-check" d="M234 50 l7 7 l13 -15" fill="none" stroke="#d4a373" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="svc-rule"></div>
-        <h3 class="svc-name" data-i="svc5Name">RCSD — Moteur de conversion interactif</h3>
-        <p class="svc-desc" data-i="svc5Desc">Admissible en 60 secondes. Réservé aussitôt.</p>
-        <span class="svc-detail-cue" data-i="svcDetailCue">+ Voir les livrables</span>
-      </button>
-      <button class="svc fade-in d3" type="button" data-svc="s6" aria-expanded="false">
-        <div class="svc-num"><span>06 / NFC</span><span class="svc-toggle" aria-hidden="true"></span></div>
-        <div class="svc-specimen" aria-hidden="true"><svg class="sp-nfc" viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg"><rect x="44" y="34" width="44" height="32" rx="4" fill="none" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1"/><circle class="tap-dot" cx="66" cy="50" r="3" fill="#d4a373"/><g transform="translate(124, 50)" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1" fill="none" stroke-linecap="round"><path class="wave w1" d="M0 -6 a 6 6 0 0 1 0 12"/><path class="wave w2" d="M0 -12 a 12 12 0 0 1 0 24"/><path class="wave w3" d="M0 -18 a 18 18 0 0 1 0 36"/></g><g transform="translate(220, 50)" class="star"><polygon points="0,-11 3.2,-3.4 11.5,-3.4 4.8,2 7.1,10 0,5.4 -7.1,10 -4.8,2 -11.5,-3.4 -3.2,-3.4" fill="none" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/></g></svg></div>
-        <div class="svc-rule"></div>
-        <h3 class="svc-name" data-i="svc6Name">Avis Google · NFC</h3>
-        <p class="svc-desc" data-i="svc6Desc">Un tap. Un avis. Un signal.</p>
-        <span class="svc-detail-cue" data-i="svcDetailCue">+ Voir les livrables</span>
-      </button>
+    <div class="grid method-head">
+      <h2 class="h2 method-title fade-in" data-i="servicesTitle">Du clic au fauteuil.</h2>
+      <p class="method-intro fade-in d1" data-i="servicesIntro">Six leviers, quatre étapes. Chacun a ses livrables et sa ligne dans le rapport mensuel.</p>
     </div>
 
-    <div class="svc-detail" id="svcDetail" aria-live="polite"></div>
+    <div id="servicesGrid">
+      <div class="grid stage fade-in">
+        <div class="stage-meta">
+          <span class="label">01</span>
+          <h3 class="stage-name" data-i="stage1Name">Être trouvé</h3>
+          <p class="stage-text" data-i="stage1Text">Un patient cherche un dentiste près de chez lui. Vos annonces sont là au moment de la recherche.</p>
+        </div>
+        <div class="stage-levers">
+          <button class="svc" type="button" data-svc="s1" aria-expanded="false">
+            <span class="svc-name" data-i="svc1Name">Google Ads : Search et Performance Max</span>
+            <span class="svc-desc" data-i="svc1Desc">Mots-clés, annonces et exclusions suivis de près. Jamais laissés en pilote automatique.</span>
+            <span class="svc-detail-cue"><span data-i="svcDetailCue">Livrables</span><span class="svc-toggle" aria-hidden="true"></span></span>
+          </button>
+          <button class="svc" type="button" data-svc="s4" aria-expanded="false">
+            <span class="svc-name" data-i="svc4Name">Google Ads : Display</span>
+            <span class="svc-desc" data-i="svc4Desc">Vos bannières devant les patients de votre secteur, entre deux recherches.</span>
+            <span class="svc-detail-cue"><span data-i="svcDetailCue">Livrables</span><span class="svc-toggle" aria-hidden="true"></span></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid stage fade-in">
+        <div class="stage-meta">
+          <span class="label">02</span>
+          <h3 class="stage-name" data-i="stage2Name">Être choisi</h3>
+          <p class="stage-text" data-i="stage2Text">Devant trois cliniques sur la carte, le patient compare les fiches et lit les avis.</p>
+        </div>
+        <div class="stage-levers">
+          <button class="svc" type="button" data-svc="s2" aria-expanded="false">
+            <span class="svc-name" data-i="svc2Name">Fiche d'établissement Google</span>
+            <span class="svc-desc" data-i="svc2Desc">Une fiche complète et tenue à jour, avec une réponse à chaque avis.</span>
+            <span class="svc-detail-cue"><span data-i="svcDetailCue">Livrables</span><span class="svc-toggle" aria-hidden="true"></span></span>
+          </button>
+          <button class="svc" type="button" data-svc="s6" aria-expanded="false">
+            <span class="svc-name" data-i="svc6Name">Avis Google par plaquette NFC</span>
+            <span class="svc-desc" data-i="svc6Desc">Une plaquette à la réception. Le patient y pose son téléphone et laisse son avis avant de partir.</span>
+            <span class="svc-detail-cue"><span data-i="svcDetailCue">Livrables</span><span class="svc-toggle" aria-hidden="true"></span></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid stage fade-in">
+        <div class="stage-meta">
+          <span class="label">03</span>
+          <h3 class="stage-name" data-i="stage3Name">Être réservé</h3>
+          <p class="stage-text" data-i="stage3Text">Avant d'appeler, le patient veut savoir s'il est couvert. La réponse est sur votre site.</p>
+        </div>
+        <div class="stage-levers">
+          <button class="svc" type="button" data-svc="s5" aria-expanded="false">
+            <span class="svc-name" data-i="svc5Name">RCSD : moteur de conversion interactif</span>
+            <span class="svc-desc" data-i="svc5Desc">L'admissibilité au RCSD en quatre questions, puis la prise de rendez-vous.</span>
+            <span class="svc-detail-cue"><span data-i="svc5Cue">Essayer l'outil</span><span class="svc-toggle" aria-hidden="true"></span></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid stage fade-in">
+        <div class="stage-meta">
+          <span class="label">04</span>
+          <h3 class="stage-name" data-i="stage4Name">Être mesuré</h3>
+          <p class="stage-text" data-i="stage4Text">Chaque appel est rattaché à sa source. Le rapport arrive chaque mois.</p>
+        </div>
+        <div class="stage-levers">
+          <button class="svc" type="button" data-svc="s3" aria-expanded="false">
+            <span class="svc-name" data-i="svc3Name">Suivi d'appels et rapport mensuel</span>
+            <span class="svc-desc" data-i="svc3Desc">Un numéro suivi par clinique, un tableau de bord, un rapport mensuel.</span>
+            <span class="svc-detail-cue"><span data-i="svcDetailCue">Livrables</span><span class="svc-toggle" aria-hidden="true"></span></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="svc-detail" id="svcDetail" aria-live="polite"></div>
+    </div>
+
+    <div class="grid onramp" id="process">
+      <div class="onramp-meta fade-in">
+        <span class="label" data-i="processLabel">Mise en route</span>
+        <p data-i="processIntro">De l'audit aux campagnes actives, en trois étapes.</p>
+      </div>
+      <div class="onramp-steps">
+        <div class="onramp-step fade-in">
+          <div class="step-anchor">30<small data-i="step1Unit">min</small></div>
+          <h3 class="step-title" data-i="step1Title">Audit</h3>
+          <p class="step-desc" data-i="step1Desc">Présence Google, concurrents, occasions locales.</p>
+        </div>
+        <div class="onramp-step fade-in d1">
+          <div class="step-anchor" data-i="step2Anchor">Plan</div>
+          <h3 class="step-title" data-i="step2Title">Stratégie</h3>
+          <p class="step-desc" data-i="step2Desc">Plan d'action, budget par levier, cibles mensuelles.</p>
+        </div>
+        <div class="onramp-step fade-in d2">
+          <div class="step-anchor">14<small data-i="step3Unit">jours</small></div>
+          <h3 class="step-title" data-i="step3Title">Mise en ligne</h3>
+          <p class="step-desc" data-i="step3Desc">Campagnes actives. Mesure dès le premier mois.</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1231,171 +1378,201 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
       <span data-i="pricingLabel">Forfait</span>
     </div>
 
-    <div class="pricing-stage">
-      <h2 class="pricing-statement fade-in d2" data-i="pricingStatement">Un forfait par clinique.</h2>
-      <div class="pricing-mo fade-in d3" data-i="pricingMo">Tarifs sur demande · sans engagement</div>
-    </div>
+    <div class="grid">
+      <div class="pricing-lead fade-in">
+        <div class="pricing-numeral" data-i="priceNum">450 $</div>
+        <span class="label pricing-mo" data-i="pricingMo">Par mois, par clinique</span>
+        <h2 class="pricing-statement" data-i="pricingStatement">Un forfait par clinique. Le même pour toutes.</h2>
+        <div class="pricing-foot">
+          <a href="#contact" class="cta-primary">
+            <span data-i="pricingCta">Réserver un appel de 30 minutes</span>
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
+            </svg>
+          </a>
+          <a class="pricing-mail" href="/tarifs/" data-tarifs data-i="pricingMail">Voir tous les tarifs</a>
+        </div>
+      </div>
 
-    <div class="pricing-divider fade-in"></div>
-
-    <div class="pricing-facts">
-      <div class="pricing-fact fade-in d1">
-        <div class="pricing-fact-label" data-i="pf1Label">Inclus</div>
-        <div class="pricing-fact-value" data-i="pf1Value">Gestion Google</div>
-        <div class="pricing-fact-note" data-i="pf1Note">Search, Display, Performance Max, fiche Google, suivi d’appels, rapport mensuel, plaquette NFC.</div>
+      <div class="pricing-ledger">
+        <div class="ledger-row fade-in">
+          <span class="label" data-i="pf1Label">Inclus</span>
+          <div>
+            <div class="ledger-value" data-i="pf1Value">Gestion Google</div>
+            <p class="ledger-note" data-i="pf1Note">Search, Display, Performance Max, fiche Google, suivi d'appels, rapport mensuel, tableau de bord par clinique, plaquette NFC.</p>
+          </div>
+        </div>
+        <div class="ledger-row fade-in">
+          <span class="label" data-i="pf2Label">Mise en service</span>
+          <div>
+            <div class="ledger-value" data-i="pf2Value">Une seule fois</div>
+            <p class="ledger-note" data-i="pf2Note">Mise en place clinique par clinique. Une facture par clinique.</p>
+          </div>
+        </div>
+        <div class="ledger-row fade-in">
+          <span class="label" data-i="pf3Label">Budget publicitaire</span>
+          <div>
+            <div class="ledger-value" data-i="pf3Value">En sus, facturé au coût</div>
+            <p class="ledger-note" data-i="pf3Note">Votre budget Google, sans majoration. Aucuns frais cachés.</p>
+          </div>
+        </div>
+        <div class="ledger-row fade-in">
+          <span class="label" data-i="pf4Label">Calculateur RCSD</span>
+          <div>
+            <div class="ledger-value" data-i="pf4Value">Gratuit</div>
+            <p class="ledger-note" data-i="pf4Note">Installé sur votre site, aux couleurs de la clinique.</p>
+          </div>
+        </div>
+        <div class="ledger-row fade-in">
+          <span class="label" data-i="pf5Label">Engagement</span>
+          <div>
+            <div class="ledger-value" data-i="pf5Value">Trois mois au départ</div>
+            <p class="ledger-note" data-i="pf5Note">Ensuite au mois, avec un préavis de 30 jours.</p>
+          </div>
+        </div>
+        <div class="ledger-row ledger-row--beyond fade-in" id="addons">
+          <span class="label" data-i="addonsLabel">Au-delà du forfait</span>
+          <ul class="ledger-list">
+            <li>
+              <div class="ledger-value" data-i="addon1Name">Publicité vidéo sur mesure</div>
+              <p class="ledger-note" data-i="addon1Desc">Ciblage local, pour les cliniques établies. Sur demande.</p>
+            </li>
+            <li>
+              <div class="ledger-value" data-i="addon2Name">Architecture SEO multi-succursales</div>
+              <p class="ledger-note" data-i="addon2Desc">Pour les groupes de trois succursales et plus. Sur demande.</p>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="pricing-fact fade-in d2">
-        <div class="pricing-fact-label" data-i="pf2Label">Onboarding</div>
-        <div class="pricing-fact-value" data-i="pf2Value">Une seule fois</div>
-        <div class="pricing-fact-note" data-i="pf2Note">Mise en place clinique par clinique. Une facture par clinique.</div>
-      </div>
-      <div class="pricing-fact fade-in d3">
-        <div class="pricing-fact-label" data-i="pf3Label">Publicité Google</div>
-        <div class="pricing-fact-value" data-i="pf3Value">Facturée directement</div>
-        <div class="pricing-fact-note" data-i="pf3Note">Vous gardez le contrôle. Aucun frais caché.</div>
-      </div>
-      <div class="pricing-fact fade-in d4">
-        <div class="pricing-fact-label" data-i="pf4Label">Calculatrice RCSD</div>
-        <div class="pricing-fact-value" data-i="pf4Value">En option</div>
-        <div class="pricing-fact-note" data-i="pf4Note">Aux couleurs de la clinique, sur demande.</div>
-      </div>
-    </div>
-
-    <div class="pricing-foot fade-in">
-      <a href="#contact" class="cta-primary">
-        <span data-i="pricingCta">Réserver un audit de 30 min</span>
-        <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
-        </svg>
-      </a>
-      <a class="pricing-mail" href="mailto:info@sss.marketing" data-i="pricingMail">Tarifs : info@sss.marketing</a>
     </div>
   </div>
 </section>
 
-<!-- Editorial filter break · Paper · transitional moment, not a section -->
-<aside class="break" aria-label="Filtre de positionnement">
+<!-- Editorial filter line -->
+<aside class="break" aria-label="Positionnement">
   <div class="break-rule"></div>
   <div class="container">
-    <p class="break-line fade-in" data-i="filter">Aucune caméra. Aucune danse. Vous restez dentiste.</p>
+    <div class="grid break-grid">
+      <p class="break-line fade-in" data-i="filter">Aucune caméra. Aucune danse. Vous restez dentiste.</p>
+      <div class="fit fade-in d1">
+        <span class="label" data-i="fitLabel">SSS n'est pas pour</span>
+        <ul class="fit-list">
+          <li data-i="fit1">Les dentistes qui veulent être devant la caméra.</li>
+          <li data-i="fit2">Les cliniques qui mesurent leur marketing en abonnés.</li>
+          <li data-i="fit3">Les propriétaires qui ne liront pas un rapport mensuel.</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </aside>
 
-<!-- 04 · PROCESS · Surface B -->
-<section class="section section--surface-b" id="process">
-  <div class="section-rule"></div>
+<!-- 04 · TEAM · Surface A -->
+<section class="section section--surface-a" id="team">
   <div class="container">
     <div class="section-head fade-in">
       <span class="num">04</span><span class="sep"></span>
-      <span data-i="processLabel">Processus</span>
-    </div>
-
-    <div class="process-steps">
-      <div class="process-step fade-in d1">
-        <div class="process-step-num" data-i="step1Num">Étape 01</div>
-        <div class="process-step-anchor">30<small data-i="step1Unit">min</small></div>
-        <h3 class="process-step-title" data-i="step1Title">Audit</h3>
-        <p class="process-step-desc" data-i="step1Desc">Présence Google. Compétiteurs. Opportunités locales.</p>
-      </div>
-      <div class="process-step fade-in d2">
-        <div class="process-step-num" data-i="step2Num">Étape 02</div>
-        <div class="process-step-anchor" data-i="step2Anchor">Plan</div>
-        <h3 class="process-step-title" data-i="step2Title">Stratégie</h3>
-        <p class="process-step-desc" data-i="step2Desc">Plan d'action. Budget par levier. Cibles mensuelles.</p>
-      </div>
-      <div class="process-step fade-in d3">
-        <div class="process-step-num" data-i="step3Num">Étape 03</div>
-        <div class="process-step-anchor">14<small data-i="step3Unit">jours</small></div>
-        <h3 class="process-step-title" data-i="step3Title">Mise en ligne</h3>
-        <p class="process-step-desc" data-i="step3Desc">Campagnes actives. Mesure dès le premier mois.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 05 · TEAM · Surface A -->
-<section class="section section--surface-a" id="team">
-  <div class="section-rule"></div>
-  <div class="container">
-    <div class="section-head fade-in">
-      <span class="num">05</span><span class="sep"></span>
       <span data-i="teamLabel">Équipe</span>
     </div>
 
-    <div class="team-head fade-in d1">
-      <h2 class="team-title" data-i="teamTitle">Chaque dollar a un opérateur.</h2>
-      <p class="team-sub fade-in d2" data-i="teamSub">Chaque campagne a un opérateur, et les trois partenaires pratiquent toujours en clinique. Aucun mot publié sans validation. Aucune ligne entre nous et votre clinique.</p>
+    <div class="grid team-head">
+      <h2 class="h2 team-title fade-in" data-i="teamTitle">Trois associés. Tous encore en clinique.</h2>
+      <p class="team-sub fade-in d1" data-i="teamSub">Chaque campagne a un responsable. Aucun mot n'est publié sans validation.</p>
     </div>
 
     <div class="team-grid">
+      <article class="team-card fade-in">
+        <span class="label team-role" data-i="hamzaRole">Fondateur</span>
+        <h3 class="team-name" data-i="hamzaName">Hamza A.</h3>
+        <p class="team-bio" data-i="hamzaBio">Dix ans en marketing. Quatre ans en clinique : appels, urgences, plans de traitement. La majorité des agences n'ont jamais vu ça de l'intérieur.</p>
+      </article>
+
       <article class="team-card fade-in d1">
-        <div class="team-meta">
-          <div class="team-role" data-i="hamzaRole">Fondateur</div>
-          <h3 class="team-name" data-i="hamzaName">Hamza A.</h3>
-          <p class="team-bio" data-i="hamzaBio">Dix ans en marketing. Quatre ans en clinique — appels, urgences, plans de traitement. La majorité des agences n'ont jamais vu ça de l'intérieur.</p>
-        </div>
+        <span class="label team-role" data-i="shayanRole">Partenaire · Conseiller clinique</span>
+        <h3 class="team-name" data-i="shayanName">Dr Shayan Araghi</h3>
+        <p class="team-bio" data-i="shayanBio">14 ans de pratique clinique. Plusieurs cliniques bâties de zéro. DMD, Université de Montréal. Partenaire stratégique.</p>
       </article>
 
       <article class="team-card fade-in d2">
-        <div class="team-meta">
-          <div class="team-role" data-i="shayanRole">Partenaire · Conseiller clinique</div>
-          <h3 class="team-name" data-i="shayanName">Dr. Shayan Araghi</h3>
-          <p class="team-bio" data-i="shayanBio">14 ans de pratique clinique. Plusieurs cliniques bâties de zéro. DMD, Université de Montréal. Partenaire stratégique.</p>
-        </div>
-      </article>
-
-      <article class="team-card fade-in d3">
-        <div class="team-meta">
-          <div class="team-role" data-i="aliRole">Partenaire · Conseiller opérationnel</div>
-          <h3 class="team-name" data-i="aliName">Ali K.</h3>
-          <p class="team-bio" data-i="aliBio">Plus de 10 ans à l'intérieur des cliniques dentaires. Opérations quotidiennes, navigation des assurances, comptabilité clinique, expérience patient. A piloté des cliniques de plusieurs millions. Sait ce qui se passe entre le clic et le fauteuil.</p>
-        </div>
+        <span class="label team-role" data-i="aliRole">Partenaire · Conseiller opérationnel</span>
+        <h3 class="team-name" data-i="aliName">Ali K.</h3>
+        <p class="team-bio" data-i="aliBio">Plus de 10 ans à l'intérieur des cliniques dentaires. Opérations quotidiennes, navigation des assurances, comptabilité clinique, expérience patient. Sait ce qui se passe entre le clic et le fauteuil.</p>
       </article>
     </div>
   </div>
 </section>
 
-<!-- 06 · ADD-ONS · Beyond the flat plan -->
-<section class="section section--paper" id="addons">
-  <div class="section-rule"></div>
+<!-- 05 · FAQ · Paper -->
+<section class="section section--paper" id="faq">
+  <div class="container">
+    <div class="section-head fade-in">
+      <span class="num">05</span><span class="sep"></span>
+      <span data-i="faqLabel">Questions</span>
+    </div>
+    <div class="grid">
+      <h2 class="h2 faq-title fade-in" data-i="faqTitle">Les questions avant de réserver.</h2>
+      <div class="faq-list fade-in d1">
+        <details class="faq-item">
+          <summary><span data-i="faq0Q">Le calculateur RCSD est-il vraiment gratuit ?</span><span class="svc-toggle" aria-hidden="true"></span></summary>
+          <p data-i="faq0A">Oui. Il s'installe pendant un appel de 30 minutes avec la personne qui gère votre site. Le badge « Propulsé par SSS » reste affiché.</p>
+        </details>
+        <details class="faq-item">
+          <summary><span data-i="faq1Q">Combien ça coûte ?</span><span class="svc-toggle" aria-hidden="true"></span></summary>
+          <p data-i="faq1A">450 $ par mois, par clinique. La mise en service est facturée une seule fois. Le budget publicitaire Google est en sus, facturé au coût.</p>
+        </details>
+        <details class="faq-item">
+          <summary><span data-i="faq2Q">Qu'est-ce qui est inclus dans le forfait ?</span><span class="svc-toggle" aria-hidden="true"></span></summary>
+          <p data-i="faq2A">Les campagnes Search, Display et Performance Max, la fiche d'établissement Google, le suivi d'appels, le rapport mensuel, le tableau de bord par clinique et la plaquette NFC pour les avis. Le calculateur RCSD est gratuit, avec ou sans forfait.</p>
+        </details>
+        <details class="faq-item">
+          <summary><span data-i="faq3Q">Y a-t-il un contrat à long terme ?</span><span class="svc-toggle" aria-hidden="true"></span></summary>
+          <p data-i="faq3A">Non. Trois mois au départ, puis au mois, avec un préavis de 30 jours.</p>
+        </details>
+        <details class="faq-item">
+          <summary><span data-i="faq4Q">Combien de temps avant que les campagnes soient en ligne ?</span><span class="svc-toggle" aria-hidden="true"></span></summary>
+          <p data-i="faq4A">14 jours. L'audit prend 30 minutes, le plan suit, puis la mise en ligne. La mesure commence dès le premier mois.</p>
+        </details>
+        <details class="faq-item">
+          <summary><span data-i="faq5Q">Faut-il se filmer ou publier sur les réseaux sociaux ?</span><span class="svc-toggle" aria-hidden="true"></span></summary>
+          <p data-i="faq5A">Non. Le travail se fait sur Google : la recherche, la carte, la fiche et les avis. Vous restez dentiste.</p>
+        </details>
+        <details class="faq-item">
+          <summary><span data-i="faq6Q">Travaillez-vous avec les groupes de cliniques ?</span><span class="svc-toggle" aria-hidden="true"></span></summary>
+          <p data-i="faq6A">Oui. Le forfait et la facture sont établis clinique par clinique. Pour les groupes de trois succursales et plus, une architecture SEO multi-succursales s'ajoute sur demande.</p>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 · CLOSE · Forest panel, then the booking calendar on paper -->
+<section class="final" id="book" aria-labelledby="closeTitle">
   <div class="container">
     <div class="section-head fade-in">
       <span class="num">06</span><span class="sep"></span>
-      <span data-i="addonsLabel">Renforts</span>
-    </div>
-    <div class="services-head">
-      <h2 class="services-title fade-in d1" data-i="addonsTitle">Solutions complémentaires.</h2>
-      <p class="services-intro fade-in d2" data-i="addonsIntro">Au-delà du forfait. Sur demande.</p>
-    </div>
-    <div class="addon-grid" id="addonGrid">
-      <div class="addon fade-in d1">
-        <div class="svc-num"><span data-i="addon1Num">A / Vidéo</span></div>
-        <div class="svc-specimen" aria-hidden="true"><svg class="sp-addon-video" viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg"><rect x="90" y="24" width="100" height="52" fill="none" stroke="#1c1812" stroke-opacity="0.5" stroke-width="1"/><polygon points="128,40 128,60 152,50" fill="none" stroke="#1c1812" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/></svg></div>
-        <div class="svc-rule"></div>
-        <h3 class="svc-name" data-i="addon1Name">Publicité vidéo sur mesure</h3>
-        <p class="svc-desc" data-i="addon1Desc">Créatif à fort impact. Ciblage local. Pour cliniques établies.</p>
-      </div>
-      <div class="addon fade-in d2">
-        <div class="svc-num"><span data-i="addon2Num">B / Multi-succursales</span></div>
-        <div class="svc-specimen" aria-hidden="true"><svg class="sp-addon-multi" viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg"><g stroke="#1c1812" stroke-opacity="0.5" stroke-width="1" fill="none"><rect x="70" y="40" width="20" height="30"/><rect x="130" y="30" width="20" height="40"/><rect x="190" y="45" width="20" height="25"/></g><line x1="60" y1="70" x2="220" y2="70" stroke="#1c1812" stroke-opacity="0.3" stroke-width="1"/></svg></div>
-        <div class="svc-rule"></div>
-        <h3 class="svc-name" data-i="addon2Name">Architecture SEO multi-succursales</h3>
-        <p class="svc-desc" data-i="addon2Desc">Conçu pour les groupes de 3 succursales et plus.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 07 · CLOSE + BOOK · Sage signature panel → Paper calendar -->
-<section class="final" id="book" aria-labelledby="closeTitle">
-  <div class="final-rule"></div>
-  <div class="container">
-    <div class="section-head section-head--close fade-in">
-      <span class="num">07</span><span class="sep"></span>
       <span data-i="closeLabel">Réserver</span>
     </div>
-    <h2 class="final-title fade-in d1" id="closeTitle" data-i="closeTitle">Un fauteuil vide coûte plus cher qu'un forfait marketing.</h2>
-    <p class="final-sub fade-in d2" data-i="closeSub">30 minutes. Google Meet. Gratuit.</p>
+    <div class="grid final-grid">
+      <div class="final-main fade-in">
+        <h2 class="final-title" id="closeTitle" data-i="closeTitle">Un fauteuil vide coûte plus cher qu'un forfait marketing.</h2>
+        <p class="final-sub" data-i="closeSub">30 minutes. Google Meet. Gratuit.</p>
+        <div class="final-cta">
+          <a href="#contact" class="cta-primary">
+            <span data-i="closeCta">Choisir un créneau</span>
+            <svg width="10" height="14" viewBox="0 0 10 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M5 1v12m0 0L1 9m4 4l4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="final-aside fade-in d1">
+        <span class="label" data-i="auditLabel">Ce que l'appel couvre</span>
+        <ol class="audit-list">
+          <li><span class="n" aria-hidden="true">01</span><span data-i="audit1">Le calculateur RCSD, installé sur votre site</span></li>
+          <li><span class="n" aria-hidden="true">02</span><span data-i="audit2">Votre présence sur Google</span></li>
+          <li><span class="n" aria-hidden="true">03</span><span data-i="audit3">Vos concurrents et les occasions dans votre secteur</span></li>
+        </ol>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1440,10 +1617,10 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
         </div>
 
         <!-- Single-day view (default landing surface on desktop) -->
-        <div class="booking-day fade-in d2" id="bookingDay" role="grid" aria-label="Créneaux du jour"></div>
+        <div class="booking-day fade-in d2" id="bookingDay" role="group" aria-label="Créneaux du jour"></div>
 
         <!-- Desktop 7-column grid (revealed when user toggles to Semaine) -->
-        <div class="booking-grid fade-in d2" id="bookingGrid" role="grid" aria-label="Créneaux disponibles" style="display:none;"></div>
+        <div class="booking-grid fade-in d2" id="bookingGrid" role="group" aria-label="Créneaux disponibles" style="display:none;"></div>
 
         <!-- Mobile day-picker (hidden on desktop) -->
         <div class="booking-mobile-picker fade-in d2" id="bookingMobilePicker">
@@ -1457,17 +1634,17 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
         <div class="booking-confirm-wrap" id="bookingConfirmWrap" aria-hidden="true">
           <div class="booking-confirm">
             <div class="booking-confirm-summary">
-              <span class="booking-confirm-eyebrow" data-i="bookingConfirmEyebrow">Votre audit</span>
+              <span class="booking-confirm-eyebrow" data-i="bookingConfirmEyebrow">Votre appel</span>
               <div class="booking-confirm-datetime" id="bookingConfirmDatetime">—</div>
               <div class="booking-confirm-meta" data-i="bookingConfirmMeta">Google Meet · 30 minutes</div>
-              <p class="booking-confirm-desc" data-i="bookingConfirmDesc">Audit de croissance dentaire — préparé pour votre clinique.</p>
+              <p class="booking-confirm-desc" data-i="bookingConfirmDesc">Installation du calculateur RCSD, puis un regard sur votre présence Google. Invitez la personne qui gère votre site.</p>
               <button class="booking-confirm-reset" type="button" id="bookingReset">
-                <span data-i="bookingConfirmReset">← Modifier le créneau</span>
+                <span data-i="bookingConfirmReset">← Changer de créneau</span>
               </button>
             </div>
             <div class="booking-confirm-cta-panel" id="bookingCtaPanel">
               <span class="booking-confirm-cta-eyebrow" data-i="bookingConfirmCtaEyebrow">Réservation</span>
-              <p class="booking-confirm-cta-copy" data-i="bookingConfirmCtaCopy">Confirmez votre créneau via Google Agenda. Confirmation instantanée par email.</p>
+              <p class="booking-confirm-cta-copy" data-i="bookingConfirmCtaCopy">Confirmez votre créneau. Vous recevez la confirmation par courriel aussitôt.</p>
 
               <!-- Form path (shown when data-booking-api is set on #bookingFlow) -->
               <form class="booking-form" id="bookingForm" novalidate hidden>
@@ -1489,6 +1666,29 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
                   <div class="booking-field">
                     <label for="bookingFieldClinic" data-i="bookingFieldClinic">Clinique (facultatif)</label>
                     <input type="text" id="bookingFieldClinic" name="clinic" autocomplete="organization" maxlength="160">
+                  </div>
+                </div>
+                <div class="booking-form-row">
+                  <div class="booking-field">
+                    <label for="bookingFieldSiteOwner" data-i="bookingFieldSiteOwner">Qui gère votre site ? (facultatif)</label>
+                    <select id="bookingFieldSiteOwner" name="siteOwner">
+                      <option value="" data-i="bookingOptNone">Choisir</option>
+                      <option value="self" data-i="bookingOwnerSelf">Moi</option>
+                      <option value="staff" data-i="bookingOwnerStaff">Mon équipe</option>
+                      <option value="agency" data-i="bookingOwnerAgency">Une agence</option>
+                      <option value="unknown" data-i="bookingOptUnknown">Je ne sais pas</option>
+                    </select>
+                  </div>
+                  <div class="booking-field">
+                    <label for="bookingFieldCms" data-i="bookingFieldCms">Plateforme du site (facultatif)</label>
+                    <select id="bookingFieldCms" name="cms">
+                      <option value="" data-i="bookingOptNone">Choisir</option>
+                      <option value="wordpress">WordPress</option>
+                      <option value="wix">Wix</option>
+                      <option value="squarespace">Squarespace</option>
+                      <option value="other" data-i="bookingCmsOther">Autre</option>
+                      <option value="unknown" data-i="bookingOptUnknown">Je ne sais pas</option>
+                    </select>
                   </div>
                 </div>
                 <div class="booking-field">
@@ -1519,13 +1719,14 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
                 <span class="booking-confirm-strip-sep" aria-hidden="true">·</span>
                 <span data-i="bookingStrip3">Annulation libre</span>
               </div>
+              <p class="booking-privacy" data-i="bookingPrivacy">Vos coordonnées servent à confirmer ce rendez-vous et à vous joindre à son sujet. Rien d'autre.</p>
             </div>
 
             <!-- Success state (revealed after a real booking succeeds) -->
             <div class="booking-success" id="bookingSuccess" aria-live="polite">
               <span class="booking-success-eyebrow" data-i="bookingSuccessEyebrow">Réservation confirmée</span>
               <h3 class="booking-success-title" id="bookingSuccessTitle">—</h3>
-              <p class="booking-success-meta" data-i="bookingSuccessMeta">Vous recevrez un email de confirmation avec un lien Google Meet sous peu.</p>
+              <p class="booking-success-meta" data-i="bookingSuccessMeta">Vous recevrez sous peu un courriel de confirmation avec un lien Google Meet.</p>
               <a class="cta-primary" id="bookingSuccessCta" href="#" target="_blank" rel="noopener">
                 <span data-i="bookingSuccessCta">Ajouter à Google Agenda</span>
                 <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
@@ -1553,7 +1754,6 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
 </main>
 
 <footer>
-  <div class="footer-rule"></div>
   <div class="container">
     <div class="footer-grid">
       <div>
@@ -1561,27 +1761,27 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
           <img src="logo-mark.png"
                srcset="logo-mark.png 1x, logo-mark@2x.png 2x, logo-mark@3x.png 3x"
                alt="SSS"
-               width="148" height="61"
+               width="123" height="52"
                loading="lazy"
                decoding="async">
         </div>
-        <p class="footer-brand-tag" data-i="footerTag">Marketing dentaire. Sur Google.</p>
+        <p class="footer-brand-tag" data-i="footerTag">Marketing dentaire, mesuré au fauteuil.</p>
       </div>
       <div class="footer-col">
         <div class="footer-col-label" data-i="footerNav">Navigation</div>
         <ul>
-          <li><a href="#services" data-i="footerNavSvc">Services</a></li>
+          <li><a href="#services" data-i="footerNavSvc">Méthode</a></li>
+          <li><a href="#process" data-i="footerNavProc">Mise en route</a></li>
           <li><a href="#pricing" data-i="footerNavPrice">Forfait</a></li>
-          <li><a href="#process" data-i="footerNavProc">Processus</a></li>
+          <li><a href="/tarifs/" data-tarifs data-i="footerNavTarifs">Tous les tarifs</a></li>
           <li><a href="#team" data-i="footerNavTeam">Équipe</a></li>
-          <li><a href="#addons" data-i="footerNavAddons">Renforts</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <div class="footer-col-label" data-i="footerContact">Contact</div>
         <ul>
           <li><a href="mailto:info@sss.marketing">info@sss.marketing</a></li>
-          <li><a href="#contact" data-i="footerBook">Réserver un audit</a></li>
+          <li><a href="#contact" data-i="footerBook">Réserver un appel</a></li>
           <li><span data-i="footerLoc">Montréal, QC</span></li>
         </ul>
       </div>
@@ -1592,88 +1792,42 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
   </div>
 </footer>
 
-<button class="scroll-cue" id="scrollCue" type="button">
-  <span class="vh" data-i="scrollLabel">Défiler</span>
-  <svg class="scroll-cue-icon" width="22" height="40" viewBox="0 0 22 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <line x1="11" y1="2" x2="11" y2="22" stroke="currentColor" stroke-width="1"/>
-    <path d="M3 24 L11 32 L19 24" stroke="currentColor" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
-  </svg>
-</button>
-
 <script src="/embed/index.js?v=ddd12d56" defer></script>
 <script>
 (function(){
   const i18n = {
-    fr:{
-      cta:"Réserver un audit de 30 min",skipLink:"Aller au contenu",eyebrow:"Acquisition de patients dentaires",heroTitle:"Marketing dentaire. Par des opérateurs.",heroTitleAccent:"Un fauteuil occupé.",heroSub:"Un seul indicateur compte. Mesuré au fauteuil.",heroCta:"Réserver un audit de 30 min",scrollLabel:"Défiler",problemLabel:"Le problème",prob1:"Les agences traditionnelles vendent de la visibilité. Nous générons des patients.",prob2:"La plupart des agences ne comprennent pas pourquoi quelqu'un cherche « dentiste d'urgence » à 22h. Nous, oui.",servicesLabel:"Services",servicesTitle:"Six leviers. Un forfait clair.",servicesIntro:"Opéré en interne. Mesuré mensuellement.",svc1Name:"Google Ads — Search et Performance Max",svc1Desc:"Géré par des opérateurs. Jamais laissé en pilote automatique.",svc2Name:"Google Business Profile",svc2Desc:"Premier sur la carte. Profil défendu.",svc3Name:"Suivi d'appels & rapport mensuel",svc3Desc:"Chaque dollar tracé au fauteuil.",svc4Name:"Google Ads — Display",svc4Desc:"Présence ciblée. Mesurable.",svc5Num:"05 / RCSD",svc5Name:"RCSD — Moteur de conversion interactif",svc5Desc:"Admissible en 60 secondes. Réservé aussitôt.",svc6Name:"Avis Google · NFC",svc6Desc:"Un tap. Un avis. Un signal.",svcDetailCue:"+ Voir les livrables",pricingLabel:"Forfait",pricingStatement:"Un forfait par clinique.",pricingMail:"Tarifs : info@sss.marketing",pricingMo:"Tarifs sur demande · sans engagement",pf1Label:"Inclus",pf1Value:"Gestion Google",pf1Note:"Search, Display, Performance Max, fiche Google, suivi d'appels, rapport mensuel, tableau de bord par clinique, plaquette NFC.",pf2Label:"Onboarding",pf2Value:"Une seule fois",pf2Note:"Mise en place clinique par clinique. Une facture par clinique.",pf3Label:"Publicité Google",pf3Value:"Facturée directement",pf3Note:"Vous gardez le contrôle. Aucun frais caché.",pf4Label:"Calculatrice RCSD",pf4Value:"En option",pf4Note:"Aux couleurs de la clinique, sur demande.",pricingCta:"Réserver un audit de 30 min",processLabel:"Processus",step1Num:"Étape 01",step1Unit:"min",step1Title:"Audit",step1Desc:"Présence Google. Compétiteurs. Opportunités locales.",step2Num:"Étape 02",step2Anchor:"Plan",step2Title:"Stratégie",step2Desc:"Plan d'action. Budget par levier. Cibles mensuelles.",step3Num:"Étape 03",step3Unit:"jours",step3Title:"Mise en ligne",step3Desc:"Campagnes actives. Mesure dès le premier mois.",filter:"Aucune caméra. Aucune danse. Vous restez dentiste.",teamLabel:"Équipe",teamTitle:"Chaque dollar a un opérateur.",teamSub:"Chaque campagne a un opérateur, et les trois partenaires pratiquent toujours en clinique. Aucun mot publié sans validation. Aucune ligne entre nous et votre clinique.",hamzaRole:"Fondateur",hamzaName:"Hamza A.",hamzaBio:"Dix ans en marketing. Quatre ans en clinique — appels, urgences, plans de traitement. La majorité des agences n'ont jamais vu ça de l'intérieur.",shayanRole:"Partenaire · Conseiller clinique",shayanName:"Dr. Shayan Araghi",shayanBio:"14 ans de pratique clinique. Plusieurs cliniques bâties de zéro. DMD, Université de Montréal. Partenaire stratégique.",aliRole:"Partenaire · Conseiller opérationnel",aliName:"Ali K.",aliBio:"Plus de 10 ans à l'intérieur des cliniques dentaires. Opérations quotidiennes, navigation des assurances, comptabilité clinique, expérience patient. A piloté des cliniques de plusieurs millions. Sait ce qui se passe entre le clic et le fauteuil.",closeLabel:"Réserver",closeTitle:"Un fauteuil vide coûte plus cher qu'un forfait marketing.",closeSub:"30 minutes. Google Meet. Gratuit.",bookingConfirmEyebrow:"Votre audit",bookingConfirmMeta:"Google Meet · 30 minutes",bookingConfirmDesc:"Audit de croissance dentaire — préparé pour votre clinique.",bookingConfirmReset:"← Modifier le créneau",bookingConfirmCtaEyebrow:"Réservation",bookingConfirmCtaCopy:"Confirmez votre créneau via Google Agenda. Confirmation instantanée par email.",bookingConfirmCta:"Confirmer la réservation",bookingStrip1:"Confirmation immédiate",bookingStrip2:"Aucune carte requise",bookingStrip3:"Annulation libre",bookingIframeFallback:"Accéder directement au calendrier Google",footerTag:"Marketing dentaire. Sur Google.",footerNav:"Navigation",footerNavSvc:"Services",footerNavPrice:"Forfait",footerNavProc:"Processus",footerNavTeam:"Équipe",footerContact:"Contact",footerBook:"Réserver un audit",footerLoc:"Montréal, QC",footerLegal:"© 2026 SSS Marketing. Tous droits réservés.",detailCloseLabel:"Fermer",addonsLabel:"Renforts",addonsTitle:"Solutions complémentaires.",addonsIntro:"Au-delà du forfait. Sur demande.",addon1Num:"A / Vidéo",addon1Name:"Publicité vidéo sur mesure",addon1Desc:"Créatif à fort impact. Ciblage local. Pour cliniques établies.",addon2Num:"B / Multi-succursales",addon2Name:"Architecture SEO multi-succursales",addon2Desc:"Conçu pour les groupes de 3 succursales et plus.",footerNavAddons:"Renforts"
-    },
-    en:{
-      cta:"Book a 30-min audit",skipLink:"Skip to content",eyebrow:"Dental patient acquisition",heroTitle:"Dental marketing. By operators.",heroTitleAccent:"A booked chair.",heroSub:"One metric matters. Measured at the chair.",heroCta:"Book a 30-min audit",scrollLabel:"Scroll",problemLabel:"The problem",prob1:"Traditional agencies sell visibility. We generate patients.",prob2:"Most agencies don't understand why someone searches \u201Cemergency dentist\u201D at 10 PM. We do.",servicesLabel:"Services",servicesTitle:"Six levers. One clear plan.",servicesIntro:"Run in-house. Measured monthly.",svc1Name:"Google Ads — Search and Performance Max",svc1Desc:"Run by operators. Never left on autopilot.",svc2Name:"Google Business Profile",svc2Desc:"First on the map. Profile defended.",svc3Name:"Call tracking & monthly report",svc3Desc:"Every dollar traced to the chair.",svc4Name:"Google Ads — Display",svc4Desc:"Targeted presence. Measurable.",svc5Num:"05 / CDCP",svc5Name:"CDCP Interactive Conversion Engine",svc5Desc:"Qualified in 60 seconds. Booked instantly.",svc6Name:"Google Reviews · NFC",svc6Desc:"One tap. One review. One signal.",svcDetailCue:"+ See deliverables",pricingLabel:"Package",pricingStatement:"One package per clinic.",pricingMail:"Pricing: info@sss.marketing",pricingMo:"Pricing on request · no commitment",pf1Label:"Included",pf1Value:"Google management",pf1Note:"Search, Display, Performance Max, Google profile, call tracking, monthly report, per-clinic dashboard, NFC pad.",pf2Label:"Onboarding",pf2Value:"One time",pf2Note:"Set up clinic by clinic. One invoice per clinic.",pf3Label:"Google ad spend",pf3Value:"Billed directly",pf3Note:"You keep control. No hidden fees.",pf4Label:"CDCP calculator",pf4Value:"Optional",pf4Note:"Clinic-branded on request.",pricingCta:"Book a 30-min audit",processLabel:"Process",step1Num:"Step 01",step1Unit:"min",step1Title:"Audit",step1Desc:"Google presence. Competitors. Local opportunities.",step2Num:"Step 02",step2Anchor:"Plan",step2Title:"Strategy",step2Desc:"Action plan. Budget per channel. Monthly targets.",step3Num:"Step 03",step3Unit:"days",step3Title:"Live",step3Desc:"Campaigns active. Measured from month one.",filter:"No camera. No dancing. You stay a dentist.",teamLabel:"Team",teamTitle:"Every dollar has an operator.",teamSub:"Every campaign has an operator, and all three partners still work in clinics. No copy posted without review. No layer between us and your practice.",hamzaRole:"Founder",hamzaName:"Hamza A.",hamzaBio:"Ten years in marketing. Four years inside a clinic — phones, emergencies, treatment plans. Most agencies haven't seen this from the inside.",shayanRole:"Partner · Clinical advisor",shayanName:"Dr. Shayan Araghi",shayanBio:"14 years of clinical practice. Several clinics built from scratch. DMD, Université de Montréal. Strategic partner.",aliRole:"Partner · Operations advisor",aliName:"Ali K.",aliBio:"10+ years inside dental clinics. Daily operations, insurance navigation, clinic accounting, patient experience. Has run multi-million-dollar clinics. Knows exactly what happens between the click and the chair.",closeLabel:"Book",closeTitle:"An empty chair costs more than a marketing plan.",closeSub:"30 minutes. Google Meet. Free.",bookingConfirmEyebrow:"Your audit",bookingConfirmMeta:"Google Meet · 30 minutes",bookingConfirmDesc:"Dental growth audit — prepared for your practice.",bookingConfirmReset:"← Modify slot",bookingConfirmCtaEyebrow:"Booking",bookingConfirmCtaCopy:"Confirm your slot via Google Calendar. Instant email confirmation.",bookingConfirmCta:"Confirm booking",bookingStrip1:"Instant confirmation",bookingStrip2:"No card required",bookingStrip3:"Cancel anytime",bookingIframeFallback:"Open Google Calendar directly",footerTag:"Dental marketing. Built on Google.",footerNav:"Navigation",footerNavSvc:"Services",footerNavPrice:"Package",footerNavProc:"Process",footerNavTeam:"Team",footerContact:"Contact",footerBook:"Book an audit",footerLoc:"Montréal, QC",footerLegal:"© 2026 SSS Marketing. All rights reserved.",detailCloseLabel:"Close",addonsLabel:"Boosters",addonsTitle:"Add-on solutions.",addonsIntro:"Beyond the plan. On request.",addon1Num:"A / Video",addon1Name:"Custom Video Advertising",addon1Desc:"High-impact creative. Local targeting. For established practices.",addon2Num:"B / Multi-Location",addon2Name:"Multi-Location SEO & DSO Architecture",addon2Desc:"Built for groups with 3+ locations.",footerNavAddons:"Boosters"
-    }
+    fr:{"metaTitle":"SSS | Acquisition de patients pour cliniques dentaires","metaDesc":"Agence marketing qui ne fait que du dentaire. Calculateur RCSD gratuit pour votre site. Six leviers de croissance, 450 $ par mois par clinique.","skipLink":"Aller au contenu","navMethod":"Méthode","navPricing":"Forfait","navTeam":"Équipe","cta":"Calculateur gratuit","eyebrow":"Acquisition de patients dentaires","heroTitle":"Un patient entre par Google.","heroTitleAccent":"Ou il n'entre pas.","heroSub":"Une agence qui ne fait que du dentaire. Commencez par le calculateur RCSD : installé sur votre site, gratuitement, pendant un appel de 30 minutes.","heroCta":"Réserver l'installation gratuite","heroCtaNote":"Gratuit. Sur Google Meet. Sans engagement.","sheetDay":"Un mardi","sheetChair":"Fauteuil 2","sheetR1":"Examen et nettoyage","sheetR2":"Nouveau patient, examen complet","sheetR3":"Urgence, douleur","sheetR4":"Couronne, préparation","sheetR5":"Examen et nettoyage","sheetOpen":"Libre","sheetNote":"Trois plages libres. Le loyer, lui, couvre la journée entière.","sheetCaption":"Illustration","fact1":"Associés, tous encore en clinique.","fact2Num":"100 %","fact2":"Dentaire. Aucun autre secteur.","fact3":"Leviers de croissance, un seul forfait.","priceNum":"450 $","fact4":"Par mois, par clinique.","problemLabel":"Le constat","problemTitleA":"Vos fauteuils vides ne sont pas un problème de budget.","problemTitleB":"C'est un problème de canaux.","prob1":"22 h. Quelqu'un cherche « dentiste d'urgence ».","prob1Body":"Votre clinique apparaît, ou c'est celle d'à côté. Le patient ne compare pas longtemps.","prob2":"Le téléphone sonne. Personne ne sait pourquoi.","prob2Body":"Sans suivi d'appels, impossible de dire quelle annonce a rempli quel fauteuil, ni laquelle n'a rien donné.","prob3":"La facture arrive chaque mois. Le rapport, non.","prob3Body":"Un mandat mensuel se défend avec des chiffres mensuels : les appels, leur provenance, ce qu'ils ont coûté.","servicesLabel":"La méthode","servicesTitle":"Du clic au fauteuil.","servicesIntro":"Six leviers, quatre étapes. Chacun a ses livrables et sa ligne dans le rapport mensuel.","stage1Name":"Être trouvé","stage1Text":"Un patient cherche un dentiste près de chez lui. Vos annonces sont là au moment de la recherche.","stage2Name":"Être choisi","stage2Text":"Devant trois cliniques sur la carte, le patient compare les fiches et lit les avis.","stage3Name":"Être réservé","stage3Text":"Avant d'appeler, le patient veut savoir s'il est couvert. La réponse est sur votre site.","stage4Name":"Être mesuré","stage4Text":"Chaque appel est rattaché à sa source. Le rapport arrive chaque mois.","svc1Name":"Google Ads : Search et Performance Max","svc1Desc":"Mots-clés, annonces et exclusions suivis de près. Jamais laissés en pilote automatique.","svc4Name":"Google Ads : Display","svc4Desc":"Vos bannières devant les patients de votre secteur, entre deux recherches.","svc2Name":"Fiche d'établissement Google","svc2Desc":"Une fiche complète et tenue à jour, avec une réponse à chaque avis.","svc6Name":"Avis Google par plaquette NFC","svc6Desc":"Une plaquette à la réception. Le patient y pose son téléphone et laisse son avis avant de partir.","svc5Name":"RCSD : moteur de conversion interactif","svc5Desc":"L'admissibilité au RCSD en quatre questions, puis la prise de rendez-vous.","svc5Cue":"Essayer l'outil","svc3Name":"Suivi d'appels et rapport mensuel","svc3Desc":"Un numéro suivi par clinique, un tableau de bord, un rapport mensuel.","svcDetailCue":"Livrables","detailCloseLabel":"Fermer","processLabel":"Mise en route","processIntro":"De l'audit aux campagnes actives, en trois étapes.","step1Unit":"min","step1Title":"Audit","step1Desc":"Présence Google, concurrents, occasions locales.","step2Anchor":"Plan","step2Title":"Stratégie","step2Desc":"Plan d'action, budget par levier, cibles mensuelles.","step3Unit":"jours","step3Title":"Mise en ligne","step3Desc":"Campagnes actives. Mesure dès le premier mois.","pricingLabel":"Forfait","pricingMo":"Par mois, par clinique","pricingStatement":"Un forfait par clinique. Le même pour toutes.","pricingCta":"Réserver un appel de 30 minutes","pricingMail":"Voir tous les tarifs","pf1Label":"Inclus","pf1Value":"Gestion Google","pf1Note":"Search, Display, Performance Max, fiche Google, suivi d'appels, rapport mensuel, tableau de bord par clinique, plaquette NFC.","pf2Label":"Mise en service","pf2Value":"Une seule fois","pf2Note":"Mise en place clinique par clinique. Une facture par clinique.","pf3Label":"Budget publicitaire","pf3Value":"En sus, facturé au coût","pf3Note":"Votre budget Google, sans majoration. Aucuns frais cachés.","pf4Label":"Calculateur RCSD","pf4Value":"Gratuit","pf4Note":"Installé sur votre site, aux couleurs de la clinique.","addonsLabel":"Au-delà du forfait","addon1Name":"Publicité vidéo sur mesure","addon1Desc":"Ciblage local, pour les cliniques établies. Sur demande.","addon2Name":"Architecture SEO multi-succursales","addon2Desc":"Pour les groupes de trois succursales et plus. Sur demande.","filter":"Aucune caméra. Aucune danse. Vous restez dentiste.","fitLabel":"SSS n'est pas pour","fit1":"Les dentistes qui veulent être devant la caméra.","fit2":"Les cliniques qui mesurent leur marketing en abonnés.","fit3":"Les propriétaires qui ne liront pas un rapport mensuel.","faqLabel":"Questions","faqTitle":"Les questions avant de réserver.","faq1Q":"Combien ça coûte ?","faq1A":"450 $ par mois, par clinique. La mise en service est facturée une seule fois. Le budget publicitaire Google est en sus, facturé au coût.","faq2Q":"Qu'est-ce qui est inclus dans le forfait ?","faq2A":"Les campagnes Search, Display et Performance Max, la fiche d'établissement Google, le suivi d'appels, le rapport mensuel, le tableau de bord par clinique et la plaquette NFC pour les avis. Le calculateur RCSD est gratuit, avec ou sans forfait.","faq3Q":"Y a-t-il un contrat à long terme ?","faq3A":"Non. Trois mois au départ, puis au mois, avec un préavis de 30 jours.","faq4Q":"Combien de temps avant que les campagnes soient en ligne ?","faq4A":"14 jours. L'audit prend 30 minutes, le plan suit, puis la mise en ligne. La mesure commence dès le premier mois.","faq5Q":"Faut-il se filmer ou publier sur les réseaux sociaux ?","faq5A":"Non. Le travail se fait sur Google : la recherche, la carte, la fiche et les avis. Vous restez dentiste.","faq6Q":"Travaillez-vous avec les groupes de cliniques ?","faq6A":"Oui. Le forfait et la facture sont établis clinique par clinique. Pour les groupes de trois succursales et plus, une architecture SEO multi-succursales s'ajoute sur demande.","teamLabel":"Équipe","teamTitle":"Trois associés. Tous encore en clinique.","teamSub":"Chaque campagne a un responsable. Aucun mot n'est publié sans validation.","hamzaRole":"Fondateur","hamzaName":"Hamza A.","hamzaBio":"Dix ans en marketing. Quatre ans en clinique : appels, urgences, plans de traitement. La majorité des agences n'ont jamais vu ça de l'intérieur.","shayanRole":"Partenaire · Conseiller clinique","shayanName":"Dr Shayan Araghi","shayanBio":"14 ans de pratique clinique. Plusieurs cliniques bâties de zéro. DMD, Université de Montréal. Partenaire stratégique.","aliRole":"Partenaire · Conseiller opérationnel","aliName":"Ali K.","aliBio":"Plus de 10 ans à l'intérieur des cliniques dentaires. Opérations quotidiennes, navigation des assurances, comptabilité clinique, expérience patient. Sait ce qui se passe entre le clic et le fauteuil.","closeLabel":"Réserver","closeTitle":"Un fauteuil vide coûte plus cher qu'un forfait marketing.","closeSub":"30 minutes. Google Meet. Gratuit.","closeCta":"Choisir un créneau","auditLabel":"Ce que l'appel couvre","audit1":"Le calculateur RCSD, installé sur votre site","audit2":"Votre présence sur Google","audit3":"Vos concurrents et les occasions dans votre secteur","bookingConfirmEyebrow":"Votre appel","bookingConfirmMeta":"Google Meet · 30 minutes","bookingConfirmDesc":"Installation du calculateur RCSD, puis un regard sur votre présence Google. Invitez la personne qui gère votre site.","bookingConfirmReset":"← Changer de créneau","bookingConfirmCtaEyebrow":"Réservation","bookingConfirmCtaCopy":"Confirmez votre créneau. Vous recevez la confirmation par courriel aussitôt.","bookingConfirmCta":"Confirmer la réservation","bookingStrip1":"Confirmation immédiate","bookingStrip2":"Aucune carte requise","bookingStrip3":"Annulation libre","bookingPrivacy":"Vos coordonnées servent à confirmer ce rendez-vous et à vous joindre à son sujet. Rien d'autre.","bookingIframeFallback":"Accéder directement au calendrier Google","bookingFieldName":"Nom","bookingFieldEmail":"Courriel","bookingFieldPhone":"Téléphone (facultatif)","bookingFieldClinic":"Clinique (facultatif)","bookingFieldNotes":"Notes (facultatif)","bookingSubmit":"Confirmer la réservation","bookingSubmitting":"Envoi en cours…","bookingSuccessEyebrow":"Réservation confirmée","bookingSuccessMeta":"Vous recevrez sous peu un courriel de confirmation avec un lien Google Meet.","bookingSuccessCta":"Ajouter à Google Agenda","bookingErrMissing":"Veuillez inscrire votre nom et votre courriel.","bookingErrEmail":"Adresse courriel invalide.","bookingErrSlot":"Veuillez choisir un créneau.","bookingErrTaken":"Ce créneau vient d'être réservé. Choisissez-en un autre.","bookingErrTooSoon":"Ce créneau est trop rapproché. Choisissez une heure plus tard.","bookingErrNetwork":"Impossible de joindre le service de réservation. Réessayez ou écrivez à info@sss.marketing.","bookingErrGeneric":"Une erreur est survenue. Réessayez ou écrivez à info@sss.marketing.","bookingViewDay":"Jour","bookingViewWeek":"Semaine","bookingTodayLabel":"Aujourd'hui","bookingDayEmpty":"Aucune disponibilité ce jour-là. Essayez le suivant.","footerTag":"Marketing dentaire, mesuré au fauteuil.","footerNav":"Navigation","footerNavSvc":"Méthode","footerNavProc":"Mise en route","footerNavPrice":"Forfait","footerNavTeam":"Équipe","footerContact":"Contact","footerBook":"Réserver un appel","footerLoc":"Montréal, QC","footerLegal":"© 2026 SSS Marketing. Tous droits réservés.","heroTry":"Essayer le calculateur","offerLabel":"Gratuit pour les cliniques dentaires","offerTitle":"Le calculateur RCSD. Sur votre site. Gratuit.","offerLede":"« Suis-je admissible au RCSD, et combien vais-je payer ? » Votre réception répond à cette question au téléphone. Votre site peut y répondre à sa place.","offerFact1":"Quatre questions. Moins d'une minute.","offerFact2":"Vos couleurs, le nom de votre clinique.","offerFact3":"En français ou en anglais.","offerFact4":"Un bouton vers votre prise de rendez-vous.","offerDeal":"Le prix : un appel de 30 minutes avec la personne qui gère votre site. Le badge « Propulsé par SSS » reste affiché. C'est tout.","offerCta":"Réserver l'installation gratuite","offerDemoTag":"Essayez-le comme un patient","pf5Label":"Engagement","pf5Value":"Trois mois au départ","pf5Note":"Ensuite au mois, avec un préavis de 30 jours.","faq0Q":"Le calculateur RCSD est-il vraiment gratuit ?","faq0A":"Oui. Il s'installe pendant un appel de 30 minutes avec la personne qui gère votre site. Le badge « Propulsé par SSS » reste affiché.","bookingFieldSiteOwner":"Qui gère votre site ? (facultatif)","bookingFieldCms":"Plateforme du site (facultatif)","bookingOptNone":"Choisir","bookingOptUnknown":"Je ne sais pas","bookingOwnerSelf":"Moi","bookingOwnerStaff":"Mon équipe","bookingOwnerAgency":"Une agence","bookingCmsOther":"Autre","bookingNoteOwner":"Site géré par : ","bookingNoteCms":"Plateforme : ","footerNavTarifs":"Tous les tarifs"},
+    en:{"metaTitle":"SSS | Patient acquisition for dental clinics","metaDesc":"A marketing agency that only works with dental clinics. Free CDCP calculator for your site. Six growth levers, $450 per month per clinic.","skipLink":"Skip to content","navMethod":"Method","navPricing":"Pricing","navTeam":"Team","cta":"Free calculator","eyebrow":"Dental patient acquisition","heroTitle":"A patient walks through Google","heroTitleAccent":"or they don't walk in at all.","heroSub":"An agency that only works with dental clinics. Start with the CDCP calculator: installed on your site, free, during one 30-minute call.","heroCta":"Book the free install","heroCtaNote":"Free. On Google Meet. No commitment.","sheetDay":"A Tuesday","sheetChair":"Chair 2","sheetR1":"Exam and cleaning","sheetR2":"New patient, complete exam","sheetR3":"Emergency, pain","sheetR4":"Crown, preparation","sheetR5":"Exam and cleaning","sheetOpen":"Open","sheetNote":"Three open slots. The rent still covers the whole day.","sheetCaption":"Illustration","fact1":"Partners, all still working in clinics.","fact2Num":"100%","fact2":"Dental. No other industry.","fact3":"Growth levers, one plan.","priceNum":"$450","fact4":"Per month, per clinic.","problemLabel":"The diagnosis","problemTitleA":"Your empty chairs are not a budget problem.","problemTitleB":"They are a channel problem.","prob1":"10 p.m. Someone searches “emergency dentist.”","prob1Body":"Your clinic comes up, or the one down the street does. The patient does not compare for long.","prob2":"The phone rings. Nobody knows why.","prob2Body":"Without call tracking, there is no telling which ad filled which chair, or which one did nothing.","prob3":"The invoice comes every month. The report doesn't.","prob3Body":"A monthly retainer is defended with monthly numbers: the calls, where they came from, what they cost.","servicesLabel":"The method","servicesTitle":"From the click to the chair.","servicesIntro":"Six levers, four stages. Each one has its deliverables and its line in the monthly report.","stage1Name":"Get found","stage1Text":"A patient searches for a dentist nearby. Your ads are there at the moment of the search.","stage2Name":"Get chosen","stage2Text":"With three clinics on the map, the patient compares the profiles and reads the reviews.","stage3Name":"Get booked","stage3Text":"Before calling, the patient wants to know if they are covered. The answer is on your site.","stage4Name":"Get measured","stage4Text":"Every call is tied to its source. The report arrives every month.","svc1Name":"Google Ads: Search and Performance Max","svc1Desc":"Keywords, ads and exclusions watched closely. Never left on autopilot.","svc4Name":"Google Ads: Display","svc4Desc":"Your banners in front of patients in your area, between searches.","svc2Name":"Google Business Profile","svc2Desc":"A complete, current profile, with a reply to every review.","svc6Name":"Google reviews by NFC pad","svc6Desc":"A pad at the front desk. The patient taps it with their phone and leaves a review before leaving.","svc5Name":"CDCP interactive conversion engine","svc5Desc":"CDCP eligibility in four questions, then the booking.","svc5Cue":"Try the tool","svc3Name":"Call tracking and monthly report","svc3Desc":"One tracked number per clinic, a dashboard, a monthly report.","svcDetailCue":"Deliverables","detailCloseLabel":"Close","processLabel":"Getting started","processIntro":"From the audit to live campaigns, in three steps.","step1Unit":"min","step1Title":"Audit","step1Desc":"Google presence, competitors, local opportunities.","step2Anchor":"Plan","step2Title":"Strategy","step2Desc":"Action plan, budget per lever, monthly targets.","step3Unit":"days","step3Title":"Launch","step3Desc":"Campaigns live. Measured from the first month.","pricingLabel":"Pricing","pricingMo":"Per month, per clinic","pricingStatement":"One plan per clinic. The same for every clinic.","pricingCta":"Book a 30-minute call","pricingMail":"See all pricing","pf1Label":"Included","pf1Value":"Google management","pf1Note":"Search, Display, Performance Max, Google Business Profile, call tracking, monthly report, per-clinic dashboard, NFC pad.","pf2Label":"Setup","pf2Value":"One time","pf2Note":"Set up clinic by clinic. One invoice per clinic.","pf3Label":"Ad budget","pf3Value":"Extra, billed at cost","pf3Note":"Your Google budget, with no markup. No hidden fees.","pf4Label":"CDCP calculator","pf4Value":"Free","pf4Note":"Installed on your site, in the clinic's colours.","addonsLabel":"Beyond the plan","addon1Name":"Custom video advertising","addon1Desc":"Local targeting, for established clinics. On request.","addon2Name":"Multi-location SEO architecture","addon2Desc":"For groups of three locations or more. On request.","filter":"No camera. No dancing. You stay a dentist.","fitLabel":"SSS is not for","fit1":"Dentists who want to be on camera.","fit2":"Clinics that measure marketing in followers.","fit3":"Owners who won't read a monthly report.","faqLabel":"Questions","faqTitle":"The questions before booking.","faq1Q":"How much does it cost?","faq1A":"$450 per month, per clinic. Setup is billed once. The Google ad budget is extra, billed at cost.","faq2Q":"What is included in the plan?","faq2A":"Search, Display and Performance Max campaigns, the Google Business Profile, call tracking, the monthly report, the per-clinic dashboard and the NFC pad for reviews. The CDCP calculator is free, with or without the plan.","faq3Q":"Is there a long-term contract?","faq3A":"No. Three months to start, then month to month, with 30 days' notice.","faq4Q":"How long before campaigns are live?","faq4A":"14 days. The audit takes 30 minutes, the plan follows, then the launch. Measurement starts in the first month.","faq5Q":"Do we have to film ourselves or post on social media?","faq5A":"No. The work happens on Google: search, the map, the profile and reviews. You stay a dentist.","faq6Q":"Do you work with clinic groups?","faq6A":"Yes. The plan and the invoice are set clinic by clinic. For groups of three locations or more, a multi-location SEO architecture can be added on request.","teamLabel":"Team","teamTitle":"Three partners. All still in clinics.","teamSub":"Every campaign has an owner. Nothing is published without review.","hamzaRole":"Founder","hamzaName":"Hamza A.","hamzaBio":"Ten years in marketing. Four years inside a clinic: phones, emergencies, treatment plans. Most agencies haven't seen this from the inside.","shayanRole":"Partner · Clinical advisor","shayanName":"Dr. Shayan Araghi","shayanBio":"14 years of clinical practice. Several clinics built from scratch. DMD, Université de Montréal. Strategic partner.","aliRole":"Partner · Operations advisor","aliName":"Ali K.","aliBio":"10+ years inside dental clinics. Daily operations, insurance navigation, clinic accounting, patient experience. Knows exactly what happens between the click and the chair.","closeLabel":"Book","closeTitle":"An empty chair costs more than a marketing plan.","closeSub":"30 minutes. Google Meet. Free.","closeCta":"Pick a time","auditLabel":"What the call covers","audit1":"The CDCP calculator, installed on your site","audit2":"Your presence on Google","audit3":"Your competitors and the opportunities in your area","bookingConfirmEyebrow":"Your call","bookingConfirmMeta":"Google Meet · 30 minutes","bookingConfirmDesc":"CDCP calculator install, then a look at your Google presence. Bring whoever manages your website.","bookingConfirmReset":"← Change the time","bookingConfirmCtaEyebrow":"Booking","bookingConfirmCtaCopy":"Confirm your time. The confirmation arrives by email right away.","bookingConfirmCta":"Confirm booking","bookingStrip1":"Instant confirmation","bookingStrip2":"No card required","bookingStrip3":"Cancel anytime","bookingPrivacy":"Your details are used to confirm this appointment and to reach you about it. Nothing else.","bookingIframeFallback":"Open Google Calendar directly","bookingFieldName":"Name","bookingFieldEmail":"Email","bookingFieldPhone":"Phone (optional)","bookingFieldClinic":"Clinic (optional)","bookingFieldNotes":"Notes (optional)","bookingSubmit":"Confirm booking","bookingSubmitting":"Sending…","bookingSuccessEyebrow":"Booking confirmed","bookingSuccessMeta":"A confirmation email with a Google Meet link is on its way.","bookingSuccessCta":"Add to Google Calendar","bookingErrMissing":"Please enter your name and email.","bookingErrEmail":"Invalid email address.","bookingErrSlot":"Please pick a time.","bookingErrTaken":"That time was just booked. Please pick another.","bookingErrTooSoon":"That time is too soon. Please pick a later one.","bookingErrNetwork":"Could not reach the booking service. Please retry or email info@sss.marketing.","bookingErrGeneric":"Something went wrong. Please retry or email info@sss.marketing.","bookingViewDay":"Day","bookingViewWeek":"Week","bookingTodayLabel":"Today","bookingDayEmpty":"No availability that day. Try the next one.","footerTag":"Dental marketing, measured at the chair.","footerNav":"Navigation","footerNavSvc":"Method","footerNavProc":"Getting started","footerNavPrice":"Pricing","footerNavTeam":"Team","footerContact":"Contact","footerBook":"Book a call","footerLoc":"Montréal, QC","footerLegal":"© 2026 SSS Marketing. All rights reserved.","heroTry":"Try the calculator","offerLabel":"Free for dental clinics","offerTitle":"The CDCP calculator. On your site. Free.","offerLede":"“Do I qualify for the CDCP, and what will I pay?” Your front desk answers that question on the phone. Your website can answer it instead.","offerFact1":"Four questions. Under a minute.","offerFact2":"Your colours, your clinic's name.","offerFact3":"English or French.","offerFact4":"A button to your booking page.","offerDeal":"The price: one 30-minute call with whoever manages your website. The “Powered by SSS” badge stays on. That's the whole deal.","offerCta":"Book the free install","offerDemoTag":"Try it as a patient would","pf5Label":"Term","pf5Value":"Three months to start","pf5Note":"Then month to month, with 30 days' notice.","faq0Q":"Is the CDCP calculator really free?","faq0A":"Yes. It is installed during one 30-minute call with whoever manages your website. The “Powered by SSS” badge stays on.","bookingFieldSiteOwner":"Who manages your website? (optional)","bookingFieldCms":"Website platform (optional)","bookingOptNone":"Select","bookingOptUnknown":"Not sure","bookingOwnerSelf":"Me","bookingOwnerStaff":"My staff","bookingOwnerAgency":"An agency","bookingCmsOther":"Other","bookingNoteOwner":"Site managed by: ","bookingNoteCms":"Platform: ","footerNavTarifs":"All pricing"}
   };
-  // Booking form & status strings, kept out of the giant dictionary lines above for diff sanity.
-  Object.assign(i18n.fr, {
-    bookingFieldName: "Nom",
-    bookingFieldEmail: "Courriel",
-    bookingFieldPhone: "Téléphone (facultatif)",
-    bookingFieldClinic: "Clinique (facultatif)",
-    bookingFieldNotes: "Notes (facultatif)",
-    bookingSubmit: "Confirmer la réservation",
-    bookingSubmitting: "Envoi en cours…",
-    bookingSuccessEyebrow: "Réservation confirmée",
-    bookingSuccessMeta: "Vous recevrez un email de confirmation avec un lien Google Meet sous peu.",
-    bookingSuccessCta: "Ajouter à Google Agenda",
-    bookingErrMissing: "Veuillez remplir votre nom et votre email.",
-    bookingErrEmail: "Adresse email invalide.",
-    bookingErrSlot: "Veuillez sélectionner un créneau.",
-    bookingErrTaken: "Ce créneau vient d'être réservé. Choisissez-en un autre.",
-    bookingErrTooSoon: "Ce créneau est trop proche. Choisissez un horaire plus tard.",
-    bookingErrNetwork: "Impossible de joindre le service de réservation. Réessayez ou écrivez à info@sss.marketing.",
-    bookingErrGeneric: "Une erreur est survenue. Réessayez ou écrivez à info@sss.marketing.",
-    bookingViewDay: "Jour",
-    bookingViewWeek: "Semaine",
-    bookingTodayLabel: "Aujourd'hui",
-    bookingDayEmpty: "Aucune disponibilité ce jour — essayez le suivant."
-  });
-  Object.assign(i18n.en, {
-    bookingFieldName: "Name",
-    bookingFieldEmail: "Email",
-    bookingFieldPhone: "Phone (optional)",
-    bookingFieldClinic: "Clinic (optional)",
-    bookingFieldNotes: "Notes (optional)",
-    bookingSubmit: "Confirm booking",
-    bookingSubmitting: "Sending…",
-    bookingSuccessEyebrow: "Booking confirmed",
-    bookingSuccessMeta: "You'll receive a confirmation email with a Google Meet link shortly.",
-    bookingSuccessCta: "Add to Google Calendar",
-    bookingErrMissing: "Please enter your name and email.",
-    bookingErrEmail: "Invalid email address.",
-    bookingErrSlot: "Please select a time slot.",
-    bookingErrTaken: "That slot was just booked. Please pick another.",
-    bookingErrTooSoon: "That slot is too soon. Please pick a later time.",
-    bookingErrNetwork: "Could not reach the booking service. Please retry or email info@sss.marketing.",
-    bookingErrGeneric: "Something went wrong. Please retry or email info@sss.marketing.",
-    bookingViewDay: "Day",
-    bookingViewWeek: "Week",
-    bookingTodayLabel: "Today",
-    bookingDayEmpty: "No availability this day — try the next one."
-  });
 
   const svcDetail = {
-    fr:{s1:{name:"Google Ads — Search et Performance Max",lede:"Notre discipline principale. Le levier qui remplit l'agenda le plus vite.",blocks:[{label:"Création",items:["Recherche avancée de mots-clés.","Analyse des compétiteurs.","Annonces et extensions sur-mesure."]},{label:"Gestion & optimisation",items:["Optimisation algorithmique continue.","Achat programmatique.","Exclusions gérées en temps réel.","Conseils budgétaires complets."]},{label:"Service & conseil",items:["Équipe dédiée. Suivi mensuel.","Accès 24/7 à vos résultats."]}]},s2:{name:"Google Business Profile",lede:"Votre fiche Google transformée en outil d'acquisition.",blocks:[{label:"Optimisation & SEO local",items:["Création et optimisation de la fiche GBP.","Positionnement stratégique sur Maps.","Étude de mots-clés géociblés."]},{label:"Gestion de réputation",items:["Gestion proactive des avis clients.","Réponses professionnelles personnalisées.","Alertes sur les commentaires négatifs."]},{label:"Contenu & engagement",items:["Publications régulières sur votre fiche.","Trafic qualifié vers vos succursales.","Suivi mensuel. Accès 24/7."]}]},s3:{name:"Suivi d'appels & rapport mensuel",lede:"Chaque campagne auditable. Chaque dollar tracé.",blocks:[{label:"Configuration & setup",items:["Installation Analytics et Tag Manager.","Paramétrage des conversions et objectifs.","Mise en place des rapports."]},{label:"Analyse de précision",items:["Suivi par heure, ville, jour, mot-clé.","Comportement et engagement utilisateur.","Entonnoirs de conversion configurés."]},{label:"Optimisation & stratégie",items:["Suivi multi-canaux d'acquisition.","Recommandations UX de base.","Campagnes optimisées par conversion."]}]},s4:{name:"Google Ads — Display",lede:"Vos bannières au bon endroit. Au bon moment.",blocks:[{label:"Création",items:["Formats IAB standards.","Ciblage d'audience avancé."]},{label:"Gestion",items:["Achat programmatique.","Optimisation algorithmique en temps réel."]},{label:"Service",items:["Experts hautement certifiés.","Suivi mensuel. Accès 24/7."]}]},s5:{name:"RCSD — Moteur de conversion interactif",lede:"Le RCSD expliqué. Le patient qualifié. Le rendez-vous réservé — en une visite.",blocks:[{label:"Admissibilité",items:["Évaluation RCSD en quatre questions.","Repérage instantané : assurance privée, RCSD, ou payant.","Grille tarifaire fédérale vs. provinciale, affichée en clair."]},{label:"Routage patient",items:["Branchement automatique selon le profil.","Réservation immédiate pour les assurés.","Réservation différée 6 à 8 semaines pour les cartes RCSD à venir."]},{label:"Déploiement",items:["Configuré et en ligne en moins de 15 minutes.","Intégration directe à votre système de rendez-vous.","Bilingue. Aucune maintenance requise."]}]},s6:{name:"Avis Google · NFC",lede:"Chaque visite devient un avis. Sans demander.",blocks:[{label:"Dispositif",items:["Plaquette NFC à la réception.","Activée par toucher. Sans application.","Liée à votre fiche Google."]},{label:"Signal algorithmique",items:["La fréquence d'avis est l'un des signaux les plus forts du SEO local.","Composé direct avec le levier GBP.","Chaque tap, un signal."]},{label:"Effet réseau",items:["Cycle de réputation autonome.","Baisse le coût d'acquisition du patient suivant.","Inclus. Aucun frais matériel additionnel."]}]}},
-    en:{s1:{name:"Google Ads — Search and Performance Max",lede:"Our core discipline. The lever that fills the schedule fastest.",blocks:[{label:"Setup",items:["Advanced keyword research.","Competitor analysis.","Custom ads and extensions."]},{label:"Management & optimization",items:["Continuous algorithmic optimization.","Programmatic bidding.","Real-time exclusion management.","Full budget guidance."]},{label:"Service & advisory",items:["Dedicated team. Monthly review.","24/7 access to your results."]}]},s2:{name:"Google Business Profile",lede:"Your Google listing turned into an acquisition tool.",blocks:[{label:"Optimization & local SEO",items:["GBP listing built and optimized.","Strategic Maps positioning.","Geo-targeted keyword study."]},{label:"Reputation management",items:["Proactive review management.","Personalized professional responses.","Alerts on negative comments."]},{label:"Content & engagement",items:["Regular listing posts.","Qualified traffic to your locations.","Monthly review. 24/7 access."]}]},s3:{name:"Call tracking & monthly report",lede:"Every campaign auditable. Every dollar traced.",blocks:[{label:"Configuration & setup",items:["Analytics and Tag Manager installed.","Conversions and goals configured.","Reports set up."]},{label:"Precision analysis",items:["Tracking by hour, city, day, keyword.","User behavior and engagement.","Conversion funnels configured."]},{label:"Optimization & strategy",items:["Multi-channel acquisition tracking.","Baseline UX recommendations.","Campaigns optimized by conversion."]}]},s4:{name:"Google Ads — Display",lede:"Your banners. Right place. Right moment.",blocks:[{label:"Creative",items:["IAB standard formats.","Advanced audience targeting."]},{label:"Management",items:["Programmatic bidding.","Real-time algorithmic optimization."]},{label:"Service",items:["Highly certified experts.","Monthly review. 24/7 access."]}]},s5:{name:"CDCP Interactive Conversion Engine",lede:"CDCP, explained. The patient, qualified. The appointment, booked — in one visit.",blocks:[{label:"Eligibility",items:["Four-question CDCP assessment.","Instant routing: private insurance, CDCP, or out-of-pocket.","Federal vs. provincial fee guide, shown in plain terms."]},{label:"Patient routing",items:["Automated branching by profile.","Immediate booking for insured patients.","6–8 week future booking for pending CDCP cardholders."]},{label:"Deployment",items:["Configured and live in under 15 minutes.","Direct integration with your booking system.","Bilingual. Zero maintenance."]}]},s6:{name:"Google Reviews · NFC",lede:"Every visit becomes a review. Without asking.",blocks:[{label:"Hardware",items:["NFC pad at the front desk.","Activated by tap. No app required.","Linked to your Google listing."]},{label:"Algorithmic signal",items:["Review frequency is one of the strongest local-SEO signals.","Compounds directly with the GBP lever.","Every tap, a signal."]},{label:"Network effect",items:["Self-sustaining reputation cycle.","Lowers the cost of the next patient.","Included. No additional hardware fee."]}]}}
+    fr:{"s1":{"name":"Google Ads : Search et Performance Max","lede":"Le levier le plus direct entre une recherche et un rendez-vous.","blocks":[{"label":"Création","items":["Recherche de mots-clés par service et par secteur.","Analyse des concurrents locaux.","Annonces et extensions rédigées pour la clinique."]},{"label":"Gestion","items":["Enchères et budgets ajustés selon les conversions.","Exclusion des requêtes hors cible.","Recommandations budgétaires."]},{"label":"Suivi","items":["Revue mensuelle des résultats.","Tableau de bord par clinique."]}]},"s2":{"name":"Fiche d'établissement Google","lede":"Votre fiche Google, travaillée comme un outil d'acquisition.","blocks":[{"label":"Fiche et référencement local","items":["Création et optimisation de la fiche.","Positionnement sur Google Maps.","Étude de mots-clés géociblés."]},{"label":"Réputation","items":["Suivi des avis.","Réponses rédigées pour chaque avis.","Alerte lors d'un avis négatif."]},{"label":"Contenu","items":["Publications régulières sur la fiche.","Revue mensuelle des résultats."]}]},"s3":{"name":"Suivi d'appels et rapport mensuel","lede":"Chaque campagne se vérifie. Chaque appel a une source.","blocks":[{"label":"Configuration","items":["Installation d'Analytics et de Tag Manager.","Conversions et objectifs configurés.","Un numéro suivi par clinique."]},{"label":"Analyse","items":["Appels par heure, par jour, par ville et par mot-clé.","Comportement des visiteurs sur le site.","Entonnoirs de conversion."]},{"label":"Rapport","items":["Rapport mensuel par clinique.","Canaux d'acquisition comparés.","Campagnes optimisées selon les conversions."]}]},"s4":{"name":"Google Ads : Display","lede":"Vos bannières devant les patients de votre secteur.","blocks":[{"label":"Création","items":["Formats standards IAB.","Ciblage d'audience par secteur."]},{"label":"Gestion","items":["Emplacements et enchères ajustés selon les résultats."]},{"label":"Suivi","items":["Revue mensuelle des résultats.","Tableau de bord par clinique."]}]},"s5":{name:"RCSD : moteur de conversion interactif",lede:"Le RCSD expliqué. Le patient qualifié. Le rendez-vous réservé — en une visite.",blocks:[{label:"Admissibilité",items:["Évaluation RCSD en quatre questions.","Repérage instantané : assurance privée, RCSD, ou payant.","Grille tarifaire fédérale vs. provinciale, affichée en clair."]},{label:"Routage patient",items:["Branchement automatique selon le profil.","Réservation immédiate pour les assurés.","Réservation différée 6 à 8 semaines pour les cartes RCSD à venir."]},{label:"Déploiement",items:["Configuré et en ligne en moins de 15 minutes.","Intégration directe à votre système de rendez-vous.","Bilingue. Aucune maintenance requise."]}]},"s6":{"name":"Avis Google par plaquette NFC","lede":"L'avis est demandé au bon moment : à la réception, après la visite.","blocks":[{"label":"Dispositif","items":["Plaquette NFC à la réception.","Activée au toucher, sans application.","Liée à votre fiche Google."]},{"label":"Référencement local","items":["Le nombre et la fréquence des avis comptent dans le classement local de Google.","Travaille de pair avec la fiche d'établissement."]},{"label":"Forfait","items":["Comprise dans le forfait.","Aucuns frais de matériel additionnels."]}]}},
+    en:{"s1":{"name":"Google Ads: Search and Performance Max","lede":"The most direct lever between a search and an appointment.","blocks":[{"label":"Setup","items":["Keyword research by service and by area.","Local competitor analysis.","Ads and extensions written for the clinic."]},{"label":"Management","items":["Bids and budgets adjusted on conversions.","Off-target queries excluded.","Budget recommendations."]},{"label":"Review","items":["Monthly review of results.","Per-clinic dashboard."]}]},"s2":{"name":"Google Business Profile","lede":"Your Google profile, worked as an acquisition tool.","blocks":[{"label":"Profile and local SEO","items":["Profile built and optimized.","Positioning on Google Maps.","Geo-targeted keyword study."]},{"label":"Reputation","items":["Review monitoring.","A written reply to every review.","An alert on any negative review."]},{"label":"Content","items":["Regular posts on the profile.","Monthly review of results."]}]},"s3":{"name":"Call tracking and monthly report","lede":"Every campaign can be checked. Every call has a source.","blocks":[{"label":"Configuration","items":["Analytics and Tag Manager installed.","Conversions and goals configured.","One tracked number per clinic."]},{"label":"Analysis","items":["Calls by hour, day, city and keyword.","Visitor behaviour on the site.","Conversion funnels."]},{"label":"Report","items":["Monthly report per clinic.","Acquisition channels compared.","Campaigns optimized on conversions."]}]},"s4":{"name":"Google Ads: Display","lede":"Your banners in front of patients in your area.","blocks":[{"label":"Creative","items":["IAB standard formats.","Audience targeting by area."]},{"label":"Management","items":["Placements and bids adjusted on results."]},{"label":"Review","items":["Monthly review of results.","Per-clinic dashboard."]}]},"s5":{name:"CDCP interactive conversion engine",lede:"CDCP, explained. The patient, qualified. The appointment, booked — in one visit.",blocks:[{label:"Eligibility",items:["Four-question CDCP assessment.","Instant routing: private insurance, CDCP, or out-of-pocket.","Federal vs. provincial fee guide, shown in plain terms."]},{label:"Patient routing",items:["Automated branching by profile.","Immediate booking for insured patients.","6–8 week future booking for pending CDCP cardholders."]},{label:"Deployment",items:["Configured and live in under 15 minutes.","Direct integration with your booking system.","Bilingual. Zero maintenance."]}]},"s6":{"name":"Google reviews by NFC pad","lede":"The review is requested at the right moment: at the front desk, after the visit.","blocks":[{"label":"Hardware","items":["NFC pad at the front desk.","Activated by tap, no app required.","Linked to your Google profile."]},{"label":"Local SEO","items":["The number and frequency of reviews count in Google's local ranking.","Works together with the Business Profile."]},{"label":"Plan","items":["Included in the plan.","No additional hardware fee."]}]}}
   };
 
-  let lang="fr",openSvc=null,hasScrolled=false,scrollIdleTimer=null;
-  const htmlEl=document.documentElement,bodyEl=document.body,nav=document.getElementById("nav"),detailEl=document.getElementById("svcDetail"),langBtns=document.querySelectorAll(".lang-btn"),scrollCue=document.getElementById("scrollCue");
+  let lang=(new URLSearchParams(window.location.search).get("lang")==="en")?"en":"fr",openSvc=null;
+  const htmlEl=document.documentElement,bodyEl=document.body,nav=document.getElementById("nav"),detailEl=document.getElementById("svcDetail"),langBtns=document.querySelectorAll(".lang-btn");
 
   function applyLang(){
     htmlEl.lang=lang;
     const dict=i18n[lang];
     document.querySelectorAll("[data-i]").forEach(function(el){const key=el.getAttribute("data-i");if(dict[key]!==undefined)el.textContent=dict[key];});
     langBtns.forEach(function(b){const isActive=b.getAttribute("data-lang")===lang;b.classList.toggle("active",isActive);b.setAttribute("aria-pressed",isActive?"true":"false");});
-    if(scrollCue&&dict.scrollLabel)scrollCue.setAttribute("aria-label",dict.scrollLabel);
+    document.title=dict.metaTitle;
+    const md=document.querySelector('meta[name="description"]');if(md)md.setAttribute("content",dict.metaDesc);
+    const canon=document.querySelector('link[rel="canonical"]');if(canon)canon.setAttribute("href","https://sss.marketing/"+(lang==="en"?"?lang=en":""));
     if(openSvc)renderSvcDetail(openSvc);
+    document.querySelectorAll("[data-tarifs]").forEach(function(a){a.setAttribute("href","/tarifs/"+(lang==="en"?"?lang=en":""));});
+    mountOfferCalc();
+  }
+  function mountOfferCalc(){
+    const m=document.getElementById("cdcpOfferMount");if(!m)return;
+    m.textContent="";
+    const c=document.createElement("cdcp-calculator");
+    c.setAttribute("data-lang",lang);c.setAttribute("data-province","QC");c.setAttribute("data-primary-color","#1B3B36");
+    c.setAttribute("data-clinic-name",lang==="fr"?"Notre clinique dentaire":"Our Dental Clinic");
+    c.setAttribute("data-booking-url",(lang==="en"?"/?lang=en":"/")+"#contact");
+    m.appendChild(c);
   }
   const cdcpDemoTag={fr:"Outil patient — ce que verrait un visiteur sur votre site",en:"Patient-facing tool — this is what visitors on your site would see"};
   function renderSvcDetail(id){
@@ -1702,27 +1856,16 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
     card.addEventListener("click",function(){
       const id=card.getAttribute("data-svc"),isActive=card.classList.contains("active");
       document.querySelectorAll(".svc").forEach(function(c){c.classList.remove("active");c.setAttribute("aria-expanded","false");});
-      if(isActive){closeSvc();}else{card.classList.add("active");card.setAttribute("aria-expanded","true");openSvc=id;renderSvcDetail(id);setTimeout(function(){detailEl.scrollIntoView({behavior:"smooth",block:"center"});},80);}
+      if(isActive){closeSvc();}else{card.classList.add("active");card.setAttribute("aria-expanded","true");const st=card.closest(".stage");if(st&&detailEl.previousElementSibling!==st)st.after(detailEl);openSvc=id;renderSvcDetail(id);setTimeout(function(){detailEl.scrollIntoView({behavior:"smooth",block:"center"});},80);}
     });
   });
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&openSvc)closeSvc();});
-  langBtns.forEach(function(b){b.addEventListener("click",function(){const target=b.getAttribute("data-lang");if(target===lang)return;lang=target;applyLang();});});
+  langBtns.forEach(function(b){b.addEventListener("click",function(){const target=b.getAttribute("data-lang");if(target===lang)return;lang=target;applyLang();try{history.replaceState(null,"",window.location.pathname+(lang==="en"?"?lang=en":"")+window.location.hash);}catch(_e){}});});
 
-  function updateScrollCueOnIdle(){
-    if(!scrollCue)return;
-    const y=window.scrollY,max=(document.documentElement.scrollHeight||bodyEl.scrollHeight)-window.innerHeight,nearBottom=max>0&&y>=max-160;
-    if(y>80&&!nearBottom)scrollCue.classList.add("visible");else scrollCue.classList.remove("visible");
-  }
   let ticking=false;
   window.addEventListener("scroll",function(){
-    if(scrollCue)scrollCue.classList.remove("visible");
-    if(scrollIdleTimer)clearTimeout(scrollIdleTimer);
-    scrollIdleTimer=setTimeout(updateScrollCueOnIdle,500);
-    if(!ticking){window.requestAnimationFrame(function(){const y=window.scrollY;if(y>24)nav.classList.add("scrolled");else nav.classList.remove("scrolled");if(y>80&&!hasScrolled){hasScrolled=true;bodyEl.classList.add("scrolled");}ticking=false;});ticking=true;}
+    if(!ticking){window.requestAnimationFrame(function(){nav.classList.toggle("scrolled",window.scrollY>24);ticking=false;});ticking=true;}
   },{passive:true});
-  if(scrollCue){scrollCue.addEventListener("click",function(){const delta=Math.max(window.innerHeight-120,320);window.scrollBy({top:delta,behavior:"smooth"});});}
-  setTimeout(updateScrollCueOnIdle,1400);
-  window.addEventListener("resize",function(){if(scrollIdleTimer)clearTimeout(scrollIdleTimer);scrollIdleTimer=setTimeout(updateScrollCueOnIdle,200);},{passive:true});
 
   const io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add("visible");io.unobserve(e.target);}});},{threshold:0.12,rootMargin:"0px 0px -40px 0px"});
   document.querySelectorAll(".fade-in").forEach(function(el){io.observe(el);});
@@ -2393,6 +2536,12 @@ footer{background:var(--paper);padding:80px 0 56px;position:relative}
         var phone = (phoneEl.value||'').trim();
         var clinic= (clinicEl.value||'').trim();
         var notes = (notesEl.value||'').trim();
+        var ownerEl = document.getElementById('bookingFieldSiteOwner');
+        var cmsEl   = document.getElementById('bookingFieldCms');
+        var extra = [];
+        if(ownerEl && ownerEl.value) extra.push(dict.bookingNoteOwner + ownerEl.options[ownerEl.selectedIndex].text);
+        if(cmsEl && cmsEl.value) extra.push(dict.bookingNoteCms + cmsEl.options[cmsEl.selectedIndex].text);
+        if(extra.length) notes = (extra.join(' · ') + (notes ? '\n' + notes : '')).slice(0, 2000);
 
         if(!selectedSlot){
           setStatus(dict.bookingErrSlot, true);
