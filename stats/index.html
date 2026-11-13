@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Stats | SSS</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<style>
+@font-face{font-family:'Newsreader';src:url('/fonts/newsreader-latin-opsz-normal.woff2') format('woff2');font-weight:200 800;font-display:swap}
+@font-face{font-family:'Hanken Grotesk';src:url('/fonts/hanken-grotesk-latin-wght-normal.woff2') format('woff2');font-weight:100 900;font-display:swap}
+:root{--paper:#fefae0;--surface:#e9edc9;--sage:#ccd5ae;--tan:#d4a373;--tan-deep:#875320;--ink:#1c1812;--forest:#1b3b36;
+  --ink-2:rgba(28,24,18,.74);--rule:rgba(28,24,18,.16);
+  --display:'Newsreader',Georgia,serif;--body:'Hanken Grotesk',Helvetica,Arial,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--forest);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding:32px clamp(20px,4vw,40px) 64px}
+header{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;padding-bottom:24px;border-bottom:1px solid var(--rule)}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(28px,4vw,40px);letter-spacing:-.02em}
+h2{font-family:var(--display);font-weight:500;font-size:26px;letter-spacing:-.01em;margin:48px 0 6px}
+.label{font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--tan-deep)}
+.sub{color:var(--ink-2);font-size:15px;max-width:60ch}
+.ranges{display:flex;gap:6px}
+.ranges button,.btn{font:inherit;font-size:14px;font-weight:500;min-height:44px;padding:10px 16px;border:1px solid var(--rule);background:transparent;color:var(--ink);cursor:pointer}
+.ranges button[aria-pressed="true"]{background:var(--forest);color:var(--paper);border-color:var(--forest)}
+.btn{background:var(--forest);color:var(--paper);border-color:var(--forest)}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--tan);margin-top:20px}
+.tile{padding:18px 16px 20px 0;border-bottom:1px solid var(--rule)}
+.tile + .tile{padding-left:16px;border-left:1px solid var(--rule)}
+.tile .n{font-family:var(--display);font-size:44px;line-height:1;font-variant-numeric:tabular-nums;margin-top:10px}
+.bars{display:flex;align-items:flex-end;gap:3px;height:120px;margin-top:24px;border-bottom:1px solid var(--ink)}
+.bars i{flex:1;background:var(--forest);min-height:1px;position:relative}
+.bars i:hover{background:var(--tan-deep)}
+.bars-cap{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);margin-top:6px}
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:14px}
+th{font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--tan-deep);text-align:left;padding:8px 8px 8px 0;border-bottom:1px solid var(--tan)}
+td{padding:9px 8px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.empty{color:var(--ink-2);font-size:15px;padding:12px 0}
+.scroll{overflow-x:auto}
+form{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px;max-width:520px}
+input{font:inherit;flex:1 1 240px;min-height:44px;padding:10px 12px;border:1px solid var(--rule);background:#fffdf0;color:var(--ink)}
+.msg{margin-top:12px;font-size:15px;color:#8a2a1c}
+.tag{display:inline-block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);border:1px solid var(--rule);padding:1px 6px;margin-left:6px}
+@media(max-width:760px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.tile:nth-child(3){padding-left:0;border-left:0}.cols{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <p class="label">SSS · private</p>
+      <h1>Visitors and calculator use</h1>
+    </div>
+    <div class="ranges" role="group" aria-label="Period" id="ranges" hidden>
+      <button type="button" data-d="7">7 days</button>
+      <button type="button" data-d="30" aria-pressed="true">30 days</button>
+      <button type="button" data-d="90">90 days</button>
+      <button type="button" data-d="365">1 year</button>
+    </div>
+  </header>
+
+  <section id="login" hidden>
+    <p class="sub" style="margin-top:28px">Enter your stats key. It is remembered on this browser only.</p>
+    <form id="keyForm">
+      <label class="label" for="key" style="flex-basis:100%">Stats key</label>
+      <input id="key" type="password" autocomplete="current-password" required>
+      <button class="btn" type="submit">Show stats</button>
+    </form>
+    <p class="msg" id="msg" role="alert"></p>
+  </section>
+
+  <main id="out" hidden>
+    <h2>sss.marketing</h2>
+    <p class="sub">Unique visitors are counted per day, without cookies. Your own browser is excluded once you visit any page with <code>?notrack=1</code>.</p>
+    <div class="tiles">
+      <div class="tile"><p class="label">Visitors</p><p class="n" id="tVisitors">–</p></div>
+      <div class="tile"><p class="label">Page views</p><p class="n" id="tViews">–</p></div>
+      <div class="tile"><p class="label">Button clicks</p><p class="n" id="tClicks">–</p></div>
+      <div class="tile"><p class="label">Bookings</p><p class="n" id="tBooked">–</p></div>
+    </div>
+    <div class="bars" id="bars" role="img" aria-label="Visitors per day"></div>
+    <div class="bars-cap"><span id="barFrom"></span><span>Visitors per day</span><span id="barTo"></span></div>
+
+    <div class="cols">
+      <div><h2 style="font-size:21px">Where they came from</h2><table><thead><tr><th>Source</th><th class="num">Visitors</th></tr></thead><tbody id="sources"></tbody></table></div>
+      <div><h2 style="font-size:21px">Pages</h2><table><thead><tr><th>Page</th><th class="num">Visitors</th><th class="num">Views</th></tr></thead><tbody id="pages"></tbody></table></div>
+      <div><h2 style="font-size:21px">Buttons clicked</h2><table><thead><tr><th>Button</th><th class="num">Clicks</th></tr></thead><tbody id="ctas"></tbody></table></div>
+    </div>
+
+    <h2>CDCP calculator, by website</h2>
+    <p class="sub">Every site where the calculator is installed, including the demo pages on sss.marketing. Qualified means the patient reached a coverage estimate.</p>
+    <div class="scroll" tabindex="0" role="region" aria-label="Calculator use by website">
+      <table>
+        <thead><tr><th>Website</th><th>Clinic</th><th class="num">Views</th><th class="num">Visitors</th><th class="num">Started</th><th class="num">Finished</th><th class="num">Qualified</th><th class="num">Booking clicks</th><th class="num">Calls</th><th class="num">Apply clicks</th></tr></thead>
+        <tbody id="calc"></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+<script>
+(function () {
+  var API = "https://zikfxleqejynrwelgpbc.supabase.co/functions/v1/stats";
+  var $ = function (id) { return document.getElementById(id); };
+  var days = 30, key = "";
+  try { key = localStorage.getItem("sss_stats_key") || ""; localStorage.setItem("sss_notrack", "1"); } catch (e) {}
+
+  function cell(tr, text, num) { var td = document.createElement("td"); td.textContent = text; if (num) td.className = "num"; tr.appendChild(td); return td; }
+  function rows(id, list, fn, cols) {
+    var tb = $(id); tb.textContent = "";
+    if (!list || !list.length) { var tr = document.createElement("tr"); var td = cell(tr, "Nothing yet."); td.colSpan = cols; td.className = "empty"; tb.appendChild(tr); return; }
+    list.forEach(function (x) { var tr = document.createElement("tr"); fn(tr, x); tb.appendChild(tr); });
+  }
+  function fmt(n) { return (n || 0).toLocaleString("en-CA"); }
+
+  function render(d) {
+    var s = d.site;
+    $("tVisitors").textContent = fmt(s.visitors);
+    $("tViews").textContent = fmt(s.pageviews);
+    $("tClicks").textContent = fmt(s.cta_clicks);
+    $("tBooked").textContent = fmt(s.bookings);
+    var byDay = {}; (s.by_day || []).forEach(function (r) { byDay[r.day] = r; });
+    var bars = $("bars"); bars.textContent = "";
+    var max = 1, list = [];
+    for (var i = days - 1; i >= 0; i--) {
+      var dt = new Date(Date.now() - i * 864e5);
+      var k = dt.toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
+      var v = byDay[k] ? byDay[k].visitors : 0; max = Math.max(max, v); list.push([k, v]);
+    }
+    list.forEach(function (p) { var b = document.createElement("i"); b.style.height = (p[1] / max * 100) + "%"; b.title = p[0] + ": " + p[1] + " visitors"; bars.appendChild(b); });
+    $("barFrom").textContent = list[0][0]; $("barTo").textContent = list[list.length - 1][0];
+    rows("sources", s.sources, function (tr, x) { cell(tr, x.source); cell(tr, fmt(x.visitors), true); }, 2);
+    rows("pages", s.pages, function (tr, x) { cell(tr, x.path); cell(tr, fmt(x.visitors), true); cell(tr, fmt(x.pageviews), true); }, 3);
+    rows("ctas", s.ctas, function (tr, x) { cell(tr, x.label + "  (" + x.path + ")"); cell(tr, fmt(x.clicks), true); }, 2);
+    rows("calc", d.calc, function (tr, x) {
+      var td = cell(tr, x.host);
+      if (/(^|\.)sss\.marketing$/.test(x.host)) { var t = document.createElement("span"); t.className = "tag"; t.textContent = "demo"; td.appendChild(t); }
+      cell(tr, x.clinic || "");
+      ["views", "visitors", "starts", "results", "qualified", "book_clicks", "call_clicks", "apply_clicks"].forEach(function (k) { cell(tr, fmt(x[k]), true); });
+    }, 10);
+  }
+
+  function load() {
+    $("msg").textContent = "";
+    fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: key, days: days }) })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(function (d) {
+        try { localStorage.setItem("sss_stats_key", key); } catch (e) {}
+        $("login").hidden = true; $("out").hidden = false; $("ranges").hidden = false; render(d);
+      })
+      .catch(function (st) {
+        try { localStorage.removeItem("sss_stats_key"); } catch (e) {}
+        $("out").hidden = true; $("ranges").hidden = true; $("login").hidden = false;
+        $("msg").textContent = st === 401 ? "That key didn't work." : (key ? "Could not reach the stats service. Try again." : "");
+      });
+  }
+
+  $("keyForm").addEventListener("submit", function (e) { e.preventDefault(); key = $("key").value.trim(); load(); });
+  $("ranges").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    days = +b.getAttribute("data-d");
+    [].forEach.call($("ranges").children, function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+    load();
+  });
+  if (key) load(); else $("login").hidden = false;
+})();
+</script>
+</body>
+</html>

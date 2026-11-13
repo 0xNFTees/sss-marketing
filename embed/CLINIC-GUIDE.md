@@ -82,7 +82,10 @@ Open the page on your phone and on a computer:
 No. The calculator is fully sealed off from your site's styles — your site can't break it and it can't change anything on your site.
 
 **Is patient data stored anywhere?**
-No. Answers live only in the visitor's browser while the page is open. Nothing is saved or sent anywhere.
+No. Answers live only in the visitor's browser while the page is open and are never sent. The calculator sends SSS anonymous counts only: that it was viewed, started and finished, the coverage tier or reason shown, and clicks on your booking, phone and apply buttons, with your website's address and the date. No names, no answers, no cookies, nothing that identifies a patient. We use the counts to send you a monthly summary of how many patients the calculator sent your way.
+
+**Can we turn the counts off?**
+Yes. Add `data-analytics="off"` to the `<cdcp-calculator>` tag, or tell us and we'll do it.
 
 **What do the dollar figures mean?**
 They're estimates comparing your province's 2026 dentist fee guide with the federal CDCP Dental Benefit Grid for three common visits. They're labelled as estimates, not quotes, and patients are told to ask for a written estimate.

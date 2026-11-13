@@ -13,6 +13,7 @@
  *     data-lang="en"            en | fr
  *     data-province="ON">       QC ON BC AB NS NB PE MB SK NL YT NT NU
  *   </cdcp-calculator>
+ *   Optional: data-analytics="off" stops the anonymous usage counts for that clinic.
  *
  * Figures: 2026 provincial fee guides vs the federal CDCP Dental Benefit Grid,
  * per-visit bundles supplied by SSS (sss.marketing). Estimates, not quotes.
@@ -334,6 +335,34 @@
 
   var SEAL = '<svg viewBox="0 0 12 12" aria-hidden="true" fill="none"><path d="M6 .8 10.4 2.6v3C10.4 8.5 8.6 10.4 6 11.2 3.4 10.4 1.6 8.5 1.6 5.6v-3L6 .8Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/><path d="M4.1 6l1.3 1.3 2.5-2.6" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
+  /* ---------- anonymous usage counts ---------- */
+  // Counts views, starts, results (tier or reason only), and booking / call / apply clicks per clinic site.
+  // No cookies, no answers, nothing that identifies a patient. Off with data-analytics="off".
+  var TRACK_URL = "https://zikfxleqejynrwelgpbc.supabase.co/functions/v1/collect";
+  function pageOf() {
+    // Inside the iframe shell (frame.html) the clinic's page is the referrer.
+    try {
+      if (window.top !== window && document.referrer) {
+        var r = new URL(document.referrer);
+        return { h: r.hostname, u: r.pathname };
+      }
+    } catch (e) {}
+    return { h: location.hostname, u: location.pathname };
+  }
+  function noTrack(node) {
+    if ((node.getAttribute("data-analytics") || "").toLowerCase() === "off") return true;
+    if (navigator.webdriver) return true;
+    try { if (localStorage.getItem("sss_notrack")) return true; } catch (e) {}
+    return false;
+  }
+  function beacon(payload) {
+    var body = JSON.stringify(payload);
+    try {
+      if (navigator.sendBeacon && navigator.sendBeacon(TRACK_URL, body)) return;
+    } catch (e) {}
+    try { fetch(TRACK_URL, { method: "POST", body: body, keepalive: true, mode: "no-cors" }); } catch (e) {}
+  }
+
   /* ---------- component ---------- */
 
   function CdcpCalculator() {
@@ -368,7 +397,30 @@
     this._root.appendChild(style);
     this._mount = document.createElement("div");
     this._root.appendChild(this._mount);
+    this._noTrack = noTrack(this);
     this._render();
+    this._watchView();
+  };
+
+  CdcpCalculator.prototype._t = function (name, outcome) {
+    if (this._noTrack) return;
+    var pg = pageOf();
+    beacon({ k: "calc", n: name, h: pg.h, u: pg.u, c: this._cfg.clinic, lg: this._cfg.lang,
+             p: this._state.province, o: outcome || null });
+  };
+
+  // One "view" per page load, when at least half the calculator is on screen.
+  CdcpCalculator.prototype._watchView = function () {
+    var self = this;
+    if (this._noTrack) return;
+    if (!("IntersectionObserver" in window)) { this._t("view"); return; }
+    var io = new IntersectionObserver(function (entries) {
+      if (entries.some(function (e) { return e.isIntersecting; })) {
+        io.disconnect();
+        self._t("view");
+      }
+    }, { threshold: 0.5 });
+    io.observe(this);
   };
 
   CdcpCalculator.prototype._el = function (tag, cls, text) {
@@ -412,6 +464,10 @@
       return null;
     }
     var done = outcome();
+    if (done && !S.counted) {
+      S.counted = true;
+      this._t("result", done === "qualified" ? "q_" + S.inc : done);
+    }
 
     if (!done && S.step < QUESTIONS.length) {
       this._question(screen, QUESTIONS, S.step);
@@ -432,6 +488,7 @@
         var fileA = el("a", "cta s", T.applyCta);
         fileA.href = APPLY_URL[this._cfg.lang];
         fileA.target = "_blank"; fileA.rel = "noopener noreferrer";
+        fileA.addEventListener("click", function () { self._t("apply"); });
         acts.appendChild(fileA);
         screen.appendChild(acts);
         var rm = el("p", "fine", T.renewMember);
@@ -486,6 +543,7 @@
       if (o[2]) w.appendChild(el("small", null, o[2]));
       b.appendChild(w);
       b.addEventListener("click", function () {
+        if (!S.started) { S.started = true; self._t("start"); }
         S[def.key] = o[0];
         b.setAttribute("aria-checked", "true");
         setTimeout(function () { S.step += 1; self._render(); }, 110); // tap-to-advance with press feedback
@@ -591,6 +649,7 @@
     var apply = el("a", "cta s", T.applyCta);
     apply.href = APPLY_URL[this._cfg.lang];
     apply.target = "_blank"; apply.rel = "noopener noreferrer";
+    apply.addEventListener("click", function () { self._t("apply"); });
     w1.appendChild(apply);
     a1.appendChild(w1);
     screen.appendChild(a1);
@@ -619,7 +678,7 @@
 
   // The clinic conversion card: name, booking button, click-to-call.
   CdcpCalculator.prototype._clinicActions = function (standalone) {
-    var T = STR[this._cfg.lang], el = this._el.bind(this);
+    var self = this, T = STR[this._cfg.lang], el = this._el.bind(this);
     var act = el("div", "act");
     if (standalone) act.style.marginTop = "16px";
     act.appendChild(el("b", null, T.bookT(this._cfg.clinic)));
@@ -629,11 +688,13 @@
       var a = el("a", "cta p", T.ctaBook);
       a.href = this._cfg.booking;
       a.target = "_blank"; a.rel = "noopener noreferrer";
+      a.addEventListener("click", function () { self._t("book"); });
       wrap.appendChild(a);
     }
     if (this._cfg.phone) {
       var tel = el("a", "cta " + (this._cfg.booking ? "s" : "p"), T.ctaCall(this._cfg.phone));
       tel.href = "tel:" + this._cfg.phone.replace(/[^\d+]/g, "");
+      tel.addEventListener("click", function () { self._t("call"); });
       wrap.appendChild(tel);
     }
     if (!wrap.children.length) return el("span");
