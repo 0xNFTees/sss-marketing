@@ -525,205 +525,101 @@ nav.scrolled{padding:12px 0;border-bottom-color:var(--rule)}
   max-width:880px;margin:0 auto;
 }
 
-/* ── Week navigator ── */
-.booking-nav{
-  display:flex;align-items:baseline;justify-content:space-between;
-  padding-bottom:14px;border-bottom:1px solid var(--tan);margin-bottom:0;
-}
-.booking-nav-week{
-  font-family:var(--display);font-weight:500;font-size:20px;
-  letter-spacing:-0.015em;color:var(--ink);line-height:1;
-  font-feature-settings:"tnum" 1,"lnum" 1;
-}
-.booking-nav-controls{display:flex;align-items:center;gap:20px}
-.booking-nav-month{
-  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
-  color:var(--ink);opacity:0.74;
-}
-.booking-nav-btn{
-  width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;
-  background:none;border:none;cursor:pointer;color:var(--ink);opacity:0.55;
-  transition:opacity .25s var(--ease),color .25s var(--ease);padding:0;
-}
-.booking-nav-btn:hover{opacity:1;color:var(--tan-deep)}
-.booking-nav-btn:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
-
 /* ── Calendar anchor offset (clears the fixed nav) ── */
 #contact{scroll-margin-top:calc(var(--nav-h) + 24px)}
 
-/* ── Today eyebrow ── */
-.booking-today-eyebrow{
-  display:inline-flex;align-items:center;gap:12px;
-  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
-  color:var(--tan-deep);margin-bottom:18px;min-height:14px;
+/* ── Picker · month and arrows, one week of days, the open times ── */
+.bk-head{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-bottom:20px}
+.bk-month{
+  font-family:var(--display);font-weight:400;font-size:clamp(26px,2.6vw,34px);
+  line-height:1.1;letter-spacing:-0.015em;color:var(--ink);
 }
-.booking-today-eyebrow::before{
-  content:'';width:18px;height:1px;background:var(--tan);display:inline-block;flex-shrink:0;
+.bk-arrows{display:flex;gap:8px}
+.bk-arrow{
+  width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--rule);color:var(--ink);
+  transition:background-color .2s var(--ease),border-color .2s var(--ease),transform .12s var(--ease);
 }
+.bk-arrow:hover:not(:disabled){border-color:var(--ink);background:var(--surface-b)}
+.bk-arrow:active:not(:disabled){transform:translateY(1px)}
+.bk-arrow:disabled{opacity:0.3;cursor:default}
 
-/* ── Day / Week view switch ── */
-.booking-view-switch{
-  display:inline-flex;align-items:stretch;
-  border:1px solid var(--rule-soft);
+.bk-days{
+  display:grid;grid-template-columns:repeat(7,minmax(0,1fr));
+  border-top:1px solid var(--tan);border-bottom:1px solid var(--rule);
 }
-.booking-view-btn{
-  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
-  background:transparent;border:none;color:var(--ink);opacity:0.74;
-  padding:8px 14px;cursor:pointer;line-height:1;
-  transition:color .25s var(--ease),background-color .25s var(--ease),opacity .25s var(--ease);
+.bk-day{
+  display:flex;flex-direction:column;align-items:center;gap:9px;
+  padding:18px 4px 20px;position:relative;color:var(--ink);
+  transition:background-color .2s var(--ease),color .2s var(--ease);
 }
-.booking-view-btn + .booking-view-btn{border-left:1px solid var(--rule-soft)}
-.booking-view-btn:hover{opacity:1;color:var(--tan-deep)}
-.booking-view-btn.is-active{background:var(--forest);color:var(--paper);opacity:1}
-.booking-view-btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.bk-day-name{
+  font-family:var(--body);font-size:12px;font-weight:500;line-height:1;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-2);
+}
+.bk-day-num{
+  font-family:var(--display);font-size:clamp(24px,2.6vw,32px);line-height:1;
+  letter-spacing:-0.02em;font-feature-settings:"tnum" 1,"lnum" 1;
+}
+.bk-day:hover:not(:disabled):not(.is-selected){background:var(--surface-b)}
+.bk-day:active:not(:disabled):not(.is-selected) .bk-day-num{transform:translateY(1px)}
+.bk-day:disabled{cursor:default}
+.bk-day:disabled .bk-day-name,.bk-day:disabled .bk-day-num{opacity:0.3}
+.bk-day.is-selected{background:var(--forest);color:var(--paper)}
+.bk-day.is-selected .bk-day-name{color:var(--paper-2)}
+.bk-day.is-today::after{
+  content:'';position:absolute;bottom:8px;left:50%;margin-left:-2px;
+  width:4px;height:4px;border-radius:50%;background:var(--tan-deep);
+}
+.bk-day.is-today:disabled::after{opacity:0.45}
+.bk-day.is-selected.is-today::after{background:var(--tan)}
+.bk-day:focus-visible{outline-offset:-2px;z-index:1}
 
-/* ── Single-day view ── */
-.booking-day{
-  border:1px solid var(--rule-soft);
-  background:var(--paper);
-  opacity:1;transition:opacity .35s var(--ease);
+.bk-body{padding-top:28px}
+.bk-days,.bk-body{opacity:1;transition:opacity .2s var(--ease)}
+.bk.is-switching .bk-days,.bk.is-switching .bk-body{opacity:0}
+.bk-date-row{
+  display:flex;align-items:baseline;justify-content:space-between;gap:8px 24px;flex-wrap:wrap;
+  margin-bottom:18px;min-height:28px;
 }
-.booking-day.is-transitioning{opacity:0}
-.booking-day-head{
-  display:flex;align-items:baseline;justify-content:space-between;gap:24px;
-  padding:26px 32px 22px;
-  border-bottom:1px solid var(--rule-soft);
-  background:var(--paper);
-  position:relative;
+.bk-date{font-family:var(--display);font-size:22px;line-height:1.25;letter-spacing:-0.01em;color:var(--ink)}
+.bk-meta{
+  font-family:var(--body);font-size:12px;font-weight:500;line-height:1.4;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-2);
 }
-.booking-day-head.is-today::after{
-  content:'';position:absolute;left:32px;bottom:-1px;
-  width:32px;height:2px;background:var(--tan);
+.bk-times{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:10px;
+  min-height:122px;align-content:start;
 }
-.booking-day-title{
-  font-family:var(--display);font-weight:500;
-  font-size:clamp(28px,3.4vw,40px);line-height:1;letter-spacing:-0.02em;
-  color:var(--ink);
+.bk-time{
+  height:56px;display:flex;align-items:center;justify-content:center;gap:10px;
+  border:1px solid var(--rule);background:transparent;color:var(--ink);
+  font-family:var(--display);font-size:19px;line-height:1;
   font-feature-settings:"tnum" 1,"lnum" 1;
+  transition:background-color .2s var(--ease),border-color .2s var(--ease),color .2s var(--ease),transform .12s var(--ease);
 }
-.booking-day-title .booking-day-weekday{color:var(--ink)}
-.booking-day-title .booking-day-num{color:var(--tan-deep);margin-left:8px}
-.booking-day-meta{
-  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
-  color:var(--ink);opacity:0.74;text-align:right;
+.bk-time:hover:not(.is-selected){border-color:var(--ink);background:var(--surface-b);transform:translateY(-1px)}
+.bk-time:active:not(.is-selected){transform:translateY(1px)}
+.bk-time.is-selected{background:var(--forest);border-color:var(--forest);color:var(--paper);cursor:default}
+.bk-time-check{display:none;flex-shrink:0}
+.bk-time.is-selected .bk-time-check{display:block}
+.bk-time--ghost{border-color:var(--rule-soft);pointer-events:none;animation:bkGhost 1.4s ease-in-out infinite}
+@keyframes bkGhost{0%,100%{opacity:1}50%{opacity:0.4}}
+.bk-empty{grid-column:1 / -1;font-size:16px;line-height:1.55;color:var(--ink-2);max-width:34em;padding-top:4px}
+@media(max-width:680px){
+  .bk-head{padding-bottom:16px}
+  .bk-arrow{width:40px;height:40px}
+  .bk-day{padding:14px 2px 18px;gap:8px}
+  .bk-day-name{letter-spacing:0.08em}
+  .bk-body{padding-top:22px}
+  .bk-date{font-size:20px}
+  .bk-times{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;min-height:112px}
+  .bk-time{height:52px;font-size:17px}
 }
-.booking-day-slots{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(132px,1fr));
-  gap:1px;
-  background:var(--rule-soft);
+@media(prefers-reduced-motion:reduce){
+  .bk-days,.bk-body,.bk-time,.bk-arrow,.bk-day{transition:none}
+  .bk-time--ghost{animation:none}
 }
-.booking-slot.booking-slot--day{
-  min-height:56px;padding:0 12px;
-  font-size:15px;
-  background:var(--paper);
-  border:none;
-}
-.booking-slot.booking-slot--day::before{width:0;top:0;bottom:0;left:0}
-.booking-slot.booking-slot--day:hover:not(.is-busy):not(.is-selected)::before{width:3px}
-.booking-slot.booking-slot--day.is-busy::after{left:14px;right:14px}
-.booking-day-empty{
-  padding:48px 28px;
-  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
-  color:var(--ink);opacity:0.74;text-align:center;
-}
-
-/* ── Week-grid · today column wash (sage, signature surface) ── */
-.booking-col-head.is-today{
-  background:var(--surface-a);
-}
-
-/* ── Refined hover lead on standard slot ── */
-.booking-slot:hover:not(.is-busy):not(.is-selected)::before{width:3px}
-
-/* ── Selected slot · reads as a destination ── */
-.booking-slot.is-selected{box-shadow:inset 0 0 0 1px var(--ink)}
-
-/* ── 7-column availability grid ── */
-.booking-grid{
-  display:grid;grid-template-columns:repeat(7,1fr);
-  border-left:1px solid var(--rule-soft);
-  border-top:1px solid var(--rule-soft);
-  margin-bottom:0;
-  opacity:1;transition:opacity .35s var(--ease);
-}
-.booking-grid.is-transitioning{opacity:0}
-.booking-col{
-  border-right:1px solid var(--rule-soft);
-  display:flex;flex-direction:column;
-}
-.booking-col-head{
-  padding:8px 8px;
-  border-bottom:1px solid var(--rule-soft);
-  display:flex;flex-direction:column;align-items:center;gap:3px;
-  background:var(--paper);
-  position:relative;
-}
-.booking-col-head.is-today::after{
-  content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
-  width:14px;height:1px;background:var(--tan);
-}
-.booking-col-dayname{
-  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
-  color:var(--ink);opacity:0.74;
-}
-.booking-col-daynum{
-  font-family:var(--display);font-weight:500;font-size:17px;line-height:1;
-  letter-spacing:-0.02em;color:var(--ink);
-  font-feature-settings:"tnum" 1,"lnum" 1;
-}
-.booking-col-head.is-today .booking-col-daynum{color:var(--tan-deep)}
-
-/* ── Slot buttons · 3 states: available / selected / busy ── */
-/* Fixed row height enforces visual rhythm — same skeleton every day, every week. */
-.booking-slot{
-  display:flex;align-items:center;justify-content:center;
-  width:100%;min-height:32px;padding:0 4px;
-  border:none;border-bottom:1px solid var(--rule-soft);
-  background:var(--paper);
-  font-family:var(--display);font-weight:500;font-size:14px;line-height:1;
-  letter-spacing:-0.005em;color:var(--ink);
-  font-feature-settings:"tnum" 1,"lnum" 1;
-  cursor:pointer;text-align:center;position:relative;
-  transition:background-color .22s var(--ease),color .22s var(--ease);
-}
-.booking-slot:last-child{border-bottom:none}
-
-/* State 1 · Available */
-.booking-slot::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:0;
-  background:var(--tan);
-  transition:width .2s var(--ease);
-}
-.booking-slot:hover:not(.is-busy):not(.is-selected)::before{width:2px}
-.booking-slot:hover:not(.is-busy):not(.is-selected){background:rgba(212,163,115,0.06)}
-.booking-slot:focus-visible{outline:2px solid var(--ink);outline-offset:-1px;z-index:1}
-
-/* State 2 · Selected */
-.booking-slot.is-selected{
-  background:var(--forest);color:var(--paper);cursor:default;
-}
-.booking-slot.is-selected::before{display:none}
-.booking-slot.is-selected .booking-slot-check{display:block}
-.booking-slot-check{
-  display:none;position:absolute;right:6px;top:50%;transform:translateY(-50%);
-}
-
-/* State 3 · Busy (booked, past, or outside operating window) */
-/* Time stays visible at low opacity. A tan hairline crosses the row center —
-   architectural notation, not text-decoration. Reads as "held," not "deleted." */
-.booking-slot.is-busy{
-  cursor:default;background:var(--paper);
-  color:var(--ink);opacity:0.45;
-  font-variant-numeric:tabular-nums;
-}
-.booking-slot.is-busy::before{display:none}
-.booking-slot.is-busy::after{
-  content:'';position:absolute;left:8px;right:8px;top:50%;
-  height:1px;background:var(--tan);opacity:0.55;
-  transform:translateY(-0.5px);
-}
-.booking-slot.is-busy:hover{background:var(--paper)}
 
 /* ── Zone C · Confirmation panel (hidden until slot selected) ── */
 .booking-confirm-wrap{
@@ -736,7 +632,7 @@ nav.scrolled{padding:12px 0;border-bottom-color:var(--rule)}
 .booking-confirm-wrap.is-open{max-height:2400px;opacity:1}
 .booking-confirm{
   display:grid;grid-template-columns:5fr 7fr;gap:48px;
-  align-items:center;
+  align-items:start;
   padding:40px 0 0;
   border-top:2px solid var(--tan);
   margin-top:32px;
@@ -840,95 +736,6 @@ nav.scrolled{padding:12px 0;border-bottom-color:var(--rule)}
   position:static;width:auto;height:auto;clip:auto;white-space:normal;
 }
 
-/* ========== MOBILE DAY-PICKER ========== */
-.booking-mobile-picker{
-  display:none;flex-direction:column;gap:0;
-}
-.booking-mobile-dayrail-wrap{
-  overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;
-  margin-bottom:0;
-}
-.booking-mobile-dayrail-wrap::-webkit-scrollbar{display:none}
-.booking-mobile-dayrail{
-  display:flex;gap:0;
-  border-top:1px solid var(--rule-soft);border-left:1px solid var(--rule-soft);
-  min-width:min-content;
-}
-.booking-mobile-day{
-  flex-shrink:0;width:64px;
-  border-right:1px solid var(--rule-soft);border-bottom:1px solid var(--rule-soft);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:4px;padding:10px 6px;cursor:pointer;
-  background:var(--paper);
-  transition:background-color .25s var(--ease),color .25s var(--ease);
-}
-.booking-mobile-day.is-selected{background:var(--forest)}
-.booking-mobile-day-name{
-  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
-  color:var(--ink);opacity:0.74;
-}
-.booking-mobile-day.is-selected .booking-mobile-day-name{color:var(--paper);opacity:0.8}
-.booking-mobile-day-num{
-  font-family:var(--display);font-weight:500;font-size:22px;line-height:1;
-  letter-spacing:-0.02em;color:var(--ink);
-  font-feature-settings:"tnum" 1,"lnum" 1;
-}
-.booking-mobile-day.is-today .booking-mobile-day-num{color:var(--tan-deep)}
-.booking-mobile-day.is-selected .booking-mobile-day-num{color:var(--paper)}
-.booking-mobile-day.is-selected.is-today .booking-mobile-day-num{color:var(--paper)}
-.booking-mobile-slots{
-  border:1px solid var(--rule-soft);border-top:none;
-  display:flex;flex-direction:column;
-}
-/* Mobile slot · same 3 states as desktop; taller rows for touch */
-.booking-mobile-slot{
-  display:flex;align-items:center;justify-content:space-between;
-  min-height:44px;padding:0 18px;
-  border:none;border-bottom:1px solid var(--rule-soft);
-  background:var(--paper);cursor:pointer;
-  font-family:var(--display);font-weight:500;font-size:16px;line-height:1;
-  letter-spacing:-0.005em;color:var(--ink);
-  font-feature-settings:"tnum" 1,"lnum" 1;
-  position:relative;text-align:left;
-  transition:background-color .22s var(--ease),color .22s var(--ease);
-}
-.booking-mobile-slot:last-child{border-bottom:none}
-.booking-mobile-slot-time{display:inline-block;position:relative;z-index:1}
-
-/* State 1 · Available */
-.booking-mobile-slot::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:0;
-  background:var(--tan);transition:width .2s var(--ease);
-}
-.booking-mobile-slot:hover:not(.is-busy):not(.is-selected)::before{width:3px}
-.booking-mobile-slot:hover:not(.is-busy):not(.is-selected){background:rgba(212,163,115,0.06)}
-
-/* State 2 · Selected */
-.booking-mobile-slot.is-selected{background:var(--forest);color:var(--paper)}
-.booking-mobile-slot.is-selected::before{display:none}
-.booking-mobile-slot-check{display:none;position:relative;z-index:1}
-.booking-mobile-slot.is-selected .booking-mobile-slot-check{display:block}
-
-/* State 3 · Busy (booked, past, or outside operating window) */
-.booking-mobile-slot.is-busy{
-  cursor:default;background:var(--paper);
-  color:var(--ink);opacity:0.45;
-}
-.booking-mobile-slot.is-busy::before{display:none}
-.booking-mobile-slot.is-busy::after{
-  content:'';position:absolute;left:18px;right:18px;top:50%;
-  height:1px;background:var(--tan);opacity:0.55;
-  transform:translateY(-0.5px);
-}
-.booking-mobile-slot.is-busy:hover{background:var(--paper)}
-
-.booking-mobile-empty{
-  padding:32px 20px;
-  font-family:var(--body);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
-  color:var(--ink);opacity:0.74;text-align:center;
-}
-
-
 /* collapsed booking form must not be reachable by keyboard */
 .booking-confirm-wrap{visibility:hidden}
 .booking-confirm-wrap.is-open{visibility:visible}
@@ -1015,13 +822,6 @@ footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
   .footer-grid{grid-template-columns:1fr;gap:36px;padding-bottom:40px}
 }
 @media(max-width:680px){
-  /* Booking: week grid and day view give way to the mobile day-picker */
-  .booking-nav{flex-direction:column;align-items:flex-start;gap:12px;padding-bottom:16px}
-  .booking-nav-controls{flex-wrap:wrap;row-gap:10px;column-gap:14px}
-  .booking-view-switch{order:99}
-  .booking-grid{display:none}
-  .booking-day{display:none !important}
-  .booking-mobile-picker{display:flex}
   .booking-confirm{padding:28px 0 0;margin-top:24px}
   .booking-confirm-cta-panel{padding:28px 22px 24px}
   .booking-confirm-strip{flex-direction:column;gap:6px;align-items:flex-start}
@@ -1574,47 +1374,31 @@ footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
     -->
     <div class="contact-flow" id="bookingFlow" data-booking-api="https://script.google.com/macros/s/AKfycbwTwQV-ncFp-jrIzDDxU_jI-x9FQe_iAQ-yOPyR0cY79-mrhy914IM9KZjVbcLVz2GK/exec">
 
-        <!-- Today eyebrow (auto-filled from real-time date) -->
-        <div class="booking-today-eyebrow fade-in" id="bookingTodayEyebrow" aria-live="polite"></div>
-
-        <!-- Week / Day navigator -->
-        <div class="booking-nav fade-in d1">
-          <span class="booking-nav-week" id="bookingNavWeek">Semaine du —</span>
-          <div class="booking-nav-controls">
-            <span class="booking-nav-month" id="bookingNavMonth"></span>
-            <div class="booking-view-switch" role="tablist" aria-label="Vue">
-              <button class="booking-view-btn is-active" id="bookingViewDay" type="button" role="tab" aria-selected="true">
-                <span data-i="bookingViewDay">Jour</span>
+        <!-- Picker: month and arrows, one week of days, the open times of the chosen day -->
+        <div class="bk fade-in" id="bookingPicker">
+          <div class="bk-head">
+            <h3 class="bk-month" id="bookingNavMonth" aria-live="polite"></h3>
+            <div class="bk-arrows">
+              <button class="bk-arrow" id="bookingPrev" type="button" aria-label="Semaine précédente">
+                <svg width="10" height="16" viewBox="0 0 10 16" fill="none" aria-hidden="true">
+                  <path d="M8 2L2 8l6 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
+                </svg>
               </button>
-              <button class="booking-view-btn" id="bookingViewWeek" type="button" role="tab" aria-selected="false">
-                <span data-i="bookingViewWeek">Semaine</span>
+              <button class="bk-arrow" id="bookingNext" type="button" aria-label="Semaine suivante">
+                <svg width="10" height="16" viewBox="0 0 10 16" fill="none" aria-hidden="true">
+                  <path d="M2 2l6 6-6 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
+                </svg>
               </button>
             </div>
-            <button class="booking-nav-btn" id="bookingPrev" type="button" aria-label="Précédent">
-              <svg width="10" height="16" viewBox="0 0 10 16" fill="none" aria-hidden="true">
-                <path d="M8 2L2 8l6 6" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
-              </svg>
-            </button>
-            <button class="booking-nav-btn" id="bookingNext" type="button" aria-label="Suivant">
-              <svg width="10" height="16" viewBox="0 0 10 16" fill="none" aria-hidden="true">
-                <path d="M2 2l6 6-6 6" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
-              </svg>
-            </button>
           </div>
-        </div>
-
-        <!-- Single-day view (default landing surface on desktop) -->
-        <div class="booking-day fade-in d2" id="bookingDay" role="group" aria-label="Créneaux du jour"></div>
-
-        <!-- Desktop 7-column grid (revealed when user toggles to Semaine) -->
-        <div class="booking-grid fade-in d2" id="bookingGrid" role="group" aria-label="Créneaux disponibles" style="display:none;"></div>
-
-        <!-- Mobile day-picker (hidden on desktop) -->
-        <div class="booking-mobile-picker fade-in d2" id="bookingMobilePicker">
-          <div class="booking-mobile-dayrail-wrap">
-            <div class="booking-mobile-dayrail" id="bookingMobileDayrail" role="tablist"></div>
+          <div class="bk-days" id="bookingDays" role="group"></div>
+          <div class="bk-body">
+            <div class="bk-date-row">
+              <span class="bk-date" id="bookingDateLabel" aria-live="polite"></span>
+              <span class="bk-meta" data-i="bookingConfirmMeta">Google Meet · 30 minutes</span>
+            </div>
+            <div class="bk-times" id="bookingTimes" role="group"></div>
           </div>
-          <div class="booking-mobile-slots" id="bookingMobileSlots" role="list"></div>
         </div>
 
         <!-- Zone C · Confirmation panel (hidden until slot selected) -->
@@ -1784,8 +1568,8 @@ footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
 <script>
 (function(){
   const i18n = {
-    fr:{"metaTitle":"SSS | Acquisition de patients pour cliniques dentaires","metaDesc":"Agence marketing qui ne fait que du dentaire. Calculateur RCSD gratuit pour votre site. Six leviers de croissance, 450 $ par mois par clinique.","skipLink":"Aller au contenu","navMethod":"Méthode","navPricing":"Forfait","navTeam":"Équipe","cta":"Calculateur gratuit","eyebrow":"Acquisition de patients dentaires","heroTitle":"Le marketing Google des cliniques dentaires.","heroTitleAccent":"Conçu pour remplir les fauteuils.","heroSub":"Six leviers de croissance, un forfait par clinique. Commencez par le calculateur RCSD : installé gratuitement sur votre site, pendant un appel de 30 minutes.","heroCta":"Réserver l'installation gratuite","heroCtaNote":"Gratuit. Sur Google Meet. Sans engagement.","sheetDay":"Un mardi","sheetChair":"Salle 2","sheetR1":"Examen et nettoyage","sheetR2":"Nouveau patient, examen complet","sheetR3":"Urgence, douleur","sheetR4":"Couronne, préparation","sheetR5":"Examen et nettoyage","sheetOpen":"Libre","sheetNote":"Trois plages libres. Ce matin, des gens de votre quartier cherchent un dentiste sur Google.","fact1":"Associés, tous encore en clinique.","fact2Num":"100 %","fact2":"Dentaire. Aucun autre secteur.","fact3":"Leviers de croissance, un seul forfait.","priceNum":"450 $","fact4":"Par mois, par clinique.","problemLabel":"L'occasion","problemTitleA":"Vos prochains patients cherchent déjà un dentiste sur Google.","problemTitleB":"Notre travail : qu'ils vous trouvent, et qu'ils réservent.","prob1":"Une recherche « dentiste d'urgence » à 22 h","prob1Body":"Votre clinique est la première réponse, avec vos heures et un bouton pour appeler.","prob2":"« Est-ce que le RCSD me couvre ? »","prob2Body":"Le calculateur répond sur votre site, avant même l'appel. Le patient arrive en sachant ce qu'il paiera, et votre réception garde son temps pour la clinique.","prob3":"Des résultats que toute l'équipe peut lire","prob3Body":"Un tableau de bord par clinique et un rapport chaque mois, avec la facture. Levier par levier, vous voyez ce que votre budget a produit, et vous décidez avec des chiffres.","servicesLabel":"La méthode","servicesTitle":"Du clic au fauteuil.","servicesIntro":"Six leviers, quatre étapes. Chacun a ses livrables et sa ligne dans le rapport mensuel.","stage1Name":"Être trouvé","stage1Text":"Un patient cherche un dentiste près de chez lui. Vos annonces sont là au moment de la recherche.","stage2Name":"Être choisi","stage2Text":"Devant trois cliniques sur la carte, le patient compare les fiches et lit les avis.","stage3Name":"Être réservé","stage3Text":"Avant d'appeler, le patient veut savoir s'il est couvert. La réponse est sur votre site.","stage4Name":"Être mesuré","stage4Text":"Chaque levier a sa ligne dans le tableau de bord. Le rapport arrive chaque mois.","svc1Name":"Google Ads : Search et Performance Max","svc1Desc":"Mots-clés, annonces et exclusions suivis de près. Jamais laissés en pilote automatique.","svc4Name":"Google Ads : Display","svc4Desc":"Vos bannières devant les patients de votre secteur, entre deux recherches.","svc2Name":"Fiche d'établissement Google","svc2Desc":"Une fiche complète et tenue à jour, avec une réponse à chaque avis.","svc6Name":"Avis Google par plaquette NFC","svc6Desc":"Une plaquette à la réception. Le patient y pose son téléphone et laisse son avis avant de partir.","svc5Name":"RCSD : moteur de conversion interactif","svc5Desc":"L'admissibilité au RCSD en quatre questions, puis la prise de rendez-vous.","svc5Cue":"Essayer l'outil","svc3Name":"Tableau de bord et rapport mensuel","svc3Desc":"Un tableau de bord par clinique et un rapport chaque mois, lisibles par toute l'équipe.","svcDetailCue":"Livrables","detailCloseLabel":"Fermer","processLabel":"Mise en route","processIntro":"De l'audit aux campagnes actives, en trois étapes.","step1Unit":"min","step1Title":"Audit","step1Desc":"Présence Google, concurrents, occasions locales.","step2Anchor":"Plan","step2Title":"Stratégie","step2Desc":"Plan d'action, budget par levier, cibles mensuelles.","step3Unit":"jours","step3Title":"Mise en ligne","step3Desc":"Campagnes actives. Mesure dès le premier mois.","pricingLabel":"Forfait","pricingMo":"Par mois, par clinique","pricingStatement":"Le même forfait pour chaque clinique.","pricingCta":"Réserver un appel de 30 minutes","pricingMail":"Voir tous les tarifs","pf1Label":"Inclus","pf1Value":"Gestion Google","pf1Note":"Search, Display, Performance Max, fiche Google, tableau de bord par clinique, rapport mensuel, plaquette NFC.","pf2Label":"Mise en service","pf2Value":"500 $, une seule fois","pf2Note":"Mise en place clinique par clinique. Une facture par clinique.","pf3Label":"Budget publicitaire","pf3Value":"En sus, facturé au coût","pf3Note":"Votre budget Google, sans majoration. Aucuns frais cachés.","pf4Label":"Calculateur RCSD","pf4Value":"Inclus, sur mesure","pf4Note":"Ajusté à votre grille d'honoraires, aux couleurs de la clinique.","addonsLabel":"Au-delà du forfait","addon2Name":"Architecture SEO multi-succursales","addon2Desc":"Pour les groupes de trois succursales et plus. Sur demande.","filter":"Aucune caméra. Aucun TikTok. Vous restez dentiste.","fitLabel":"SSS n'est pas pour","fit1":"Les cliniques qui courent après les vues et les abonnés, au lieu des rendez-vous.","fit2":"Les propriétaires et les groupes qui veulent plus de patients, sans devenir créateurs de contenu.","fit3":"Les équipes qui veulent voir leurs résultats chaque mois : direction, gestion, réception.","faqLabel":"Questions","faqTitle":"Les questions avant de réserver.","faq1Q":"Combien ça coûte ?","faq1A":"450 $ par mois, par clinique. La mise en service, 500 $, est facturée une seule fois. Le budget publicitaire Google est en sus, facturé au coût.","faq2Q":"Qu'est-ce qui est inclus dans le forfait ?","faq2A":"Les campagnes Search, Display et Performance Max, la fiche d'établissement Google, le tableau de bord par clinique, le rapport mensuel, la plaquette NFC pour les avis et le calculateur RCSD sur mesure.","faq3Q":"Y a-t-il un contrat à long terme ?","faq3A":"Non. Trois mois au départ, puis au mois, avec un préavis de 30 jours.","faq4Q":"Combien de temps avant que les campagnes soient en ligne ?","faq4A":"14 jours. L'audit prend 30 minutes, le plan suit, puis la mise en ligne. La mesure commence dès le premier mois.","faq6Q":"Travaillez-vous avec les groupes de cliniques ?","faq6A":"Oui. Le forfait et la facture sont établis clinique par clinique. Pour les groupes de trois succursales et plus, une architecture SEO multi-succursales s'ajoute sur demande.","teamLabel":"Équipe","teamTitle":"Trois associés, tous encore en clinique.","teamSub":"Chaque campagne a un responsable. Aucun mot n'est publié sans validation.","hamzaRole":"Fondateur","hamzaName":"Hamza A.","hamzaBio":"Dix ans en marketing. Quatre ans en clinique : appels, urgences, plans de traitement. La majorité des agences n'ont jamais vu ça de l'intérieur.","shayanRole":"Partenaire · Conseiller clinique","shayanName":"Dr Shayan Araghi","shayanBio":"14 ans de pratique clinique. Plusieurs cliniques bâties de zéro. DMD, Université de Montréal. Partenaire stratégique.","aliRole":"Partenaire · Conseiller opérationnel","aliName":"Ali K.","aliBio":"Plus de 10 ans à l'intérieur des cliniques dentaires. Opérations quotidiennes, navigation des assurances, comptabilité clinique, expérience patient. Sait ce qui se passe entre le clic et le fauteuil.","closeLabel":"Réserver","closeTitle":"Un fauteuil vide coûte plus cher qu'un forfait marketing.","closeSub":"30 minutes. Google Meet. Gratuit.","closeCta":"Choisir un créneau","auditLabel":"Ce que l'appel couvre","audit1":"Le calculateur RCSD, installé sur votre site","audit2":"Votre présence sur Google","audit3":"Vos concurrents et les occasions dans votre secteur","bookingConfirmEyebrow":"Votre appel","bookingConfirmMeta":"Google Meet · 30 minutes","bookingConfirmDesc":"Installation du calculateur RCSD, puis un regard sur votre présence Google. Prévu pour le propriétaire ou le gestionnaire de la clinique.","bookingConfirmReset":"← Changer de créneau","bookingConfirmCtaEyebrow":"Réservation","bookingConfirmCtaCopy":"Confirmez votre créneau. Vous recevez la confirmation par courriel aussitôt.","bookingConfirmCta":"Confirmer la réservation","bookingStrip1":"Confirmation immédiate","bookingStrip2":"Aucune carte requise","bookingStrip3":"Annulation libre","bookingPrivacy":"Vos coordonnées servent à confirmer ce rendez-vous et à vous joindre à son sujet. Rien d'autre.","bookingIframeFallback":"Accéder directement au calendrier Google","bookingFieldName":"Nom","bookingFieldEmail":"Courriel","bookingFieldPhone":"Téléphone (facultatif)","bookingFieldClinic":"Clinique (facultatif)","bookingFieldNotes":"Notes (facultatif)","bookingSubmit":"Confirmer la réservation","bookingSubmitting":"Envoi en cours…","bookingSuccessEyebrow":"Réservation confirmée","bookingSuccessMeta":"Vous recevrez sous peu un courriel de confirmation avec un lien Google Meet.","bookingSuccessCta":"Ajouter à Google Agenda","bookingErrMissing":"Veuillez inscrire votre nom et votre courriel.","bookingErrEmail":"Adresse courriel invalide.","bookingErrSlot":"Veuillez choisir un créneau.","bookingErrTaken":"Ce créneau vient d'être réservé. Choisissez-en un autre.","bookingErrTooSoon":"Ce créneau est trop rapproché. Choisissez une heure plus tard.","bookingErrNetwork":"Impossible de joindre le service de réservation. Réessayez ou écrivez à info@sss.marketing.","bookingErrGeneric":"Une erreur est survenue. Réessayez ou écrivez à info@sss.marketing.","bookingViewDay":"Jour","bookingViewWeek":"Semaine","bookingTodayLabel":"Aujourd'hui","bookingDayEmpty":"Aucune disponibilité ce jour-là. Essayez le suivant.","footerTag":"Marketing dentaire, mesuré au fauteuil.","footerNav":"Navigation","footerNavSvc":"Méthode","footerNavProc":"Mise en route","footerNavPrice":"Forfait","footerNavTeam":"Équipe","footerContact":"Contact","footerBook":"Réserver un appel","footerLoc":"Montréal, QC","footerLegal":"© 2026 SSS Marketing. Tous droits réservés. Mesure d'audience anonyme, sans témoins.","heroTry":"Essayer le calculateur","offerLabel":"Gratuit pour les cliniques dentaires","offerTitle":"Le calculateur RCSD. Sur votre site. Gratuit.","offerLede":"« Suis-je admissible au RCSD, et combien vais-je payer ? » Votre réception répond à cette question au téléphone. Votre site peut y répondre à sa place.","offerFact1":"Quatre questions. Moins d'une minute.","offerFact2":"Vos couleurs, le nom de votre clinique.","offerFact3":"En français ou en anglais.","offerFact4":"Un bouton vers votre prise de rendez-vous.","offerDeal":"Le prix : un appel de 30 minutes avec la personne qui décide à la clinique, propriétaire ou gestionnaire. Nous faisons l'installation avec vous. Le badge « Propulsé par SSS » reste affiché. C'est tout.","offerCta":"Réserver l'installation gratuite","offerDemoTag":"Essayez-le comme un patient","pf5Label":"Engagement","pf5Value":"Trois mois au départ","pf5Note":"Ensuite au mois, avec un préavis de 30 jours.","faq0Q":"Le calculateur RCSD est-il vraiment gratuit ?","faq0A":"Oui. Nous l'installons pendant un appel de 30 minutes avec le propriétaire ou le gestionnaire de la clinique. Le badge « Propulsé par SSS » reste affiché. La version sur mesure, ajustée à votre grille d'honoraires, est incluse dans le forfait.","bookingFieldSiteOwner":"Qui gère votre site ? (facultatif)","bookingFieldCms":"Plateforme du site (facultatif)","bookingOptNone":"Choisir","bookingOptUnknown":"Je ne sais pas","bookingOwnerSelf":"Moi","bookingOwnerStaff":"Mon équipe","bookingOwnerAgency":"Une agence","bookingCmsOther":"Autre","bookingNoteOwner":"Site géré par : ","bookingNoteCms":"Plateforme : ","footerNavTarifs":"Tous les tarifs","fitLabel2":"SSS est fait pour"},
-    en:{"metaTitle":"SSS | Patient acquisition for dental clinics","metaDesc":"A marketing agency that only works with dental clinics. Free CDCP calculator for your site. Six growth levers, $450 per month per clinic.","skipLink":"Skip to content","navMethod":"Method","navPricing":"Pricing","navTeam":"Team","cta":"Free calculator","eyebrow":"Dental patient acquisition","heroTitle":"Google marketing for dental clinics.","heroTitleAccent":"Built to fill chairs.","heroSub":"Six growth levers, one plan per clinic. Start with the CDCP calculator: installed on your site, free, during one 30-minute call.","heroCta":"Book the free install","heroCtaNote":"Free. On Google Meet. No commitment.","sheetDay":"A Tuesday","sheetChair":"Room 2","sheetR1":"Exam and cleaning","sheetR2":"New patient, complete exam","sheetR3":"Emergency, pain","sheetR4":"Crown, preparation","sheetR5":"Exam and cleaning","sheetOpen":"Open","sheetNote":"Three open slots. This morning, people in your neighbourhood are searching Google for a dentist.","fact1":"Partners, all still working in clinics.","fact2Num":"100%","fact2":"Dental. No other industry.","fact3":"Growth levers, one plan.","priceNum":"$450","fact4":"Per month, per clinic.","problemLabel":"The opportunity","problemTitleA":"Your next patients are already searching Google for a dentist.","problemTitleB":"Our job: they find you, and they book.","prob1":"A 10 p.m. search for an emergency dentist","prob1Body":"Your clinic is the first answer, with your hours and a button to call.","prob2":"“Does the CDCP cover me?”","prob2Body":"The calculator answers on your site, before the call. The patient arrives knowing what they will pay, and your front desk keeps its time for the clinic.","prob3":"Results the whole team can read","prob3Body":"One dashboard per clinic and a report every month, with the invoice. Lever by lever, you see what your budget produced, and you decide with the numbers in front of you.","servicesLabel":"The method","servicesTitle":"From the click to the chair.","servicesIntro":"Six levers, four stages. Each one has its deliverables and its line in the monthly report.","stage1Name":"Get found","stage1Text":"A patient searches for a dentist nearby. Your ads are there at the moment of the search.","stage2Name":"Get chosen","stage2Text":"With three clinics on the map, the patient compares the profiles and reads the reviews.","stage3Name":"Get booked","stage3Text":"Before calling, the patient wants to know if they are covered. The answer is on your site.","stage4Name":"Get measured","stage4Text":"Every lever has its line on the dashboard. The report arrives every month.","svc1Name":"Google Ads: Search and Performance Max","svc1Desc":"Keywords, ads and exclusions watched closely. Never left on autopilot.","svc4Name":"Google Ads: Display","svc4Desc":"Your banners in front of patients in your area, between searches.","svc2Name":"Google Business Profile","svc2Desc":"A complete, current profile, with a reply to every review.","svc6Name":"Google reviews by NFC pad","svc6Desc":"A pad at the front desk. The patient taps it with their phone and leaves a review before leaving.","svc5Name":"CDCP interactive conversion engine","svc5Desc":"CDCP eligibility in four questions, then the booking.","svc5Cue":"Try the tool","svc3Name":"Dashboard and monthly report","svc3Desc":"One dashboard per clinic and a report every month, readable by the whole team.","svcDetailCue":"Deliverables","detailCloseLabel":"Close","processLabel":"Getting started","processIntro":"From the audit to live campaigns, in three steps.","step1Unit":"min","step1Title":"Audit","step1Desc":"Google presence, competitors, local opportunities.","step2Anchor":"Plan","step2Title":"Strategy","step2Desc":"Action plan, budget per lever, monthly targets.","step3Unit":"days","step3Title":"Launch","step3Desc":"Campaigns live. Measured from the first month.","pricingLabel":"Pricing","pricingMo":"Per month, per clinic","pricingStatement":"The same plan for every clinic.","pricingCta":"Book a 30-minute call","pricingMail":"See all pricing","pf1Label":"Included","pf1Value":"Google management","pf1Note":"Search, Display, Performance Max, Google Business Profile, per-clinic dashboard, monthly report, NFC pad.","pf2Label":"Setup","pf2Value":"$500, one time","pf2Note":"Set up clinic by clinic. One invoice per clinic.","pf3Label":"Ad budget","pf3Value":"Extra, billed at cost","pf3Note":"Your Google budget, with no markup. No hidden fees.","pf4Label":"CDCP calculator","pf4Value":"Included, custom","pf4Note":"Set to your fee schedule, in your clinic's colours.","addonsLabel":"Beyond the plan","addon2Name":"Multi-location SEO architecture","addon2Desc":"For groups of three locations or more. On request.","filter":"No camera. No TikTok. You stay a dentist.","fitLabel":"SSS is not for","fit1":"Clinics chasing views and followers instead of booked appointments.","fit2":"Owners and groups who want more patients without becoming content creators.","fit3":"Teams that want to see their results every month: owners, managers, front desk.","faqLabel":"Questions","faqTitle":"The questions before booking.","faq1Q":"How much does it cost?","faq1A":"$450 per month, per clinic. Setup, $500, is billed once. The Google ad budget is extra, billed at cost.","faq2Q":"What is included in the plan?","faq2A":"Search, Display and Performance Max campaigns, the Google Business Profile, the per-clinic dashboard, the monthly report, the NFC pad for reviews and the custom CDCP calculator.","faq3Q":"Is there a long-term contract?","faq3A":"No. Three months to start, then month to month, with 30 days' notice.","faq4Q":"How long before campaigns are live?","faq4A":"14 days. The audit takes 30 minutes, the plan follows, then the launch. Measurement starts in the first month.","faq6Q":"Do you work with clinic groups?","faq6A":"Yes. The plan and the invoice are set clinic by clinic. For groups of three locations or more, a multi-location SEO architecture can be added on request.","teamLabel":"Team","teamTitle":"Three partners, all still working in clinics.","teamSub":"Every campaign has an owner. Nothing is published without review.","hamzaRole":"Founder","hamzaName":"Hamza A.","hamzaBio":"Ten years in marketing. Four years inside a clinic: phones, emergencies, treatment plans. Most agencies haven't seen this from the inside.","shayanRole":"Partner · Clinical advisor","shayanName":"Dr. Shayan Araghi","shayanBio":"14 years of clinical practice. Several clinics built from scratch. DMD, Université de Montréal. Strategic partner.","aliRole":"Partner · Operations advisor","aliName":"Ali K.","aliBio":"10+ years inside dental clinics. Daily operations, insurance navigation, clinic accounting, patient experience. Knows exactly what happens between the click and the chair.","closeLabel":"Book","closeTitle":"An empty chair costs more than a marketing plan.","closeSub":"30 minutes. Google Meet. Free.","closeCta":"Pick a time","auditLabel":"What the call covers","audit1":"The CDCP calculator, installed on your site","audit2":"Your presence on Google","audit3":"Your competitors and the opportunities in your area","bookingConfirmEyebrow":"Your call","bookingConfirmMeta":"Google Meet · 30 minutes","bookingConfirmDesc":"CDCP calculator install, then a look at your Google presence. Meant for the clinic's owner or practice manager.","bookingConfirmReset":"← Change the time","bookingConfirmCtaEyebrow":"Booking","bookingConfirmCtaCopy":"Confirm your time. The confirmation arrives by email right away.","bookingConfirmCta":"Confirm booking","bookingStrip1":"Instant confirmation","bookingStrip2":"No card required","bookingStrip3":"Cancel anytime","bookingPrivacy":"Your details are used to confirm this appointment and to reach you about it. Nothing else.","bookingIframeFallback":"Open Google Calendar directly","bookingFieldName":"Name","bookingFieldEmail":"Email","bookingFieldPhone":"Phone (optional)","bookingFieldClinic":"Clinic (optional)","bookingFieldNotes":"Notes (optional)","bookingSubmit":"Confirm booking","bookingSubmitting":"Sending…","bookingSuccessEyebrow":"Booking confirmed","bookingSuccessMeta":"A confirmation email with a Google Meet link is on its way.","bookingSuccessCta":"Add to Google Calendar","bookingErrMissing":"Please enter your name and email.","bookingErrEmail":"Invalid email address.","bookingErrSlot":"Please pick a time.","bookingErrTaken":"That time was just booked. Please pick another.","bookingErrTooSoon":"That time is too soon. Please pick a later one.","bookingErrNetwork":"Could not reach the booking service. Please retry or email info@sss.marketing.","bookingErrGeneric":"Something went wrong. Please retry or email info@sss.marketing.","bookingViewDay":"Day","bookingViewWeek":"Week","bookingTodayLabel":"Today","bookingDayEmpty":"No availability that day. Try the next one.","footerTag":"Dental marketing, measured at the chair.","footerNav":"Navigation","footerNavSvc":"Method","footerNavProc":"Getting started","footerNavPrice":"Pricing","footerNavTeam":"Team","footerContact":"Contact","footerBook":"Book a call","footerLoc":"Montreal, QC","footerLegal":"© 2026 SSS Marketing. All rights reserved. Anonymous visit counts, no cookies.","heroTry":"Try the calculator","offerLabel":"Free for dental clinics","offerTitle":"The CDCP calculator. On your site. Free.","offerLede":"“Do I qualify for the CDCP, and what will I pay?” Your front desk answers that question on the phone. Your website can answer it instead.","offerFact1":"Four questions. Under a minute.","offerFact2":"Your colours, your clinic's name.","offerFact3":"English or French.","offerFact4":"A button to your booking page.","offerDeal":"The price: one 30-minute call with the person who makes decisions at the clinic, the owner or the practice manager. We do the install with you. The “Powered by SSS” badge stays on. That's the whole deal.","offerCta":"Book the free install","offerDemoTag":"Try it as a patient would","pf5Label":"Term","pf5Value":"Three months to start","pf5Note":"Then month to month, with 30 days' notice.","faq0Q":"Is the CDCP calculator really free?","faq0A":"Yes. We install it during one 30-minute call with the clinic's owner or practice manager. The “Powered by SSS” badge stays on. The custom version, set to your fee schedule, is included in the plan.","bookingFieldSiteOwner":"Who manages your website? (optional)","bookingFieldCms":"Website platform (optional)","bookingOptNone":"Select","bookingOptUnknown":"Not sure","bookingOwnerSelf":"Me","bookingOwnerStaff":"My staff","bookingOwnerAgency":"An agency","bookingCmsOther":"Other","bookingNoteOwner":"Site managed by: ","bookingNoteCms":"Platform: ","footerNavTarifs":"All pricing","fitLabel2":"SSS is built for"}
+    fr:{"metaTitle":"SSS | Acquisition de patients pour cliniques dentaires","metaDesc":"Agence marketing qui ne fait que du dentaire. Calculateur RCSD gratuit pour votre site. Six leviers de croissance, 450 $ par mois par clinique.","skipLink":"Aller au contenu","navMethod":"Méthode","navPricing":"Forfait","navTeam":"Équipe","cta":"Calculateur gratuit","eyebrow":"Acquisition de patients dentaires","heroTitle":"Le marketing Google des cliniques dentaires.","heroTitleAccent":"Conçu pour remplir les fauteuils.","heroSub":"Six leviers de croissance, un forfait par clinique. Commencez par le calculateur RCSD : installé gratuitement sur votre site, pendant un appel de 30 minutes.","heroCta":"Réserver l'installation gratuite","heroCtaNote":"Gratuit. Sur Google Meet. Sans engagement.","sheetDay":"Un mardi","sheetChair":"Salle 2","sheetR1":"Examen et nettoyage","sheetR2":"Nouveau patient, examen complet","sheetR3":"Urgence, douleur","sheetR4":"Couronne, préparation","sheetR5":"Examen et nettoyage","sheetOpen":"Libre","sheetNote":"Trois plages libres. Ce matin, des gens de votre quartier cherchent un dentiste sur Google.","fact1":"Associés, tous encore en clinique.","fact2Num":"100 %","fact2":"Dentaire. Aucun autre secteur.","fact3":"Leviers de croissance, un seul forfait.","priceNum":"450 $","fact4":"Par mois, par clinique.","problemLabel":"L'occasion","problemTitleA":"Vos prochains patients cherchent déjà un dentiste sur Google.","problemTitleB":"Notre travail : qu'ils vous trouvent, et qu'ils réservent.","prob1":"Une recherche « dentiste d'urgence » à 22 h","prob1Body":"Votre clinique est la première réponse, avec vos heures et un bouton pour appeler.","prob2":"« Est-ce que le RCSD me couvre ? »","prob2Body":"Le calculateur répond sur votre site, avant même l'appel. Le patient arrive en sachant ce qu'il paiera, et votre réception garde son temps pour la clinique.","prob3":"Des résultats que toute l'équipe peut lire","prob3Body":"Un tableau de bord par clinique et un rapport chaque mois, avec la facture. Levier par levier, vous voyez ce que votre budget a produit, et vous décidez avec des chiffres.","servicesLabel":"La méthode","servicesTitle":"Du clic au fauteuil.","servicesIntro":"Six leviers, quatre étapes. Chacun a ses livrables et sa ligne dans le rapport mensuel.","stage1Name":"Être trouvé","stage1Text":"Un patient cherche un dentiste près de chez lui. Vos annonces sont là au moment de la recherche.","stage2Name":"Être choisi","stage2Text":"Devant trois cliniques sur la carte, le patient compare les fiches et lit les avis.","stage3Name":"Être réservé","stage3Text":"Avant d'appeler, le patient veut savoir s'il est couvert. La réponse est sur votre site.","stage4Name":"Être mesuré","stage4Text":"Chaque levier a sa ligne dans le tableau de bord. Le rapport arrive chaque mois.","svc1Name":"Google Ads : Search et Performance Max","svc1Desc":"Mots-clés, annonces et exclusions suivis de près. Jamais laissés en pilote automatique.","svc4Name":"Google Ads : Display","svc4Desc":"Vos bannières devant les patients de votre secteur, entre deux recherches.","svc2Name":"Fiche d'établissement Google","svc2Desc":"Une fiche complète et tenue à jour, avec une réponse à chaque avis.","svc6Name":"Avis Google par plaquette NFC","svc6Desc":"Une plaquette à la réception. Le patient y pose son téléphone et laisse son avis avant de partir.","svc5Name":"RCSD : moteur de conversion interactif","svc5Desc":"L'admissibilité au RCSD en quatre questions, puis la prise de rendez-vous.","svc5Cue":"Essayer l'outil","svc3Name":"Tableau de bord et rapport mensuel","svc3Desc":"Un tableau de bord par clinique et un rapport chaque mois, lisibles par toute l'équipe.","svcDetailCue":"Livrables","detailCloseLabel":"Fermer","processLabel":"Mise en route","processIntro":"De l'audit aux campagnes actives, en trois étapes.","step1Unit":"min","step1Title":"Audit","step1Desc":"Présence Google, concurrents, occasions locales.","step2Anchor":"Plan","step2Title":"Stratégie","step2Desc":"Plan d'action, budget par levier, cibles mensuelles.","step3Unit":"jours","step3Title":"Mise en ligne","step3Desc":"Campagnes actives. Mesure dès le premier mois.","pricingLabel":"Forfait","pricingMo":"Par mois, par clinique","pricingStatement":"Le même forfait pour chaque clinique.","pricingCta":"Réserver un appel de 30 minutes","pricingMail":"Voir tous les tarifs","pf1Label":"Inclus","pf1Value":"Gestion Google","pf1Note":"Search, Display, Performance Max, fiche Google, tableau de bord par clinique, rapport mensuel, plaquette NFC.","pf2Label":"Mise en service","pf2Value":"500 $, une seule fois","pf2Note":"Mise en place clinique par clinique. Une facture par clinique.","pf3Label":"Budget publicitaire","pf3Value":"En sus, facturé au coût","pf3Note":"Votre budget Google, sans majoration. Aucuns frais cachés.","pf4Label":"Calculateur RCSD","pf4Value":"Inclus, sur mesure","pf4Note":"Ajusté à votre grille d'honoraires, aux couleurs de la clinique.","addonsLabel":"Au-delà du forfait","addon2Name":"Architecture SEO multi-succursales","addon2Desc":"Pour les groupes de trois succursales et plus. Sur demande.","filter":"Aucune caméra. Aucun TikTok. Vous restez dentiste.","fitLabel":"SSS n'est pas pour","fit1":"Les cliniques qui courent après les vues et les abonnés, au lieu des rendez-vous.","fit2":"Les propriétaires et les groupes qui veulent plus de patients, sans devenir créateurs de contenu.","fit3":"Les équipes qui veulent voir leurs résultats chaque mois : direction, gestion, réception.","faqLabel":"Questions","faqTitle":"Les questions avant de réserver.","faq1Q":"Combien ça coûte ?","faq1A":"450 $ par mois, par clinique. La mise en service, 500 $, est facturée une seule fois. Le budget publicitaire Google est en sus, facturé au coût.","faq2Q":"Qu'est-ce qui est inclus dans le forfait ?","faq2A":"Les campagnes Search, Display et Performance Max, la fiche d'établissement Google, le tableau de bord par clinique, le rapport mensuel, la plaquette NFC pour les avis et le calculateur RCSD sur mesure.","faq3Q":"Y a-t-il un contrat à long terme ?","faq3A":"Non. Trois mois au départ, puis au mois, avec un préavis de 30 jours.","faq4Q":"Combien de temps avant que les campagnes soient en ligne ?","faq4A":"14 jours. L'audit prend 30 minutes, le plan suit, puis la mise en ligne. La mesure commence dès le premier mois.","faq6Q":"Travaillez-vous avec les groupes de cliniques ?","faq6A":"Oui. Le forfait et la facture sont établis clinique par clinique. Pour les groupes de trois succursales et plus, une architecture SEO multi-succursales s'ajoute sur demande.","teamLabel":"Équipe","teamTitle":"Trois associés, tous encore en clinique.","teamSub":"Chaque campagne a un responsable. Aucun mot n'est publié sans validation.","hamzaRole":"Fondateur","hamzaName":"Hamza A.","hamzaBio":"Dix ans en marketing. Quatre ans en clinique : appels, urgences, plans de traitement. La majorité des agences n'ont jamais vu ça de l'intérieur.","shayanRole":"Partenaire · Conseiller clinique","shayanName":"Dr Shayan Araghi","shayanBio":"14 ans de pratique clinique. Plusieurs cliniques bâties de zéro. DMD, Université de Montréal. Partenaire stratégique.","aliRole":"Partenaire · Conseiller opérationnel","aliName":"Ali K.","aliBio":"Plus de 10 ans à l'intérieur des cliniques dentaires. Opérations quotidiennes, navigation des assurances, comptabilité clinique, expérience patient. Sait ce qui se passe entre le clic et le fauteuil.","closeLabel":"Réserver","closeTitle":"Un fauteuil vide coûte plus cher qu'un forfait marketing.","closeSub":"30 minutes. Google Meet. Gratuit.","closeCta":"Choisir un créneau","auditLabel":"Ce que l'appel couvre","audit1":"Le calculateur RCSD, installé sur votre site","audit2":"Votre présence sur Google","audit3":"Vos concurrents et les occasions dans votre secteur","bookingConfirmEyebrow":"Votre appel","bookingConfirmMeta":"Google Meet · 30 minutes","bookingConfirmDesc":"Installation du calculateur RCSD, puis un regard sur votre présence Google. Prévu pour le propriétaire ou le gestionnaire de la clinique.","bookingConfirmReset":"← Changer de créneau","bookingConfirmCtaEyebrow":"Réservation","bookingConfirmCtaCopy":"Confirmez votre créneau. Vous recevez la confirmation par courriel aussitôt.","bookingConfirmCta":"Confirmer la réservation","bookingStrip1":"Confirmation immédiate","bookingStrip2":"Aucune carte requise","bookingStrip3":"Annulation libre","bookingPrivacy":"Vos coordonnées servent à confirmer ce rendez-vous et à vous joindre à son sujet. Rien d'autre.","bookingIframeFallback":"Accéder directement au calendrier Google","bookingFieldName":"Nom","bookingFieldEmail":"Courriel","bookingFieldPhone":"Téléphone (facultatif)","bookingFieldClinic":"Clinique (facultatif)","bookingFieldNotes":"Notes (facultatif)","bookingSubmit":"Confirmer la réservation","bookingSubmitting":"Envoi en cours…","bookingSuccessEyebrow":"Réservation confirmée","bookingSuccessMeta":"Vous recevrez sous peu un courriel de confirmation avec un lien Google Meet.","bookingSuccessCta":"Ajouter à Google Agenda","bookingErrMissing":"Veuillez inscrire votre nom et votre courriel.","bookingErrEmail":"Adresse courriel invalide.","bookingErrSlot":"Veuillez choisir un créneau.","bookingErrTaken":"Ce créneau vient d'être réservé. Choisissez-en un autre.","bookingErrTooSoon":"Ce créneau est trop rapproché. Choisissez une heure plus tard.","bookingErrNetwork":"Impossible de joindre le service de réservation. Réessayez ou écrivez à info@sss.marketing.","bookingErrGeneric":"Une erreur est survenue. Réessayez ou écrivez à info@sss.marketing.","bookingViewDay":"Jour","bookingViewWeek":"Semaine","bookingTodayLabel":"Aujourd'hui","bookingDayEmpty":"Aucune disponibilité ce jour-là. Essayez le suivant.","footerTag":"Marketing dentaire, mesuré au fauteuil.","footerNav":"Navigation","footerNavSvc":"Méthode","footerNavProc":"Mise en route","footerNavPrice":"Forfait","footerNavTeam":"Équipe","footerContact":"Contact","footerBook":"Réserver un appel","footerLoc":"Montréal, QC","footerLegal":"© 2026 SSS Marketing. Tous droits réservés. Mesure d'audience anonyme, sans témoins.","heroTry":"Essayer le calculateur","offerLabel":"Gratuit pour les cliniques dentaires","offerTitle":"Le calculateur RCSD. Sur votre site. Gratuit.","offerLede":"« Suis-je admissible au RCSD, et combien vais-je payer ? » Votre réception répond à cette question au téléphone. Votre site peut y répondre à sa place.","offerFact1":"Quatre questions. Moins d'une minute.","offerFact2":"Vos couleurs, le nom de votre clinique.","offerFact3":"En français ou en anglais.","offerFact4":"Un bouton vers votre prise de rendez-vous.","offerDeal":"Le prix : un appel de 30 minutes avec la personne qui décide à la clinique, propriétaire ou gestionnaire. Nous faisons l'installation avec vous. Le badge « Propulsé par SSS » reste affiché. C'est tout.","offerCta":"Réserver l'installation gratuite","offerDemoTag":"Essayez-le comme un patient","pf5Label":"Engagement","pf5Value":"Trois mois au départ","pf5Note":"Ensuite au mois, avec un préavis de 30 jours.","faq0Q":"Le calculateur RCSD est-il vraiment gratuit ?","faq0A":"Oui. Nous l'installons pendant un appel de 30 minutes avec le propriétaire ou le gestionnaire de la clinique. Le badge « Propulsé par SSS » reste affiché. La version sur mesure, ajustée à votre grille d'honoraires, est incluse dans le forfait.","bookingFieldSiteOwner":"Qui gère votre site ? (facultatif)","bookingFieldCms":"Plateforme du site (facultatif)","bookingOptNone":"Choisir","bookingOptUnknown":"Je ne sais pas","bookingOwnerSelf":"Moi","bookingOwnerStaff":"Mon équipe","bookingOwnerAgency":"Une agence","bookingCmsOther":"Autre","bookingNoteOwner":"Site géré par : ","bookingNoteCms":"Plateforme : ","footerNavTarifs":"Tous les tarifs","fitLabel2":"SSS est fait pour","bookingWeekEmpty":"Aucune disponibilité cette semaine. Voyez la suivante."},
+    en:{"metaTitle":"SSS | Patient acquisition for dental clinics","metaDesc":"A marketing agency that only works with dental clinics. Free CDCP calculator for your site. Six growth levers, $450 per month per clinic.","skipLink":"Skip to content","navMethod":"Method","navPricing":"Pricing","navTeam":"Team","cta":"Free calculator","eyebrow":"Dental patient acquisition","heroTitle":"Google marketing for dental clinics.","heroTitleAccent":"Built to fill chairs.","heroSub":"Six growth levers, one plan per clinic. Start with the CDCP calculator: installed on your site, free, during one 30-minute call.","heroCta":"Book the free install","heroCtaNote":"Free. On Google Meet. No commitment.","sheetDay":"A Tuesday","sheetChair":"Room 2","sheetR1":"Exam and cleaning","sheetR2":"New patient, complete exam","sheetR3":"Emergency, pain","sheetR4":"Crown, preparation","sheetR5":"Exam and cleaning","sheetOpen":"Open","sheetNote":"Three open slots. This morning, people in your neighbourhood are searching Google for a dentist.","fact1":"Partners, all still working in clinics.","fact2Num":"100%","fact2":"Dental. No other industry.","fact3":"Growth levers, one plan.","priceNum":"$450","fact4":"Per month, per clinic.","problemLabel":"The opportunity","problemTitleA":"Your next patients are already searching Google for a dentist.","problemTitleB":"Our job: they find you, and they book.","prob1":"A 10 p.m. search for an emergency dentist","prob1Body":"Your clinic is the first answer, with your hours and a button to call.","prob2":"“Does the CDCP cover me?”","prob2Body":"The calculator answers on your site, before the call. The patient arrives knowing what they will pay, and your front desk keeps its time for the clinic.","prob3":"Results the whole team can read","prob3Body":"One dashboard per clinic and a report every month, with the invoice. Lever by lever, you see what your budget produced, and you decide with the numbers in front of you.","servicesLabel":"The method","servicesTitle":"From the click to the chair.","servicesIntro":"Six levers, four stages. Each one has its deliverables and its line in the monthly report.","stage1Name":"Get found","stage1Text":"A patient searches for a dentist nearby. Your ads are there at the moment of the search.","stage2Name":"Get chosen","stage2Text":"With three clinics on the map, the patient compares the profiles and reads the reviews.","stage3Name":"Get booked","stage3Text":"Before calling, the patient wants to know if they are covered. The answer is on your site.","stage4Name":"Get measured","stage4Text":"Every lever has its line on the dashboard. The report arrives every month.","svc1Name":"Google Ads: Search and Performance Max","svc1Desc":"Keywords, ads and exclusions watched closely. Never left on autopilot.","svc4Name":"Google Ads: Display","svc4Desc":"Your banners in front of patients in your area, between searches.","svc2Name":"Google Business Profile","svc2Desc":"A complete, current profile, with a reply to every review.","svc6Name":"Google reviews by NFC pad","svc6Desc":"A pad at the front desk. The patient taps it with their phone and leaves a review before leaving.","svc5Name":"CDCP interactive conversion engine","svc5Desc":"CDCP eligibility in four questions, then the booking.","svc5Cue":"Try the tool","svc3Name":"Dashboard and monthly report","svc3Desc":"One dashboard per clinic and a report every month, readable by the whole team.","svcDetailCue":"Deliverables","detailCloseLabel":"Close","processLabel":"Getting started","processIntro":"From the audit to live campaigns, in three steps.","step1Unit":"min","step1Title":"Audit","step1Desc":"Google presence, competitors, local opportunities.","step2Anchor":"Plan","step2Title":"Strategy","step2Desc":"Action plan, budget per lever, monthly targets.","step3Unit":"days","step3Title":"Launch","step3Desc":"Campaigns live. Measured from the first month.","pricingLabel":"Pricing","pricingMo":"Per month, per clinic","pricingStatement":"The same plan for every clinic.","pricingCta":"Book a 30-minute call","pricingMail":"See all pricing","pf1Label":"Included","pf1Value":"Google management","pf1Note":"Search, Display, Performance Max, Google Business Profile, per-clinic dashboard, monthly report, NFC pad.","pf2Label":"Setup","pf2Value":"$500, one time","pf2Note":"Set up clinic by clinic. One invoice per clinic.","pf3Label":"Ad budget","pf3Value":"Extra, billed at cost","pf3Note":"Your Google budget, with no markup. No hidden fees.","pf4Label":"CDCP calculator","pf4Value":"Included, custom","pf4Note":"Set to your fee schedule, in your clinic's colours.","addonsLabel":"Beyond the plan","addon2Name":"Multi-location SEO architecture","addon2Desc":"For groups of three locations or more. On request.","filter":"No camera. No TikTok. You stay a dentist.","fitLabel":"SSS is not for","fit1":"Clinics chasing views and followers instead of booked appointments.","fit2":"Owners and groups who want more patients without becoming content creators.","fit3":"Teams that want to see their results every month: owners, managers, front desk.","faqLabel":"Questions","faqTitle":"The questions before booking.","faq1Q":"How much does it cost?","faq1A":"$450 per month, per clinic. Setup, $500, is billed once. The Google ad budget is extra, billed at cost.","faq2Q":"What is included in the plan?","faq2A":"Search, Display and Performance Max campaigns, the Google Business Profile, the per-clinic dashboard, the monthly report, the NFC pad for reviews and the custom CDCP calculator.","faq3Q":"Is there a long-term contract?","faq3A":"No. Three months to start, then month to month, with 30 days' notice.","faq4Q":"How long before campaigns are live?","faq4A":"14 days. The audit takes 30 minutes, the plan follows, then the launch. Measurement starts in the first month.","faq6Q":"Do you work with clinic groups?","faq6A":"Yes. The plan and the invoice are set clinic by clinic. For groups of three locations or more, a multi-location SEO architecture can be added on request.","teamLabel":"Team","teamTitle":"Three partners, all still working in clinics.","teamSub":"Every campaign has an owner. Nothing is published without review.","hamzaRole":"Founder","hamzaName":"Hamza A.","hamzaBio":"Ten years in marketing. Four years inside a clinic: phones, emergencies, treatment plans. Most agencies haven't seen this from the inside.","shayanRole":"Partner · Clinical advisor","shayanName":"Dr. Shayan Araghi","shayanBio":"14 years of clinical practice. Several clinics built from scratch. DMD, Université de Montréal. Strategic partner.","aliRole":"Partner · Operations advisor","aliName":"Ali K.","aliBio":"10+ years inside dental clinics. Daily operations, insurance navigation, clinic accounting, patient experience. Knows exactly what happens between the click and the chair.","closeLabel":"Book","closeTitle":"An empty chair costs more than a marketing plan.","closeSub":"30 minutes. Google Meet. Free.","closeCta":"Pick a time","auditLabel":"What the call covers","audit1":"The CDCP calculator, installed on your site","audit2":"Your presence on Google","audit3":"Your competitors and the opportunities in your area","bookingConfirmEyebrow":"Your call","bookingConfirmMeta":"Google Meet · 30 minutes","bookingConfirmDesc":"CDCP calculator install, then a look at your Google presence. Meant for the clinic's owner or practice manager.","bookingConfirmReset":"← Change the time","bookingConfirmCtaEyebrow":"Booking","bookingConfirmCtaCopy":"Confirm your time. The confirmation arrives by email right away.","bookingConfirmCta":"Confirm booking","bookingStrip1":"Instant confirmation","bookingStrip2":"No card required","bookingStrip3":"Cancel anytime","bookingPrivacy":"Your details are used to confirm this appointment and to reach you about it. Nothing else.","bookingIframeFallback":"Open Google Calendar directly","bookingFieldName":"Name","bookingFieldEmail":"Email","bookingFieldPhone":"Phone (optional)","bookingFieldClinic":"Clinic (optional)","bookingFieldNotes":"Notes (optional)","bookingSubmit":"Confirm booking","bookingSubmitting":"Sending…","bookingSuccessEyebrow":"Booking confirmed","bookingSuccessMeta":"A confirmation email with a Google Meet link is on its way.","bookingSuccessCta":"Add to Google Calendar","bookingErrMissing":"Please enter your name and email.","bookingErrEmail":"Invalid email address.","bookingErrSlot":"Please pick a time.","bookingErrTaken":"That time was just booked. Please pick another.","bookingErrTooSoon":"That time is too soon. Please pick a later one.","bookingErrNetwork":"Could not reach the booking service. Please retry or email info@sss.marketing.","bookingErrGeneric":"Something went wrong. Please retry or email info@sss.marketing.","bookingViewDay":"Day","bookingViewWeek":"Week","bookingTodayLabel":"Today","bookingDayEmpty":"No availability that day. Try the next one.","footerTag":"Dental marketing, measured at the chair.","footerNav":"Navigation","footerNavSvc":"Method","footerNavProc":"Getting started","footerNavPrice":"Pricing","footerNavTeam":"Team","footerContact":"Contact","footerBook":"Book a call","footerLoc":"Montreal, QC","footerLegal":"© 2026 SSS Marketing. All rights reserved. Anonymous visit counts, no cookies.","heroTry":"Try the calculator","offerLabel":"Free for dental clinics","offerTitle":"The CDCP calculator. On your site. Free.","offerLede":"“Do I qualify for the CDCP, and what will I pay?” Your front desk answers that question on the phone. Your website can answer it instead.","offerFact1":"Four questions. Under a minute.","offerFact2":"Your colours, your clinic's name.","offerFact3":"English or French.","offerFact4":"A button to your booking page.","offerDeal":"The price: one 30-minute call with the person who makes decisions at the clinic, the owner or the practice manager. We do the install with you. The “Powered by SSS” badge stays on. That's the whole deal.","offerCta":"Book the free install","offerDemoTag":"Try it as a patient would","pf5Label":"Term","pf5Value":"Three months to start","pf5Note":"Then month to month, with 30 days' notice.","faq0Q":"Is the CDCP calculator really free?","faq0A":"Yes. We install it during one 30-minute call with the clinic's owner or practice manager. The “Powered by SSS” badge stays on. The custom version, set to your fee schedule, is included in the plan.","bookingFieldSiteOwner":"Who manages your website? (optional)","bookingFieldCms":"Website platform (optional)","bookingOptNone":"Select","bookingOptUnknown":"Not sure","bookingOwnerSelf":"Me","bookingOwnerStaff":"My staff","bookingOwnerAgency":"An agency","bookingCmsOther":"Other","bookingNoteOwner":"Site managed by: ","bookingNoteCms":"Platform: ","footerNavTarifs":"All pricing","fitLabel2":"SSS is built for","bookingWeekEmpty":"Nothing open this week. Try the next one."}
   };
 
   const svcDetail = {
@@ -1984,15 +1768,15 @@ footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
     }
 
     // State ────────────────────────────────────────────────────────────────
-    // Day view is the default landing surface; week grid is opt-in via toggle.
+    // One week of days on screen. The first day with an opening is chosen for
+    // the visitor; only bookable times are drawn.
+    var MAX_AHEAD_DAYS = 45;               // mirrors MAX_ADVANCE_DAYS in booking.gs
     var today = new Date(); today.setHours(0,0,0,0);
-    var selectedDay      = new Date(today);
-    var currentWeekStart = getWeekStart(selectedDay);
-    var currentView      = 'day';          // 'day' | 'week'
-    var selectedSlot = null; // {date: Date, time: '12:30', key: 'YYYY-MM-DD|HH:MM'}
-    var isMobile = false;
-    var mobileDayIndex = 0;
-    var pendingRaf = null;
+    var currentWeekStart = getWeekStart(today);
+    var selectedDay  = null;               // Date shown in the times list
+    var selectedSlot = null;               // {date: Date, time: '14:30', key: 'YYYY-MM-DD|HH:MM'}
+    var autoAdvance  = true;               // until the visitor uses the arrows, skip ahead to the first open week
+    var API_LOADED_DATES = Object.create(null);
 
     function getWeekStart(d){
       var dt = new Date(d);
@@ -2005,346 +1789,181 @@ footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
     function addDays(d,n){var dt=new Date(d);dt.setDate(dt.getDate()+n);return dt;}
     function dateKey(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
     function slotKey(d,t){return dateKey(d)+'|'+t;}
-    function isToday(d){var t=new Date();return dateKey(d)===dateKey(t);}
+    function isToday(d){return dateKey(d)===dateKey(new Date());}
     function isSameDay(a,b){return dateKey(a)===dateKey(b);}
+    function inWeek(d){return d>=currentWeekStart && d<addDays(currentWeekStart,7);}
     function isPast(d,t){
-      var now=new Date();
       var parts=t.split(':');
       var dt=new Date(d);
-      dt.setHours(parseInt(parts[0]),parseInt(parts[1]),0,0);
-      return dt<=now;
+      dt.setHours(parseInt(parts[0],10),parseInt(parts[1],10),0,0);
+      return dt<=new Date();
     }
+    function lastBookableDay(){return addDays(today,MAX_AHEAD_DAYS);}
 
     // ── Language helpers ─────────────────────────────────────────────────────
     function getLang(){return document.documentElement.lang||'fr'}
-    function fmtWeekLabel(d){
-      var loc=getLang()==='en'?'en-CA':'fr-CA';
-      return new Intl.DateTimeFormat(loc,{month:'long',day:'numeric'}).format(d);
-    }
-    function fmtMonthLabel(d){
-      var loc=getLang()==='en'?'en-CA':'fr-CA';
-      return new Intl.DateTimeFormat(loc,{month:'long',year:'numeric'}).format(d);
-    }
-    function fmtDayName(d){
-      var loc=getLang()==='en'?'en-CA':'fr-CA';
-      return new Intl.DateTimeFormat(loc,{weekday:'short'}).format(d).replace('.','');
-    }
-    function fmtDayNum(d){return d.getDate()+''}
+    function loc(){return getLang()==='en'?'en-CA':'fr-CA'}
+    function cap(str){return str.charAt(0).toUpperCase()+str.slice(1)}
+    function fmtMonthLabel(d){return cap(new Intl.DateTimeFormat(loc(),{month:'long',year:'numeric'}).format(d));}
+    function fmtDayName(d){return new Intl.DateTimeFormat(loc(),{weekday:'short'}).format(d).replace('.','');}
+    function fmtLongDate(d){return cap(new Intl.DateTimeFormat(loc(),{weekday:'long',month:'long',day:'numeric'}).format(d));}
     function fmtConfirmDatetime(d,t){
-      var loc=getLang()==='en'?'en-CA':'fr-CA';
-      var dayStr=new Intl.DateTimeFormat(loc,{weekday:'long',month:'long',day:'numeric'}).format(d);
-      return dayStr+' · '+t;
+      return fmtLongDate(d)+' · '+t;
     }
 
     // ── DOM refs ─────────────────────────────────────────────────────────────
-    var gridEl   = document.getElementById('bookingGrid');
-    var dayEl    = document.getElementById('bookingDay');
-    var navWeek  = document.getElementById('bookingNavWeek');
+    var pickerEl = document.getElementById('bookingPicker');
+    var daysEl   = document.getElementById('bookingDays');
+    var timesEl  = document.getElementById('bookingTimes');
+    var dateLbl  = document.getElementById('bookingDateLabel');
     var navMonth = document.getElementById('bookingNavMonth');
     var prevBtn  = document.getElementById('bookingPrev');
     var nextBtn  = document.getElementById('bookingNext');
-    var viewDayBtn   = document.getElementById('bookingViewDay');
-    var viewWeekBtn  = document.getElementById('bookingViewWeek');
-    var todayEyebrow = document.getElementById('bookingTodayEyebrow');
     var confirmWrap = document.getElementById('bookingConfirmWrap');
     var confirmDt   = document.getElementById('bookingConfirmDatetime');
     var confirmCta  = document.getElementById('bookingConfirmCta');
     var resetBtn    = document.getElementById('bookingReset');
-    var mobilePicker = document.getElementById('bookingMobilePicker');
-    var mobileRail   = document.getElementById('bookingMobileDayrail');
-    var mobileSlots  = document.getElementById('bookingMobileSlots');
 
-    if(!gridEl) return;
+    if(!pickerEl || !daysEl || !timesEl) return;
 
-    // ── Detect mobile ────────────────────────────────────────────────────────
-    function checkMobile(){
-      isMobile = window.innerWidth <= 680;
-      if(isMobile){
-        gridEl.style.display='none';
-        if(dayEl) dayEl.style.display='none';
-        mobilePicker.style.display='flex';
-      } else {
-        mobilePicker.style.display='none';
-        if(dayEl) dayEl.style.display = (currentView==='day')  ? '' : 'none';
-        gridEl.style.display          = (currentView==='week') ? '' : 'none';
+    // ── Availability for the week on screen ──────────────────────────────────
+    function weekLoaded(){
+      if(!API_ENABLED) return true;
+      for(var i=0;i<7;i++){
+        var d=addDays(currentWeekStart,i);
+        if(d>lastBookableDay()) break;
+        if(!API_LOADED_DATES[dateKey(d)]) return false;
       }
+      return true;
     }
-    checkMobile();
-    window.addEventListener('resize',function(){checkMobile();render();},{passive:true});
+    // Bookable times of a day, inside the window the page shows.
+    function openTimes(day){
+      var arr = slotsForDay(day);
+      return BUSINESS_HOURS_TIMES.filter(function(t){
+        return arr.indexOf(t)!==-1 && !isSlotBooked(slotKey(day,t)) && !isPast(day,t);
+      });
+    }
+    function firstOpenDay(){
+      for(var i=0;i<7;i++){
+        var d=addDays(currentWeekStart,i);
+        if(openTimes(d).length) return d;
+      }
+      return null;
+    }
+    function checkSvg(){
+      var chk = document.createElementNS('http://www.w3.org/2000/svg','svg');
+      chk.setAttribute('class','bk-time-check');
+      chk.setAttribute('width','12');chk.setAttribute('height','10');
+      chk.setAttribute('viewBox','0 0 10 8');chk.setAttribute('fill','none');
+      chk.setAttribute('aria-hidden','true');
+      var path = document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('d','M1 4l2.5 2.5L9 1');
+      path.setAttribute('stroke','currentColor');path.setAttribute('stroke-width','1.2');
+      path.setAttribute('stroke-linecap','square');
+      chk.appendChild(path);
+      return chk;
+    }
 
-    // ── Render dispatcher ────────────────────────────────────────────────────
+    // ── Render ───────────────────────────────────────────────────────────────
     function render(){
-      updateNavLabels();
-      updateTodayEyebrow();
-      if(isMobile){ renderMobilePicker(); return; }
-      if(currentView==='day'){ renderDay(); } else { renderWeek(); }
-    }
-    function setView(v){
-      if(v!=='day' && v!=='week') return;
-      currentView = v;
-      if(viewDayBtn){
-        viewDayBtn.classList.toggle('is-active',  v==='day');
-        viewDayBtn.setAttribute('aria-selected',  v==='day'?'true':'false');
-      }
-      if(viewWeekBtn){
-        viewWeekBtn.classList.toggle('is-active', v==='week');
-        viewWeekBtn.setAttribute('aria-selected', v==='week'?'true':'false');
-      }
-      if(!isMobile && dayEl){
-        dayEl.style.display  = v==='day'  ? '' : 'none';
-        gridEl.style.display = v==='week' ? '' : 'none';
-      }
-      // Keep selected day inside the current week when switching to week view
-      if(v==='week'){ currentWeekStart = getWeekStart(selectedDay); }
-      render();
-    }
-    function updateTodayEyebrow(){
-      if(!todayEyebrow) return;
       var lang = getLang();
-      var loc  = lang==='en' ? 'en-CA' : 'fr-CA';
-      var label = (i18n[lang] && i18n[lang].bookingTodayLabel) || (lang==='en'?'Today':"Aujourd'hui");
-      var full = new Intl.DateTimeFormat(loc,{weekday:'long',month:'long',day:'numeric'}).format(new Date());
-      full = full.charAt(0).toUpperCase() + full.slice(1);
-      todayEyebrow.textContent = label + ' · ' + full;
-    }
+      var loaded = weekLoaded();
+      var failed = API_ENABLED && !loaded && !API_LOADING && !!API_LAST_ERROR;
 
-    // ── Render week (desktop grid) ───────────────────────────────────────────
-    function renderWeek(){
-      updateNavLabels();
-      if(isMobile){renderMobilePicker();return;}
-      gridEl.innerHTML='';
-      gridEl.classList.add('is-transitioning');
-      if(pendingRaf!==null){cancelAnimationFrame(pendingRaf);}
-      pendingRaf=requestAnimationFrame(function(){
-        pendingRaf=null;
-        gridEl.classList.remove('is-transitioning');
-        for(var col=0;col<7;col++){
-          var day = addDays(currentWeekStart, col);
-          var dow = day.getDay();
-          var dk  = dateKey(day);
-          var colEl = document.createElement('div');
-          colEl.className = 'booking-col';
-          // Head
-          var head = document.createElement('div');
-          head.className = 'booking-col-head'+(isToday(day)?' is-today':'');
-          var dn = document.createElement('span');
-          dn.className = 'booking-col-dayname';
-          dn.textContent = fmtDayName(day).toUpperCase();
-          var dnum = document.createElement('span');
-          dnum.className = 'booking-col-daynum';
-          dnum.textContent = fmtDayNum(day);
-          head.appendChild(dn);head.appendChild(dnum);
-          colEl.appendChild(head);
-          var daySlotsArr = slotsForDay(day);
-          // Every row renders the time. Three states only:
-          //   available — active button, selectable
-          //   selected  — currently chosen
-          //   busy      — out-of-window OR booked OR past, all visually unified
-          BUSINESS_HOURS_TIMES.forEach(function(t){
-            var hasSlot = daySlotsArr.indexOf(t)!==-1;
-            var sk = slotKey(day,t);
-            var booked = isSlotBooked(sk);
-            var past   = isPast(day,t);
-            var isBusy = !hasSlot || booked || past;
-            var isSel  = !isBusy && selectedSlot && selectedSlot.key===sk;
-            var btn = document.createElement('button');
-            btn.type='button';
-            btn.className='booking-slot'+(isBusy?' is-busy':'')+(isSel?' is-selected':'');
-            btn.textContent=t;
-            var busyLabel=getLang()==='en'?' — unavailable':' — non disponible';
-            btn.setAttribute('aria-label',t+(isBusy?busyLabel:''));
-            if(isBusy){btn.disabled=true;btn.setAttribute('aria-disabled','true');}
-            // Check mark SVG
-            var chk = document.createElementNS('http://www.w3.org/2000/svg','svg');
-            chk.setAttribute('class','booking-slot-check');
-            chk.setAttribute('width','10');chk.setAttribute('height','8');
-            chk.setAttribute('viewBox','0 0 10 8');chk.setAttribute('fill','none');
-            chk.setAttribute('aria-hidden','true');
-            var path = document.createElementNS('http://www.w3.org/2000/svg','path');
-            path.setAttribute('d','M1 4l2.5 2.5L9 1');
-            path.setAttribute('stroke','currentColor');path.setAttribute('stroke-width','1.2');
-            path.setAttribute('stroke-linecap','square');
-            chk.appendChild(path);btn.appendChild(chk);
-            if(!isBusy){
-              btn.addEventListener('click',function(sk2,day2,t2){
-                return function(){selectSlot(sk2,day2,t2);}
-              }(sk,day,t));
-            }
-            colEl.appendChild(btn);
-          });
-          gridEl.appendChild(colEl);
+      if(loaded){
+        if(selectedSlot && inWeek(selectedSlot.date) && openTimes(selectedSlot.date).indexOf(selectedSlot.time)!==-1 && (!selectedDay || !inWeek(selectedDay))){
+          selectedDay = selectedSlot.date;
         }
-      });
-    }
-
-    // ── Render single-day view (default desktop surface) ─────────────────────
-    function renderDay(){
-      if(!dayEl) return;
-      var lang = getLang();
-      var loc  = lang==='en' ? 'en-CA' : 'fr-CA';
-      var day  = selectedDay;
-      var isCurrentDay = isSameDay(day, new Date());
-      var todayLabel = (i18n[lang] && i18n[lang].bookingTodayLabel) || (lang==='en'?'Today':"Aujourd'hui");
-
-      var weekday = new Intl.DateTimeFormat(loc,{weekday:'long'}).format(day);
-      weekday = weekday.charAt(0).toUpperCase() + weekday.slice(1);
-      var monthYr = new Intl.DateTimeFormat(loc,{month:'long',year:'numeric'}).format(day);
-
-      dayEl.innerHTML = '';
-      dayEl.classList.add('is-transitioning');
-      if(pendingRaf!==null){cancelAnimationFrame(pendingRaf);}
-      pendingRaf = requestAnimationFrame(function(){
-        pendingRaf = null;
-        dayEl.classList.remove('is-transitioning');
-
-        var head = document.createElement('div');
-        head.className = 'booking-day-head' + (isCurrentDay ? ' is-today' : '');
-        var title = document.createElement('div');
-        title.className = 'booking-day-title';
-        var wkSpan = document.createElement('span');
-        wkSpan.className = 'booking-day-weekday';
-        wkSpan.textContent = weekday;
-        var numSpan = document.createElement('span');
-        numSpan.className = 'booking-day-num';
-        numSpan.textContent = day.getDate();
-        title.appendChild(wkSpan); title.appendChild(numSpan);
-        var meta = document.createElement('div');
-        meta.className = 'booking-day-meta';
-        meta.textContent = monthYr + (isCurrentDay ? ' · ' + todayLabel : '');
-        head.appendChild(title); head.appendChild(meta);
-        dayEl.appendChild(head);
-
-        var daySlotsArr = slotsForDay(day);
-        var anyAvailable = false;
-
-        var slotsWrap = document.createElement('div');
-        slotsWrap.className = 'booking-day-slots';
-
-        BUSINESS_HOURS_TIMES.forEach(function(t){
-          var hasSlot = daySlotsArr.indexOf(t)!==-1;
-          var sk = slotKey(day,t);
-          var booked = isSlotBooked(sk);
-          var past   = isPast(day,t);
-          var isBusy = !hasSlot || booked || past;
-          var isSel  = !isBusy && selectedSlot && selectedSlot.key===sk;
-          if(!isBusy) anyAvailable = true;
-
-          var btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'booking-slot booking-slot--day' + (isBusy?' is-busy':'') + (isSel?' is-selected':'');
-          btn.textContent = t;
-          var busyLabel = lang==='en' ? ' — unavailable' : ' — non disponible';
-          btn.setAttribute('aria-label', t + (isBusy?busyLabel:''));
-          if(isBusy){ btn.disabled = true; btn.setAttribute('aria-disabled','true'); }
-
-          var chk = document.createElementNS('http://www.w3.org/2000/svg','svg');
-          chk.setAttribute('class','booking-slot-check');
-          chk.setAttribute('width','10'); chk.setAttribute('height','8');
-          chk.setAttribute('viewBox','0 0 10 8'); chk.setAttribute('fill','none');
-          chk.setAttribute('aria-hidden','true');
-          var path = document.createElementNS('http://www.w3.org/2000/svg','path');
-          path.setAttribute('d','M1 4l2.5 2.5L9 1');
-          path.setAttribute('stroke','currentColor');
-          path.setAttribute('stroke-width','1.2');
-          path.setAttribute('stroke-linecap','square');
-          chk.appendChild(path); btn.appendChild(chk);
-
-          if(!isBusy){
-            btn.addEventListener('click', (function(_sk,_d,_t){
-              return function(){ selectSlot(_sk,_d,_t); };
-            })(sk,day,t));
-          }
-          slotsWrap.appendChild(btn);
-        });
-
-        dayEl.appendChild(slotsWrap);
-
-        if(!anyAvailable){
-          var empty = document.createElement('div');
-          empty.className = 'booking-day-empty';
-          empty.textContent = (i18n[lang] && i18n[lang].bookingDayEmpty) ||
-            (lang==='en' ? 'No availability this day — try the next one.' : "Aucune disponibilité ce jour — essayez le suivant.");
-          dayEl.appendChild(empty);
+        if(!selectedDay || !inWeek(selectedDay) || !openTimes(selectedDay).length){
+          selectedDay = firstOpenDay();
         }
-      });
-    }
+      }
+      var shownDay = (loaded && selectedDay && inWeek(selectedDay)) ? selectedDay : null;
 
-    // ── Render mobile picker ─────────────────────────────────────────────────
-    function renderMobilePicker(){
-      mobileRail.innerHTML='';
-      for(var col=0;col<7;col++){
-        var day=addDays(currentWeekStart,col);
-        var dow=day.getDay();
+      // Month, arrows
+      if(navMonth) navMonth.textContent = fmtMonthLabel(shownDay || (currentWeekStart<today ? today : currentWeekStart));
+      if(prevBtn){
+        prevBtn.disabled = currentWeekStart <= getWeekStart(today);
+        prevBtn.setAttribute('aria-label', lang==='en'?'Previous week':'Semaine précédente');
+      }
+      if(nextBtn){
+        nextBtn.disabled = addDays(currentWeekStart,7) > lastBookableDay();
+        nextBtn.setAttribute('aria-label', lang==='en'?'Next week':'Semaine suivante');
+      }
+
+      // Days
+      daysEl.innerHTML='';
+      daysEl.setAttribute('aria-label', lang==='en'?'Day':'Jour');
+      for(var i=0;i<7;i++){
+        (function(day){
+          var open = loaded && openTimes(day).length>0;
+          var isSel = !!shownDay && isSameDay(day,shownDay);
+          var btn=document.createElement('button');
+          btn.type='button';
+          btn.className='bk-day'+(isSel?' is-selected':'')+(isToday(day)?' is-today':'');
+          btn.setAttribute('aria-pressed',isSel?'true':'false');
+          btn.setAttribute('aria-label',fmtLongDate(day)+(open?'':(lang==='en'?', unavailable':', non disponible')));
+          if(!open) btn.disabled=true;
+          var dn=document.createElement('span');dn.className='bk-day-name';dn.textContent=fmtDayName(day);
+          var dnum=document.createElement('span');dnum.className='bk-day-num';dnum.textContent=day.getDate();
+          btn.appendChild(dn);btn.appendChild(dnum);
+          if(open){btn.addEventListener('click',function(){selectedDay=day;render();});}
+          daysEl.appendChild(btn);
+        })(addDays(currentWeekStart,i));
+      }
+
+      // Times
+      timesEl.innerHTML='';
+      timesEl.setAttribute('aria-label', lang==='en'?'Available times':'Créneaux disponibles');
+      if(!loaded && !failed){
+        if(dateLbl) dateLbl.textContent='';
+        timesEl.setAttribute('aria-busy','true');
+        for(var g=0;g<6;g++){
+          var ghost=document.createElement('div');
+          ghost.className='bk-time bk-time--ghost';ghost.setAttribute('aria-hidden','true');
+          timesEl.appendChild(ghost);
+        }
+        return;
+      }
+      timesEl.removeAttribute('aria-busy');
+      if(!shownDay){
+        if(dateLbl) dateLbl.textContent='';
+        var empty=document.createElement('p');
+        empty.className='bk-empty';
+        empty.textContent = failed ? i18n[lang].bookingErrNetwork : i18n[lang].bookingWeekEmpty;
+        timesEl.appendChild(empty);
+        return;
+      }
+      if(dateLbl) dateLbl.textContent = fmtLongDate(shownDay);
+      openTimes(shownDay).forEach(function(t){
+        var sk=slotKey(shownDay,t);
+        var isSel=!!selectedSlot && selectedSlot.key===sk;
         var btn=document.createElement('button');
         btn.type='button';
-        btn.className='booking-mobile-day'+(col===mobileDayIndex?' is-selected':'')+(isToday(day)?' is-today':'');
-        btn.setAttribute('role','tab');
-        btn.setAttribute('aria-selected',col===mobileDayIndex?'true':'false');
-        var dn=document.createElement('span');dn.className='booking-mobile-day-name';dn.textContent=fmtDayName(day).toUpperCase();
-        var dnum=document.createElement('span');dnum.className='booking-mobile-day-num';dnum.textContent=fmtDayNum(day);
-        btn.appendChild(dn);btn.appendChild(dnum);
-        (function(c,d){btn.addEventListener('click',function(){mobileDayIndex=c;renderMobileDaySlots(d);renderMobileRailActive();});})(col,day);
-        mobileRail.appendChild(btn);
-      }
-      renderMobileDaySlots(addDays(currentWeekStart,mobileDayIndex));
-    }
-    function renderMobileRailActive(){
-      Array.from(mobileRail.children).forEach(function(b,i){
-        b.classList.toggle('is-selected',i===mobileDayIndex);
-        b.setAttribute('aria-selected',i===mobileDayIndex?'true':'false');
-      });
-    }
-    function renderMobileDaySlots(day){
-      var daySlotsArr=slotsForDay(day);
-      mobileSlots.innerHTML='';
-      // Even if day has zero slots, render the full skeleton — every row busy.
-      BUSINESS_HOURS_TIMES.forEach(function(t){
-        var hasSlot = daySlotsArr.indexOf(t)!==-1;
-        var sk=slotKey(day,t);
-        var booked=isSlotBooked(sk);var past=isPast(day,t);
-        var isBusy=!hasSlot || booked || past;
-        var isSel=!isBusy && selectedSlot && selectedSlot.key===sk;
-        var btn=document.createElement('button');
-        btn.type='button';
-        btn.className='booking-mobile-slot'+(isBusy?' is-busy':'')+(isSel?' is-selected':'');
-        btn.setAttribute('role','listitem');
-        var busyLabel=getLang()==='en'?' — unavailable':' — non disponible';
-        btn.setAttribute('aria-label',t+(isBusy?busyLabel:''));
-        var timeSpan=document.createElement('span');
-        timeSpan.className='booking-mobile-slot-time';
-        timeSpan.textContent=t;
-        var chkSpan=document.createElement('span');chkSpan.className='booking-mobile-slot-check';
-        var chkSvg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-        chkSvg.setAttribute('width','10');chkSvg.setAttribute('height','8');chkSvg.setAttribute('viewBox','0 0 10 8');chkSvg.setAttribute('fill','none');chkSvg.setAttribute('aria-hidden','true');
-        var cp=document.createElementNS('http://www.w3.org/2000/svg','path');
-        cp.setAttribute('d','M1 4l2.5 2.5L9 1');cp.setAttribute('stroke','currentColor');cp.setAttribute('stroke-width','1.2');cp.setAttribute('stroke-linecap','square');
-        chkSvg.appendChild(cp);chkSpan.appendChild(chkSvg);
-        btn.appendChild(timeSpan);btn.appendChild(chkSpan);
-        if(!isBusy){btn.addEventListener('click',function(sk2,d2,t2){return function(){selectSlot(sk2,d2,t2);};}(sk,day,t));}
-        else{btn.disabled=true;}
-        mobileSlots.appendChild(btn);
+        btn.className='bk-time'+(isSel?' is-selected':'');
+        btn.setAttribute('aria-pressed',isSel?'true':'false');
+        var label=document.createElement('span');label.textContent=t;
+        btn.appendChild(label);btn.appendChild(checkSvg());
+        btn.addEventListener('click',function(){selectSlot(sk,shownDay,t);});
+        timesEl.appendChild(btn);
       });
     }
 
     // ── Slot selection ───────────────────────────────────────────────────────
     function selectSlot(sk,day,t){
       selectedSlot={key:sk,date:day,time:t};
-      var dtStr=fmtConfirmDatetime(day,t);
-      confirmDt.textContent=dtStr;
-      // Build calendar link for the selected week
+      confirmDt.textContent=fmtConfirmDatetime(day,t);
+      // Fallback CTA (no API): open the Google calendar on that week
       var gcUrl='https://calendar.google.com/calendar/r/week/'+day.getFullYear()+'/'+(day.getMonth()+1)+'/'+day.getDate()+'?cid=c_c3163b5e97939baf226e43395f5f8433bbe3f6fdcf2def9a236dbc825a19d676%40group.calendar.google.com';
-      confirmCta.href=gcUrl;
+      if(confirmCta) confirmCta.href=gcUrl;
       confirmWrap.classList.add('is-open');
       confirmWrap.setAttribute('aria-hidden','false');
-      // Scroll confirm panel into view smoothly. On mobile (<=680px) use
-      // block:'start' so the form fields aren't pushed below the fold or
-      // behind the soft keyboard — desktop keeps the gentler 'nearest'.
+      // On mobile, bring the form to the top so the keyboard does not cover it.
       setTimeout(function(){
         var blockMode = (window.innerWidth <= 680) ? 'start' : 'nearest';
         confirmWrap.scrollIntoView({behavior:'smooth', block: blockMode});
       }, 80);
-      // Re-render to update selected state
-      if(isMobile){renderMobileDaySlots(day);}else{render();}
+      render();
     }
 
     // ── Reset ────────────────────────────────────────────────────────────────
@@ -2357,82 +1976,54 @@ footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
       });
     }
 
-    // ── Navigation ───────────────────────────────────────────────────────────
-    function updateNavLabels(){
-      var weekEnd=addDays(currentWeekStart,6);
-      var loc=getLang()==='en'?'en-CA':'fr-CA';
-      var fromStr=new Intl.DateTimeFormat(loc,{month:'long',day:'numeric'}).format(currentWeekStart);
-      if(navWeek) navWeek.textContent=(getLang()==='en'?'Week of ':'Semaine du ')+fromStr;
-      if(navMonth) navMonth.textContent=fmtMonthLabel(currentWeekStart);
-    }
+    // ── Loading and navigation ───────────────────────────────────────────────
+    // Each request covers the week on screen and the one after it, so the next
+    // arrow usually answers at once.
     function ensureWeekLoaded(){
-      if(!API_ENABLED) return Promise.resolve();
-      var weekEnd = addDays(currentWeekStart, 6);
-      return fetchAvailability(currentWeekStart, weekEnd).then(function(){
-        render();
+      if(!API_ENABLED){ settleWeek(); return Promise.resolve(); }
+      if(weekLoaded()){ settleWeek(); return Promise.resolve(); }
+      var start = currentWeekStart, end = addDays(currentWeekStart,13);
+      render();
+      return fetchAvailability(start,end).then(function(){
+        if(!API_LAST_ERROR){
+          for(var i=0;i<14;i++){ API_LOADED_DATES[dateKey(addDays(start,i))]=true; }
+        }
+        settleWeek();
       });
     }
-    if(prevBtn){prevBtn.addEventListener('click',function(){
-      if(currentView==='day' && !isMobile){
-        // Don't allow stepping into the past
-        var candidate = addDays(selectedDay,-1);
-        if(candidate < today) return;
-        dayEl && dayEl.classList.add('is-transitioning');
-        setTimeout(function(){
-          selectedDay = candidate;
-          currentWeekStart = getWeekStart(selectedDay);
-          render();
-          ensureWeekLoaded();
-        },180);
-      } else {
-        gridEl.classList.add('is-transitioning');
-        setTimeout(function(){
-          currentWeekStart=addDays(currentWeekStart,-7);
-          if(getWeekStart(today) > currentWeekStart){
-            currentWeekStart = getWeekStart(today);
-          }
-          defaultMobileDayIndexToToday();
-          render();
-          ensureWeekLoaded();
-        },180);
+    // First visit only: a week with nothing left gives way to the next one.
+    function settleWeek(){
+      if(autoAdvance && weekLoaded() && !firstOpenDay() && addDays(currentWeekStart,7) <= lastBookableDay()){
+        currentWeekStart = addDays(currentWeekStart,7);
+        ensureWeekLoaded();
+        return;
       }
-    });}
-    if(nextBtn){nextBtn.addEventListener('click',function(){
-      if(currentView==='day' && !isMobile){
-        dayEl && dayEl.classList.add('is-transitioning');
-        setTimeout(function(){
-          selectedDay = addDays(selectedDay,1);
-          currentWeekStart = getWeekStart(selectedDay);
-          render();
-          ensureWeekLoaded();
-        },180);
-      } else {
-        gridEl.classList.add('is-transitioning');
-        setTimeout(function(){
-          currentWeekStart=addDays(currentWeekStart,7);
-          mobileDayIndex=0;
-          render();
-          ensureWeekLoaded();
-        },180);
-      }
-    });}
-
-    if(viewDayBtn)  viewDayBtn.addEventListener('click',  function(){ setView('day');  });
-    if(viewWeekBtn) viewWeekBtn.addEventListener('click', function(){ setView('week'); });
+      if(weekLoaded()) autoAdvance=false;
+      render();
+    }
+    function reloadWeek(){
+      for(var i=0;i<14;i++){ delete API_LOADED_DATES[dateKey(addDays(currentWeekStart,i))]; }
+      Object.keys(API_FETCHED_RANGES).forEach(function(k){ delete API_FETCHED_RANGES[k]; });
+      return ensureWeekLoaded();
+    }
+    function step(n){
+      autoAdvance=false;
+      var target=addDays(currentWeekStart,7*n);
+      if(target < getWeekStart(today) || target > lastBookableDay()) return;
+      pickerEl.classList.add('is-switching');
+      setTimeout(function(){
+        currentWeekStart=target;
+        pickerEl.classList.remove('is-switching');
+        ensureWeekLoaded();
+      },180);
+    }
+    if(prevBtn) prevBtn.addEventListener('click',function(){step(-1);});
+    if(nextBtn) nextBtn.addEventListener('click',function(){step(1);});
 
     // ── Language change re-render ────────────────────────────────────────────
     document.querySelectorAll('.lang-btn').forEach(function(b){
       b.addEventListener('click',function(){setTimeout(render,50);});
     });
-
-    // ── Default mobile dayrail focus to today (not Monday) ───────────────────
-    function defaultMobileDayIndexToToday(){
-      for(var i=0;i<7;i++){
-        if(isSameDay(addDays(currentWeekStart,i), today)){ mobileDayIndex = i; return; }
-      }
-      mobileDayIndex = 0;
-    }
-    defaultMobileDayIndexToToday();
 
     // ── Booking form wiring ──────────────────────────────────────────────────
     var formEl       = document.getElementById('bookingForm');
@@ -2574,8 +2165,7 @@ footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
           setStatus(mapServerError(code), true);
           if(code === 'slot_taken' || code === 'busy'){
             // Re-fetch availability so the busy slot disappears from the grid.
-            delete API_FETCHED_RANGES[dateKey(currentWeekStart)+'|'+dateKey(addDays(currentWeekStart,6))];
-            ensureWeekLoaded();
+            reloadWeek();
           }
         }).catch(function(err){
           setSubmitting(false);
@@ -2598,7 +2188,6 @@ footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
     });
 
     // ── Initial render ───────────────────────────────────────────────────────
-    render();
     ensureWeekLoaded();
 
     // ── Accessible fallback: silent iframe background load ───────────────────
