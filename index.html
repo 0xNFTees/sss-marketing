@@ -181,8 +181,8 @@
 
   --ease:cubic-bezier(0.16,1,0.3,1);
   --nav-h:72px;
-  --container:1240px;
-  --gutter:40px;
+  --container:1400px;
+  --gutter:clamp(40px,4vw,64px);
   --col-gap:32px;
   --section-y:clamp(88px,10vw,144px);
 }
@@ -209,7 +209,7 @@ h1,h2,h3{font-family:var(--display);font-weight:400;font-optical-sizing:auto}
 :focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .final :focus-visible,footer :focus-visible{outline-color:var(--paper)}
 
-.container{max-width:var(--container);margin:0 auto;padding:0 var(--gutter)}
+.container{max-width:calc(var(--container) + 2 * var(--gutter));margin:0 auto;padding:0 var(--gutter)}
 .grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--col-gap)}
 
 /* Label voice: tracked caps of the body face. Always above a title. */
@@ -230,7 +230,7 @@ nav{
 }
 nav.scrolled{padding:12px 0;border-bottom-color:var(--rule)}
 .nav-inner{
-  max-width:var(--container);margin:0 auto;padding:0 var(--gutter);
+  max-width:calc(var(--container) + 2 * var(--gutter));margin:0 auto;padding:0 var(--gutter);
   display:flex;align-items:center;justify-content:space-between;gap:32px;
 }
 .nav-logo{display:flex;align-items:center;height:30px;line-height:1}
