@@ -33,8 +33,8 @@
   --rule:rgba(28,24,18,.16);
   --display:'Newsreader','Palatino Linotype',Georgia,serif;
   --body:'Hanken Grotesk',Helvetica,Arial,sans-serif;
-  --container:1120px;
-  --gutter:clamp(20px,4vw,40px);
+  --container:1400px;
+  --gutter:clamp(20px,4vw,64px);
   --section-y:clamp(64px,9vw,120px);
 }
 *{margin:0;padding:0;box-sizing:border-box}
@@ -44,7 +44,7 @@ a{color:inherit}
 img{display:block;max-width:100%}
 :focus-visible{outline:2px solid var(--forest);outline-offset:3px}
 .on-forest :focus-visible{outline-color:var(--paper)}
-.container{max-width:var(--container);margin:0 auto;padding:0 var(--gutter)}
+.container{max-width:calc(var(--container) + 2 * var(--gutter));margin:0 auto;padding:0 var(--gutter)}
 .skip{position:absolute;left:-9999px;top:0;background:var(--forest);color:var(--paper);padding:12px 18px;font-size:14px;z-index:10}
 .skip:focus{left:var(--gutter);top:12px}
 
