@@ -72,7 +72,7 @@ const PAGECSS = `
 .lx-bkw{margin:0!important}
 .lx .bk{background:var(--navy2);padding:clamp(72px,8vw,128px) 0}
 .lx .bk .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(40px,6vw,128px);align-items:center}
-.lx .bk h2{color:#fff!important}.lx .bk .eb{color:#8fdcf5}
+.lx .bk h2{color:#fff!important}.lx .bk .lxf h2{color:#074672!important}.lx .bk .eb{color:#8fdcf5}
 .lx .bk p.s{color:#cfe3ee;margin-top:16px;max-width:520px;font-size:18px}
 .lx .bk ul{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:12px}
 .lx .bk li{display:flex;gap:12px;align-items:flex-start;color:#fff;margin:0;font-size:16.5px;line-height:1.45}.lx .bk li svg{width:22px;height:22px;flex:none}
@@ -343,7 +343,7 @@ async function build(pg, idx){
   const slug = pg.slug + t.sfx;
   const H = {credentials:'include', headers:{'X-WP-Nonce':window.__NONCE,'Content-Type':'application/json'}};
   const ex = await (await fetch(`/wp-json/wp/v2/pages?slug=${encodeURIComponent(slug)}&status=draft&lang=${l}&_fields=id`, H)).json();
-  const body = JSON.stringify({title:`${title} – ${t.draft}`, slug, status:'draft', content});
+  const body = JSON.stringify({title:`${title} – ${t.draft}`, slug, status:'draft', template:'100-width.php', content});
   let r;
   if (Array.isArray(ex) && ex.length) r = await fetch(`/wp-json/wp/v2/pages/${ex[0].id}?lang=${l}`, {method:'POST', ...H, body});
   else r = await fetch(`/wp-json/wp/v2/pages?lang=${l}`, {method:'POST', ...H, body});
