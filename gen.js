@@ -288,7 +288,7 @@ function team(l, html, title){
       continue; }
     if (e.tagName==='H1') { const lines = e.innerHTML.split(/<br\s*\/?>/i).map(x=>x.replace(/<[^>]+>/g,'').replace(/&nbsp;/g,' ').trim()).filter(Boolean);
       cur = {name:lines[0], cred:lines.slice(1).join(' '), role:'', photo:photoQ.shift()||null, logos:logoQ, body:[]}; logoQ=[]; people.push(cur); continue; }
-    if (!cur) continue;
+    if (!cur) { if (e.tagName==='P') e.querySelectorAll('img').forEach(i=>{const s=imgSrc(i); if (s && /logo|brebeuf/i.test(s)) logoQ.push(s); else if (s && !/feuille/.test(s)) photoQ.push(s);}); continue; }
     if (/^H[2-4]$/.test(e.tagName)) { const tx=e.textContent.trim(); if (!cur.body.length && !cur.role) cur.role=tx; else cur.body.push({t:'h',lvl:3,text:tx}); continue; }
     if (e.tagName==='P') { e.querySelectorAll('img').forEach(i=>{const s=imgSrc(i); if (s && /logo|brebeuf/i.test(s)) logoQ.push(s); else if (s) photoQ.push(s);}); const h=clean(e); if (h.replace(/<br\s*\/?>/g,'').trim()) cur.body.push({t:'p',html:h}); continue; }
     const items=[...e.children].filter(li=>li.tagName==='LI').map(clean).filter(Boolean); if (items.length) cur.body.push({t:e.tagName.toLowerCase(),items});
