@@ -72,7 +72,7 @@ const PAGECSS = `
 .lx-bkw{margin:0!important}
 .lx .bk{background:var(--navy2);padding:clamp(72px,8vw,128px) 0}
 .lx .bk .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(40px,6vw,128px);align-items:center}
-.lx .bk h2{color:#fff!important}.lx .bk .lxf h2{color:#074672!important}.lx .bk .eb{color:#8fdcf5}
+.lx .bk h2{color:#fff!important}.lx .bk .lxf h2,.lx .lxf h2{color:#074672!important;font-size:25px!important;line-height:1.2!important;font-weight:600!important;letter-spacing:-.02em!important}.lx .card p:empty{display:none}.lx .card h3{margin-bottom:22px!important}.lx .bk .eb{color:#8fdcf5}
 .lx .bk p.s{color:#cfe3ee;margin-top:16px;max-width:520px;font-size:18px}
 .lx .bk ul{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:12px}
 .lx .bk li{display:flex;gap:12px;align-items:flex-start;color:#fff;margin:0;font-size:16.5px;line-height:1.45}.lx .bk li svg{width:22px;height:22px;flex:none}
