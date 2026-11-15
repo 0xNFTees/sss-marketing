@@ -337,6 +337,7 @@ async function build(pg, idx){
       const pick = [0,1,2,3].map(k => others[(off+k*3)%others.length]).filter((v,k,arr)=>v && arr.indexOf(v)===k);
       a += `<section class="sec wash"><div class="w"><div class="head"><div><span class="eb">${EB[l].service}</span><h2>${t.rel}</h2></div><a class="b b2" href="${t.allUrl}">${t.all}${AR}</a></div><div class="grid">${pick.map(p=>`<a class="card" href="${p.link}"><h3>${esc(new DOMParser().parseFromString(p.t,'text/html').body.textContent)}</h3><p></p><span class="t">${t.more}</span></a>`).join('')}</div></div></section>`;
     }
+    if (/^(clinique-dentaire|dental-clinic)$/.test(pg.slug)) a += `<section class="sec wash"><div class="w"><div class="sh"><span class="eb">${EB[l].clinic}</span><h2>${l==='fr'?'Visitez nos installations':'Tour our clinic'}</h2></div><div class="gal" style="margin-top:0">${POOL.map(x=>`<div>${imgTag(UP+x,'')}</div>`).join('')}</div></div></section>`;
     a += facts(l) + `</div>`;
     const ownForm = formIds.find(f => f !== t.bookForm);
     const bkH = ownForm ? title : null;
@@ -355,5 +356,18 @@ async function build(pg, idx){
   return {id:j.id, status:r.status, slug, l, title, kind, note, url: ORIGIN + (l==='en'?'/en/':'/') + slug + '/'};
 }
 
-window.LCGEN = {build, extract, sectionize, L, POOL};
+
+async function buildIndex(groups){
+  const t = L.fr;
+  const card = r => `<a class="card" href="${r.url}"><h3>${esc(r.title)}</h3><p>${r.l==='en'?'English':'Français'}</p><span class="t">Voir l’aperçu</span></a>`;
+  const a = STYLE() + `<div class="lx">${hero('fr','Aperçu SSS','Toutes les pages du nouveau site','Chaque page de la Clinique dentaire La Cité, refaite dans le nouveau design. Brouillons visibles seulement lorsque vous êtes connecté à WordPress.',null)}` +
+    groups.map((g,i)=>`<section class="sec${i%2?' wash':''}"><div class="w"><div class="sh"><span class="eb">${g.eb}</span><h2>${g.h}</h2></div><div class="grid">${g.items.map(card).join('')}</div></div></section>`).join('') + `</div>`;
+  const content = OPEN + code(a) + CLOSE;
+  const H = {credentials:'include', headers:{'X-WP-Nonce':window.__NONCE,'Content-Type':'application/json'}};
+  const ex = await (await fetch(`/wp-json/wp/v2/pages?slug=apercu-sss&status=draft&lang=fr&_fields=id`, H)).json();
+  const body = JSON.stringify({title:'Aperçu SSS – toutes les pages (brouillon)', slug:'apercu-sss', status:'draft', template:'100-width.php', content});
+  const r = Array.isArray(ex)&&ex.length ? await fetch(`/wp-json/wp/v2/pages/${ex[0].id}?lang=fr`,{method:'POST',...H,body}) : await fetch(`/wp-json/wp/v2/pages?lang=fr`,{method:'POST',...H,body});
+  return (await r.json()).id;
+}
+window.LCGEN = {build, buildIndex, extract, sectionize, L, POOL};
 })();
