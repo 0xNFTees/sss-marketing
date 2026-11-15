@@ -81,14 +81,14 @@ const PAGECSS = `
 .lx .lxg form>*{order:0!important;grid-column:1/-1!important}
 .lx .lxg form>p{margin-bottom:6px!important}
 .lx .ct{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(40px,6vw,128px);align-items:start}
-.lx .ct .lxf{box-shadow:0 24px 60px rgba(4,48,79,.14);border:1px solid var(--line)}
+.lx .ct>div:first-child{grid-row:1/span 2}.lx .ct{row-gap:28px}.lx .ct .lxf{box-shadow:0 24px 60px rgba(4,48,79,.14);border:1px solid var(--line)}
 .lx .mapw{position:relative;border-radius:28px;overflow:hidden;height:clamp(380px,38vw,560px);background:#dfeef5;border:1px solid var(--line)}
 .lx .mapw iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .lx .legal{max-width:960px}.lx .legal h1,.lx .legal h2{font-size:clamp(24px,2vw,32px)!important;margin:40px 0 14px!important}.lx .legal h3{margin:28px 0 10px!important}.lx .legal p,.lx .legal li{font-size:16.5px;line-height:1.7;color:var(--mut)}.lx .legal ul{padding-left:22px;margin:0 0 18px}
 @media(max-width:1080px){
  .lx .ih .w{grid-template-columns:minmax(0,1fr);min-height:0;padding-bottom:72px}
  .lx .ih .pic{aspect-ratio:16/10;max-width:720px}
- .lx .ed,.lx .md,.lx .person,.lx .bk .w,.lx .ct{grid-template-columns:minmax(0,1fr);gap:32px}
+ .lx .ed,.lx .md,.lx .person,.lx .bk .w,.lx .ct{grid-template-columns:minmax(0,1fr);gap:32px}.lx .ct>div{grid-column:auto!important;grid-row:auto!important}
  .lx .ed>.hd,.lx .person .pic{position:static}
  .lx .md.flip>.pic{order:0}.lx .md>.pic{order:-1}
  .lx .person.flip>.pic{order:0}.lx .person .pic{max-width:520px;aspect-ratio:4/4.4}
@@ -282,7 +282,7 @@ function team(l, html, title){
   const docs = people.filter(p => p.body.length);
   const crew = people.filter(p => !p.body.length);
   const pBlock = (p,i) => `<article class="person${i%2?' flip':''}"><div class="pic">${p.photo?imgTag(fullSize(p.photo),p.name):''}</div><div><h2>${esc(p.name)}</h2>${p.cred?`<span class="cred">${esc(p.cred)}</span>`:'<span class="cred"></span>'}<div class="prose">${bodyHtml(p.body)}</div>${p.logos.length?`<div class="logos">${[...new Set(p.logos)].map(s=>`<img src="${esc(s)}" alt="" loading="lazy">`).join('')}</div>`:''}</div></article>`;
-  const a = STYLE() + `<div class="lx">${hero(l, EB[l].team, title, t.teamLead, UP+GROUP, title)}
+  const a = STYLE() + `<div class="lx">${hero(l, EB[l].team, l==='fr'?'Rencontrez notre équipe':'Meet our team', t.teamLead, UP+GROUP, title)}
 <section class="sec"><div class="w"><div class="sh"><span class="eb">${t.dentists}</span></div><div class="people">${docs.map(pBlock).join('')}</div></div></section>
 ${crew.length?`<section class="sec wash"><div class="w"><div class="sh"><span class="eb">${t.staff}</span><h2>${t.staff}</h2><p class="lead">${t.staffP}</p></div><div class="crew">${crew.map(p=>`<div class="mem"><div class="pic">${p.photo?imgTag(fullSize(p.photo),p.name):''}</div><h3>${esc(p.name)}</h3><span>${esc(p.role)}</span></div>`).join('')}</div></div></section>`:''}
 ${facts(l)}</div>`;
@@ -312,8 +312,8 @@ async function build(pg, idx){
   } else if (kind === 'contact') {
     const a = STYLE() + `<div class="lx">${hero(l, t.ctEb, title, t.ctSub, UP+POOL[7], title)}</div>`;
     const fid = formIds[0];
-    const ct = `<div class="lx"><section class="sec"><div class="w ct"><div><span class="eb">${t.ctEb}</span><h2>${l==='fr'?'Adresse, heures et stationnement':'Address, hours and parking'}</h2><dl>${t.dl.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl><div class="cta" style="margin-top:28px;display:flex;flex-wrap:wrap;gap:12px"><a class="b b1" href="${MAPS}" target="_blank" rel="noopener">${t.route}${AR}</a></div></div><div class="lxf lxg" id="rdv"><h2>${t.ctH}</h2><p class="sub">${t.ctSub}</p>[contact-form-7 id="${fid}"]</div></div></section></div>`;
-    const b = `<div class="lx"><section class="sec wash" style="padding-top:clamp(56px,6vw,96px)"><div class="w"><div class="mapw"><iframe src="${MAPEMBED}" title="${t.mapT}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div></div></section></div>` + bar(l,bookTarget);
+    const ct = `<div class="lx"><section class="sec"><div class="w ct"><div><span class="eb">${t.ctEb}</span><h2>${l==='fr'?'Adresse, heures et stationnement':'Address, hours and parking'}</h2><dl>${t.dl.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl><div class="cta" style="margin-top:28px;display:flex;flex-wrap:wrap;gap:12px"><a class="b b1" href="${MAPS}" target="_blank" rel="noopener">${t.route}${AR}</a></div></div><div class="lxf lxg" id="rdv"><h2>${t.ctH}</h2><p class="sub">${t.ctSub}</p>[contact-form-7 id="${fid}"]</div><div class="mapw" style="grid-column:2;height:clamp(320px,26vw,440px)"><iframe src="${MAPEMBED}" title="${t.mapT}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div></div></section></div>`;
+    const b = bar(l,bookTarget);
     content = OPEN + code(a) + text(ct) + code(b) + CLOSE;
     note = 'form ' + fid;
   } else if (kind === 'legal') {
@@ -326,6 +326,7 @@ async function build(pg, idx){
   } else {
     const blocks = extract(html);
     const s = sectionize(blocks, title);
+    if (s.secs.length && !s.secs.some(x=>x.imgs.length)) { let best=0; s.secs.forEach((x,k)=>{ if (tlen(x)>tlen(s.secs[best])) best=k; }); if (tlen(s.secs[best])>200) s.secs[best].imgs.push({src:UP+POOL[(idx*3+4)%POOL.length],alt:''}); }
     let a = STYLE() + `<div class="lx">${hero(l, eb, s.h1, s.lead, pic, title)}${renderSecs(s.secs, false)}`;
     if (kind === 'service') {
       const others = window.__P.filter(p => p.l===l && p.id!==pg.id);
