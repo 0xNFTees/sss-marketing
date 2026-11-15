@@ -177,6 +177,9 @@ function extract(html){
     if (tag==='UL'||tag==='OL') { const items=[...c.children].filter(li=>li.tagName==='LI').map(clean).filter(Boolean); if (items.length) out.push({t:tag.toLowerCase(),items}); continue; }
     if (tag==='IFRAME') { const s=c.getAttribute('src')||c.dataset.src||''; if (/youtube|vimeo/.test(s)) out.push({t:'vid',src:s}); continue; }
     if (tag==='TABLE') { out.push({t:'table',html:fixTxt(c.outerHTML.replace(/ (class|style|width|height)="[^"]*"/g,''))}); continue; }
+    const loose = [...c.childNodes].some(n=>n.nodeType===3 && n.textContent.trim());
+    if (loose && !c.querySelector('p,ul,ol,h1,h2,h3,h4,div,table,form')) { c.querySelectorAll('img').forEach(i=>{const s=imgSrc(i); if(s) out.push({t:'img',src:s,w:i.getAttribute('width'),alt:i.getAttribute('alt')||''});}); c.innerHTML.split(/(?:<br\s*\/?>\s*){2,}/i).forEach(part=>{const tmp=document.createElement('div'); tmp.innerHTML=part; const h=clean(tmp); if (h.replace(/<br\s*\/?>/g,'').trim()) out.push({t:'p',html:h});}); continue; }
+    if (loose) { [...c.childNodes].filter(n=>n.nodeType===3 && n.textContent.trim().length>2).forEach(n=>out.push({t:'p',html:fixTxt(esc(n.textContent.trim()))})); }
     walk(c);
   } };
   walk(root);
