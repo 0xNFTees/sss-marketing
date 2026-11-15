@@ -50,7 +50,7 @@ const PAGECSS = `
 .lx .cg>div:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(7,70,114,.08);border-color:#bfe0ee}
 .lx .cg h3{margin-bottom:14px!important;display:flex;gap:14px;align-items:center}
 .lx .cg h3 i{flex:none;font-style:normal;width:34px;height:34px;border-radius:50%;background:#e4f6fd;color:var(--navy);font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center}
-.lx .cg .prose{max-width:none}.lx .cg .prose p{font-size:16.5px}
+.lx .cg .prose{max-width:none}.lx .cg .prose ul.many{grid-template-columns:minmax(0,1fr)!important}.lx .cg .prose p{font-size:16.5px}
 .lx .sh{margin-bottom:clamp(36px,4vw,56px);max-width:900px}
 /* team */
 .lx .people{display:grid;gap:clamp(72px,8vw,136px)}
@@ -278,19 +278,19 @@ function team(l, html, title){
   const d = new DOMParser().parseFromString(html,'text/html');
   const root = d.querySelector('#content .post-content') || d.querySelector('#content');
   const all = [...root.querySelectorAll('h1,h2,h3,h4,p,ul,ol,img')].filter(e => !e.parentElement.closest('p,ul,ol,h1,h2,h3,h4'));
-  const people = []; const photoQ = []; let cur = null;
+  const people = []; const photoQ = []; let logoQ = []; let cur = null;
   for (const e of all) {
     if (e.tagName==='IMG') { const s=imgSrc(e), w=e.getAttribute('width'); if (!s) continue;
       if (/0J3A7208/.test(s)) continue;
-      if (isLogo(s,w) && !/\.jpg$/i.test(s)) { if (cur && !/feuille/.test(s)) cur.logos.push(s); }
-      else if (/brebeuf/i.test(s)) { if (cur) cur.logos.push(s); }
+      if (/feuille/.test(s)) {}
+      else if ((isLogo(s,w) && !/\.jpg$/i.test(s)) || /brebeuf|logo/i.test(s)) logoQ.push(s);
       else photoQ.push(s);
       continue; }
     if (e.tagName==='H1') { const lines = e.innerHTML.split(/<br\s*\/?>/i).map(x=>x.replace(/<[^>]+>/g,'').replace(/&nbsp;/g,' ').trim()).filter(Boolean);
-      cur = {name:lines[0], cred:lines.slice(1).join(' '), role:'', photo:photoQ.shift()||null, logos:[], body:[]}; people.push(cur); continue; }
+      cur = {name:lines[0], cred:lines.slice(1).join(' '), role:'', photo:photoQ.shift()||null, logos:logoQ, body:[]}; logoQ=[]; people.push(cur); continue; }
     if (!cur) continue;
     if (/^H[2-4]$/.test(e.tagName)) { const tx=e.textContent.trim(); if (!cur.body.length && !cur.role) cur.role=tx; else cur.body.push({t:'h',lvl:3,text:tx}); continue; }
-    if (e.tagName==='P') { e.querySelectorAll('img').forEach(i=>{const s=imgSrc(i); if (s && /logo|brebeuf/i.test(s)) cur.logos.push(s); else if (s) photoQ.push(s);}); const h=clean(e); if (h.replace(/<br\s*\/?>/g,'').trim()) cur.body.push({t:'p',html:h}); continue; }
+    if (e.tagName==='P') { e.querySelectorAll('img').forEach(i=>{const s=imgSrc(i); if (s && /logo|brebeuf/i.test(s)) logoQ.push(s); else if (s) photoQ.push(s);}); const h=clean(e); if (h.replace(/<br\s*\/?>/g,'').trim()) cur.body.push({t:'p',html:h}); continue; }
     const items=[...e.children].filter(li=>li.tagName==='LI').map(clean).filter(Boolean); if (items.length) cur.body.push({t:e.tagName.toLowerCase(),items});
   }
   // portraits are queued in document order and taken one per name
