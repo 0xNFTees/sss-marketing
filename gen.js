@@ -85,6 +85,11 @@ const PAGECSS = `
 .lx .mapw{position:relative;border-radius:28px;overflow:hidden;height:clamp(380px,38vw,560px);background:#dfeef5;border:1px solid var(--line)}
 .lx .mapw iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .lx .legal{max-width:960px}.lx .legal h1,.lx .legal h2{font-size:clamp(24px,2vw,32px)!important;margin:40px 0 14px!important}.lx .legal h3{margin:28px 0 10px!important}.lx .legal p,.lx .legal li{font-size:16.5px;line-height:1.7;color:var(--mut)}.lx .legal ul{padding-left:22px;margin:0 0 18px}
+
+.lx .legal .alignwide,.lx .legal .alignfull,.lx .legal .wp-block-group{margin-left:0!important;margin-right:0!important;width:auto!important;max-width:none!important;padding-left:0!important;padding-right:0!important}
+.lx .legal .wp-block-post-title{font-size:clamp(24px,2vw,32px)!important;text-transform:none}
+.lx .ed>.prose.full{max-width:none}
+.post-content>.fusion-fullwidth:not(.hundred-percent-fullwidth)>.fusion-builder-row{max-width:calc(1760px + 2*clamp(20px,4.6vw,96px))!important;padding-left:clamp(20px,4.6vw,96px)!important;padding-right:clamp(20px,4.6vw,96px)!important;box-sizing:border-box}
 @media(max-width:1080px){
  .lx .ih .w{grid-template-columns:minmax(0,1fr);min-height:0;padding-bottom:72px}
  .lx .ih .pic{aspect-ratio:16/10;max-width:720px}
@@ -196,6 +201,13 @@ function sectionize(blocks, pageTitle){
     cur.blocks.push(b);
   }
   if (cur.h||cur.blocks.length||cur.imgs.length) secs.push(cur);
+  // split long sections on their sub-headings (h3/h4 or a short bold-only paragraph)
+  const isSub = b => (b.t==='h' && b.lvl>=3) || (b.t==='p' && /^<(strong|b)>[^<]{2,90}<\/(strong|b)>\s*:?\s*$/.test(b.html));
+  const subText = b => (b.t==='h' ? b.text : b.html.replace(/<[^>]+>/g,'')).replace(/\s*:\s*$/,'').trim();
+  for (let i=0;i<secs.length;i++) { const sc=secs[i]; const n=sc.blocks.filter(isSub).length; const len=sc.blocks.reduce((m,b)=>m+(b.html||'').length+(b.items||[]).join('').length,0);
+    if (n>=2 && len>700) { const parts=[]; let c={h:sc.h,blocks:[],imgs:sc.imgs};
+      for (const b of sc.blocks) { if (isSub(b)) { if (c.h||c.blocks.length) parts.push(c); c={h:subText(b),blocks:[],imgs:[]}; } else c.blocks.push(b); }
+      parts.push(c); secs.splice(i,1,...parts.filter(x=>x.blocks.length||x.imgs.length||x===parts[0])); i+=parts.length-1; } }
   // images in a text-less section move to the next one
   for (let i=0;i<secs.length;i++) if (!secs[i].blocks.length && !secs[i].h && secs[i].imgs.length && secs[i+1]) { secs[i+1].imgs.unshift(...secs[i].imgs); secs[i].imgs=[]; }
   const res = secs.filter(s=>s.blocks.length||s.imgs.length);
