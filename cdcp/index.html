@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#fefae0">
-<title>CDCP Eligibility Calculator — Live Demo | SSS</title>
-<meta name="description" content="Try the CDCP eligibility calculator SSS installs on dental clinic websites, free. Four questions, sixty seconds, real federal coverage tiers.">
+<title>CDCP Calculator for Dental Clinic Websites, Free | SSS</title>
+<meta name="description" content="The CDCP eligibility and co-pay calculator SSS installs free on dental clinic websites, in English and French. Try the live demo: four questions, 60 seconds.">
 <meta name="format-detection" content="telephone=no">
 
 <link rel="canonical" href="https://sss.marketing/cdcp/">
@@ -25,28 +25,63 @@
 <meta property="og:site_name" content="SSS">
 <meta property="og:locale" content="en_CA">
 <meta property="og:url" content="https://sss.marketing/cdcp/">
-<meta property="og:title" content="SSS — CDCP Eligibility Calculator">
+<meta property="og:title" content="SSS — CDCP calculator for dental clinic websites">
 <meta property="og:description" content="The CDCP calculator we install on dental clinic websites, free. Try it in 60 seconds.">
 <meta property="og:image" content="https://sss.marketing/cdcp/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="SSS — CDCP Eligibility Calculator">
+<meta property="og:image:alt" content="SSS — CDCP calculator for dental clinic websites">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="SSS — CDCP Eligibility Calculator">
+<meta name="twitter:title" content="SSS — CDCP calculator for dental clinic websites">
 <meta name="twitter:description" content="The CDCP calculator we install on dental clinic websites, free. Try it in 60 seconds.">
 <meta name="twitter:image" content="https://sss.marketing/cdcp/og-image.png">
 
 <script type="application/ld+json">
 {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-{"@type":"Question","name":"Am I eligible for CDCP?","acceptedAnswer":{"@type":"Answer","text":"Three conditions, all required: no access to private dental insurance, an adjusted family net income under $90,000, and a filed Canadian tax return for you (and your spouse or partner, if applicable) for the previous year."}},
-{"@type":"Question","name":"What income cuts off CDCP coverage?","acceptedAnswer":{"@type":"Answer","text":"Under $70,000 covers up to 100%. $70,000–$79,999 covers up to 60%. $80,000–$89,999 covers up to 40%. $90,000 or more isn't eligible."}},
-{"@type":"Question","name":"Does CDCP cover implants or Invisalign?","acceptedAnswer":{"@type":"Answer","text":"No. Implants and orthodontics, including Invisalign, are excluded at every income level, with no clinical exceptions."}},
-{"@type":"Question","name":"When can I apply or renew?","acceptedAnswer":{"@type":"Answer","text":"The main renewal window runs mid-April to early June each year. Miss it and there's no retroactive reimbursement. New, first-time applications are accepted on a rolling basis all year."}},
-{"@type":"Question","name":"How much does CDCP save patients?","acceptedAnswer":{"@type":"Answer","text":"About $900 a year on average, per the federal program's own April 2026 figures, across more than 6.5 million enrolled Canadians."}}
-  ]
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "Am I eligible for CDCP?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Four requirements, all needed: no access to private dental insurance, an adjusted family net income under $90,000, last year's tax return filed, and Canadian residency for tax purposes. The tax requirements apply to a spouse or common-law partner too."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "What income cuts off CDCP coverage?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Under $70,000, CDCP pays 100% of its established fee. From $70,000 to $79,999 it pays 60%, and from $80,000 to $89,999 it pays 40%. At $90,000 or more, you are not eligible."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Does CDCP cover implants or Invisalign?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "No. Orthodontic services, including Invisalign, are currently not available under CDCP, and implants are not on the list of covered services."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "When can I apply or renew?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Renewal happens each spring; in 2026 it ran April 15 to June 1. Missing it ends coverage on June 30 and care during the gap is not reimbursed. New applications for 2026–27 are open."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "How many people are enrolled in CDCP?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "5,163,512 for the 2026–27 benefit period as of October 31, 2026, including 1,438,307 in Quebec. 29,762 oral health providers participate."
+   }
+  }
+ ]
 }
 </script>
 
@@ -219,6 +254,10 @@ footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
   .fade-in{opacity:1;transform:none}
   html{scroll-behavior:auto}
 }
+.criteria-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1024px){.criteria-grid{grid-template-columns:1fr 1fr}.criteria-cell:nth-child(3){border-left:none;padding-left:0}}
+@media(max-width:760px){.criteria-grid{grid-template-columns:1fr}.criteria-cell+.criteria-cell{border-left:none;padding-left:0}}
+.text-link{border-bottom:1px solid var(--tan);padding-bottom:2px}.text-link:hover{border-bottom-color:var(--ink)}
 </style>
 </head>
 <body>
@@ -227,17 +266,17 @@ footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
 
 <nav id="nav" aria-label="Main">
   <div class="nav-inner">
-    <a href="/?lang=en" class="nav-logo" aria-label="SSS">
+    <a href="/en/" class="nav-logo" aria-label="SSS">
       <img src="/logo-nav.png" srcset="/logo-nav.png 1x, /logo-nav@2x.png 2x, /logo-nav@3x.png 3x" alt="SSS" width="74" height="30" fetchpriority="high" loading="eager" decoding="async">
     </a>
     <div class="nav-links">
-      <a href="/?lang=en#services">Method</a>
-      <a href="/tarifs/?lang=en">Pricing</a>
-      <a href="/?lang=en#team">Team</a>
+      <a href="/en/#services">Method</a>
+      <a href="/en/pricing/">Pricing</a>
+      <a href="/en/#team">Team</a>
     </div>
     <div class="nav-right">
       <a class="nav-lang-link" href="/rcsd/" hreflang="fr">Français (RCSD)</a>
-      <a href="/?lang=en#contact" class="cta-nav">Install it free</a>
+      <a href="/en/#contact" class="cta-nav">Install it free</a>
     </div>
   </div>
 </nav>
@@ -247,7 +286,7 @@ footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
   <div class="container">
     <div class="hero-left">
       <p class="eyebrow label fade-in d1">Live product demo</p>
-      <h1 class="fade-in d2">6.5 million Canadians have CDCP coverage.<br><em>Try the tool that turns them into booked patients.</em></h1>
+      <h1 class="fade-in d2">5.1 million Canadians are enrolled in CDCP for 2026–27.<br><em>Try the tool that turns them into booked patients.</em></h1>
       <p class="hero-sub fade-in d3">This is the CDCP eligibility calculator we install on dental clinic websites, free. Run it the way a patient would, then picture it on yours.</p>
     </div>
   </div>
@@ -263,10 +302,10 @@ footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
         <p class="label calc-kicker">Free eligibility check</p>
         <h3 class="calc-title">Check your CDCP coverage in 60 seconds</h3>
         <p class="calc-sub">Four quick questions. No account, no waiting.</p>
-      <div id="quizRoot"><cdcp-calculator data-lang="en" data-province="QC" data-primary-color="#1B3B36" data-clinic-name="Our Dental Clinic" data-booking-url="/?lang=en#contact"></cdcp-calculator></div>
+      <div id="quizRoot"><cdcp-calculator data-lang="en" data-province="QC" data-primary-color="#1B3B36" data-clinic-name="Our Dental Clinic" data-booking-url="/en/#contact"></cdcp-calculator></div>
       <div class="demo-cta">
         <p>Free for any dental clinic in Canada. Installed on your site in one 30-minute call.</p>
-        <a href="/?lang=en#contact" class="cta-primary">Get this on your site, free<span class="cta-arrow" aria-hidden="true">&#8594;</span></a>
+        <a href="/en/#contact" class="cta-primary">Get this on your site, free<span class="cta-arrow" aria-hidden="true">&#8594;</span></a>
       </div>
     </div>
   </div>
@@ -276,11 +315,12 @@ footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
   <div class="section-rule"></div>
   <div class="container">
     <div class="section-head fade-in"><span class="num">02</span><span class="sep"></span><span>What qualifies</span></div>
-    <h2 class="section-title fade-in d1" id="eligTitle">Three conditions. No exceptions.</h2>
-    <p class="section-lede fade-in d2">CDCP eligibility comes down to three federal conditions, checked in order.</p>
-    <div class="criteria-grid"><div class="criteria-cell fade-in"><div class="criteria-label">No private coverage</div><div class="criteria-value">Any of the three disqualifies</div><p class="criteria-note">An employer plan, private insurance, or a health spending account that covers dental: any one of them ends eligibility, regardless of income.</p></div><div class="criteria-cell fade-in"><div class="criteria-label">Income</div><div class="criteria-value">Under $90,000</div><p class="criteria-note">Adjusted family net income, from the last tax return. Coverage steps down from 100% to 60% to 40% as income rises inside that ceiling.</p></div><div class="criteria-cell fade-in"><div class="criteria-label">Tax filed</div><div class="criteria-value">You, and your spouse or partner</div><p class="criteria-note">For the previous tax year. No return on file with the CRA means no coverage, no matter how low the income.</p></div></div>
-    <p class="criteria-close fade-in">These are federal rules, verified on canada.ca on 2026-09-15. No clinic can change them.</p>
-    <p class="criteria-close fade-in" style="margin-top:12px">In Quebec? RAMQ covers basic care for children under 10 separately from CDCP. The French version of this page has the full breakdown.</p>
+    <h2 class="section-title fade-in d1" id="eligTitle">Four conditions. All of them required.</h2>
+    <p class="section-lede fade-in d2">The federal requirements on canada.ca. The tax ones apply to the spouse or common-law partner too.</p>
+    <div class="criteria-grid"><div class="criteria-cell fade-in"><div class="criteria-label">No private coverage</div><div class="criteria-value">No access to dental insurance</div><p class="criteria-note">An employer plan, a pension plan, a family member&#x27;s plan or a health spending account that covers dental: access to any one of them ends eligibility, regardless of income.</p></div><div class="criteria-cell fade-in"><div class="criteria-label">Income</div><div class="criteria-value">Under $90,000</div><p class="criteria-note">Adjusted family net income, from the last tax return. CDCP pays 100%, 60% or 40% of its fee as income rises inside that ceiling.</p></div><div class="criteria-cell fade-in"><div class="criteria-label">Tax filed</div><div class="criteria-value">Last year&#x27;s return</div><p class="criteria-note">Filed for the patient, and for their spouse or common-law partner if they have one.</p></div><div class="criteria-cell fade-in"><div class="criteria-label">Residency</div><div class="criteria-value">Canadian resident for tax purposes</div><p class="criteria-note">Applies to the spouse or common-law partner too.</p></div></div>
+    <p class="criteria-close fade-in">These are federal rules, verified on canada.ca on November 18, 2026. No clinic can change them.</p>
+    <p class="criteria-close fade-in" style="margin-top:12px">In Quebec, RAMQ pays first for the services it covers for children under 10; CDCP can cover the rest, such as cleanings. <a class="text-link" href="/calculateur-rcsd/#ramq" hreflang="fr">RAMQ and RCSD, explained in French</a></p>
+    <p class="criteria-close fade-in" style="margin-top:12px"><a class="text-link" href="/cdcp-calculator/">The full patient guide: co-pay examples, what is covered, renewal dates &#8594;</a></p>
   </div>
 </section>
 
@@ -300,11 +340,11 @@ footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
   <div class="container">
     <div class="section-head fade-in"><span class="num">04</span><span class="sep"></span><span>Questions patients ask</span></div>
     <h2 class="section-title fade-in d1" id="faqTitle">The answers your front desk gives every day.</h2>
-    <div class="faq fade-in d2"><details><summary>Am I eligible for CDCP?<span class="vh">Toggle answer</span></summary><div class="faq-a">Three conditions, all required: no access to private dental insurance, an adjusted family net income under $90,000, and a filed Canadian tax return for you (and your spouse or partner, if applicable) for the previous year.</div></details>
-<details><summary>What income cuts off CDCP coverage?<span class="vh">Toggle answer</span></summary><div class="faq-a">Under $70,000 covers up to 100%. $70,000–$79,999 covers up to 60%. $80,000–$89,999 covers up to 40%. $90,000 or more isn't eligible.</div></details>
-<details><summary>Does CDCP cover implants or Invisalign?<span class="vh">Toggle answer</span></summary><div class="faq-a">No. Implants and orthodontics, including Invisalign, are excluded at every income level, with no clinical exceptions.</div></details>
-<details><summary>When can I apply or renew?<span class="vh">Toggle answer</span></summary><div class="faq-a">The main renewal window runs mid-April to early June each year. Miss it and there's no retroactive reimbursement. New, first-time applications are accepted on a rolling basis all year.</div></details>
-<details><summary>How much does CDCP save patients?<span class="vh">Toggle answer</span></summary><div class="faq-a">About $900 a year on average, per the federal program's own April 2026 figures, across more than 6.5 million enrolled Canadians.</div></details></div>
+    <div class="faq fade-in d2"><details><summary>Am I eligible for CDCP?<span class="vh">Toggle answer</span></summary><div class="faq-a">Four requirements, all needed: no access to private dental insurance, an adjusted family net income under $90,000, last year&#x27;s tax return filed, and Canadian residency for tax purposes. The tax requirements apply to a spouse or common-law partner too.</div></details>
+<details><summary>What income cuts off CDCP coverage?<span class="vh">Toggle answer</span></summary><div class="faq-a">Under $70,000, CDCP pays 100% of its established fee. From $70,000 to $79,999 it pays 60%, and from $80,000 to $89,999 it pays 40%. At $90,000 or more, you are not eligible.</div></details>
+<details><summary>Does CDCP cover implants or Invisalign?<span class="vh">Toggle answer</span></summary><div class="faq-a">No. Orthodontic services, including Invisalign, are currently not available under CDCP, and implants are not on the list of covered services.</div></details>
+<details><summary>When can I apply or renew?<span class="vh">Toggle answer</span></summary><div class="faq-a">Renewal happens each spring; in 2026 it ran April 15 to June 1. Missing it ends coverage on June 30 and care during the gap is not reimbursed. New applications for 2026–27 are open.</div></details>
+<details><summary>How many people are enrolled in CDCP?<span class="vh">Toggle answer</span></summary><div class="faq-a">5,163,512 for the 2026–27 benefit period as of October 31, 2026, including 1,438,307 in Quebec. 29,762 oral health providers participate.</div></details></div>
   </div>
 </section>
 
@@ -320,8 +360,8 @@ footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
       <div class="footer-col">
         <div class="footer-col-label">Navigation</div>
         <ul>
-          <li><a href="/?lang=en#services">Method</a></li>
-          <li><a href="/tarifs/?lang=en">Pricing</a></li>
+          <li><a href="/en/#services">Method</a></li>
+          <li><a href="/en/pricing/">Pricing</a></li>
           <li><a href="/rcsd/">Français (RCSD)</a></li>
         </ul>
       </div>
@@ -329,7 +369,7 @@ footer{background:var(--forest);color:var(--paper);padding:72px 0 44px}
         <div class="footer-col-label">Contact</div>
         <ul>
           <li><a href="mailto:info@sss.marketing">info@sss.marketing</a></li>
-          <li><a href="/?lang=en#contact">Book a call</a></li>
+          <li><a href="/en/#contact">Book a call</a></li>
         </ul>
       </div>
     </div>

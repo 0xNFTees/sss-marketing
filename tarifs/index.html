@@ -2,15 +2,16 @@
 <html lang="fr-CA">
 <head>
 <meta charset="utf-8">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get("lang")==="en"){q.delete("lang");var r=q.toString();location.replace("/en/pricing/"+(r?"?"+r:"")+location.hash);}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tarifs | SSS Marketing dentaire</title>
+<title>Tarifs du marketing dentaire : 450 $ par mois par clinique | SSS</title>
 <meta name="description" content="450 $ par mois, par clinique. Mise en service de 500 $. Calculateur RCSD gratuit, installé pendant un appel de 30 minutes.">
 <link rel="canonical" href="https://sss.marketing/tarifs/">
 <link rel="alternate" hreflang="fr-CA" href="https://sss.marketing/tarifs/">
-<link rel="alternate" hreflang="en-CA" href="https://sss.marketing/tarifs/?lang=en">
+<link rel="alternate" hreflang="en-CA" href="https://sss.marketing/en/pricing/">
 <link rel="alternate" hreflang="x-default" href="https://sss.marketing/tarifs/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Tarifs | SSS Marketing dentaire">
+<meta property="og:title" content="Tarifs du marketing dentaire : 450 $ par mois par clinique | SSS">
 <meta property="og:description" content="450 $ par mois, par clinique. Calculateur RCSD gratuit.">
 <meta property="og:url" content="https://sss.marketing/tarifs/">
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -161,7 +162,7 @@ h2{font-family:var(--display);font-weight:500;font-size:clamp(28px,3.6vw,44px);l
       <div class="lang" role="group" aria-label="Langue / Language">
         <a href="/tarifs/" hreflang="fr" lang="fr" id="lang-fr" aria-current="true">FR</a>
         <span aria-hidden="true">/</span>
-        <a href="/tarifs/?lang=en" hreflang="en" lang="en" id="lang-en">EN</a>
+        <a href="/en/pricing/" hreflang="en" lang="en" id="lang-en">EN</a>
       </div>
       <a class="btn btn--nav" href="/#contact" data-book data-en="Book a call">Réserver un appel</a>
     </div>
@@ -335,28 +336,5 @@ h2{font-family:var(--display);font-weight:500;font-size:clamp(28px,3.6vw,44px);l
 </div>
 
 <script src="/s.js" defer></script>
-<script>
-(function () {
-  if (new URLSearchParams(location.search).get("lang") !== "en") return;
-  var d = document;
-  d.documentElement.lang = "en-CA";
-  d.title = "Pricing | SSS Dental Marketing";
-  var set = function (sel, attr, val) { var el = d.querySelector(sel); if (el) el.setAttribute(attr, val); };
-  set('meta[name="description"]', "content", "$450 per month, per clinic. $500 setup. Free CDCP calculator, installed during one 30-minute call.");
-  set('meta[property="og:title"]', "content", "Pricing | SSS Dental Marketing");
-  set('meta[property="og:description"]', "content", "$450 per month, per clinic. Free CDCP calculator.");
-  set('meta[property="og:url"]', "content", "https://sss.marketing/tarifs/?lang=en");
-  set('link[rel="canonical"]', "href", "https://sss.marketing/tarifs/?lang=en");
-  d.querySelectorAll("[data-en]").forEach(function (el) { el.innerHTML = el.getAttribute("data-en"); });
-  d.querySelectorAll("[data-book]").forEach(function (el) { el.setAttribute("href", "/?lang=en#contact"); });
-  d.querySelectorAll("[data-home]").forEach(function (el) { el.setAttribute("href", "/?lang=en"); });
-  d.querySelectorAll("[data-demo]").forEach(function (el) { el.setAttribute("href", "/cdcp/"); });
-  set(".nav", "aria-label", "Main");
-  set(".footer nav", "aria-label", "Footer");
-  set(".nav-logo", "aria-label", "SSS Marketing, home");
-  d.getElementById("lang-fr").removeAttribute("aria-current");
-  d.getElementById("lang-en").setAttribute("aria-current", "true");
-})();
-</script>
 </body>
 </html>

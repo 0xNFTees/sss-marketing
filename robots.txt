@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /stats/
+Disallow: /onboarding/
+
+Sitemap: https://sss.marketing/sitemap.xml
