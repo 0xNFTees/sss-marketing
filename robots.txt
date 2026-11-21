@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /stats/
 Disallow: /onboarding/
+Disallow: /crm/
 
 Sitemap: https://sss.marketing/sitemap.xml
