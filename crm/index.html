@@ -249,6 +249,27 @@ details.more-details summary::-webkit-details-marker{display:none}
 .modal{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:20px;background:rgba(28,24,18,.35)}
 .modal .card{width:min(680px,100%);max-height:calc(100vh - 40px);overflow:auto;padding:22px;background:var(--paper)}
 .modal h2{font-family:var(--display);font-weight:500;font-size:28px;margin:0 0 4px}
+.k-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.k-tabs{margin-bottom:14px}
+.k-body{display:grid;gap:12px}
+.k-say{background:var(--surface-a);border-radius:var(--r-sm);padding:12px 16px}
+.k-say p{margin:4px 0 0;font-size:17px;line-height:1.5}
+.k-branch{background:var(--card);border:1px dashed var(--line-2)}
+.k-who{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--tan-deep)}
+.k-tip{margin:0;font-size:13.5px;color:var(--ink-2);padding-left:12px;border-left:3px solid var(--tan)}
+.k-list b{display:block;font-size:14px;margin-bottom:4px}
+.k-list ul{margin:0;padding-left:20px;display:grid;gap:4px;font-size:14.5px}
+.k-obj{border:1px solid var(--line);border-radius:var(--r-sm);background:var(--card)}
+.k-obj summary{cursor:pointer;padding:11px 14px;font-weight:600;font-size:15px;list-style:none}
+.k-obj summary::-webkit-details-marker{display:none}
+.k-obj summary::before{content:'+ ';color:var(--tan-deep)}
+.k-obj[open] summary::before{content:'– '}
+.k-obj p{margin:0 14px 10px;font-size:16px;line-height:1.5}
+.k-obj .k-tip{font-size:13px}
+mark.ph{background:#f3e3bf;color:inherit;border-radius:4px;padding:0 4px}
+.callmode .inner.with-kit{max-width:1280px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:32px;align-items:start}
+.callmode .kit.in-call{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow-y:auto;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+@media (max-width:980px){.callmode .inner.with-kit{grid-template-columns:1fr}.callmode .kit.in-call{position:static;max-height:none}}
 .callmode{position:fixed;inset:0;z-index:25;background:var(--paper);overflow-y:auto}
 .callmode .inner{max-width:760px;margin:0 auto;padding:20px 22px 60px}
 .callbar{display:flex;align-items:center;gap:12px;margin-bottom:18px}
@@ -1020,7 +1041,9 @@ function syncPool(){
 
 /* ================= SEQUENCES ================= */
 function renderSequences(){
-  var h=head('Cadences','Sequences','Each lead on a sequence shows up in Today on the day its next step is due. Any reply, meeting, “not now” or “no” takes it off.');
+  var tabs='<div class="seg" role="group" aria-label="Show"><button type="button" data-act="seq-tab" data-v="seq" aria-pressed="'+(state.seqTab!=='kit')+'">Sequences</button><button type="button" data-act="seq-tab" data-v="kit" aria-pressed="'+(state.seqTab==='kit')+'">Call kit</button></div>';
+  if(state.seqTab==='kit'){$('#view').innerHTML=head('Cadences','Call kit','Scripts, objection answers and tools for every call, in French and English.',tabs)+renderKitView();return;}
+  var h=head('Cadences','Sequences','Each lead on a sequence shows up in Today on the day its next step is due. Any reply, meeting, “not now” or “no” takes it off.',tabs);
   if(!state.seqs.length){$('#view').innerHTML=h+'<div class="card empty"><b>No sequences yet</b>Ask Claude to load the outreach playbook.</div>';return;}
   h+='<div class="seqs">';
   state.seqs.forEach(function(s,si){
@@ -1050,6 +1073,247 @@ function saveTemplate(v){
   var p=v.split('-'),s=state.seqs[+p[0]],st=s&&s.steps[+p[1]];if(!st||!db)return;
   st.subj=$('#t-subj').value;st.body=$('#t-body').value;st.d=Math.max(0,parseInt($('#t-day').value,10)||0);
   db.doc('config/sequences').set({list:state.seqs}).then(function(){closeModal();toast('Template saved.');render();}).catch(fail);
+}
+
+/* ================= CALL KIT (scripts, rebuttals, tools) ================= */
+/* {moi} = caller first name, {contact} = person on the lead, {clinique} = clinic name */
+var KIT_SECTIONS=[
+  {k:'prep',fr:'Avant de composer',en:'Before you dial'},
+  {k:'desk',fr:'Réception',en:'Front desk'},
+  {k:'dm',fr:'Décideur',en:'Decision maker'},
+  {k:'spec',fr:'Spécialiste',en:'Specialist'},
+  {k:'disc',fr:'Questions',en:'Questions'},
+  {k:'obj',fr:'Objections',en:'Objections'},
+  {k:'book',fr:'Rendez-vous',en:'Booking'},
+  {k:'vm',fr:'Message vocal',en:'Voicemail'},
+  {k:'tools',fr:'Outils',en:'Tools'}
+];
+var KIT={
+FR:{
+prep:[
+  {s:'tip',x:'20 secondes avant chaque appel. Un bon appel dure moins de 3 minutes et finit par une date ou une prochaine étape notée.'},
+  {s:'list',h:'Vérifiez',items:['Le lead n’est pas « Ne pas contacter » (DNC).','La langue de la clinique : français, anglais ou les deux.','Le nom du contact et son rôle (dentiste propriétaire, gestionnaire).','La section « Quoi dire » et les dernières notes.','Ce n’est pas une clinique 123Dentist ou Dentalcorp, ni un orthodontiste, ni une clinique où vous avez travaillé.']},
+  {s:'list',h:'Les 6 étapes, toujours dans cet ordre',items:['1. Nom, SSS Marketing et la raison, dès la première phrase.','2. Demander la permission : « Vous avez 30 secondes? »','3. La raison en une phrase : la question du RCSD à la réception.','4. Deux questions, puis on se tait et on écoute.','5. Demander l’appel d’installation avec deux heures précises.','6. Noter le résultat et une ligne de note avant le prochain numéro.']},
+  {s:'list',h:'Règles',items:['Vouvoyer par défaut. Passer à l’anglais dès que la personne le fait.','Ne jamais argumenter : on reconnaît, on répond une fois, on redemande une fois. Deux non = on remercie et on note.','Ne jamais promettre de prix, de résultats ou quoi que ce soit sur les données des patients. « Hamza vous montre tout ça pendant l’appel de 30 minutes. »','Sourire en parlant : ça s’entend.']}
+],
+desk:[
+  {s:'say',w:'Vous',x:'Bonjour, {moi} de SSS Marketing. Je vous appelle pour une question rapide, vous avez 30 secondes?'},
+  {s:'say',w:'Vous',x:'Merci. Est-ce que les patients vous demandent souvent si le RCSD les couvre, et combien ils vont payer?'},
+  {s:'branch',h:'Oui / souvent',x:'C’est exactement pour ça que j’appelle. On a un calculateur gratuit qui répond à cette question directement sur le site de la clinique, en moins d’une minute. Le patient voit son palier, sa part à payer, et il peut prendre rendez-vous.'},
+  {s:'branch',h:'Non / pas vraiment',x:'Ah, intéressant! Vous acceptez le RCSD? (Si oui :) Quand ils appellent, c’est souvent pour savoir combien il leur reste à payer. Le calculateur leur répond avant l’appel.'},
+  {s:'say',w:'Vous',x:'Qui s’occupe du site web ou du marketing chez vous? C’est {contact} ou la gestionnaire?'},
+  {s:'say',w:'Vous',x:'Je pourrais lui parler deux minutes? Sinon, quel est le meilleur moment pour la joindre?'},
+  {s:'tip',x:'Toujours repartir avec un nom et un moment. Notez le prénom de la réceptionniste et utilisez-le au prochain appel.'},
+  {s:'say',w:'Si elle ne peut pas transférer',x:'Pas de problème. Je peux vous envoyer le lien pour l’essayer comme un patient, et vous le montrez à {contact}? À quelle adresse courriel?'},
+  {s:'tip',x:'Une adresse donnée au téléphone avec son accord = consentement exprès. Notez qui l’a donnée et quand.'}
+],
+dm:[
+  {s:'say',w:'Vous',x:'Bonjour {contact}, {moi} de SSS Marketing. On travaille seulement avec des cliniques dentaires. Vous avez 30 secondes?'},
+  {s:'say',w:'Vous',x:'La question qu’on entend le plus à la réception ces temps-ci, c’est : « Est-ce que le RCSD me couvre, et combien je vais payer? » Un premier examen avec nettoyage, c’est 344 $ au guide ACDQ 2026; le RCSD en paie 268. Même couvert à 100 %, le patient paie 76 $, et il l’apprend souvent au comptoir.'},
+  {s:'say',w:'Vous',x:'On a bâti un calculateur qui lui montre ça sur votre site, avant le rendez-vous. Quatre questions, moins d’une minute, à vos couleurs, avec un bouton vers votre prise de rendez-vous. C’est gratuit : Hamza, notre fondateur, l’installe avec vous en 30 minutes.'},
+  {s:'say',w:'Vous',x:'Comment votre équipe gère ces questions-là aujourd’hui?'},
+  {s:'tip',x:'Écoutez. Reprenez un mot qu’ils ont dit (« le téléphone », « les nouveaux patients ») avant de proposer le rendez-vous.'},
+  {s:'say',w:'Vous',x:'Je vous propose {jour1} ou {jour2} pour l’installer. Qu’est-ce qui vous va le mieux?'},
+  {s:'branch',h:'Gestionnaire (plutôt que dentiste)',x:'Pour vous, ça veut dire moins d’appels RCSD à la réception, et rien à faire de votre côté : Hamza s’occupe de l’installation avec la personne qui a accès au site.'}
+],
+spec:[
+  {s:'tip',x:'Pour les spécialistes à qui la Clinique Dentaire La Cité réfère des patients (parodontistes, endodontistes, chirurgiens buccaux, denturologistes). C’est vrai, et c’est notre meilleure porte d’entrée. Ne dites jamais qu’on vous attend si ce n’est pas le cas.'},
+  {s:'say',w:'Vous',x:'Bonjour, {moi} de SSS Marketing. J’appelle de la part de Hamza, de la réception de la Clinique Dentaire La Cité, qui vous réfère des patients. Vous avez 30 secondes?'},
+  {s:'say',w:'Vous',x:'Hamza a fondé SSS Marketing pour les cliniques dentaires. On a un calculateur RCSD qui s’installe sur votre site : le patient référé voit s’il est admissible, son palier et sa part à payer avant la consultation, plutôt qu’au comptoir.'},
+  {s:'say',w:'Vous',x:'Vos patients référés savent-ils ce que le RCSD va payer avant de venir?'},
+  {s:'say',w:'Vous',x:'C’est gratuit, Hamza l’installe en 30 minutes. Je vous propose {jour1} ou {jour2}?'},
+  {s:'tip',x:'Denturologistes : parlez de la « quote-part pour la prothèse ». Chirurgiens et parodontistes : « l’écart entre vos honoraires et la grille du RCSD ».'}
+],
+disc:[
+  {s:'tip',x:'Posez-en deux, pas plus. Puis taisez-vous. Celui qui parle le plus vend le moins.'},
+  {s:'list',h:'Réception',items:['Est-ce que les patients vous demandent souvent si le RCSD les couvre?','Combien d’appels par jour, à peu près, sur le RCSD?','Qu’est-ce que vous leur répondez quand ils demandent combien ils vont payer?']},
+  {s:'list',h:'Décideur',items:['Comment votre équipe gère ces questions-là aujourd’hui?','Est-ce que des patients RCSD annulent ou ne reviennent pas quand ils voient la facture?','Qui s’occupe de votre site web : une agence, quelqu’un à l’interne?','Vous prenez de nouveaux patients en ce moment?']},
+  {s:'list',h:'Spécialiste',items:['Vos patients référés savent-ils ce que le RCSD va payer avant la consultation?','Combien de vos patients référés sont au RCSD, à peu près?']}
+],
+obj:[
+  {s:'tip',x:'Reconnaître, répondre une fois, redemander une fois. Un deuxième non : on remercie et on note.'},
+  {s:'obj',q:'« Envoyez-moi un courriel. »',a:'Avec plaisir. Je vous envoie le lien pour l’essayer comme un patient. À quelle adresse? Et je vous rappelle {jour2} pour voir ce que vous en pensez?',n:'Notez l’adresse, qui l’a donnée, et la date de rappel.'},
+  {s:'obj',q:'« On n’est pas intéressés. »',a:'Je comprends. Juste pour savoir : est-ce que les patients vous posent la question du RCSD?',n:'Si c’est encore non : « Merci de votre temps, bonne journée. » Résultat : Non.'},
+  {s:'obj',q:'« On a déjà une agence / quelqu’un pour le site. »',a:'Parfait, ça ne change rien : c’est un outil gratuit sur votre site. Votre agence peut même l’installer avec nous, ça prend 15 minutes.'},
+  {s:'obj',q:'« C’est quoi le piège? C’est vraiment gratuit? »',a:'Oui. Un petit « Propulsé par SSS » reste sous le calculateur, c’est tout. Si un jour vous voulez plus, Hamza vous en parle, sans obligation.'},
+  {s:'obj',q:'« Combien ça coûte, après? »',a:'Le calculateur reste gratuit. Hamza vous montre les options pendant l’appel; je ne veux pas vous donner un mauvais chiffre.',n:'Ne donnez jamais de prix. Si on insiste : escaladez à Hamza.'},
+  {s:'obj',q:'« On n’a pas le temps. »',a:'C’est justement 30 minutes, une seule fois, et ça vous sauve du temps au téléphone ensuite. {jour1} ou {jour2}?'},
+  {s:'obj',q:'« Rappelez plus tard. »',a:'Bien sûr. Quel moment est le mieux : avant 9 h, sur l’heure du midi ou après 16 h?',n:'Résultat : Plus tard, avec la date exacte.'},
+  {s:'obj',q:'« On ne prend pas le RCSD. »',a:'Merci de me le dire, bonne journée!',n:'Notez-le, marquez Perdu. On n’insiste pas.'},
+  {s:'obj',q:'« Les patients appellent quand même, ça ne changera rien. »',a:'Certains, oui. Mais ceux qui appellent savent déjà leur palier, alors l’appel dure une minute au lieu de dix. Et ceux qui ne l’ont pas demandé voient le montant avant le rendez-vous, plutôt qu’au comptoir.'},
+  {s:'obj',q:'« Le RCSD, on l’explique déjà sur notre site. »',a:'Super, vous êtes en avance. Le calculateur ajoute la partie que le texte ne peut pas donner : le montant que ce patient-là va payer, selon son palier.'},
+  {s:'obj',q:'« On a assez de patients. »',a:'Tant mieux! Le calculateur sert surtout la réception : moins d’appels RCSD, moins de surprises au comptoir.'},
+  {s:'obj',q:'« Et les données des patients? »',a:'Le patient répond à quatre questions pour voir son estimation. Hamza vous explique exactement ce qui est conservé ou non pendant l’appel.',n:'N’improvisez jamais sur ce sujet.'},
+  {s:'obj',q:'« Qui s’occupe de notre site? Aucune idée. »',a:'Pas de souci, Hamza regarde ça avec vous. Il suffit que quelqu’un ait accès au site, ou le courriel de la personne qui l’a fait.'},
+  {s:'obj',q:'« Le dentiste décide, je ne peux rien faire. »',a:'Je comprends. C’est quand le meilleur moment pour lui parler deux minutes? Je peux aussi vous envoyer le lien pour lui montrer.'},
+  {s:'obj',q:'« On fait partie d’un groupe (123Dentist, Dentalcorp, etc.). »',a:'Merci de me le dire. Je vais en parler à Hamza, c’est lui qui s’occupe des groupes. Bonne journée!',n:'Arrêtez l’appel et escaladez à Hamza.'},
+  {s:'obj',q:'« Ne m’appelez plus. »',a:'C’est noté, vous ne serez plus appelés. Bonne journée.',n:'Résultat : Non → la fiche passe en Ne pas contacter tout de suite.'}
+],
+book:[
+  {s:'say',w:'Vous',x:'Je vous propose {jour1} ou {jour2}. Qu’est-ce qui vous va le mieux?'},
+  {s:'tip',x:'Toujours deux heures précises, jamais « quand ça vous arrange ». Les deux heures proposées sont des suggestions : vérifiez l’agenda de Hamza. Jamais un mercredi. Si ça ne marche pas, proposez les deux prochaines.'},
+  {s:'list',h:'Avant de raccrocher, confirmez',items:['Qui sera à l’appel (nom et rôle).','Son courriel, pour l’invitation.','Ce qui fait tourner le site : WordPress, Wix, Squarespace, une agence, autre.','Qui a l’accès au site (ou le courriel de l’agence).','Le lien de prise de rendez-vous en ligne, s’ils en ont un.']},
+  {s:'say',w:'Pour finir',x:'Parfait, c’est noté pour {jour1}. Hamza vous envoie l’invitation par courriel aujourd’hui. Merci beaucoup, bonne journée!'},
+  {s:'tip',x:'Résultat : Rendez-vous, avec la date, l’heure, la personne et le courriel dans la note. Avant de composer le prochain numéro.'}
+],
+vm:[
+  {s:'tip',x:'Seulement au 3e essai. 20 secondes maximum. Parlez lentement en donnant votre numéro.'},
+  {s:'say',w:'Message',x:'Bonjour {contact}, {moi} de SSS Marketing. J’appelle au sujet des questions RCSD à la réception : on installe gratuitement un calculateur sur le site de la clinique. Je vous envoie un courriel aujourd’hui avec le lien pour l’essayer. Vous pouvez me rappeler au [votre numéro]. Bonne journée!'},
+  {s:'tip',x:'Envoyez le courriel promis seulement si le lead a une adresse avec preuve (publiée ou donnée au téléphone). Sinon, ne promettez pas de courriel.'},
+  {s:'say',w:'Sans courriel',x:'Bonjour {contact}, {moi} de SSS Marketing, au sujet des questions RCSD à la réception. On installe gratuitement un calculateur sur le site de la clinique. Rappelez-moi au [votre numéro]. Bonne journée!'}
+],
+tools:[
+  {s:'say',w:'Pitch de 30 secondes',x:'Les patients demandent à la réception : « Est-ce que le RCSD me couvre, et combien je vais payer? » Notre calculateur répond sur le site de la clinique : quatre questions, moins d’une minute, le patient voit son palier, sa part et un bouton pour prendre rendez-vous. C’est gratuit, Hamza l’installe en 30 minutes.'},
+  {s:'list',h:'Les chiffres à connaître',items:['Québec : premier examen + nettoyage = 344 $ (guide ACDQ 2026). Le RCSD paie 268 $. Le patient paie 76 $, même « couvert à 100 % ».','Ontario : 423 $ (guide ODA). Le RCSD paie 342 $. Le patient paie 81 $.','On dit que le RCSD « paie » la clinique (directement), pas qu’il « rembourse ».','Démo à montrer : www.sss.marketing/embed/demo.html?lang=fr']},
+  {s:'list',h:'Phrases qui marchent',items:['« Ça vous sauve des appels, pas du temps de plus. »','« C’est vous qui répondez à ces questions-là toute la journée, non? »','« Je ne veux pas vous donner un mauvais chiffre : Hamza vous le montre. »','« Je vous laisse retourner à vos patients. »']},
+  {s:'list',h:'À ne jamais dire',items:['Un prix, un contrat, des résultats Google Ads.','« Dre X attend mon appel » si ce n’est pas vrai.','Quoi que ce soit sur une clinique où vous avez travaillé.','« Je me permets de vous déranger », « solutions », « révolutionner ».']},
+  {s:'list',h:'Escaladez à Hamza tout de suite si',items:['On demande un prix ou un contrat.','Un groupe ou un réseau de plusieurs cliniques est intéressé.','On mentionne 123Dentist ou Dentalcorp.','Quelqu’un est fâché ou parle d’une plainte.','Vous n’êtes pas sûr de pouvoir écrire à une adresse.']},
+  {s:'list',h:'Meilleurs moments',items:['Décideurs : avant 9 h, 12 h à 13 h, après 16 h.','Évitez l’ouverture et le retour du dîner : la réception est débordée.','Jamais de rendez-vous le mercredi.']},
+  {s:'list',h:'Une bonne note',items:['« Réception (Julie) : Dre Tran en chirurgie le mardi, rappeler jeudi 8 h 30. »','« Dr Roy intéressé, veut voir avec sa gestionnaire (Isabelle). Rappel lundi 16 h. Site Wix. »','Pas seulement « rappeler ».']}
+]
+},
+EN:{
+prep:[
+  {s:'tip',x:'20 seconds before every call. A good call is under 3 minutes and ends with a date or a clear next step logged.'},
+  {s:'list',h:'Check',items:['The lead is not marked Do not contact (DNC).','The clinic’s language: French, English or both.','The contact’s name and role (owner dentist, office manager).','The “What to say” box and the last notes.','It is not a 123Dentist or Dentalcorp clinic, an orthodontist, or a clinic where you have worked.']},
+  {s:'list',h:'The 6 moves, always in this order',items:['1. Your name, SSS Marketing and the reason, in the first sentence.','2. Ask permission: “Do you have 30 seconds?”','3. The reason in one sentence: the CDCP question at the front desk.','4. Two questions, then stop talking and listen.','5. Ask for the install call with two specific times.','6. Log the outcome and a one-line note before the next dial.']},
+  {s:'list',h:'Rules',items:['Switch to French the moment they do.','Never argue: acknowledge, answer once, ask once more. Two noes = thank them and log it.','Never promise prices, results or anything about patient data. “Hamza walks you through all of that on the 30-minute call.”','Smile while you talk: they can hear it.']}
+],
+desk:[
+  {s:'say',w:'You',x:'Hi, this is {moi} from SSS Marketing. Quick question, do you have 30 seconds?'},
+  {s:'say',w:'You',x:'Thanks. Do patients often ask you whether the CDCP covers them, and how much they’ll pay?'},
+  {s:'branch',h:'Yes / all the time',x:'That’s exactly why I’m calling. We have a free calculator that answers that on the clinic’s website in under a minute. The patient sees their tier, their share, and can book right there.'},
+  {s:'branch',h:'No / not really',x:'Oh, interesting! Do you accept the CDCP? (If yes:) When they do call, it’s usually to find out what’s left for them to pay. The calculator answers that before they call.'},
+  {s:'say',w:'You',x:'Who looks after the website or marketing there, {contact} or the office manager?'},
+  {s:'say',w:'You',x:'Could I speak with them for two minutes? If not, when’s the best time to reach them?'},
+  {s:'tip',x:'Always leave with a name and a time. Write down the receptionist’s first name and use it on the next call.'},
+  {s:'say',w:'If they can’t transfer you',x:'No problem. I can email you the link so you can try it like a patient and show {contact}. What address should I use?'},
+  {s:'tip',x:'An address given on the phone with their OK = express consent. Note who gave it and when.'}
+],
+dm:[
+  {s:'say',w:'You',x:'Hi {contact}, {moi} from SSS Marketing. We work only with dental clinics. Do you have 30 seconds?'},
+  {s:'say',w:'You',x:'The question front desks hear most right now is “Does the CDCP cover me, and what will I pay?” In Quebec a new-patient exam and cleaning is $344 on the ACDQ guide; the CDCP pays $268. Even at 100% coverage the patient owes $76, and often finds out at checkout.'},
+  {s:'say',w:'You',x:'We built a calculator that shows them that on your website before the visit. Four questions, under a minute, in your colours, with a button to your booking page. It’s free: Hamza, our founder, installs it with you on a 30-minute call.'},
+  {s:'say',w:'You',x:'How does your team handle those questions today?'},
+  {s:'tip',x:'Listen. Repeat one word they used (“the phones”, “new patients”) before you ask for the meeting.'},
+  {s:'say',w:'You',x:'I can book {jour1} or {jour2} for the install. Which works better?'},
+  {s:'branch',h:'Office manager (not the dentist)',x:'For you it means fewer CDCP calls at the front desk, and nothing to do on your side: Hamza handles the install with whoever has access to the website.'},
+  {s:'tip',x:'Ontario clinic: use $423 on the ODA guide, the CDCP pays $342, the patient owes $81.'}
+],
+spec:[
+  {s:'tip',x:'For specialists Clinique Dentaire La Cité refers patients to (periodontists, endodontists, oral surgeons, denturists). It’s true, and it’s our best way in. Never say they’re expecting your call unless they are.'},
+  {s:'say',w:'You',x:'Hi, this is {moi} from SSS Marketing. I’m calling on behalf of Hamza, from the front desk at Clinique Dentaire La Cité, which refers patients to you. Do you have 30 seconds?'},
+  {s:'say',w:'You',x:'Hamza founded SSS Marketing for dental clinics. We have a CDCP calculator that sits on your website: a referred patient sees whether they qualify, their tier and their share before the consult, not at checkout.'},
+  {s:'say',w:'You',x:'Do your referred patients know what the CDCP will pay before they come in?'},
+  {s:'say',w:'You',x:'It’s free, Hamza installs it in 30 minutes. Would {jour1} or {jour2} work?'},
+  {s:'tip',x:'Denturists: talk about “the co-pay on the denture”. Surgeons and periodontists: “the gap between your fees and the CDCP grid”.'}
+],
+disc:[
+  {s:'tip',x:'Ask two, no more. Then be quiet. Whoever talks most sells least.'},
+  {s:'list',h:'Front desk',items:['Do patients often ask you whether the CDCP covers them?','Roughly how many CDCP calls a day?','What do you tell them when they ask how much they’ll pay?']},
+  {s:'list',h:'Decision maker',items:['How does your team handle those questions today?','Do CDCP patients ever cancel or not come back once they see the bill?','Who looks after your website: an agency, someone in-house?','Are you taking new patients right now?']},
+  {s:'list',h:'Specialist',items:['Do your referred patients know what the CDCP will pay before the consult?','Roughly how many of your referred patients are on the CDCP?']}
+],
+obj:[
+  {s:'tip',x:'Acknowledge, answer once, ask once more. A second no: thank them and log it.'},
+  {s:'obj',q:'“Just email me.”',a:'Happy to. I’ll send you the link so you can try it as a patient. What’s the best address? And I’ll call you back {jour2} to hear what you think?',n:'Log the address, who gave it, and the callback date.'},
+  {s:'obj',q:'“We’re not interested.”',a:'I understand. Just so I know: do patients ask you about the CDCP?',n:'Still no: “Thanks for your time, have a good day.” Outcome: No.'},
+  {s:'obj',q:'“We already have an agency / someone for the website.”',a:'Perfect, that doesn’t change anything: it’s a free tool on your site. Your agency can even install it with us, it takes 15 minutes.'},
+  {s:'obj',q:'“What’s the catch? Is it really free?”',a:'Yes. A small “Powered by SSS” stays under the calculator, that’s all. If you ever want more, Hamza can tell you about it, no obligation.'},
+  {s:'obj',q:'“How much does it cost after?”',a:'The calculator stays free. Hamza shows you the options on the call; I don’t want to give you a wrong number.',n:'Never quote a price. If they push: escalate to Hamza.'},
+  {s:'obj',q:'“We don’t have time.”',a:'That’s the point: 30 minutes, once, and it saves you phone time after that. {jour1} or {jour2}?'},
+  {s:'obj',q:'“Call back later.”',a:'Of course. What’s best: before 9, over lunch or after 4?',n:'Outcome: Later, with the exact date.'},
+  {s:'obj',q:'“We don’t take the CDCP.”',a:'Thanks for letting me know, have a good day!',n:'Note it, mark Lost. Don’t push.'},
+  {s:'obj',q:'“Patients will still call, it won’t change anything.”',a:'Some will. But the ones who call already know their tier, so the call takes a minute instead of ten. And the ones who didn’t ask see the amount before the appointment, not at checkout.'},
+  {s:'obj',q:'“We already explain the CDCP on our site.”',a:'Great, you’re ahead. The calculator adds what text can’t: the amount this specific patient will pay, for their tier.'},
+  {s:'obj',q:'“We have enough patients.”',a:'Good for you! It’s mostly for the front desk: fewer CDCP calls, fewer surprises at checkout.'},
+  {s:'obj',q:'“What about patient data?”',a:'The patient answers four questions to see their estimate. Hamza explains exactly what is and isn’t stored on the call.',n:'Never improvise on this.'},
+  {s:'obj',q:'“No idea who runs our website.”',a:'No worries, Hamza figures that out with you. We just need someone with access to the site, or the email of whoever built it.'},
+  {s:'obj',q:'“The dentist decides, I can’t do anything.”',a:'Understood. When’s the best time to catch them for two minutes? I can also email you the link to show them.'},
+  {s:'obj',q:'“We’re part of a group (123Dentist, Dentalcorp…).”',a:'Thanks for telling me. I’ll pass it to Hamza, he handles groups himself. Have a good day!',n:'End the call and escalate to Hamza.'},
+  {s:'obj',q:'“Don’t call us again.”',a:'Noted, you won’t be called again. Have a good day.',n:'Outcome: No → the lead becomes Do not contact right away.'}
+],
+book:[
+  {s:'say',w:'You',x:'I can do {jour1} or {jour2}. Which works better?'},
+  {s:'tip',x:'Always two specific times, never “whenever suits you”. The two times shown are suggestions: check Hamza’s calendar. Never a Wednesday. If neither works, offer the next two.'},
+  {s:'list',h:'Before you hang up, confirm',items:['Who will be on the call (name and role).','Their email, for the invite.','What runs the website: WordPress, Wix, Squarespace, an agency, other.','Who has access to the site (or the agency’s email).','Their online booking link, if they have one.']},
+  {s:'say',w:'To close',x:'Perfect, you’re booked for {jour1}. Hamza will email you the invite today. Thanks so much, have a good day!'},
+  {s:'tip',x:'Outcome: Meeting, with date, time, person and email in the note. Before you dial the next number.'}
+],
+vm:[
+  {s:'tip',x:'Only on the 3rd attempt. 20 seconds max. Say your number slowly.'},
+  {s:'say',w:'Message',x:'Hi {contact}, {moi} from SSS Marketing, about the CDCP questions your front desk gets. We install a free calculator on clinic websites. I’ll email you the link to try it today. You can reach me at [your number]. Have a good day!'},
+  {s:'tip',x:'Only send the promised email if the lead has an address with proof (published or given on the phone). Otherwise, don’t promise one.'},
+  {s:'say',w:'No email on file',x:'Hi {contact}, {moi} from SSS Marketing, about the CDCP questions at your front desk. We install a free calculator on clinic websites. Call me back at [your number]. Have a good day!'}
+],
+tools:[
+  {s:'say',w:'30-second pitch',x:'Patients ask the front desk “Does the CDCP cover me, and what will I pay?” Our calculator answers it on the clinic’s own website: four questions, under a minute, the patient sees their tier, their share and a button to book. It’s free, Hamza installs it in 30 minutes.'},
+  {s:'list',h:'Numbers to know',items:['Quebec: new-patient exam + cleaning = $344 (ACDQ 2026 guide). The CDCP pays $268. The patient owes $76, even “100% covered”.','Ontario: $423 (ODA guide). The CDCP pays $342. The patient owes $81.','The CDCP “pays” the clinic directly; don’t say it “reimburses”.','Demo to share: www.sss.marketing/embed/demo.html']},
+  {s:'list',h:'Lines that work',items:['“It saves you calls, not adds work.”','“You’re the one answering those questions all day, right?”','“I don’t want to give you a wrong number: Hamza will show you.”','“I’ll let you get back to your patients.”']},
+  {s:'list',h:'Never say',items:['A price, a contract, Google Ads results.','“Dr. X is expecting my call” unless it’s true.','Anything about a clinic where you have worked.','“Solutions”, “revolutionize”, “game-changer”.']},
+  {s:'list',h:'Escalate to Hamza right away if',items:['They ask for a price or a contract.','A group or network of several clinics is interested.','Someone mentions 123Dentist or Dentalcorp.','Someone is upset or mentions a complaint.','You’re not sure you may email an address.']},
+  {s:'list',h:'Best times',items:['Decision makers: before 9, 12 to 1, after 4.','Avoid opening and right after lunch: the front desk is swamped.','Never book a Wednesday.']},
+  {s:'list',h:'A good note',items:['“Reception (Julie): Dr. Tran in surgery Tuesdays, call back Thursday 8:30.”','“Dr. Roy interested, wants to check with his manager (Isabelle). Callback Monday 4 pm. Wix site.”','Not just “call back”.']}
+]
+}};
+var kit={lang:'FR',sec:'desk',open:false};
+function kitDays(lang){
+  var out=[],d=new Date();d.setHours(12,0,0,0);
+  var fr=lang==='FR';
+  var dn=fr?['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi']:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var mn=fr?['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre']:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var times=fr?['10 h','14 h']:['10 am','2 pm'];
+  while(out.length<2){
+    d.setDate(d.getDate()+1);var w=d.getDay();if(w===0||w===6||w===3)continue;
+    out.push(fr?(dn[w]+' '+(d.getDate()===1?'1er':d.getDate())+' '+mn[d.getMonth()]+' à '+times[out.length]):(dn[w]+', '+mn[d.getMonth()]+' '+d.getDate()+' at '+times[out.length]));
+  }
+  return out;
+}
+function kitFirst(s){return String(s||'').split(/[;,(]/)[0].trim();}
+function kitFill(txt,lang,l){
+  var me=String(state.me||'').split(' ')[0];
+  var c=l?kitFirst(l.contact):'';
+  var cl=l?titleOf(l):'';
+  var days=kitDays(lang);
+  var tok=function(v,ph){return v?esc(v):'<mark class="ph">'+esc(ph)+'</mark>';};
+  return esc(txt)
+    .replace(/\{moi\}/g,tok(me,lang==='FR'?'votre prénom':'your name'))
+    .replace(/\{contact\}/g,tok(c,lang==='FR'?'Dre X':'Dr. X'))
+    .replace(/\{clinique\}/g,tok(cl,lang==='FR'?'la clinique':'the clinic'))
+    .replace(/\{jour1\}/g,'<b>'+esc(days[0])+'</b>')
+    .replace(/\{jour2\}/g,'<b>'+esc(days[1])+'</b>')
+    .replace(/\[(votre numéro|your number)\]/g,'<mark class="ph">$1</mark>');
+}
+function kitBody(lang,sec,l){
+  var blocks=(KIT[lang]||{})[sec]||[];
+  return blocks.map(function(b){
+    if(b.s==='say')return '<div class="k-say"><span class="k-who">'+esc(b.w)+'</span><p>'+kitFill(b.x,lang,l)+'</p></div>';
+    if(b.s==='branch')return '<div class="k-say k-branch"><span class="k-who">'+(lang==='FR'?'Si : ':'If: ')+esc(b.h)+'</span><p>'+kitFill(b.x,lang,l)+'</p></div>';
+    if(b.s==='tip')return '<p class="k-tip">'+kitFill(b.x,lang,l)+'</p>';
+    if(b.s==='list')return '<div class="k-list"><b>'+esc(b.h)+'</b><ul>'+b.items.map(function(i){return '<li>'+kitFill(i,lang,l)+'</li>';}).join('')+'</ul></div>';
+    if(b.s==='obj')return '<details class="k-obj"><summary>'+esc(b.q)+'</summary><p>'+kitFill(b.a,lang,l)+'</p>'+(b.n?'<p class="k-tip">'+kitFill(b.n,lang,l)+'</p>':'')+'</details>';
+    return '';
+  }).join('');
+}
+function kitPanel(l,inCall){
+  var lang=kit.lang,sec=kit.sec;
+  var h='<div class="kit'+(inCall?' in-call':'')+'">'+
+    '<div class="k-top"><div class="seg" role="group" aria-label="Language">'+['FR','EN'].map(function(x){return '<button type="button" data-act="kit-lang" data-v="'+x+'" aria-pressed="'+(lang===x)+'">'+x+'</button>';}).join('')+'</div>'+
+    (inCall?'<button type="button" class="btn small ghost" data-act="kit-toggle">'+ic('i-x')+(lang==='FR'?'Fermer':'Close')+'</button>':'')+'</div>'+
+    '<div class="chips k-tabs" role="tablist">'+KIT_SECTIONS.map(function(s){return '<button type="button" class="chip" role="tab" data-act="kit-sec" data-v="'+s.k+'" aria-pressed="'+(sec===s.k)+'">'+esc(lang==='FR'?s.fr:s.en)+'</button>';}).join('')+'</div>'+
+    (sec==='obj'?'<p class="faint" style="font-size:13px;margin:0 0 8px">'+(lang==='FR'?'Touchez une objection pour voir la réponse.':'Tap an objection to see the answer.')+'</p>':'')+
+    '<div class="k-body">'+kitBody(lang,sec,l)+'</div></div>';
+  return h;
+}
+function kitForLead(l){
+  if(!l)return;
+  var lg=String(l.lang||'').toUpperCase();
+  kit.lang=(lg.indexOf('EN')===0||(lg.indexOf('FR')<0&&String(l.prov||'')!=='QC'&&String(l.prov||'')!==''))?'EN':'FR';
+  kit.sec=l.type==='specialist'?'spec':'desk';
+}
+function renderKitView(){
+  var h='<p class="soft" style="margin:0 0 16px;max-width:720px">'+(kit.lang==='FR'?'Tout ce qu’il faut pour un appel : les scripts, les réponses aux objections et les outils. Le même kit s’ouvre pendant un appel avec le bouton Script, rempli avec le nom de la clinique et du contact.':'Everything you need on a call: scripts, objection answers and tools. The same kit opens during a call with the Script button, filled in with the clinic and contact names.')+'</p>';
+  return h+'<div class="card" style="padding:18px 20px">'+kitPanel(null,false)+'</div>';
 }
 
 /* ================= DRAWER ================= */
@@ -1262,7 +1526,7 @@ function rerender(){render();if(state.open)renderDrawer();if(state.call)renderCa
 function startCalls(){
   var list=dueMine().filter(function(l){return channelOf(l)==='call';}).sort(function(a,b){return a.due<b.due?-1:1;});
   if(!list.length){toast('No calls due.');return;}
-  state.call={ids:list.map(function(l){return l.id;}),i:0,draft:{},done:0};
+  state.call={ids:list.map(function(l){return l.id;}),i:0,draft:{},done:0};kit.open=window.innerWidth>980;kit.lead=null;
   $('#callmode').hidden=false;document.body.classList.add('locked');renderCall();
 }
 function endCalls(){var n=state.call?state.call.done:0;state.call=null;$('#callmode').hidden=true;if(!state.open)document.body.classList.remove('locked');render();if(n)toast(n+' call'+(n===1?'':'s')+' logged. Nice work.');}
@@ -1271,8 +1535,9 @@ function renderCall(){
   if(c.i>=c.ids.length){$('#callmode').innerHTML='<div class="inner"><div class="empty" style="padding-top:80px"><b>That’s the list</b>'+c.done+' logged.<div style="margin-top:16px"><button type="button" class="btn primary" data-act="call-end">Back to Today</button></div></div></div>';return;}
   var l=lead(c.ids[c.i]);if(!l){c.i++;renderCall();return;}
   var phone=firstPhone(l.phone),d=c.draft,logs=logsFor(l.id).slice(0,3),st=stepOf(l);
-  var h='<div class="inner"><div class="callbar"><button type="button" class="btn small ghost" data-act="call-end">'+ic('i-x')+'End</button>'+
-    '<div class="bar" aria-hidden="true"><i style="width:'+Math.round(c.i/c.ids.length*100)+'%"></i></div><span class="num soft" style="font-size:14px">'+(c.i+1)+' of '+c.ids.length+'</span></div>'+
+  if(kit.lead!==l.id){kit.lead=l.id;kitForLead(l);}
+  var h='<div class="inner'+(kit.open?' with-kit':'')+'"><div class="cm-main"><div class="callbar"><button type="button" class="btn small ghost" data-act="call-end">'+ic('i-x')+'End</button>'+
+    '<div class="bar" aria-hidden="true"><i style="width:'+Math.round(c.i/c.ids.length*100)+'%"></i></div><span class="num soft" style="font-size:14px">'+(c.i+1)+' of '+c.ids.length+'</span>'+(kit.open?'':'<button type="button" class="btn small" data-act="kit-toggle">Script</button>')+'</div>'+
     '<span class="caps" style="color:var(--tan-deep)">'+esc([lbl(TYPES,l.type),l.city,l.lang].filter(Boolean).join(' · '))+'</span>'+
     '<h2>'+esc(titleOf(l))+'</h2><p class="soft" style="margin:0">'+esc([l.contact,l.role].filter(Boolean).join(' · '))+'</p>'+
     (phone?'<a class="phone-xl num" href="tel:'+esc(digits(phone))+'">'+esc(phone)+'</a> <button type="button" class="btn small ghost" data-act="copy" data-v="'+esc(phone)+'">'+ic('i-copy')+'Copy</button>':'<p class="notice warn">No phone number on file.</p>')+
@@ -1284,7 +1549,8 @@ function renderCall(){
     (d.outcome==='meeting'?'<p class="notice" style="margin-top:10px">Not on a Wednesday. Set the meeting date below.</p>':'')+
     (['no'].indexOf(d.outcome)<0?'<div class="chips" style="margin-top:12px">'+FOLLOW.map(function(f){var v=addDays(f.d);return '<button type="button" class="chip" data-act="c-follow" data-v="'+v+'" aria-pressed="'+(d.due===v)+'">'+f.l+'</button>';}).join('')+'<input type="date" id="c-due" aria-label="Follow-up date" value="'+esc(d.due||'')+'" style="width:auto"></div>':'')+
     '<div class="row-actions" style="margin-top:16px"><button type="button" class="btn primary" data-act="c-save"'+(d.outcome?'':' disabled')+'>Save and next <span class="kbd" style="color:inherit;border-color:currentColor">Enter</span></button>'+
-    '<button type="button" class="btn ghost" data-act="c-skip">Skip</button><button type="button" class="btn ghost" data-act="open" data-id="'+esc(l.id)+'">Open lead</button></div></div>';
+    '<button type="button" class="btn ghost" data-act="c-skip">Skip</button><button type="button" class="btn ghost" data-act="open" data-id="'+esc(l.id)+'">Open lead</button></div></div>'+(kit.open?kitPanel(l,true):'')+'</div>';
+  var ks=$('#callmode .kit .k-body');var kst=ks?ks.scrollTop:0;
   $('#callmode').innerHTML=h;
 }
 function callSave(){
@@ -1479,6 +1745,10 @@ document.addEventListener('click',function(e){
     case 'd-add': addFromDirectory();break;
     case 'sync': syncPool();break;
     /* sequences */
+    case 'seq-tab': state.seqTab=v;render();break;
+    case 'kit-lang': kit.lang=v;if(state.call)renderCall();else render();break;
+    case 'kit-sec': kit.sec=v;if(state.call)renderCall();else render();break;
+    case 'kit-toggle': kit.open=!kit.open;renderCall();break;
     case 'seq-filter': state.p={q:'',stage:'all',owner:'',type:'',prov:'',seq:v,flag:'',mode:'list',limit:100,sel:{}};location.hash='pipeline';break;
     case 'tpl-open': openTemplate(v);break;
     case 'tpl-save': saveTemplate(v);break;
