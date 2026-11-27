@@ -1094,7 +1094,7 @@ prep:[
   {s:'tip',x:'20 secondes avant chaque appel. Un bon appel dure moins de 3 minutes et finit par une date ou une prochaine étape notée.'},
   {s:'list',h:'Vérifiez',items:['Le lead n’est pas « Ne pas contacter » (DNC).','La langue de la clinique : français, anglais ou les deux.','Le nom du contact et son rôle (dentiste propriétaire, gestionnaire).','La section « Quoi dire » et les dernières notes.','Ce n’est pas une clinique 123Dentist ou Dentalcorp, ni un orthodontiste, ni une clinique où vous avez travaillé.']},
   {s:'list',h:'Les 6 étapes, toujours dans cet ordre',items:['1. Nom, SSS Marketing et la raison, dès la première phrase.','2. Demander la permission : « Vous avez 30 secondes? »','3. La raison en une phrase : la question du RCSD à la réception.','4. Deux questions, puis on se tait et on écoute.','5. Demander l’appel d’installation avec deux heures précises.','6. Noter le résultat et une ligne de note avant le prochain numéro.']},
-  {s:'list',h:'Règles',items:['Vouvoyer par défaut. Passer à l’anglais dès que la personne le fait.','Ne jamais argumenter : on reconnaît, on répond une fois, on redemande une fois. Deux non = on remercie et on note.','Ne jamais promettre de prix, de résultats ou quoi que ce soit sur les données des patients. « Hamza vous montre tout ça pendant l’appel de 30 minutes. »','Sourire en parlant : ça s’entend.']}
+  {s:'list',h:'Règles',items:['Vouvoyer par défaut. Passer à l’anglais dès que la personne le fait.','Ne jamais argumenter : on reconnaît, on répond une fois, on redemande une fois. Deux non = on remercie et on note.','Ne jamais promettre de prix, de résultats ou quoi que ce soit sur les données des patients. « On vous montre tout ça pendant l’appel d’installation de 30 minutes. »','Sourire en parlant : ça s’entend.']}
 ],
 desk:[
   {s:'say',w:'Vous',x:'Bonjour, {moi} de SSS Marketing. Je vous appelle pour une question rapide, vous avez 30 secondes?'},
@@ -1110,18 +1110,18 @@ desk:[
 dm:[
   {s:'say',w:'Vous',x:'Bonjour {contact}, {moi} de SSS Marketing. On travaille seulement avec des cliniques dentaires. Vous avez 30 secondes?'},
   {s:'say',w:'Vous',x:'La question qu’on entend le plus à la réception ces temps-ci, c’est : « Est-ce que le RCSD me couvre, et combien je vais payer? » Un premier examen avec nettoyage, c’est 344 $ au guide ACDQ 2026; le RCSD en paie 268. Même couvert à 100 %, le patient paie 76 $, et il l’apprend souvent au comptoir.'},
-  {s:'say',w:'Vous',x:'On a bâti un calculateur qui lui montre ça sur votre site, avant le rendez-vous. Quatre questions, moins d’une minute, à vos couleurs, avec un bouton vers votre prise de rendez-vous. C’est gratuit : Hamza, notre fondateur, l’installe avec vous en 30 minutes.'},
+  {s:'say',w:'Vous',x:'On a bâti un calculateur qui lui montre ça sur votre site, avant le rendez-vous. Quatre questions, moins d’une minute, à vos couleurs, avec un bouton vers votre prise de rendez-vous. C’est gratuit, et on l’installe avec vous lors d’un appel de 30 minutes.'},
   {s:'say',w:'Vous',x:'Comment votre équipe gère ces questions-là aujourd’hui?'},
   {s:'tip',x:'Écoutez. Reprenez un mot qu’ils ont dit (« le téléphone », « les nouveaux patients ») avant de proposer le rendez-vous.'},
   {s:'say',w:'Vous',x:'Je vous propose {jour1} ou {jour2} pour l’installer. Qu’est-ce qui vous va le mieux?'},
-  {s:'branch',h:'Gestionnaire (plutôt que dentiste)',x:'Pour vous, ça veut dire moins d’appels RCSD à la réception, et rien à faire de votre côté : Hamza s’occupe de l’installation avec la personne qui a accès au site.'}
+  {s:'branch',h:'Gestionnaire (plutôt que dentiste)',x:'Pour vous, ça veut dire moins d’appels RCSD à la réception, et rien à faire de votre côté : on s’occupe de l’installation avec la personne qui a accès au site.'}
 ],
 spec:[
-  {s:'tip',x:'Pour les spécialistes à qui la Clinique Dentaire La Cité réfère des patients (parodontistes, endodontistes, chirurgiens buccaux, denturologistes). C’est vrai, et c’est notre meilleure porte d’entrée. Ne dites jamais qu’on vous attend si ce n’est pas le cas.'},
-  {s:'say',w:'Vous',x:'Bonjour, {moi} de SSS Marketing. J’appelle de la part de Hamza, de la réception de la Clinique Dentaire La Cité, qui vous réfère des patients. Vous avez 30 secondes?'},
-  {s:'say',w:'Vous',x:'Hamza a fondé SSS Marketing pour les cliniques dentaires. On a un calculateur RCSD qui s’installe sur votre site : le patient référé voit s’il est admissible, son palier et sa part à payer avant la consultation, plutôt qu’au comptoir.'},
+  {s:'tip',x:'Pour les spécialistes à qui la Clinique Dentaire La Cité réfère des patients (parodontistes, endodontistes, chirurgiens buccaux, denturologistes). SSS a bâti le calculateur de La Cité : c’est vrai, et c’est notre meilleure porte d’entrée. Ne dites jamais qu’on vous attend si ce n’est pas le cas.'},
+  {s:'say',w:'Vous',x:'Bonjour, {moi} de SSS Marketing. On travaille avec la Clinique Dentaire La Cité, qui vous réfère des patients. Vous avez 30 secondes?'},
+  {s:'say',w:'Vous',x:'SSS Marketing travaille seulement avec des cliniques dentaires. On a un calculateur RCSD qui s’installe sur votre site : le patient référé voit s’il est admissible, son palier et sa part à payer avant la consultation, plutôt qu’au comptoir.'},
   {s:'say',w:'Vous',x:'Vos patients référés savent-ils ce que le RCSD va payer avant de venir?'},
-  {s:'say',w:'Vous',x:'C’est gratuit, Hamza l’installe en 30 minutes. Je vous propose {jour1} ou {jour2}?'},
+  {s:'say',w:'Vous',x:'C’est gratuit, on l’installe avec vous en 30 minutes. Je vous propose {jour1} ou {jour2}?'},
   {s:'tip',x:'Denturologistes : parlez de la « quote-part pour la prothèse ». Chirurgiens et parodontistes : « l’écart entre vos honoraires et la grille du RCSD ».'}
 ],
 disc:[
@@ -1135,25 +1135,25 @@ obj:[
   {s:'obj',q:'« Envoyez-moi un courriel. »',a:'Avec plaisir. Je vous envoie le lien pour l’essayer comme un patient. À quelle adresse? Et je vous rappelle {jour2} pour voir ce que vous en pensez?',n:'Notez l’adresse, qui l’a donnée, et la date de rappel.'},
   {s:'obj',q:'« On n’est pas intéressés. »',a:'Je comprends. Juste pour savoir : est-ce que les patients vous posent la question du RCSD?',n:'Si c’est encore non : « Merci de votre temps, bonne journée. » Résultat : Non.'},
   {s:'obj',q:'« On a déjà une agence / quelqu’un pour le site. »',a:'Parfait, ça ne change rien : c’est un outil gratuit sur votre site. Votre agence peut même l’installer avec nous, ça prend 15 minutes.'},
-  {s:'obj',q:'« C’est quoi le piège? C’est vraiment gratuit? »',a:'Oui. Un petit « Propulsé par SSS » reste sous le calculateur, c’est tout. Si un jour vous voulez plus, Hamza vous en parle, sans obligation.'},
-  {s:'obj',q:'« Combien ça coûte, après? »',a:'Le calculateur reste gratuit. Hamza vous montre les options pendant l’appel; je ne veux pas vous donner un mauvais chiffre.',n:'Ne donnez jamais de prix. Si on insiste : escaladez à Hamza.'},
+  {s:'obj',q:'« C’est quoi le piège? C’est vraiment gratuit? »',a:'Oui. Un petit « Propulsé par SSS » reste sous le calculateur, c’est tout. Si un jour vous voulez plus, on vous en parle pendant l’appel, sans obligation.'},
+  {s:'obj',q:'« Combien ça coûte, après? »',a:'Le calculateur reste gratuit. On vous montre les options pendant l’appel d’installation; je ne veux pas vous donner un mauvais chiffre.',n:'Ne donnez jamais de prix. Si on insiste : escaladez à votre responsable.'},
   {s:'obj',q:'« On n’a pas le temps. »',a:'C’est justement 30 minutes, une seule fois, et ça vous sauve du temps au téléphone ensuite. {jour1} ou {jour2}?'},
   {s:'obj',q:'« Rappelez plus tard. »',a:'Bien sûr. Quel moment est le mieux : avant 9 h, sur l’heure du midi ou après 16 h?',n:'Résultat : Plus tard, avec la date exacte.'},
   {s:'obj',q:'« On ne prend pas le RCSD. »',a:'Merci de me le dire, bonne journée!',n:'Notez-le, marquez Perdu. On n’insiste pas.'},
   {s:'obj',q:'« Les patients appellent quand même, ça ne changera rien. »',a:'Certains, oui. Mais ceux qui appellent savent déjà leur palier, alors l’appel dure une minute au lieu de dix. Et ceux qui ne l’ont pas demandé voient le montant avant le rendez-vous, plutôt qu’au comptoir.'},
   {s:'obj',q:'« Le RCSD, on l’explique déjà sur notre site. »',a:'Super, vous êtes en avance. Le calculateur ajoute la partie que le texte ne peut pas donner : le montant que ce patient-là va payer, selon son palier.'},
   {s:'obj',q:'« On a assez de patients. »',a:'Tant mieux! Le calculateur sert surtout la réception : moins d’appels RCSD, moins de surprises au comptoir.'},
-  {s:'obj',q:'« Et les données des patients? »',a:'Le patient répond à quatre questions pour voir son estimation. Hamza vous explique exactement ce qui est conservé ou non pendant l’appel.',n:'N’improvisez jamais sur ce sujet.'},
-  {s:'obj',q:'« Qui s’occupe de notre site? Aucune idée. »',a:'Pas de souci, Hamza regarde ça avec vous. Il suffit que quelqu’un ait accès au site, ou le courriel de la personne qui l’a fait.'},
+  {s:'obj',q:'« Et les données des patients? »',a:'Le patient répond à quatre questions pour voir son estimation. On vous explique exactement ce qui est conservé ou non pendant l’appel d’installation.',n:'N’improvisez jamais sur ce sujet.'},
+  {s:'obj',q:'« Qui s’occupe de notre site? Aucune idée. »',a:'Pas de souci, on regarde ça avec vous pendant l’appel. Il suffit que quelqu’un ait accès au site, ou le courriel de la personne qui l’a fait.'},
   {s:'obj',q:'« Le dentiste décide, je ne peux rien faire. »',a:'Je comprends. C’est quand le meilleur moment pour lui parler deux minutes? Je peux aussi vous envoyer le lien pour lui montrer.'},
-  {s:'obj',q:'« On fait partie d’un groupe (123Dentist, Dentalcorp, etc.). »',a:'Merci de me le dire. Je vais en parler à Hamza, c’est lui qui s’occupe des groupes. Bonne journée!',n:'Arrêtez l’appel et escaladez à Hamza.'},
+  {s:'obj',q:'« On fait partie d’un groupe (123Dentist, Dentalcorp, etc.). »',a:'Merci de me le dire. Je vais transmettre ça à la personne qui s’occupe des groupes chez nous. Bonne journée!',n:'Terminez poliment et escaladez à votre responsable.'},
   {s:'obj',q:'« Ne m’appelez plus. »',a:'C’est noté, vous ne serez plus appelés. Bonne journée.',n:'Résultat : Non → la fiche passe en Ne pas contacter tout de suite.'}
 ],
 book:[
   {s:'say',w:'Vous',x:'Je vous propose {jour1} ou {jour2}. Qu’est-ce qui vous va le mieux?'},
-  {s:'tip',x:'Toujours deux heures précises, jamais « quand ça vous arrange ». Les deux heures proposées sont des suggestions : vérifiez l’agenda de Hamza. Jamais un mercredi. Si ça ne marche pas, proposez les deux prochaines.'},
+  {s:'tip',x:'Toujours deux heures précises, jamais « quand ça vous arrange ». Les deux heures proposées sont des suggestions : vérifiez l’agenda des installations. Jamais un mercredi. Si ça ne marche pas, proposez les deux prochaines.'},
   {s:'list',h:'Avant de raccrocher, confirmez',items:['Qui sera à l’appel (nom et rôle).','Son courriel, pour l’invitation.','Ce qui fait tourner le site : WordPress, Wix, Squarespace, une agence, autre.','Qui a l’accès au site (ou le courriel de l’agence).','Le lien de prise de rendez-vous en ligne, s’ils en ont un.']},
-  {s:'say',w:'Pour finir',x:'Parfait, c’est noté pour {jour1}. Hamza vous envoie l’invitation par courriel aujourd’hui. Merci beaucoup, bonne journée!'},
+  {s:'say',w:'Pour finir',x:'Parfait, c’est noté pour {jour1}. Vous recevrez l’invitation par courriel aujourd’hui. Merci beaucoup, bonne journée!'},
   {s:'tip',x:'Résultat : Rendez-vous, avec la date, l’heure, la personne et le courriel dans la note. Avant de composer le prochain numéro.'}
 ],
 vm:[
@@ -1163,11 +1163,11 @@ vm:[
   {s:'say',w:'Sans courriel',x:'Bonjour {contact}, {moi} de SSS Marketing, au sujet des questions RCSD à la réception. On installe gratuitement un calculateur sur le site de la clinique. Rappelez-moi au [votre numéro]. Bonne journée!'}
 ],
 tools:[
-  {s:'say',w:'Pitch de 30 secondes',x:'Les patients demandent à la réception : « Est-ce que le RCSD me couvre, et combien je vais payer? » Notre calculateur répond sur le site de la clinique : quatre questions, moins d’une minute, le patient voit son palier, sa part et un bouton pour prendre rendez-vous. C’est gratuit, Hamza l’installe en 30 minutes.'},
+  {s:'say',w:'Pitch de 30 secondes',x:'Les patients demandent à la réception : « Est-ce que le RCSD me couvre, et combien je vais payer? » Notre calculateur répond sur le site de la clinique : quatre questions, moins d’une minute, le patient voit son palier, sa part et un bouton pour prendre rendez-vous. C’est gratuit, et on l’installe avec la clinique en 30 minutes.'},
   {s:'list',h:'Les chiffres à connaître',items:['Québec : premier examen + nettoyage = 344 $ (guide ACDQ 2026). Le RCSD paie 268 $. Le patient paie 76 $, même « couvert à 100 % ».','Ontario : 423 $ (guide ODA). Le RCSD paie 342 $. Le patient paie 81 $.','On dit que le RCSD « paie » la clinique (directement), pas qu’il « rembourse ».','Démo à montrer : www.sss.marketing/embed/demo.html?lang=fr']},
-  {s:'list',h:'Phrases qui marchent',items:['« Ça vous sauve des appels, pas du temps de plus. »','« C’est vous qui répondez à ces questions-là toute la journée, non? »','« Je ne veux pas vous donner un mauvais chiffre : Hamza vous le montre. »','« Je vous laisse retourner à vos patients. »']},
+  {s:'list',h:'Phrases qui marchent',items:['« Ça vous sauve des appels, pas du temps de plus. »','« C’est vous qui répondez à ces questions-là toute la journée, non? »','« Je ne veux pas vous donner un mauvais chiffre : on vous le montre pendant l’appel. »','« Je vous laisse retourner à vos patients. »']},
   {s:'list',h:'À ne jamais dire',items:['Un prix, un contrat, des résultats Google Ads.','« Dre X attend mon appel » si ce n’est pas vrai.','Quoi que ce soit sur une clinique où vous avez travaillé.','« Je me permets de vous déranger », « solutions », « révolutionner ».']},
-  {s:'list',h:'Escaladez à Hamza tout de suite si',items:['On demande un prix ou un contrat.','Un groupe ou un réseau de plusieurs cliniques est intéressé.','On mentionne 123Dentist ou Dentalcorp.','Quelqu’un est fâché ou parle d’une plainte.','Vous n’êtes pas sûr de pouvoir écrire à une adresse.']},
+  {s:'list',h:'Escaladez à votre responsable tout de suite si',items:['On demande un prix ou un contrat.','Un groupe ou un réseau de plusieurs cliniques est intéressé.','On mentionne 123Dentist ou Dentalcorp.','Quelqu’un est fâché ou parle d’une plainte.','Vous n’êtes pas sûr de pouvoir écrire à une adresse.']},
   {s:'list',h:'Meilleurs moments',items:['Décideurs : avant 9 h, 12 h à 13 h, après 16 h.','Évitez l’ouverture et le retour du dîner : la réception est débordée.','Jamais de rendez-vous le mercredi.']},
   {s:'list',h:'Une bonne note',items:['« Réception (Julie) : Dre Tran en chirurgie le mardi, rappeler jeudi 8 h 30. »','« Dr Roy intéressé, veut voir avec sa gestionnaire (Isabelle). Rappel lundi 16 h. Site Wix. »','Pas seulement « rappeler ».']}
 ]
@@ -1177,7 +1177,7 @@ prep:[
   {s:'tip',x:'20 seconds before every call. A good call is under 3 minutes and ends with a date or a clear next step logged.'},
   {s:'list',h:'Check',items:['The lead is not marked Do not contact (DNC).','The clinic’s language: French, English or both.','The contact’s name and role (owner dentist, office manager).','The “What to say” box and the last notes.','It is not a 123Dentist or Dentalcorp clinic, an orthodontist, or a clinic where you have worked.']},
   {s:'list',h:'The 6 moves, always in this order',items:['1. Your name, SSS Marketing and the reason, in the first sentence.','2. Ask permission: “Do you have 30 seconds?”','3. The reason in one sentence: the CDCP question at the front desk.','4. Two questions, then stop talking and listen.','5. Ask for the install call with two specific times.','6. Log the outcome and a one-line note before the next dial.']},
-  {s:'list',h:'Rules',items:['Switch to French the moment they do.','Never argue: acknowledge, answer once, ask once more. Two noes = thank them and log it.','Never promise prices, results or anything about patient data. “Hamza walks you through all of that on the 30-minute call.”','Smile while you talk: they can hear it.']}
+  {s:'list',h:'Rules',items:['Switch to French the moment they do.','Never argue: acknowledge, answer once, ask once more. Two noes = thank them and log it.','Never promise prices, results or anything about patient data. “We walk you through all of that on the 30-minute install call.”','Smile while you talk: they can hear it.']}
 ],
 desk:[
   {s:'say',w:'You',x:'Hi, this is {moi} from SSS Marketing. Quick question, do you have 30 seconds?'},
@@ -1193,19 +1193,19 @@ desk:[
 dm:[
   {s:'say',w:'You',x:'Hi {contact}, {moi} from SSS Marketing. We work only with dental clinics. Do you have 30 seconds?'},
   {s:'say',w:'You',x:'The question front desks hear most right now is “Does the CDCP cover me, and what will I pay?” In Quebec a new-patient exam and cleaning is $344 on the ACDQ guide; the CDCP pays $268. Even at 100% coverage the patient owes $76, and often finds out at checkout.'},
-  {s:'say',w:'You',x:'We built a calculator that shows them that on your website before the visit. Four questions, under a minute, in your colours, with a button to your booking page. It’s free: Hamza, our founder, installs it with you on a 30-minute call.'},
+  {s:'say',w:'You',x:'We built a calculator that shows them that on your website before the visit. Four questions, under a minute, in your colours, with a button to your booking page. It’s free, and we install it with you on a 30-minute call.'},
   {s:'say',w:'You',x:'How does your team handle those questions today?'},
   {s:'tip',x:'Listen. Repeat one word they used (“the phones”, “new patients”) before you ask for the meeting.'},
   {s:'say',w:'You',x:'I can book {jour1} or {jour2} for the install. Which works better?'},
-  {s:'branch',h:'Office manager (not the dentist)',x:'For you it means fewer CDCP calls at the front desk, and nothing to do on your side: Hamza handles the install with whoever has access to the website.'},
+  {s:'branch',h:'Office manager (not the dentist)',x:'For you it means fewer CDCP calls at the front desk, and nothing to do on your side: we handle the install with whoever has access to the website.'},
   {s:'tip',x:'Ontario clinic: use $423 on the ODA guide, the CDCP pays $342, the patient owes $81.'}
 ],
 spec:[
-  {s:'tip',x:'For specialists Clinique Dentaire La Cité refers patients to (periodontists, endodontists, oral surgeons, denturists). It’s true, and it’s our best way in. Never say they’re expecting your call unless they are.'},
-  {s:'say',w:'You',x:'Hi, this is {moi} from SSS Marketing. I’m calling on behalf of Hamza, from the front desk at Clinique Dentaire La Cité, which refers patients to you. Do you have 30 seconds?'},
-  {s:'say',w:'You',x:'Hamza founded SSS Marketing for dental clinics. We have a CDCP calculator that sits on your website: a referred patient sees whether they qualify, their tier and their share before the consult, not at checkout.'},
+  {s:'tip',x:'For specialists Clinique Dentaire La Cité refers patients to (periodontists, endodontists, oral surgeons, denturists). SSS built La Cité’s calculator: it’s true, and it’s our best way in. Never say they’re expecting your call unless they are.'},
+  {s:'say',w:'You',x:'Hi, this is {moi} from SSS Marketing. We work with Clinique Dentaire La Cité, which refers patients to you. Do you have 30 seconds?'},
+  {s:'say',w:'You',x:'SSS Marketing works only with dental clinics. We have a CDCP calculator that sits on your website: a referred patient sees whether they qualify, their tier and their share before the consult, not at checkout.'},
   {s:'say',w:'You',x:'Do your referred patients know what the CDCP will pay before they come in?'},
-  {s:'say',w:'You',x:'It’s free, Hamza installs it in 30 minutes. Would {jour1} or {jour2} work?'},
+  {s:'say',w:'You',x:'It’s free, and we install it with you in 30 minutes. Would {jour1} or {jour2} work?'},
   {s:'tip',x:'Denturists: talk about “the co-pay on the denture”. Surgeons and periodontists: “the gap between your fees and the CDCP grid”.'}
 ],
 disc:[
@@ -1219,25 +1219,25 @@ obj:[
   {s:'obj',q:'“Just email me.”',a:'Happy to. I’ll send you the link so you can try it as a patient. What’s the best address? And I’ll call you back {jour2} to hear what you think?',n:'Log the address, who gave it, and the callback date.'},
   {s:'obj',q:'“We’re not interested.”',a:'I understand. Just so I know: do patients ask you about the CDCP?',n:'Still no: “Thanks for your time, have a good day.” Outcome: No.'},
   {s:'obj',q:'“We already have an agency / someone for the website.”',a:'Perfect, that doesn’t change anything: it’s a free tool on your site. Your agency can even install it with us, it takes 15 minutes.'},
-  {s:'obj',q:'“What’s the catch? Is it really free?”',a:'Yes. A small “Powered by SSS” stays under the calculator, that’s all. If you ever want more, Hamza can tell you about it, no obligation.'},
-  {s:'obj',q:'“How much does it cost after?”',a:'The calculator stays free. Hamza shows you the options on the call; I don’t want to give you a wrong number.',n:'Never quote a price. If they push: escalate to Hamza.'},
+  {s:'obj',q:'“What’s the catch? Is it really free?”',a:'Yes. A small “Powered by SSS” stays under the calculator, that’s all. If you ever want more, we can tell you about it on the call, no obligation.'},
+  {s:'obj',q:'“How much does it cost after?”',a:'The calculator stays free. We show you the options on the install call; I don’t want to give you a wrong number.',n:'Never quote a price. If they push: escalate to your manager.'},
   {s:'obj',q:'“We don’t have time.”',a:'That’s the point: 30 minutes, once, and it saves you phone time after that. {jour1} or {jour2}?'},
   {s:'obj',q:'“Call back later.”',a:'Of course. What’s best: before 9, over lunch or after 4?',n:'Outcome: Later, with the exact date.'},
   {s:'obj',q:'“We don’t take the CDCP.”',a:'Thanks for letting me know, have a good day!',n:'Note it, mark Lost. Don’t push.'},
   {s:'obj',q:'“Patients will still call, it won’t change anything.”',a:'Some will. But the ones who call already know their tier, so the call takes a minute instead of ten. And the ones who didn’t ask see the amount before the appointment, not at checkout.'},
   {s:'obj',q:'“We already explain the CDCP on our site.”',a:'Great, you’re ahead. The calculator adds what text can’t: the amount this specific patient will pay, for their tier.'},
   {s:'obj',q:'“We have enough patients.”',a:'Good for you! It’s mostly for the front desk: fewer CDCP calls, fewer surprises at checkout.'},
-  {s:'obj',q:'“What about patient data?”',a:'The patient answers four questions to see their estimate. Hamza explains exactly what is and isn’t stored on the call.',n:'Never improvise on this.'},
-  {s:'obj',q:'“No idea who runs our website.”',a:'No worries, Hamza figures that out with you. We just need someone with access to the site, or the email of whoever built it.'},
+  {s:'obj',q:'“What about patient data?”',a:'The patient answers four questions to see their estimate. We explain exactly what is and isn’t stored on the install call.',n:'Never improvise on this.'},
+  {s:'obj',q:'“No idea who runs our website.”',a:'No worries, we figure that out with you on the call. We just need someone with access to the site, or the email of whoever built it.'},
   {s:'obj',q:'“The dentist decides, I can’t do anything.”',a:'Understood. When’s the best time to catch them for two minutes? I can also email you the link to show them.'},
-  {s:'obj',q:'“We’re part of a group (123Dentist, Dentalcorp…).”',a:'Thanks for telling me. I’ll pass it to Hamza, he handles groups himself. Have a good day!',n:'End the call and escalate to Hamza.'},
+  {s:'obj',q:'“We’re part of a group (123Dentist, Dentalcorp…).”',a:'Thanks for telling me. I’ll pass it to the person who handles groups on our side. Have a good day!',n:'Close politely and escalate to your manager.'},
   {s:'obj',q:'“Don’t call us again.”',a:'Noted, you won’t be called again. Have a good day.',n:'Outcome: No → the lead becomes Do not contact right away.'}
 ],
 book:[
   {s:'say',w:'You',x:'I can do {jour1} or {jour2}. Which works better?'},
-  {s:'tip',x:'Always two specific times, never “whenever suits you”. The two times shown are suggestions: check Hamza’s calendar. Never a Wednesday. If neither works, offer the next two.'},
+  {s:'tip',x:'Always two specific times, never “whenever suits you”. The two times shown are suggestions: check the install calendar. Never a Wednesday. If neither works, offer the next two.'},
   {s:'list',h:'Before you hang up, confirm',items:['Who will be on the call (name and role).','Their email, for the invite.','What runs the website: WordPress, Wix, Squarespace, an agency, other.','Who has access to the site (or the agency’s email).','Their online booking link, if they have one.']},
-  {s:'say',w:'To close',x:'Perfect, you’re booked for {jour1}. Hamza will email you the invite today. Thanks so much, have a good day!'},
+  {s:'say',w:'To close',x:'Perfect, you’re booked for {jour1}. You’ll get the invite by email today. Thanks so much, have a good day!'},
   {s:'tip',x:'Outcome: Meeting, with date, time, person and email in the note. Before you dial the next number.'}
 ],
 vm:[
@@ -1247,11 +1247,11 @@ vm:[
   {s:'say',w:'No email on file',x:'Hi {contact}, {moi} from SSS Marketing, about the CDCP questions at your front desk. We install a free calculator on clinic websites. Call me back at [your number]. Have a good day!'}
 ],
 tools:[
-  {s:'say',w:'30-second pitch',x:'Patients ask the front desk “Does the CDCP cover me, and what will I pay?” Our calculator answers it on the clinic’s own website: four questions, under a minute, the patient sees their tier, their share and a button to book. It’s free, Hamza installs it in 30 minutes.'},
+  {s:'say',w:'30-second pitch',x:'Patients ask the front desk “Does the CDCP cover me, and what will I pay?” Our calculator answers it on the clinic’s own website: four questions, under a minute, the patient sees their tier, their share and a button to book. It’s free, and we install it with the clinic in 30 minutes.'},
   {s:'list',h:'Numbers to know',items:['Quebec: new-patient exam + cleaning = $344 (ACDQ 2026 guide). The CDCP pays $268. The patient owes $76, even “100% covered”.','Ontario: $423 (ODA guide). The CDCP pays $342. The patient owes $81.','The CDCP “pays” the clinic directly; don’t say it “reimburses”.','Demo to share: www.sss.marketing/embed/demo.html']},
-  {s:'list',h:'Lines that work',items:['“It saves you calls, not adds work.”','“You’re the one answering those questions all day, right?”','“I don’t want to give you a wrong number: Hamza will show you.”','“I’ll let you get back to your patients.”']},
+  {s:'list',h:'Lines that work',items:['“It saves you calls, not adds work.”','“You’re the one answering those questions all day, right?”','“I don’t want to give you a wrong number: we’ll show you on the call.”','“I’ll let you get back to your patients.”']},
   {s:'list',h:'Never say',items:['A price, a contract, Google Ads results.','“Dr. X is expecting my call” unless it’s true.','Anything about a clinic where you have worked.','“Solutions”, “revolutionize”, “game-changer”.']},
-  {s:'list',h:'Escalate to Hamza right away if',items:['They ask for a price or a contract.','A group or network of several clinics is interested.','Someone mentions 123Dentist or Dentalcorp.','Someone is upset or mentions a complaint.','You’re not sure you may email an address.']},
+  {s:'list',h:'Escalate to your manager right away if',items:['They ask for a price or a contract.','A group or network of several clinics is interested.','Someone mentions 123Dentist or Dentalcorp.','Someone is upset or mentions a complaint.','You’re not sure you may email an address.']},
   {s:'list',h:'Best times',items:['Decision makers: before 9, 12 to 1, after 4.','Avoid opening and right after lunch: the front desk is swamped.','Never book a Wednesday.']},
   {s:'list',h:'A good note',items:['“Reception (Julie): Dr. Tran in surgery Tuesdays, call back Thursday 8:30.”','“Dr. Roy interested, wants to check with his manager (Isabelle). Callback Monday 4 pm. Wix site.”','Not just “call back”.']}
 ]
