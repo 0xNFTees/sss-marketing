@@ -94,7 +94,7 @@ input{font:inherit;flex:1 1 240px;min-height:44px;padding:10px 12px;border:1px s
     <p class="sub">Every site where the calculator is installed, including the demo pages on sss.marketing. Qualified means the patient reached a coverage estimate.</p>
     <div class="scroll" tabindex="0" role="region" aria-label="Calculator use by website">
       <table>
-        <thead><tr><th>Website</th><th>Clinic</th><th class="num">Views</th><th class="num">Visitors</th><th class="num">Started</th><th class="num">Finished</th><th class="num">Qualified</th><th class="num">Booking clicks</th><th class="num">Calls</th><th class="num">Apply clicks</th></tr></thead>
+        <thead><tr><th>Website</th><th>Clinic</th><th class="num">Views</th><th class="num">Visitors</th><th class="num">Started</th><th class="num">Finished</th><th class="num">Qualified</th><th class="num">Booking clicks</th><th class="num" title="Booking or call clicks divided by finished calculators">Finished → book or call</th><th class="num">Calls</th><th class="num">Apply clicks</th></tr></thead>
         <tbody id="calc"></tbody>
       </table>
     </div>
@@ -138,8 +138,11 @@ input{font:inherit;flex:1 1 240px;min-height:44px;padding:10px 12px;border:1px s
       var td = cell(tr, x.host);
       if (/(^|\.)sss\.marketing$/.test(x.host)) { var t = document.createElement("span"); t.className = "tag"; t.textContent = "demo"; td.appendChild(t); }
       cell(tr, x.clinic || "");
-      ["views", "visitors", "starts", "results", "qualified", "book_clicks", "call_clicks", "apply_clicks"].forEach(function (k) { cell(tr, fmt(x[k]), true); });
-    }, 10);
+      ["views", "visitors", "starts", "results", "qualified", "book_clicks"].forEach(function (k) { cell(tr, fmt(x[k]), true); });
+      var fin = Number(x.results) || 0, act = (Number(x.book_clicks) || 0) + (Number(x.call_clicks) || 0);
+      cell(tr, fin ? Math.round(act / fin * 100) + " %" : "–", true);
+      ["call_clicks", "apply_clicks"].forEach(function (k) { cell(tr, fmt(x[k]), true); });
+    }, 11);
   }
 
   function load() {
