@@ -1271,7 +1271,7 @@ function kitDays(lang){
 }
 function kitFirst(s){return String(s||'').split(/[;,(]/)[0].trim();}
 function kitFill(txt,lang,l){
-  var me=String(state.me||'').split(' ')[0];
+  var me=String(state.me||'').split(' ')[0];if(/^hamza$/i.test(me))me='';
   var c=l?kitFirst(l.contact):'';
   var cl=l?titleOf(l):'';
   var days=kitDays(lang);
